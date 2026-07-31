@@ -1,0 +1,1635 @@
+[
+  {
+    "id": "q1",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "extroversion",
+    "importance": "medium",
+    "english": {
+      "text": "I feel energized and recharged after spending time in lively social gatherings."
+    },
+    "arabic": {
+      "text": "أشعر بالحيوية والنشاط بعد قضاء الوقت في التجمعات الاجتماعية الصاخبة."
+    },
+    "followups": [
+      {
+        "next_id": "q1_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q1_follow",
+    "category": "Personality",
+    "type": "choice",
+    "weight": 1.2,
+    "trait": "extroversion",
+    "importance": "low",
+    "is_followup": true,
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "extroversion": 1.5,
+          "mbti_e": 1.5
+        },
+        "english": "Host parties or group events myself",
+        "arabic": "استضافة الحفلات أو المناسبات الجماعية بنفسي"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "extroversion": 1.0,
+          "mbti_e": 1.0
+        },
+        "english": "Attend events but let others organize",
+        "arabic": "حضور المناسبات ولكن أترك التنظيم للآخرين"
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "extroversion": 0.5
+        },
+        "english": "Prefer small, intimate gatherings only",
+        "arabic": "أفضل التجمعات الصغيرة والحميمة فقط"
+      }
+    ],
+    "english": {
+      "text": "As someone who enjoys social settings, what is your preferred role?"
+    },
+    "arabic": {
+      "text": "بصفتك شخصاً يستمتع بالأجواء الاجتماعية، ما هو دورك المفضل؟"
+    }
+  },
+  {
+    "id": "q2",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "agreeableness",
+    "importance": "medium",
+    "english": {
+      "text": "I often prioritize other people's needs and happiness above my own."
+    },
+    "arabic": {
+      "text": "غالباً ما أقدم احتياجات الآخرين وسعادتهم على احتياجاتي وسعادتي الخاصة."
+    }
+  },
+  {
+    "id": "q3",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "conscientiousness",
+    "importance": "high",
+    "english": {
+      "text": "I prefer having a detailed plan and schedule rather than acting spontaneously."
+    },
+    "arabic": {
+      "text": "أفضل وجود خطة وجدول زمني مفصلين بدلاً من التصرف بعفوية."
+    }
+  },
+  {
+    "id": "q4",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "neuroticism",
+    "importance": "medium",
+    "english": {
+      "text": "I tend to worry frequently about future scenarios or unexpected setbacks."
+    },
+    "arabic": {
+      "text": "أميل إلى القلق بشكل متكرر بشأن السيناريوهات المستقبلية أو العقبات غير المتوقعة."
+    }
+  },
+  {
+    "id": "q5",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "openness",
+    "importance": "medium",
+    "english": {
+      "text": "I am constantly seeking new intellectual concepts, abstract ideas, or artistic experiences."
+    },
+    "arabic": {
+      "text": "أبحث باستمرار عن مفاهيم فكرية جديدة، أو أفكار مجردة، أو تجارب فنية."
+    }
+  },
+  {
+    "id": "q6",
+    "category": "Personality",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "mbti_t_f",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "mbti_t": 1.5
+        },
+        "english": "Analyze facts, pros/cons, and logical consequences objectively.",
+        "arabic": "تحليل الحقائق، الإيجابيات والسلبيات، والنتائج المنطقية بموضوعية."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "mbti_f": 1.5
+        },
+        "english": "Consider the impact on feelings, values, and interpersonal harmony.",
+        "arabic": "مراعاة التأثير على المشاعر، القيم، والانسجام بين الأشخاص."
+      }
+    ],
+    "english": {
+      "text": "When making an important life choice, what guides you most?"
+    },
+    "arabic": {
+      "text": "عند اتخاذ قرار حياتي مهم، ما الذي يوجهك أكثر؟"
+    }
+  },
+  {
+    "id": "q7",
+    "category": "Personality",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "attachment_style",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "attachment_secure": 2.0
+        },
+        "english": "Communicate my feelings honestly and feel confident we can work through it.",
+        "arabic": "أعبر عن مشاعري بصدق وأشعر بالثقة في أنه يمكننا تجاوز الأمر."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "attachment_anxious": 2.0
+        },
+        "english": "Worry excessively that my partner is losing interest or pulling away.",
+        "arabic": "أقلق بشكل مفرط من أن شريكي يفقد اهتمامه أو يبتعد عني."
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "attachment_avoidant": 2.0
+        },
+        "english": "Withdraw, seek space, and handle my emotions entirely on my own.",
+        "arabic": "أنسحب، وأبحث عن مساحة خاصة، وأتعامل مع مشاعري بمفردي تماماً."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Your partner has been unusually quiet and distant for two days. How do you naturally react?"
+    },
+    "arabic": {
+      "text": "سيناريو: شريكك هادئ ومتباعد بشكل غير معتاد لمدة يومين. كيف تكون ردة فعلك التلقائية؟"
+    }
+  },
+  {
+    "id": "q8",
+    "category": "Communication",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "communication_assertive",
+    "importance": "high",
+    "english": {
+      "text": "I feel comfortable expressing my needs and boundaries directly, even if it causes minor tension."
+    },
+    "arabic": {
+      "text": "أشعر بالارتياح للتعبير عن احتياجاتي وحدودي بشكل مباشر، حتى لو تسبب ذلك في توتر بسيط."
+    }
+  },
+  {
+    "id": "q9",
+    "category": "Communication",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "communication_style",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "communication_assertive": 1.5
+        },
+        "english": "Speak up directly and state my thoughts respectfully",
+        "arabic": "التحدث بصراحة والتعبير عن أفكاري باحترام"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "communication_passive": 1.5
+        },
+        "english": "Keep quiet to preserve peace, hoping the issue resolves itself",
+        "arabic": "الصمت للحفاظ على السلام، على أمل أن تحل المشكلة تلقائياً"
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "communication_passive_aggressive": 1.5
+        },
+        "english": "Drop subtle hints or use sarcasm to express my dissatisfaction",
+        "arabic": "إلقاء تلميحات خفية أو استخدام السخرية للتعبير عن استيائي"
+      }
+    ],
+    "english": {
+      "text": "When someone treats me unfairly, my immediate tendency is to:"
+    },
+    "arabic": {
+      "text": "عندما يعاملني شخص ما بغير إنصاف، فإن ميلي المباشر هو:"
+    }
+  },
+  {
+    "id": "q10",
+    "category": "Communication",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "communication_active_listening",
+    "importance": "high",
+    "english": {
+      "text": "During an argument, I focus fully on understanding my partner's perspective before preparing my response."
+    },
+    "arabic": {
+      "text": "خلال النقاش، أركز تماماً على فهم وجهة نظر شريكي قبل تجهيز ردي."
+    }
+  },
+  {
+    "id": "q11",
+    "category": "Communication",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "communication_sharing",
+    "importance": "medium",
+    "english": {
+      "text": "I believe in sharing my daily experiences, minor thoughts, and internal feelings with my partner every day."
+    },
+    "arabic": {
+      "text": "أؤمن بأهمية مشاركة تجاربي اليومية، وأفكاري البسيطة، ومشاكلي الداخلية مع شريكي كل يوم."
+    },
+    "followups": [
+      {
+        "next_id": "q11_follow",
+        "condition": "disagree"
+      }
+    ]
+  },
+  {
+    "id": "q11_follow",
+    "category": "Communication",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "communication_sharing",
+    "importance": "low",
+    "is_followup": true,
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "communication_reserved": 1.5
+        },
+        "english": "I prefer to process feelings alone first before sharing",
+        "arabic": "أفضل معالجة مشاعري بمفردي أولاً قبل مشاركتها"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "communication_private": 1.5
+        },
+        "english": "I value high conversational privacy and share only significant issues",
+        "arabic": "أقدر الخصوصية الحوارية العالية وأشارك الأمور المهمة فقط"
+      }
+    ],
+    "english": {
+      "text": "Since you prefer less frequent sharing, what is your primary reason?"
+    },
+    "arabic": {
+      "text": "بما أنك تفضل مشاركة أقل تواتراً، ما هو السبب الرئيسي لذلك؟"
+    }
+  },
+  {
+    "id": "q12",
+    "category": "Conflict",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "conflict_style",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "conflict_collaborating": 1.5
+        },
+        "english": "Discuss the issue calmly until we reach a mutually satisfying solution",
+        "arabic": "مناقشة المشكلة بهدوء حتى نصل إلى حل يرضي الطرفين"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "conflict_avoiding": 1.5
+        },
+        "english": "Wait for tempers to cool down, sometimes avoiding the topic indefinitely",
+        "arabic": "الانتظار حتى تهدأ النفوس، وأحياناً تجنب الموضوع تماماً"
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "conflict_competing": 1.5
+        },
+        "english": "Argue my point forcefully until my perspective is fully accepted",
+        "arabic": "الجدال بقوة لإثبات وجهة نظري حتى يتم قبولها بالكامل"
+      },
+      {
+        "id": "opt4",
+        "trait_scores": {
+          "conflict_compromising": 1.5
+        },
+        "english": "Quickly find a middle ground where both of us make sacrifices",
+        "arabic": "إيجاد حل وسط سريع يقدم فيه كل منا تضحيات"
+      }
+    ],
+    "english": {
+      "text": "When a disagreement arises, my natural conflict resolution style is to:"
+    },
+    "arabic": {
+      "text": "عندما ينشأ خلاف، فإن أسلوبي الطبيعي لحل النزاع هو:"
+    }
+  },
+  {
+    "id": "q13",
+    "category": "Conflict",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "conflict_tolerance",
+    "importance": "medium",
+    "english": {
+      "text": "I view conflicts as a healthy pathway to growth rather than a threat to the relationship."
+    },
+    "arabic": {
+      "text": "أرى النزاعات كمسار صحي للنمو والتطور وليس كتهديد للعلاقة."
+    }
+  },
+  {
+    "id": "q14",
+    "category": "Conflict",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "conflict_behavior",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "conflict_collaborating": 1.5,
+          "emotional_intelligence": 1.0
+        },
+        "english": "Acknowledge their distress and schedule a specific calm time to talk.",
+        "arabic": "أقدر ضيقهم وأحدد وقتاً محدداً وهادئاً للتحدث لاحقاً."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "conflict_competing": 1.5
+        },
+        "english": "Defend myself immediately and point out their contribution to the problem.",
+        "arabic": "أدافع عن نفسي على الفور وأشير إلى مساهمتهم في حدوث المشكلة."
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "conflict_avoiding": 1.5
+        },
+        "english": "Walk away or shut down because the emotional intensity feels overwhelming.",
+        "arabic": "أبتعد أو أصمت لأن الشدة العاطفية للموقف تبدو غامرة ومجهدة."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Your partner raises their voice and blames you for something you feel was an accident. How do you respond?"
+    },
+    "arabic": {
+      "text": "سيناريو: يرفع شريكك صوته ويلومك على شيء تشعر أنه كان مجرد حادث. كيف تستجيب؟"
+    }
+  },
+  {
+    "id": "q15",
+    "category": "Conflict",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "conflict_forgiveness",
+    "importance": "medium",
+    "english": {
+      "text": "Once an argument is resolved, I can let go of resentment completely and quickly."
+    },
+    "arabic": {
+      "text": "بمجرد حل الخلاف، يمكنني التخلص من مشاعر الاستياء تماماً وبسرعة."
+    }
+  },
+  {
+    "id": "q16",
+    "category": "Money",
+    "type": "choice",
+    "weight": 1.3,
+    "trait": "money_management",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "money_joint": 2.0
+        },
+        "english": "Fully combined: All income goes into joint accounts, all expenses paid together",
+        "arabic": "مشترك بالكامل: تذهب جميع المداخيل إلى حسابات مشتركة، وتُدفع جميع المصاريف معاً"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "money_hybrid": 2.0
+        },
+        "english": "Hybrid: Joint accounts for shared expenses, separate accounts for personal spending",
+        "arabic": "مختلط: حسابات مشتركة للنفقات المشتركة، وحسابات منفصلة للإنفاق الشخصي"
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "money_separate": 2.0
+        },
+        "english": "Fully separate: Each keeps their own money and divides mutual bills proportionally",
+        "arabic": "منفصل بالكامل: يحتفظ كل طرف بماله الخاص وتقسم الفواتير المشتركة بنسب محددة"
+      }
+    ],
+    "english": {
+      "text": "In a committed marriage, how should financial accounts be structured?"
+    },
+    "arabic": {
+      "text": "في الزواج المستقر، كيف ينبغي هيكلة الحسابات المالية؟"
+    }
+  },
+  {
+    "id": "q17",
+    "category": "Money",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "money_saver_spender",
+    "importance": "high",
+    "english": {
+      "text": "I prioritize saving for the long-term future and investments over enjoying spontaneous experiences/purchases today."
+    },
+    "arabic": {
+      "text": "أعطي الأولوية للادخار للمستقبل طويل الأجل والاستثمارات على الاستمتاع بالتجارب/المشتريات العفوية اليوم."
+    }
+  },
+  {
+    "id": "q18",
+    "category": "Money",
+    "type": "rank",
+    "weight": 1.1,
+    "trait": "money_priorities",
+    "importance": "medium",
+    "items": [
+      {
+        "id": "p1",
+        "trait": "money_priority_security",
+        "english": "Financial Security (Savings, emergency fund, owning a house)",
+        "arabic": "الأمان المالي (المدخرات، صندوق الطوارئ، امتلاك منزل)"
+      },
+      {
+        "id": "p2",
+        "trait": "money_priority_experience",
+        "english": "Life Experiences (Travel, dining out, recreation, luxury)",
+        "arabic": "تجارب الحياة (السفر، تناول الطعام بالخارج، الترفيه، الرفاهية)"
+      },
+      {
+        "id": "p3",
+        "trait": "money_priority_growth",
+        "english": "Business & Growth (Investing, starting companies, continuous education)",
+        "arabic": "الأعمال والنمو (الاستثمار، تأسيس الشركات، التعليم المستمر)"
+      },
+      {
+        "id": "p4",
+        "trait": "money_priority_charity",
+        "english": "Philanthropy/Community (Giving to family, donations, religious charity)",
+        "arabic": "العمل الخيري والمجتمعي (مساعدة العائلة، التبرعات، الصدقات الدينية)"
+      }
+    ],
+    "english": {
+      "text": "Rank your primary financial priorities from 1 (Highest) to 4 (Lowest):"
+    },
+    "arabic": {
+      "text": "رتب أولوياتك المالية الأساسية من 1 (الأعلى) إلى 4 (الأدنى):"
+    }
+  },
+  {
+    "id": "q19",
+    "category": "Money",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "money_transparency",
+    "importance": "high",
+    "english": {
+      "text": "Every purchase over a certain modest threshold (e.g., $150) should be discussed and agreed upon beforehand."
+    },
+    "arabic": {
+      "text": "يجب مناقشة كل عملية شراء تتجاوز حداً معيناً (مثلاً 150 دولاراً) والموافقة عليها مسبقاً."
+    },
+    "followups": [
+      {
+        "next_id": "q19_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q19_follow",
+    "category": "Money",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "money_transparency",
+    "importance": "medium",
+    "is_followup": true,
+    "english": {
+      "text": "I would feel restricted or micro-managed if my partner wanted to inspect my daily small transactions."
+    },
+    "arabic": {
+      "text": "سأشعر بالتقييد أو بالرقابة اللصيقة إذا أراد شريكي تفقد معاملاتي المالية الصغيرة اليومية."
+    }
+  },
+  {
+    "id": "q20",
+    "category": "Lifestyle",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "lifestyle_neatness",
+    "importance": "medium",
+    "english": {
+      "text": "I need my living space to be highly organized and tidy at all times to feel relaxed."
+    },
+    "arabic": {
+      "text": "أحتاج أن تكون مساحة معيشتي مرتبة ومنظمة للغاية في جميع الأوقات لأشعر بالراحة والاسترخاء."
+    }
+  },
+  {
+    "id": "q21",
+    "category": "Lifestyle",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "lifestyle_leisure",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "lifestyle_active": 1.5
+        },
+        "english": "Active outdoor sports, traveling, or busy social plans.",
+        "arabic": "الرياضات الخارجية النشطة، السفر، أو المخططات الاجتماعية المزدحمة."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "lifestyle_quiet": 1.5
+        },
+        "english": "Quiet domestic rest, reading, movies, or hobbies at home.",
+        "arabic": "الراحة المنزلية الهادئة، القراءة، مشاهدة الأفلام، أو الهوايات في البيت."
+      }
+    ],
+    "english": {
+      "text": "My absolute ideal way to spend a free weekend is:"
+    },
+    "arabic": {
+      "text": "طريقتي المثالية المطلقة لقضاء عطلة نهاية أسبوع مجانية هي:"
+    }
+  },
+  {
+    "id": "q22",
+    "category": "Lifestyle",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "lifestyle_social_frequency",
+    "importance": "medium",
+    "english": {
+      "text": "I want to host guests, friends, or family in our home multiple times every week."
+    },
+    "arabic": {
+      "text": "أرغب في استضافة الضيوف، الأصدقاء، أو العائلة في منزلنا عدة مرات كل أسبوع."
+    }
+  },
+  {
+    "id": "q23",
+    "category": "Lifestyle",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "lifestyle_health",
+    "importance": "medium",
+    "english": {
+      "text": "Maintaining a strict diet, exercise routine, and health-focused lifestyle is essential for me."
+    },
+    "arabic": {
+      "text": "الحفاظ على نظام غذائي صارم، وممارسة الرياضة، وأسلوب حياة يركز على الصحة أمر ضروري بالنسبة لي."
+    }
+  },
+  {
+    "id": "q24",
+    "category": "Marriage",
+    "type": "choice",
+    "weight": 1.3,
+    "trait": "marriage_roles",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "marriage_traditional": 2.0
+        },
+        "english": "Traditional: Distinct roles (e.g., one primary provider, one primary homemaker)",
+        "arabic": "تقليدي: أدوار متميزة (مثل: معيل أساسي واحد، ورب منزل أساسي واحد)"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "marriage_egalitarian": 2.0
+        },
+        "english": "Egalitarian: Shared breadwinning, housework, and child-rearing responsibilities equally",
+        "arabic": "متساوي: مشاركة متساوية في جلب الرزق، الأعمال المنزلية، ومسؤوليات تربية الأطفال"
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "marriage_fluid": 1.5
+        },
+        "english": "Fluid: Responsibilities shift dynamically based on career stages and personal strengths",
+        "arabic": "مرن: تتغير المسؤوليات ديناميكياً بناءً على مراحل العمل ونقاط القوة الشخصية"
+      }
+    ],
+    "english": {
+      "text": "Which model of marital roles aligns closest with your vision of marriage?"
+    },
+    "arabic": {
+      "text": "أي نموذج للأدوار الزوجية يتماشى بشكل أقرب مع رؤيتك للزواج؟"
+    }
+  },
+  {
+    "id": "q25",
+    "category": "Marriage",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "marriage_commitment",
+    "importance": "high",
+    "english": {
+      "text": "I view marriage as an unbreakable lifetime vow that should be preserved through almost all personal differences."
+    },
+    "arabic": {
+      "text": "أرى الزواج كعهد أبدي لا ينفصم ويجب الحفاظ عليه رغم معظم الخلافات الشخصية."
+    }
+  },
+  {
+    "id": "q26",
+    "category": "Marriage",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "marriage_independence",
+    "importance": "medium",
+    "english": {
+      "text": "Even after marriage, it is critical that both spouses maintain individual friendships and separate hobbies."
+    },
+    "arabic": {
+      "text": "حتى بعد الزواج، من الضروري جداً أن يحافظ كلا الزوجين على صداقات فردية وهوايات منفصلة."
+    }
+  },
+  {
+    "id": "q27",
+    "category": "Marriage",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "marriage_expectations",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "marriage_egalitarian": 1.5
+        },
+        "english": "Work together to balance chores, or hire help so neither is overburdened.",
+        "arabic": "العمل معاً لموازنة الأعمال المنزلية، أو استئجار المساعدة حتى لا يثقل كاهل أي منا."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "marriage_traditional": 1.5
+        },
+        "english": "Expect the partner with fewer career hours to absorb the majority of housework.",
+        "arabic": "توقع أن يقوم الطرف الذي يقضي ساعات عمل أقل باستيعاب غالبية الأعمال المنزلية."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Both of you work, but the house is messy and dinner isn't prepared. How do you resolve this?"
+    },
+    "arabic": {
+      "text": "سيناريو: كلاكما يعمل، لكن المنزل فوضوي والعشاء لم يُعد. كيف تحلان هذه المشكلة؟"
+    }
+  },
+  {
+    "id": "q28",
+    "category": "Family",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "family_influence",
+    "importance": "high",
+    "english": {
+      "text": "I consult my parents/extended family before making major decisions in my life."
+    },
+    "arabic": {
+      "text": "أستشير والديّ/عائلتي الممتدة قبل اتخاذ قرارات كبرى في حياتي."
+    },
+    "followups": [
+      {
+        "next_id": "q28_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q28_follow",
+    "category": "Family",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "family_influence",
+    "importance": "high",
+    "is_followup": true,
+    "english": {
+      "text": "If my parents strongly disapproved of my spouse's decision, I would support my parents over my spouse."
+    },
+    "arabic": {
+      "text": "إذا عارض والداي بشدة قرار زوجتي/زوجي، فسوف أدعم والديّ على حساب شريكي."
+    }
+  },
+  {
+    "id": "q29",
+    "category": "Family",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "family_closeness",
+    "importance": "medium",
+    "english": {
+      "text": "I expect to visit or host my extended family almost every single week."
+    },
+    "arabic": {
+      "text": "أتوقع زيارة عائلتي الممتدة أو استضافتهم كل أسبوع تقريباً."
+    }
+  },
+  {
+    "id": "q30",
+    "category": "Family",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "family_boundaries",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "family_boundaries_firm": 2.0
+        },
+        "english": "Politely but firmly tell my family that this is a private matter between us.",
+        "arabic": "أخبر عائلتي بأدب ولكن بحزم أن هذا أمر خاص بيننا."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "family_boundaries_permeable": 2.0
+        },
+        "english": "Listen to their advice and try to incorporate it to keep the family happy.",
+        "arabic": "أستمع إلى نصيحتهم وأحاول دمجها للحفاظ على سعادة العائلة."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Your family gives unsolicited, critical advice regarding how you manage your household. What do you do?"
+    },
+    "arabic": {
+      "text": "سيناريو: تقدم عائلتك نصائح غير مرغوب فيها وانتقادية بشأن كيفية إدارة منزلك. ماذا تفعل؟"
+    }
+  },
+  {
+    "id": "q31",
+    "category": "Children",
+    "type": "choice",
+    "weight": 1.5,
+    "trait": "children_desire",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "children_want": 2.0
+        },
+        "english": "Yes, having children is a fundamental, non-negotiable life goal.",
+        "arabic": "نعم، إنجاب الأطفال هو هدف حياتي أساسي وغير قابل للتفاوض."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "children_not_want": 2.0
+        },
+        "english": "No, I do not want to have children.",
+        "arabic": "لا، لا أريد إنجاب الأطفال."
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "children_unsure": 1.0
+        },
+        "english": "I am open or undecided, depending heavily on circumstances and my partner.",
+        "arabic": "أنا منفتح على الفكرة أو لم أقرر بعد، ويعتمد ذلك كثيراً على الظروف وشريكي."
+      }
+    ],
+    "english": {
+      "text": "What is your stance on having children in this marriage?"
+    },
+    "arabic": {
+      "text": "ما هو موقفك من إنجاب الأطفال في هذا الزواج؟"
+    },
+    "followups": [
+      {
+        "next_id": "q31_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q31_follow",
+    "category": "Children",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "children_parenting_style",
+    "importance": "high",
+    "is_followup": true,
+    "english": {
+      "text": "I believe children require strict discipline, rules, and clear hierarchical boundaries to grow up well."
+    },
+    "arabic": {
+      "text": "أعتقد أن الأطفال يحتاجون إلى انضباط صارم، وقواعد، وحدود هرمية واضحة لينشأوا بشكل جيد."
+    }
+  },
+  {
+    "id": "q32",
+    "category": "Children",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "children_education",
+    "importance": "medium",
+    "english": {
+      "text": "I believe religious/spiritual instruction and moral homeschooling or private tutoring should be core parts of parenting."
+    },
+    "arabic": {
+      "text": "أعتقد أن التعليم الديني/الروحي والتربية الأخلاقية أو التعليم الخاص يجب أن تكون أجزاءً أساسية من التربية."
+    }
+  },
+  {
+    "id": "q33",
+    "category": "Children",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "children_care",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "children_care_parental": 1.5
+        },
+        "english": "One of us must put their career on hold to raise the children personally.",
+        "arabic": "يجب على أحدنا تعليق مسيرته المهنية مؤقتاً لتربية الأطفال شخصياً."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "children_care_shared": 1.5
+        },
+        "english": "We should use nurseries, nannies, or grandparents so both can work.",
+        "arabic": "ينبغي لنا الاستعانة بدور الحضانة، أو المربيات، أو الأجداد لتمكين كلا الطرفين من العمل."
+      }
+    ],
+    "english": {
+      "text": "Scenario: You have a baby. How do you envision managing early childhood care during working hours?"
+    },
+    "arabic": {
+      "text": "سيناريو: رزقتما بطفل. كيف تتخيلان إدارة رعاية الطفولة المبكرة خلال ساعات العمل؟"
+    }
+  },
+  {
+    "id": "q34",
+    "category": "Religion",
+    "type": "likert",
+    "weight": 1.5,
+    "trait": "religion_importance",
+    "importance": "high",
+    "english": {
+      "text": "Religion/spirituality plays a central role in my daily lifestyle, actions, and decisions."
+    },
+    "arabic": {
+      "text": "تلعب الديانة/الروحانية دوراً مركزياً في أسلوب حياتي اليومي، وأفعالي، وقراراتي."
+    },
+    "followups": [
+      {
+        "next_id": "q34_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q34_follow",
+    "category": "Religion",
+    "type": "likert",
+    "weight": 1.3,
+    "trait": "religion_orthodoxy",
+    "importance": "high",
+    "is_followup": true,
+    "english": {
+      "text": "It is essential that my partner shares the exact same religious beliefs and practices."
+    },
+    "arabic": {
+      "text": "من الضروري جداً أن يشاركني شريكي نفس المعتقدات والممارسات الدينية تماماً."
+    }
+  },
+  {
+    "id": "q35",
+    "category": "Religion",
+    "type": "choice",
+    "weight": 1.2,
+    "trait": "religion_values",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "religion_conservative": 2.0
+        },
+        "english": "Traditional, conservative, adhering strictly to scriptures.",
+        "arabic": "تقليدي، محافظ، يلتزم بالنصوص والشرائع بدقة."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "religion_liberal": 2.0
+        },
+        "english": "Progressive, modern, focusing on moral essence over rituals.",
+        "arabic": "تقدمي، حديث، يركز على الجوهر الأخلاقي قبل الطقوس."
+      },
+      {
+        "id": "opt3",
+        "trait_scores": {
+          "religion_secular": 2.0
+        },
+        "english": "Secular, agnostic, or spiritual but not religious.",
+        "arabic": "علماني، لا أدري، أو روحي ولكن غير متدين."
+      }
+    ],
+    "english": {
+      "text": "How would you describe your theological worldview or ethical orientation?"
+    },
+    "arabic": {
+      "text": "كيف تصف نظرتك اللاهوتية للعالم أو توجهك الأخلاقي؟"
+    }
+  },
+  {
+    "id": "q36",
+    "category": "Career",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "career_ambition",
+    "importance": "medium",
+    "english": {
+      "text": "My professional ambition and career success are central to my identity, and I dedicate substantial extra hours to them."
+    },
+    "arabic": {
+      "text": "طموحي المهني ونجاحي في العمل أمران مركزيان في هويتي، وأنا أخصص لهما ساعات إضافية كبيرة."
+    }
+  },
+  {
+    "id": "q37",
+    "category": "Career",
+    "type": "scenario",
+    "weight": 1.3,
+    "trait": "career_priority",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "career_supportive": 2.0
+        },
+        "english": "We should relocate so they can take this life-changing opportunity.",
+        "arabic": "يجب أن ننتقل حتى يتمكنوا من اغتنام هذه الفرصة المغيرة للحياة."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "career_stability": 2.0
+        },
+        "english": "Decline the offer because staying near family and stable roots is more important.",
+        "arabic": "رفض العرض لأن البقاء بالقرب من العائلة والاستقرار أكثر أهمية."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Your partner receives a brilliant career offer in another country. How do you approach this?"
+    },
+    "arabic": {
+      "text": "سيناريو: يتلقى شريكك عرض عمل رائعاً في بلد آخر. كيف تتعامل مع هذا الموقف؟"
+    }
+  },
+  {
+    "id": "q38",
+    "category": "Career",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "career_worklife_balance",
+    "importance": "medium",
+    "english": {
+      "text": "I believe in completely turning off work notifications and refusing professional calls once I return home."
+    },
+    "arabic": {
+      "text": "أؤمن بإيقاف تشغيل إشعارات العمل تماماً ورفض المكالمات المهنية بمجرد عودتي إلى المنزل."
+    }
+  },
+  {
+    "id": "q39",
+    "category": "Decision making",
+    "type": "choice",
+    "weight": 1.1,
+    "trait": "decision_style",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "decision_analytical": 1.5
+        },
+        "english": "Analytical: Gather maximum data, compare spreadsheets, and logically optimize",
+        "arabic": "تحليلي: جمع أكبر قدر من البيانات، مقارنة الجداول، والتحسين منطقياً"
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "decision_intuitive": 1.5
+        },
+        "english": "Intuitive: Trust my gut feeling, instincts, and immediate emotional alignment",
+        "arabic": "حدسي: الثقة في شعوري الباطني، والحدس، والمواءمة العاطفية الفورية"
+      }
+    ],
+    "english": {
+      "text": "How do you make complex, multi-variable decisions in life?"
+    },
+    "arabic": {
+      "text": "كيف تتخذ قرارات معقدة ومتعددة المتغيرات في الحياة؟"
+    }
+  },
+  {
+    "id": "q40",
+    "category": "Decision making",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "decision_consensus",
+    "importance": "high",
+    "english": {
+      "text": "In a marriage, all major household decisions must have 100% agreement/consensus before proceeding."
+    },
+    "arabic": {
+      "text": "في الزواج، يجب أن تحظى جميع القرارات المنزلية الكبرى بموافقة وإجماع بنسبة 100% قبل المضي قدماً."
+    },
+    "followups": [
+      {
+        "next_id": "q40_follow",
+        "condition": "disagree"
+      }
+    ]
+  },
+  {
+    "id": "q40_follow",
+    "category": "Decision making",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "decision_veto",
+    "importance": "medium",
+    "is_followup": true,
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "decision_veto_husband": 1.5
+        },
+        "english": "The husband should have the final decision-making power in stalemates.",
+        "arabic": "يجب أن يكون للزوج سلطة اتخاذ القرار النهائي عند طريق مسدود."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "decision_veto_delegated": 1.5
+        },
+        "english": "We should divide domains (e.g., one controls finance, the other home/kids).",
+        "arabic": "يجب تقسيم المجالات (مثال: أحدهما يتحكم في المال والآخر في المنزل/الأطفال)."
+      }
+    ],
+    "english": {
+      "text": "When consensus is impossible, how should deadlocks be broken?"
+    },
+    "arabic": {
+      "text": "عندما يكون الإجماع مستحيلاً، كيف ينبغي حل الطريق المسدود؟"
+    }
+  },
+  {
+    "id": "q41",
+    "category": "Trust",
+    "type": "likert",
+    "weight": 1.3,
+    "trait": "trust_jealousy",
+    "importance": "high",
+    "english": {
+      "text": "I feel anxious or jealous if my spouse maintains warm, friendly interactions with coworkers or friends of the opposite gender."
+    },
+    "arabic": {
+      "text": "أشعر بالقلق أو الغيرة إذا حافظ شريكي على تفاعلات ودية مع زملاء العمل أو الأصدقاء من الجنس الآخر."
+    }
+  },
+  {
+    "id": "q42",
+    "category": "Trust",
+    "type": "likert",
+    "weight": 1.4,
+    "trait": "trust_privacy",
+    "importance": "high",
+    "english": {
+      "text": "True intimacy means both spouses share passwords to their phones and email accounts without hesitation."
+    },
+    "arabic": {
+      "text": "الحميمية الحقيقية تعني مشاركة كلا الزوجين كلمات المرور لهواتفهما وحساباتهما البريدية دون تردد."
+    }
+  },
+  {
+    "id": "q43",
+    "category": "Trust",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "trust_vulnerability",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "trust_vulnerability_open": 2.0
+        },
+        "english": "Share the mistake immediately and work through the fallout transparently.",
+        "arabic": "أشارك الخطأ على الفور وأعمل على معالجة التداعيات بشفافية."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "trust_vulnerability_guarded": 2.0
+        },
+        "english": "Try to fix the issue privately first, sharing only if absolutely necessary.",
+        "arabic": "أحاول حل المشكلة بشكل خاص أولاً، وأشاركها فقط إذا لزم الأمر تماماً."
+      }
+    ],
+    "english": {
+      "text": "Scenario: You made a major financial mistake or failed at a significant personal commitment. What do you do?"
+    },
+    "arabic": {
+      "text": "سيناريو: ارتكبت خطأً مالياً كبيراً أو فشلت في التزام شخصي هام. ماذا تفعل؟"
+    }
+  },
+  {
+    "id": "q44",
+    "category": "Boundaries",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "boundaries_independence",
+    "importance": "medium",
+    "english": {
+      "text": "I require significant alone time (several hours per week) that is entirely mine, separate from my partner."
+    },
+    "arabic": {
+      "text": "أحتاج إلى وقت خاص بمفردي (عدة ساعات في الأسبوع) يكون ملكي بالكامل، وبمعزل عن شريكي."
+    }
+  },
+  {
+    "id": "q45",
+    "category": "Boundaries",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "boundaries_secrets",
+    "importance": "high",
+    "english": {
+      "text": "It is healthy to keep secrets from my spouse if I believe revealing them would cause unnecessary worry/stress."
+    },
+    "arabic": {
+      "text": "من الصحي إخفاء بعض الأسرار عن شريكي إذا كنت أعتقد أن كشفها قد يسبب قلقاً أو توتراً غير ضروري."
+    }
+  },
+  {
+    "id": "q46",
+    "category": "Boundaries",
+    "type": "choice",
+    "weight": 1.1,
+    "trait": "boundaries_opposite_gender",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "boundaries_strict_gender": 2.0
+        },
+        "english": "Zero one-on-one friendships with the opposite gender outside professional work.",
+        "arabic": "منع الصداقات الفردية تماماً مع الجنس الآخر خارج نطاق العمل المهني."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "boundaries_open_gender": 2.0
+        },
+        "english": "One-on-one friendships are perfectly fine as long as there is full transparency.",
+        "arabic": "الصداقات الفردية مقبولة تماماً طالما أن هناك شفافية كاملة."
+      }
+    ],
+    "english": {
+      "text": "What boundaries should exist around close friendships with the opposite gender?"
+    },
+    "arabic": {
+      "text": "ما هي الحدود التي يجب أن توجد حول الصداقات المقربة مع الجنس الآخر؟"
+    }
+  },
+  {
+    "id": "q47",
+    "category": "Emotional intelligence",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "emotional_regulation",
+    "importance": "medium",
+    "english": {
+      "text": "When experiencing intense anger or sadness, I can calm myself down before speaking to my spouse."
+    },
+    "arabic": {
+      "text": "عندما أشعر بغضب شديد أو حزن، يمكنني تهدئة نفسي قبل التحدث إلى شريكي."
+    }
+  },
+  {
+    "id": "q48",
+    "category": "Emotional intelligence",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "emotional_empathy",
+    "importance": "high",
+    "english": {
+      "text": "I easily sense when my partner is upset or stressed, even before they say anything."
+    },
+    "arabic": {
+      "text": "أشعر بسهولة عندما يكون شريكي متضايقاً أو متوتراً، حتى قبل أن يقول أي شيء."
+    }
+  },
+  {
+    "id": "q49",
+    "category": "Emotional intelligence",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "emotional_validation",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "emotional_validation_empathy": 2.0
+        },
+        "english": "Listen fully, validate their frustration, and offer a comforting hug.",
+        "arabic": "أستمع بالكامل، وأعبر عن تفهمي لإحباطهم، وأقدم لهم عناقاً دافئاً مواسياً."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "emotional_validation_fixer": 2.0
+        },
+        "english": "Immediately offer logical steps and direct solutions to solve their work issue.",
+        "arabic": "أقدم على الفور خطوات منطقية وحلولاً مباشرة لحل مشكلة عملهم."
+      }
+    ],
+    "english": {
+      "text": "Scenario: Your partner comes home crying about a terrible conflict with their boss. Your immediate reaction is to:"
+    },
+    "arabic": {
+      "text": "سيناريو: يعود شريكك إلى المنزل باكياً بسبب خلاف حاد مع رئيسه في العمل. ردة فعلك الفورية هي:"
+    }
+  },
+  {
+    "id": "q50",
+    "category": "Affection",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "affection_physical",
+    "importance": "medium",
+    "english": {
+      "text": "Holding hands, hugging, and physical touch are critical components of my daily happiness."
+    },
+    "arabic": {
+      "text": "إمساك الأيدي، العناق، والتلامس الجسدي مكونات أساسية لسعادتي اليومية."
+    }
+  },
+  {
+    "id": "q51",
+    "category": "Affection",
+    "type": "rank",
+    "weight": 1.3,
+    "trait": "love_languages",
+    "importance": "high",
+    "items": [
+      {
+        "id": "l1",
+        "trait": "love_words",
+        "english": "Words of Affirmation (Compliments, words of appreciation, love notes)",
+        "arabic": "كلمات التشجيع والتقدير (المديح، عبارات الامتنان، رسائل الحب)"
+      },
+      {
+        "id": "l2",
+        "trait": "love_quality_time",
+        "english": "Quality Time (Undivided attention, meaningful shared activities)",
+        "arabic": "الوقت النوعي (الانتباه الكامل، الأنشطة المشتركة الهادفة)"
+      },
+      {
+        "id": "l3",
+        "trait": "love_gifts",
+        "english": "Receiving Gifts (Thoughtful tokens of appreciation, surprise presents)",
+        "arabic": "تلقي الهدايا (عربون تقدير مدروس، هدايا مفاجئة)"
+      },
+      {
+        "id": "l4",
+        "trait": "love_acts",
+        "english": "Acts of Service (Doing helpful chores, fixing things, making life easier)",
+        "arabic": "تقديم الخدمات (المساعدة في الأعمال المنزلية، إصلاح الأشياء)"
+      },
+      {
+        "id": "l5",
+        "trait": "love_touch",
+        "english": "Physical Touch (Holding hands, hugging, physical proximity)",
+        "arabic": "التلامس الجسدي (إمساك الأيدي، العناق، التقارب الجسدي)"
+      }
+    ],
+    "english": {
+      "text": "Rank the Love Languages in order of how you prefer to receive love from 1 (Most preferred) to 5 (Least preferred):"
+    },
+    "arabic": {
+      "text": "رتب لغات الحب بالترتيب الذي تفضل به استقبال الحب من 1 (الأكثر تفضيلاً) إلى 5 (الأقل تفضيلاً):"
+    }
+  },
+  {
+    "id": "q52",
+    "category": "Affection",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "affection_public",
+    "importance": "low",
+    "english": {
+      "text": "I feel comfortable showing mild romantic affection (holding hands, simple hugs) in public settings."
+    },
+    "arabic": {
+      "text": "أشعر بالارتياح لإظهار المودة الرومانسية الخفيفة (إمساك الأيدي، العناق البسيط) في الأماكن العامة."
+    }
+  },
+  {
+    "id": "q53",
+    "category": "Future planning",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "future_stability",
+    "importance": "high",
+    "english": {
+      "text": "I have a highly detailed 5-to-10 year plan regarding my location, house purchase, and financial targets."
+    },
+    "arabic": {
+      "text": "لدي خطة مفصلة للغاية تتراوح بين 5 إلى 10 سنوات فيما يتعلق بموقعي، وشراء منزلي، وأهدافي المالية."
+    },
+    "followups": [
+      {
+        "next_id": "q53_follow",
+        "condition": "agree"
+      }
+    ]
+  },
+  {
+    "id": "q53_follow",
+    "category": "Future planning",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "future_stability",
+    "importance": "medium",
+    "is_followup": true,
+    "english": {
+      "text": "I would feel extremely uncomfortable modifying my long-term life plans to accommodate my partner's sudden desires."
+    },
+    "arabic": {
+      "text": "سأشعر بعدم ارتياح شديد إذا اضطررت لتعديل خطط حياتي طويلة الأجل للتكيف مع رغبات شريكي المفاجئة."
+    }
+  },
+  {
+    "id": "q54",
+    "category": "Future planning",
+    "type": "choice",
+    "weight": 1.1,
+    "trait": "future_location",
+    "importance": "high",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "future_location_home": 1.5
+        },
+        "english": "Stay in my home city/country close to my family and established roots.",
+        "arabic": "البقاء في مدينتي/بلدي الأصلي بالقرب من عائلتي وجذوري المستقرة."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "future_location_abroad": 1.5
+        },
+        "english": "Open or actively planning to relocate abroad for better opportunities or experience.",
+        "arabic": "منفتح أو أخطط بنشاط للانتقال إلى الخارج بحثاً عن فرص أو تجارب أفضل."
+      }
+    ],
+    "english": {
+      "text": "Where do you envision settling down long term?"
+    },
+    "arabic": {
+      "text": "أين تتخيل الاستقرار على المدى الطويل؟"
+    }
+  },
+  {
+    "id": "q55",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "mbti_s_n",
+    "importance": "medium",
+    "english": {
+      "text": "I naturally focus on concrete facts and current realities rather than exploring future possibilities and theories."
+    },
+    "arabic": {
+      "text": "أركز بشكل طبيعي على الحقائق الملموسة والواقع الحالي بدلاً من استكشاف الاحتمالات والنظريات المستقبلية."
+    }
+  },
+  {
+    "id": "q56",
+    "category": "Personality",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "mbti_j_p",
+    "importance": "medium",
+    "english": {
+      "text": "I feel much more comfortable once a decision has been finalized rather than keeping options open."
+    },
+    "arabic": {
+      "text": "أشعر براحة أكبر بمجرد اتخاذ قرار نهائي بدلاً من إبقاء الخيارات مفتوحة."
+    }
+  },
+  {
+    "id": "q57",
+    "category": "Communication",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "communication_timing",
+    "importance": "medium",
+    "english": {
+      "text": "If my partner is upset, I believe we should discuss the problem immediately, even if it is late at night."
+    },
+    "arabic": {
+      "text": "إذا كان شريكي متضايقاً، أعتقد أنه يجب علينا مناقشة المشكلة على الفور، حتى لو كان ذلك في وقت متأخر من الليل."
+    }
+  },
+  {
+    "id": "q58",
+    "category": "Religion",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "religion_finances",
+    "importance": "medium",
+    "english": {
+      "text": "I believe we should give a fixed portion of our monthly household income as religious charity or tithing."
+    },
+    "arabic": {
+      "text": "أعتقد أنه ينبغي لنا تقديم جزء ثابت من دخلنا الشهري كصدقة دينية أو زكاة."
+    }
+  },
+  {
+    "id": "q59",
+    "category": "Career",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "career_prestige",
+    "importance": "low",
+    "english": {
+      "text": "It is important to me that my spouse holds a highly respected, high-status professional career."
+    },
+    "arabic": {
+      "text": "من المهم بالنسبة لي أن يشغل شريكي وظيفة مهنية تحظى باحترام ومكانة عالية."
+    }
+  },
+  {
+    "id": "q60",
+    "category": "Trust",
+    "type": "likert",
+    "weight": 1.2,
+    "trait": "trust_past",
+    "importance": "high",
+    "english": {
+      "text": "I need full, detailed transparency about my partner's romantic and personal history to build deep trust."
+    },
+    "arabic": {
+      "text": "أحتاج إلى شفافية كاملة ومفصلة حول التاريخ العاطفي والشخصي لشريكي لبناء ثقة عميقة."
+    }
+  },
+  {
+    "id": "q61",
+    "category": "Boundaries",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "boundaries_family_privacy",
+    "importance": "high",
+    "english": {
+      "text": "What happens inside our marriage/home stays entirely between us and should never be shared with friends or in-laws."
+    },
+    "arabic": {
+      "text": "ما يحدث داخل زواجنا/منزلنا يظل بيننا تماماً ولا ينبغي أبداً مشاركته مع الأصدقاء أو الأصهار."
+    }
+  },
+  {
+    "id": "q62",
+    "category": "Emotional intelligence",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "emotional_comforting",
+    "importance": "medium",
+    "english": {
+      "text": "I sometimes struggle to find the right words to comfort my partner when they are going through a tough time."
+    },
+    "arabic": {
+      "text": "أجد أحياناً صعوبة في العثور على الكلمات المناسبة لمواساة شريكي عندما يمر بوقت عصيب."
+    }
+  },
+  {
+    "id": "q63",
+    "category": "Affection",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "affection_words",
+    "importance": "medium",
+    "english": {
+      "text": "Hearing 'I love you' or words of affirmation daily is an absolute necessity for me to feel loved."
+    },
+    "arabic": {
+      "text": "سماع عبارة 'أنا أحبك' أو كلمات التقدير والتشجيع يومياً ضرورة مطلقة بالنسبة لي لأشعر بالحب."
+    }
+  },
+  {
+    "id": "q64",
+    "category": "Future planning",
+    "type": "choice",
+    "weight": 1.1,
+    "trait": "future_lifestyle",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "opt1",
+        "trait_scores": {
+          "future_lifestyle_suburban": 1.5
+        },
+        "english": "Suburban or rural: Spacious quiet life, close to nature, larger home.",
+        "arabic": "الضواحي أو الريف: حياة هادئة وواسعة، قريبة من الطبيعة، منزل أكبر."
+      },
+      {
+        "id": "opt2",
+        "trait_scores": {
+          "future_lifestyle_urban": 1.5
+        },
+        "english": "Urban city-center: Energetic fast-paced life, close to culture, convenience, and apartments.",
+        "arabic": "وسط المدينة: حياة نشيطة وسريعة الإيقاع، قريبة من الثقافة والخدمات والشقق."
+      }
+    ],
+    "english": {
+      "text": "What setting do you prefer for your future family home?"
+    },
+    "arabic": {
+      "text": "ما هي البيئة التي تفضلها لمنزل عائلتك المستقبلي؟"
+    }
+  },
+  {
+    "id": "q65",
+    "category": "Marriage",
+    "type": "likert",
+    "weight": 1.1,
+    "trait": "marriage_growth",
+    "importance": "medium",
+    "english": {
+      "text": "I believe partners should actively push each other to improve, even if it leads to some discomfort."
+    },
+    "arabic": {
+      "text": "أعتقد أنه يجب على الشريكين دفع بعضهما البعض بنشاط للتحسن والنمو، حتى لو أدى ذلك إلى بعض عدم الارتياح."
+    }
+  }
+]

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="app_title">MatchWise Lite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Premium Navigation Bar -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <svg class="heart-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <div class="logo-text">
+                    <h1 data-i18n="app_title">MatchWise Lite</h1>
+                    <p data-i18n="app_subtitle">Offline Relationship Compatibility Assessment</p>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <!-- Language Selector -->
+                <div class="control-group">
+                    <select id="languageSelector" class="premium-select">
+                        <option value="en">English (LTR)</option>
+                        <option value="ar">العربية (RTL)</option>
+                    </select>
+                </div>
+
+                <!-- Dark Mode Toggle Button -->
+                <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-content">
+        <!-- 1. HOME PANEL -->
+        <section id="panelHome" class="spa-panel active-panel">
+            <div class="premium-hero">
+                <h2 data-i18n="app_title">MatchWise Lite</h2>
+                <p data-i18n="app_subtitle" class="hero-desc">Offline Relationship Compatibility Assessment</p>
+                <div class="hero-badge">v1.0 • Offline Production Quality</div>
+            </div>
+
+            <div class="menu-cards-grid">
+                <!-- Card 1: Start Assessment -->
+                <div class="menu-card" id="btnStartNewAssessment">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="start_new">Start New Assessment</h3>
+                    <p class="card-text">Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.</p>
+                </div>
+
+                <!-- Card 2: Compare Profiles -->
+                <div class="menu-card" id="btnGoToDashboard">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="3" x2="9" y2="21"></line>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
+                    <p class="card-text">Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ASSESSMENT PANEL -->
+        <section id="panelAssessment" class="spa-panel">
+            <div class="assessment-container">
+                <div class="assessment-meta-header">
+                    <div>
+                        <h2 data-i18n="question_header">Assessment</h2>
+                        <span id="questionCategory" class="category-badge">Category</span>
+                    </div>
+                    <div class="meta-progress">
+                        <span data-i18n="progress">Progress</span>: <span id="progressPercent">0%</span>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator Bar -->
+                <div class="progress-bar-container">
+                    <div id="progressBarFill" class="progress-bar-fill"></div>
+                </div>
+
+                <p data-i18n="required_questions_info" class="meta-desc">Note: Adaptive engine selects the most relevant questions based on your responses (Minimum 45, Maximum 70).</p>
+
+                <!-- Dynamic Question Display Card -->
+                <div class="question-card">
+                    <p id="questionText" class="question-text">Loading question text...</p>
+
+                    <!-- Container for interactive answer inputs -->
+                    <div id="answerOptionsContainer" class="options-container">
+                        <!-- Rendered dynamically by script.js -->
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="assessment-nav-row">
+                    <button id="btnBackQuestion" class="secondary-btn">
+                        <span data-i18n="back">Back</span>
+                    </button>
+                    <button id="btnNextQuestion" class="primary-btn">
+                        <span data-i18n="next">Next</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DASHBOARD PANEL -->
+        <section id="panelDashboard" class="spa-panel">
+            <div class="dashboard-header-row">
+                <h2 data-i18n="dashboard_title">Dashboard</h2>
+                <button id="btnHomeFromDashboard" class="secondary-btn">
+                    <span data-i18n="back">Back</span>
+                </button>
+            </div>
+
+            <!-- Import and Saved Actions -->
+            <div class="dashboard-actions-grid">
+                <div class="action-card">
+                    <h3 data-i18n="import_profile">Import Profile</h3>
+                    <p class="action-desc">Upload a partner's decrypted or exported JSON file directly to compare.</p>
+
+                    <label for="profileFileInput" class="file-upload-label" data-i18n="import_btn_label">
+                        Select Profile JSON File
+                    </label>
+                    <input type="file" id="profileFileInput" accept=".json" style="display: none;">
+                </div>
+
+                <div class="action-card">
+                    <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
+                    <p data-i18n="compare_instructions" class="action-desc">Select two checkboxed profiles below and click 'Compare Selected' to generate a full report.</p>
+                    <button id="btnCompareSelected" class="primary-btn" style="width: 100%;">
+                        <span data-i18n="compare">Compare Selected</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Saved Profiles Table List -->
+            <div class="saved-profiles-section">
+                <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
+                <div id="profilesListContainer" class="profiles-list-container">
+                    <!-- Rendered dynamically by script.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. COMPATIBILITY REPORT PANEL -->
+        <section id="panelReport" class="spa-panel">
+            <div class="report-header-toolbar">
+                <button id="btnDashboardFromReport" class="secondary-btn">
+                    <span data-i18n="back">Back</span>
+                </button>
+                <button id="btnPrintReport" class="primary-btn">
+                    <span data-i18n="save_pdf">Print Report / Export PDF</span>
+                </button>
+            </div>
+
+            <div class="compatibility-report-document" id="printableReportDocument">
+                <!-- Logo & Watermark -->
+                <div class="report-top-banner">
+                    <svg class="report-banner-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <div>
+                        <h2>MatchWise Lite v1.0</h2>
+                        <p>High-Fidelity Psychological Relationship Assessment</p>
+                    </div>
+                </div>
+
+                <!-- Executive Summary -->
+                <section class="report-section">
+                    <h3 class="section-title" data-i18n="executive_summary">Executive Summary</h3>
+                    <div class="overall-index-gauge-container">
+                        <div class="gauge-card">
+                            <span data-i18n="overall_comp">Overall Compatibility</span>
+                            <div class="gauge-number-wrapper">
+                                <span id="reportOverallIndex" class="gauge-index-num">85%</span>
+                                <svg class="progress-circle" viewBox="0 0 36 36">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                    <path id="circleProgressFill" class="circle-fill" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="gauge-details">
+                            <div class="meta-item">
+                                <strong data-i18n="confidence_score">Assessment Confidence Score</strong>: <span id="reportConfidence">92%</span>
+                            </div>
+                            <p class="summary-p" id="reportExecutiveSummaryText">
+                                Summary analysis goes here...
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comparison Profiles Meta Table -->
+                <section class="report-section">
+                    <h3 class="section-title" data-i18n="profile_details">Profile Details</h3>
+                    <div class="table-responsive">
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th id="reportHeaderPersonA">Person A</th>
+                                    <th id="reportHeaderPersonB">Person B</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-i18n="id">ID</td>
+                                    <td id="reportIdA">--</td>
+                                    <td id="reportIdB">--</td>
+                                </tr>
+                                <tr>
+                                    <td data-i18n="created_at">Created At</td>
+                                    <td id="reportDateA">--</td>
+                                    <td id="reportDateB">--</td>
+                                </tr>
+                                <tr>
+                                    <td data-i18n="app_version">Version</td>
+                                    <td id="reportVerA">--</td>
+                                    <td id="reportVerB">--</td>
+                                </tr>
+                                <tr>
+                                    <td data-i18n="confidence_score">Confidence</td>
+                                    <td id="reportConfidenceA">--</td>
+                                    <td id="reportConfidenceB">--</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Personality Dynamics & MBTI/Attachment -->
+                <section class="report-section">
+                    <h3 class="section-title" data-i18n="personality_dynamics">Personality Dynamics</h3>
+
+                    <div class="personality-visuals-grid">
+                        <!-- Custom Radar Chart for Category Scores -->
+                        <div class="chart-card">
+                            <h4>Multivariable Compatibility Index</h4>
+                            <div id="radarChartContainer" class="chart-container">
+                                <!-- Dynamic SVG Radar Chart -->
+                            </div>
+                        </div>
+
+                        <!-- Side Bar Comparisons -->
+                        <div class="chart-card">
+                            <h4>Big Five / Temperament Alignment</h4>
+                            <div id="bigFiveBarChartContainer" class="bars-container">
+                                <!-- Dynamic SVG Bar Charts -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Type Overviews -->
+                    <div class="types-comparison-grid">
+                        <div class="type-card">
+                            <h5 data-i18n="mbti_label">MBTI Tendency</h5>
+                            <div class="type-row">
+                                <div class="person-type-badge type-a" id="mbtiBadgeA">INFP</div>
+                                <div class="person-type-badge type-b" id="mbtiBadgeB">ENFJ</div>
+                            </div>
+                        </div>
+                        <div class="type-card">
+                            <h5 data-i18n="attachment_label">Attachment Style</h5>
+                            <div class="type-row">
+                                <div class="person-type-badge type-a" id="attachmentBadgeA">Secure</div>
+                                <div class="person-type-badge type-b" id="attachmentBadgeB">Anxious</div>
+                            </div>
+                        </div>
+                        <div class="type-card">
+                            <h5 data-i18n="communication_label">Communication Style</h5>
+                            <div class="type-row">
+                                <div class="person-type-badge type-a" id="commBadgeA">Assertive</div>
+                                <div class="person-type-badge type-b" id="commBadgeB">Reserved</div>
+                            </div>
+                        </div>
+                        <div class="type-card">
+                            <h5 data-i18n="conflict_label">Conflict Style</h5>
+                            <div class="type-row">
+                                <div class="person-type-badge type-a" id="conflictBadgeA">Collaborative</div>
+                                <div class="person-type-badge type-b" id="conflictBadgeB">Avoiding</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Core Strengths -->
+                <section class="report-section">
+                    <h3 class="section-title bullet-strengths" data-i18n="strengths">Core Strengths</h3>
+                    <ul id="reportStrengthsList" class="report-bullet-list">
+                        <!-- Dynamic list items -->
+                    </ul>
+                </section>
+
+                <!-- Potential Challenges -->
+                <section class="report-section">
+                    <h3 class="section-title bullet-challenges" data-i18n="challenges">Potential Challenges</h3>
+                    <ul id="reportChallengesList" class="report-bullet-list">
+                        <!-- Dynamic list items -->
+                    </ul>
+                </section>
+
+                <!-- Deal-breaker Alerts -->
+                <section id="reportSectionDealbreakers" class="report-section alert-section">
+                    <h3 class="section-title bullet-dealbreakers" data-i18n="deal_breakers">Deal-Breaker Alerts</h3>
+                    <ul id="reportDealbreakersList" class="report-bullet-list">
+                        <!-- Dynamic list items -->
+                    </ul>
+                </section>
+
+                <!-- Topics to Discuss -->
+                <section class="report-section">
+                    <h3 class="section-title bullet-discussion" data-i18n="discussion_topics">Topics to Discuss</h3>
+                    <ul id="reportDiscussionList" class="report-bullet-list">
+                        <!-- Dynamic list items -->
+                    </ul>
+                </section>
+
+                <!-- Growth Opportunities & Psychological Recommendations -->
+                <section class="report-section">
+                    <h3 class="section-title bullet-growth" data-i18n="growth_opps">Growth Opportunities</h3>
+                    <ul id="reportGrowthList" class="report-bullet-list">
+                        <!-- Dynamic list items -->
+                    </ul>
+                </section>
+
+                <section class="report-section">
+                    <h3 class="section-title bullet-recommendations" data-i18n="recommendations">Psychological Recommendations</h3>
+                    <div id="reportRecommendationsContainer" class="p-container">
+                        <!-- Dynamic content -->
+                    </div>
+                </section>
+
+                <!-- Appendix / Footer -->
+                <section class="report-section appendix-section">
+                    <h3 class="section-title" data-i18n="appendix">Appendix & Technical Parameters</h3>
+                    <p data-i18n="confidence_explanation" class="appendix-p">
+                        Confidence score is calculated based on answer consistency, response variance, and adaptive test completeness.
+                    </p>
+                    <p data-i18n="report_disclaimer" class="disclaimer-p">
+                        Disclaimer: This report is a simulation based on self-reported assessment questions. It is designed for reflection, coaching, and educational purposes and does not replace professional therapy or clinical consultation.
+                    </p>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global SPA Backdrop / Modal for Name Entry & Export Notifications -->
+    <div id="modalBackdrop" class="modal-backdrop">
+        <div class="premium-modal">
+            <h3 id="modalTitle">Modal Title</h3>
+            <div id="modalBody" class="modal-body">
+                <!-- Contextually injected -->
+            </div>
+            <div class="modal-footer-row">
+                <button id="btnModalCancel" class="secondary-btn" data-i18n="close">Close</button>
+                <button id="btnModalSubmit" class="primary-btn">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script loading chain -->
+    <script src="utils.js"></script>
+    <script src="traits.js"></script>
+    <script src="compatibility.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
