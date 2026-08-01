@@ -1631,5 +1631,141 @@
     "arabic": {
       "text": "أعتقد أنه يجب على الشريكين دفع بعضهما البعض بنشاط للتحسن والنمو، حتى لو أدى ذلك إلى بعض عدم الارتياح."
     }
+  },
+  {
+    "id": "q66",
+    "category": "Lifestyle",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "self_physical_presentation",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "fit",
+        "trait_scores": { "aesthetic_self_fit": 2.0 },
+        "english": "Active fitness: I dedicate daily energy to maintaining athletic posture or muscles.",
+        "arabic": "اللياقة النشطة: أخصص طاقة يومية للحفاظ على قوام رياضي أو عضلات."
+      },
+      {
+        "id": "natural",
+        "trait_scores": { "aesthetic_self_natural": 2.0 },
+        "english": "Natural comfort: I prioritize organic wellness, health, and a balanced, effortless look.",
+        "arabic": "الراحة الطبيعية: أركز على العافية العضوية، والصحة، ومظهر متوازن ومريح دون تكلف."
+      },
+      {
+        "id": "polished",
+        "trait_scores": { "aesthetic_self_polished": 2.0 },
+        "english": "Polished refinement: I highly value elegant, tailored presence, grooming, and high-quality presentation.",
+        "arabic": "الأناقة المصقولة: أقدر جداً المظهر الأنيق المرتب، والاهتمام بالتفاصيل والهندام الفاخر."
+      }
+    ],
+    "english": {
+      "text": "Which of these best describes your approach to physical conditioning and daily self-presentation?"
+    },
+    "arabic": {
+      "text": "أي مما يلي يصف بشكل أفضل أسلوبك في الحفاظ على لياقتك البدنية ومظهرك اليومي؟"
+    }
+  },
+  {
+    "id": "q67",
+    "category": "Lifestyle",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "partner_physical_attraction",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "fit",
+        "trait_scores": { "aesthetic_expect_fit": 2.0 },
+        "english": "Strong dedication to athletic fitness, tone, and high-energy conditioning.",
+        "arabic": "تفانٍ قوي في اللياقة الرياضية، وتناسق القوام، والتدريبات عالية النشاط."
+      },
+      {
+        "id": "natural",
+        "trait_scores": { "aesthetic_expect_natural": 2.0 },
+        "english": "A natural, healthy, realistic body type that values balance over strict gym routines.",
+        "arabic": "بنية جسدية طبيعية، صحية وواقعية تقدر التوازن على حساب روتين النادي الصارم."
+      },
+      {
+        "id": "polished",
+        "trait_scores": { "aesthetic_expect_polished": 2.0 },
+        "english": "A highly elegant, neat, and pristine physical structure with emphasis on clean presentation.",
+        "arabic": "بنية جسدية أنيقة للغاية، مرتبة ونظيفة مع التركيز على المظهر العام المصقول."
+      }
+    ],
+    "english": {
+      "text": "What physical attributes and presentation style do you find most appealing in a partner?"
+    },
+    "arabic": {
+      "text": "ما هي الملامح الجسدية وأسلوب تقديم النفس الذي تجده أكثر جاذبية في شريك حياتك؟"
+    }
+  },
+  {
+    "id": "q68",
+    "category": "Lifestyle",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "self_fashion_style",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "classic",
+        "trait_scores": { "fashion_self_classic": 2.0 },
+        "english": "Timeless & Elegant: Traditional, tailored, formal or smart professional attire.",
+        "arabic": "خالد وأنيق: ملابس تقليدية، مفصلة بدقة، رسمية أو مهنية أنيقة."
+      },
+      {
+        "id": "casual",
+        "trait_scores": { "fashion_self_casual": 2.0 },
+        "english": "Minimalist & Casual: Comfortable, practical, clean lines, and simple athleisure.",
+        "arabic": "بسيط وعملي: مريح، عملي، خطوط تصميم واضحة، وملابس كاجوال مريحة."
+      },
+      {
+        "id": "expressive",
+        "trait_scores": { "fashion_self_expressive": 2.0 },
+        "english": "Expressive & Modern: Creative, trendy, bold colors, or highly unique designer pieces.",
+        "arabic": "تعبيري وعصري: إبداعي، متماشٍ مع الموضة، ألوان جريئة، أو قطع مصممة فريدة."
+      }
+    ],
+    "english": {
+      "text": "How would you describe your personal fashion choice and wardrobe style?"
+    },
+    "arabic": {
+      "text": "كيف تصف اختيارك الشخصي للأزياء وأسلوب خزانة ملابسك؟"
+    }
+  },
+  {
+    "id": "q69",
+    "category": "Lifestyle",
+    "type": "choice",
+    "weight": 1.0,
+    "trait": "partner_fashion_expectation",
+    "importance": "medium",
+    "options": [
+      {
+        "id": "classic",
+        "trait_scores": { "fashion_expect_classic": 2.0 },
+        "english": "Timeless sophistication, modest tailoring, clean cuts, or elegant formalwear.",
+        "arabic": "رقي خالد، حشمة أنيقة، قصات نظيفة، أو ملابس رسمية فاخرة."
+      },
+      {
+        "id": "casual",
+        "trait_scores": { "fashion_expect_casual": 2.0 },
+        "english": "Effortless casual comfort, practical, activewear, or simple clean aesthetics.",
+        "arabic": "راحة كاجوال طبيعية، ملابس عملية، ملابس رياضية، أو جماليات بسيطة ونظيفة."
+      },
+      {
+        "id": "expressive",
+        "trait_scores": { "fashion_expect_expressive": 2.0 },
+        "english": "Vibrant, fashion-forward, bold statements, or modern artistic styling.",
+        "arabic": "حيوي، رائد في عالم الموضة، اختيارات مميزة، أو تصاميم فنية حديثة."
+      }
+    ],
+    "english": {
+      "text": "What type of fashion/dress styling do you expect or prefer your future spouse to wear in public settings?"
+    },
+    "arabic": {
+      "text": "ما هو نمط الأزياء/الملابس الذي تتوقع أو تفضل أن يرتديه شريك حياتك المستقبلي في الأماكن العامة؟"
+    }
   }
 ]

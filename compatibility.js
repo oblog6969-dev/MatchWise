@@ -346,7 +346,48 @@ const CompatibilityEngine = {
         }
         categoryScores["Marriage"] = Math.round(Math.max(30, marriageScore));
 
-        // --- 11. OVERALL COMPATIBILITY INDEX CALCULATIONS ---
+        // --- 11. SUBTLE PHYSICAL & FASHION EXPECTATION MATCHING (CROSS-MATCH) ---
+        // Cross-match Person A's self-presentation with Person B's expectations and vice-versa
+        let aestheticScore = 100;
+        const aesA = traitsA.aesthetic_profile || { self_presentation: "natural", expect_presentation: "natural", self_fashion: "casual", expect_fashion: "casual" };
+        const aesB = traitsB.aesthetic_profile || { self_presentation: "natural", expect_presentation: "natural", self_fashion: "casual", expect_fashion: "casual" };
+
+        // Cross Match 1: Person A meets Person B expectations
+        if (aesA.self_presentation !== aesB.expect_presentation) aestheticScore -= 20;
+        if (aesA.self_fashion !== aesB.expect_fashion) aestheticScore -= 20;
+
+        // Cross Match 2: Person B meets Person A expectations
+        if (aesB.self_presentation !== aesA.expect_presentation) aestheticScore -= 20;
+        if (aesB.self_fashion !== aesA.expect_fashion) aestheticScore -= 20;
+
+        const aestheticMatchPercentage = Math.max(40, aestheticScore);
+
+        // Push subtle hint rather than private raw values
+        if (aestheticMatchPercentage >= 80) {
+            strengths.push({
+                en: `Aesthetic & Presentation Harmony: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
+                ar: `تناغم المظهر والأناقة: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
+            });
+        } else if (aestheticMatchPercentage <= 60) {
+            challenges.push({
+                en: `Evolving Aesthetic Preferences: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
+                ar: `تطور تفضيلات المظهر والأناقة: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
+            });
+            discussionTopics.push({
+                en: "Discuss expectations regarding grooming, daily presentation, and style expression in social settings.",
+                ar: "مناقشة التوقعات بشأن الهندام والاعتناء بالمظهر اليومي والتعبير عن الأناقة في المناسبات الاجتماعية."
+            });
+        } else {
+            strengths.push({
+                en: `Solid Aesthetic Alignment: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
+                ar: `توافق مظهر كافٍ ومريح: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
+            });
+        }
+
+        // Add to Category Scores for holistic profiling
+        categoryScores["Aesthetic Alignment"] = aestheticMatchPercentage;
+
+        // --- 12. OVERALL COMPATIBILITY INDEX CALCULATIONS ---
         const totalCategories = Object.keys(categoryScores).length;
         const sumScores = Object.values(categoryScores).reduce((a, b) => a + b, 0);
         let calculatedIndex = sumScores / totalCategories;

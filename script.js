@@ -680,7 +680,8 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.reportStrengthsList.innerHTML = "";
             const sampleStrengths = [
                 { en: `High emotional self-awareness using an adaptable ${traitsA.communication.primary} communication style.`, ar: `وعي ذاتي عاطفي مرتفع باستخدام أسلوب تواصل مرن.` },
-                { en: `Understands personal needs and can formulate firm boundaries to avoid burnouts.`, ar: `يفهم الاحتياجات الشخصية ويمكنه صياغة حدود حاسمة لتجنب الإرهاق.` }
+                { en: `Understands personal needs and can formulate firm boundaries to avoid burnouts.`, ar: `يفهم الاحتياجات الشخصية ويمكنه صياغة حدود حاسمة لتجنب الإرهاق.` },
+                { en: `Personal self-presentation values matches individual expectation by 100%.`, ar: `تتوافق قيم مظهرك وهندامك مع تفضيلاتك بنسبة 100%.` }
             ];
             sampleStrengths.forEach(item => {
                 const li = document.createElement("li");
