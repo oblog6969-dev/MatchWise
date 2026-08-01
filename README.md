@@ -1,4 +1,4 @@
-# MatchWise Lite v1.0
+# MatchWise Lite v1.2
 
 MatchWise Lite is a production-quality, offline relationship compatibility assessment tool. It is designed to run entirely inside the browser without requiring any backend, database, login, API, or internet connection.
 
