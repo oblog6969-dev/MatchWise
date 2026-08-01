@@ -305,6 +305,14 @@ const PersonalityEngine = {
         const sortedLangs = Object.entries(loveLangScores).sort((a, b) => b[1] - a[1]);
         const primaryLoveLang = sortedLangs[0][0];
 
+        // Extract exact raw values for aesthetics (q66, q67, q68, q69) to assist cross-matching
+        const aesthetic_profile = {
+            self_presentation: answers["q66"] || "natural",
+            expect_presentation: answers["q67"] || "natural",
+            self_fashion: answers["q68"] || "casual",
+            expect_fashion: answers["q69"] || "casual"
+        };
+
         // Normalize miscellaneous values
         const finalOthers = {};
         for (const [k, v] of Object.entries(other_traits)) {
@@ -365,6 +373,7 @@ const PersonalityEngine = {
                 scores: loveLangScores
             },
             values_and_lifestyle: finalOthers,
+            aesthetic_profile: aesthetic_profile,
             assessment_confidence: clamp(calculatedConfidence, 55, 98) // never state 100% certainty
         };
     }
