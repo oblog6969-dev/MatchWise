@@ -47,9 +47,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Dashboard elements
         profileFileInput: document.getElementById("profileFileInput"),
         btnCompareSelected: document.getElementById("btnCompareSelected"),
+        btnCompareText: document.getElementById("btnCompareText"),
         profilesListContainer: document.getElementById("profilesListContainer"),
 
         // Report Elements
+        reportSectionSummary: document.getElementById("reportSectionSummary"),
+        gaugeCardContainer: document.getElementById("gaugeCardContainer"),
+        radarChartCard: document.getElementById("radarChartCard"),
+        radarChartTitle: document.getElementById("radarChartTitle"),
+        barChartTitle: document.getElementById("barChartTitle"),
         reportOverallIndex: document.getElementById("reportOverallIndex"),
         circleProgressFill: document.getElementById("circleProgressFill"),
         reportConfidence: document.getElementById("reportConfidence"),
@@ -500,6 +506,17 @@ document.addEventListener("DOMContentLoaded", () => {
             checkbox.type = "checkbox";
             checkbox.className = "premium-checkbox";
             checkbox.value = p.id;
+            checkbox.addEventListener("change", () => {
+                // Update button text dynamically on checking boxes
+                const selectedCount = dom.profilesListContainer.querySelectorAll(".premium-checkbox:checked").length;
+                if (selectedCount === 2) {
+                    dom.btnCompareText.textContent = state.localization.get("compare");
+                } else if (selectedCount === 1) {
+                    dom.btnCompareText.textContent = state.localization.currentLang === "ar" ? "عرض الملف المحدد" : "View Selected Profile";
+                } else {
+                    dom.btnCompareText.textContent = "Compare / View Selected";
+                }
+            });
 
             const meta = document.createElement("div");
             meta.className = "profile-meta-info";
@@ -513,6 +530,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const actionsCol = document.createElement("div");
             actionsCol.className = "profile-actions-col";
+
+            // View Profile row action icon
+            const btnViewDirect = document.createElement("button");
+            btnViewDirect.className = "icon-btn";
+            btnViewDirect.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+            btnViewDirect.title = state.localization.currentLang === "ar" ? "عرض الملف" : "View Profile";
+            btnViewDirect.addEventListener("click", () => {
+                generateAndRenderReport(p, null);
+            });
 
             // Download file button
             const btnDownload = document.createElement("button");
@@ -545,6 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            actionsCol.appendChild(btnViewDirect);
             actionsCol.appendChild(btnDownload);
             actionsCol.appendChild(btnDelete);
 
@@ -585,111 +612,214 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsText(file);
     });
 
-    // Compare action
+    // Compare / View action
     dom.btnCompareSelected.addEventListener("click", () => {
         const checkedBoxes = dom.profilesListContainer.querySelectorAll(".premium-checkbox:checked");
-        if (checkedBoxes.length !== 2) {
+        if (checkedBoxes.length !== 1 && checkedBoxes.length !== 2) {
             alert(state.localization.get("select_profiles_to_compare"));
             return;
         }
 
         const saved = window.Storage.getProfiles();
-        const profileA = saved.find(p => p.id === checkedBoxes[0].value);
-        const profileB = saved.find(p => p.id === checkedBoxes[1].value);
+        if (checkedBoxes.length === 2) {
+            const profileA = saved.find(p => p.id === checkedBoxes[0].value);
+            const profileB = saved.find(p => p.id === checkedBoxes[1].value);
 
-        if (profileA && profileB) {
-            generateAndRenderReport(profileA, profileB);
+            if (profileA && profileB) {
+                generateAndRenderReport(profileA, profileB);
+            }
+        } else {
+            const profileA = saved.find(p => p.id === checkedBoxes[0].value);
+            if (profileA) {
+                generateAndRenderReport(profileA, null);
+            }
         }
     });
 
     // --- 9. GENERATE & RENDER GRAPHIC REPORTS ---
     function generateAndRenderReport(profileA, profileB) {
-        const report = window.CompatibilityEngine.compare(profileA, profileB);
         navigateTo("panelReport");
-
-        // Top overall summaries
-        dom.reportOverallIndex.textContent = `${report.overall_index}%`;
-        dom.circleProgressFill.setAttribute("stroke-dasharray", `${report.overall_index}, 100`);
-        dom.reportConfidence.textContent = `${report.report_confidence}%`;
-
-        // Bilingual Dynamic Summary Builder
         const isAr = state.localization.currentLang === "ar";
-        let summaryText = "";
-        if (report.overall_index >= 85) {
-            summaryText = isAr
-                ? `تناغم استثنائي وتوافق فكري وعاطفي عميق تم رصده بين ${profileA.owner_name} و ${profileB.owner_name}. تتلاقى الأهداف الحياتية والرؤى المستقبلية لإنشاء علاقة مستدامة للغاية.`
-                : `Outstanding structural synergy and deep emotional alignment detected between ${profileA.owner_name} and ${profileB.owner_name}. Core life visions and communication patterns are beautifully synchronized.`;
-        } else if (report.overall_index >= 70) {
-            summaryText = isAr
-                ? `توافق أساسي قوي للغاية بين ${profileA.owner_name} و ${profileB.owner_name}. هناك بعض النقاط الحوارية الهامة حول إدارة الشؤون المالية والحدود العائلية التي تتطلب تفاهمات واعية.`
-                : `Solid foundational compatibility with minor functional frictions between ${profileA.owner_name} and ${profileB.owner_name}. Minor discrepancies in household management and boundaries represent opportunities for proactive communication.`;
-        } else {
-            summaryText = isAr
-                ? `تم اكتشاف اختلافات فكرية واجتماعية واضحة في رؤية العلاقة بين ${profileA.owner_name} و ${profileB.owner_name}. يتطلب البناء السليم صياغة التزامات تفصيلية حول أسلوب المعيشة والاتفاق المالي.`
-                : `Significant thematic contrasts and personality divergence observed between ${profileA.owner_name} and ${profileB.owner_name}. Bridging these boundaries will require high intentionality, empathetic listening, and structural compromises.`;
-        }
-        dom.reportExecutiveSummaryText.textContent = summaryText;
 
-        // Meta parameters
-        dom.reportHeaderPersonA.textContent = profileA.owner_name;
-        dom.reportHeaderPersonB.textContent = profileB.owner_name;
+        // Show/hide comparison elements dynamically using css class .hidden
+        const bCols = document.querySelectorAll(".person-b-col");
+        if (!profileB) {
+            // SINGLE VIEW
+            bCols.forEach(el => el.classList.add("hidden"));
+            dom.gaugeCardContainer.classList.add("hidden");
+            dom.radarChartCard.classList.add("hidden");
+            dom.reportSectionDealbreakers.classList.add("hidden");
 
-        dom.reportIdA.textContent = profileA.id;
-        dom.reportIdB.textContent = profileB.id;
-        dom.reportDateA.textContent = profileA.created_at;
-        dom.reportDateB.textContent = profileB.created_at;
-        dom.reportVerA.textContent = profileA.app_version;
-        dom.reportVerB.textContent = profileB.app_version;
-        dom.reportConfidenceA.textContent = `${profileA.assessment_confidence || 85}%`;
-        dom.reportConfidenceB.textContent = `${profileB.assessment_confidence || 85}%`;
+            dom.barChartTitle.textContent = isAr ? "تحليل السمات الشخصية الخمس الكبرى" : "Big Five Personality Analysis";
 
-        // Render Badges
-        dom.mbtiBadgeA.textContent = profileA.calculated_personality.mbti.type;
-        dom.mbtiBadgeB.textContent = profileB.calculated_personality.mbti.type;
-        dom.attachmentBadgeA.textContent = profileA.calculated_personality.attachment.primary.toUpperCase();
-        dom.attachmentBadgeB.textContent = profileB.calculated_personality.attachment.primary.toUpperCase();
-        dom.commBadgeA.textContent = profileA.calculated_personality.communication.primary.toUpperCase();
-        dom.commBadgeB.textContent = profileB.calculated_personality.communication.primary.toUpperCase();
-        dom.conflictBadgeA.textContent = profileA.calculated_personality.conflict.primary.toUpperCase();
-        dom.conflictBadgeB.textContent = profileB.calculated_personality.conflict.primary.toUpperCase();
+            const traitsA = profileA.calculated_personality;
+            dom.reportConfidence.textContent = `${profileA.assessment_confidence || 85}%`;
 
-        // Render Custom SVG Radar Chart
-        renderSVGRadarChart(report.category_scores);
+            let summaryText = isAr
+                ? `هذا هو تقرير التحليل الشخصي الخاص بـ ${profileA.owner_name}. يوضح هذا الملف السمات الفكرية والاجتماعية الفريدة ومستويات الثقة في تقييمك.`
+                : `This is the individual personality assessment report for ${profileA.owner_name}. Below is a comprehensive breakdown of your Big Five traits, MBTI tendency, attachment style, and love languages.`;
+            dom.reportExecutiveSummaryText.textContent = summaryText;
 
-        // Render Custom SVG Bar Charts (Big Five OCEAN differences)
-        renderBigFiveBarCharts(profileA.calculated_personality.big_five, profileB.calculated_personality.big_five);
+            // Meta parameters
+            dom.reportHeaderPersonA.textContent = profileA.owner_name;
+            dom.reportIdA.textContent = profileA.id;
+            dom.reportDateA.textContent = profileA.created_at;
+            dom.reportVerA.textContent = profileA.app_version;
+            dom.reportConfidenceA.textContent = `${profileA.assessment_confidence || 85}%`;
 
-        // Bullets rendering helper
-        function fillList(container, list) {
-            container.innerHTML = "";
-            list.forEach(item => {
+            // Render Badges
+            dom.mbtiBadgeA.textContent = traitsA.mbti.type;
+            dom.attachmentBadgeA.textContent = traitsA.attachment.primary.toUpperCase();
+            dom.commBadgeA.textContent = traitsA.communication.primary.toUpperCase();
+            dom.conflictBadgeA.textContent = traitsA.conflict.primary.toUpperCase();
+
+            // Big Five rendering (just pass A for both to render single)
+            renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true);
+
+            // Lists
+            dom.reportStrengthsList.innerHTML = "";
+            const sampleStrengths = [
+                { en: `High emotional self-awareness using an adaptable ${traitsA.communication.primary} communication style.`, ar: `وعي ذاتي عاطفي مرتفع باستخدام أسلوب تواصل مرن.` },
+                { en: `Understands personal needs and can formulate firm boundaries to avoid burnouts.`, ar: `يفهم الاحتياجات الشخصية ويمكنه صياغة حدود حاسمة لتجنب الإرهاق.` }
+            ];
+            sampleStrengths.forEach(item => {
                 const li = document.createElement("li");
                 li.textContent = isAr ? item.ar : item.en;
-                container.appendChild(li);
+                dom.reportStrengthsList.appendChild(li);
             });
-        }
 
-        fillList(dom.reportStrengthsList, report.strengths);
-        fillList(dom.reportChallengesList, report.challenges);
-        fillList(dom.reportDiscussionList, report.discussion_topics);
-        fillList(dom.reportGrowthList, report.growth_opportunities);
+            dom.reportChallengesList.innerHTML = "";
+            const sampleChallenges = [
+                { en: `Operating under high pressure might stress the underlying ${traitsA.attachment.primary} attachment tendency.`, ar: `قد يؤدي العمل تحت ضغط مرتفع إلى إجهاد نزعة الارتباط العاطفي لديك.` }
+            ];
+            sampleChallenges.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = isAr ? item.ar : item.en;
+                dom.reportChallengesList.appendChild(li);
+            });
 
-        // Dealbreaker Alerts (Render only if any exists)
-        if (report.deal_breakers.length > 0) {
-            dom.reportSectionDealbreakers.style.display = "block";
-            fillList(dom.reportDealbreakersList, report.deal_breakers);
-        } else {
-            dom.reportSectionDealbreakers.style.display = "none";
-        }
+            dom.reportDiscussionList.innerHTML = "";
+            const sampleTopics = [
+                { en: "How to communicate your deep emotional boundaries safely to close friends or future partners.", ar: "كيفية مشاركة حدودك العاطفية العميقة بأمان مع أصدقائك أو شريك حياتك المستقبلي." }
+            ];
+            sampleTopics.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = isAr ? item.ar : item.en;
+                dom.reportDiscussionList.appendChild(li);
+            });
 
-        // Recommendations
-        dom.reportRecommendationsContainer.innerHTML = "";
-        report.recommendations.forEach(rec => {
+            dom.reportGrowthList.innerHTML = "";
+            const sampleGrowth = [
+                { en: `Practice active mindfulness to balance the identified ${traitsA.mbti.type} cognitive preferences.`, ar: `تدرب على اليقظة الذهنية المتواصلة لموازنة التفضيلات المعرفية المحددة لنمطك.` }
+            ];
+            sampleGrowth.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = isAr ? item.ar : item.en;
+                dom.reportGrowthList.appendChild(li);
+            });
+
+            dom.reportRecommendationsContainer.innerHTML = "";
             const p = document.createElement("p");
             p.className = "summary-p";
-            p.textContent = isAr ? rec.ar : rec.en;
+            p.textContent = isAr
+                ? "يُنصح بمشاركة هذا التقرير الفردي مع شريكك المقرب لتيسير المحادثات وبناء جسور عاطفية وثيقة."
+                : "We highly recommend saving this individual report and comparing it with your partner's completed profile to generate a full Compatibility Index.";
             dom.reportRecommendationsContainer.appendChild(p);
-        });
+
+        } else {
+            // COMPARISON VIEW
+            bCols.forEach(el => el.classList.remove("hidden"));
+            dom.gaugeCardContainer.classList.remove("hidden");
+            dom.radarChartCard.classList.remove("hidden");
+
+            dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد" : "Multivariable Compatibility Index";
+            dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
+
+            const report = window.CompatibilityEngine.compare(profileA, profileB);
+
+            // Top overall summaries
+            dom.reportOverallIndex.textContent = `${report.overall_index}%`;
+            dom.circleProgressFill.setAttribute("stroke-dasharray", `${report.overall_index}, 100`);
+            dom.reportConfidence.textContent = `${report.report_confidence}%`;
+
+            // Bilingual Dynamic Summary Builder
+            let summaryText = "";
+            if (report.overall_index >= 85) {
+                summaryText = isAr
+                    ? `تناغم استثنائي وتوافق فكري وعاطفي عميق تم رصده بين ${profileA.owner_name} و ${profileB.owner_name}. تتلاقى الأهداف الحياتية والرؤى المستقبلية لإنشاء علاقة مستدامة للغاية.`
+                    : `Outstanding structural synergy and deep emotional alignment detected between ${profileA.owner_name} and ${profileB.owner_name}. Core life visions and communication patterns are beautifully synchronized.`;
+            } else if (report.overall_index >= 70) {
+                summaryText = isAr
+                    ? `توافق أساسي قوي للغاية بين ${profileA.owner_name} و ${profileB.owner_name}. هناك بعض النقاط الحوارية الهامة حول إدارة الشؤون المالية والحدود العائلية التي تتطلب تفاهمات واعية.`
+                    : `Solid foundational compatibility with minor functional frictions between ${profileA.owner_name} and ${profileB.owner_name}. Minor discrepancies in household management and boundaries represent opportunities for proactive communication.`;
+            } else {
+                summaryText = isAr
+                    ? `تم اكتشاف اختلافات فكرية واجتماعية واضحة في رؤية العلاقة بين ${profileA.owner_name} و ${profileB.owner_name}. يتطلب البناء السليم صياغة التزامات تفصيلية حول أسلوب المعيشة والاتفاق المالي.`
+                    : `Significant thematic contrasts and personality divergence observed between ${profileA.owner_name} and ${profileB.owner_name}. Bridging these boundaries will require high intentionality, empathetic listening, and structural compromises.`;
+            }
+            dom.reportExecutiveSummaryText.textContent = summaryText;
+
+            // Meta parameters
+            dom.reportHeaderPersonA.textContent = profileA.owner_name;
+            dom.reportHeaderPersonB.textContent = profileB.owner_name;
+
+            dom.reportIdA.textContent = profileA.id;
+            dom.reportIdB.textContent = profileB.id;
+            dom.reportDateA.textContent = profileA.created_at;
+            dom.reportDateB.textContent = profileB.created_at;
+            dom.reportVerA.textContent = profileA.app_version;
+            dom.reportVerB.textContent = profileB.app_version;
+            dom.reportConfidenceA.textContent = `${profileA.assessment_confidence || 85}%`;
+            dom.reportConfidenceB.textContent = `${profileB.assessment_confidence || 85}%`;
+
+            // Render Badges
+            dom.mbtiBadgeA.textContent = profileA.calculated_personality.mbti.type;
+            dom.mbtiBadgeB.textContent = profileB.calculated_personality.mbti.type;
+            dom.attachmentBadgeA.textContent = profileA.calculated_personality.attachment.primary.toUpperCase();
+            dom.attachmentBadgeB.textContent = profileB.calculated_personality.attachment.primary.toUpperCase();
+            dom.commBadgeA.textContent = profileA.calculated_personality.communication.primary.toUpperCase();
+            dom.commBadgeB.textContent = profileB.calculated_personality.communication.primary.toUpperCase();
+            dom.conflictBadgeA.textContent = profileA.calculated_personality.conflict.primary.toUpperCase();
+            dom.conflictBadgeB.textContent = profileB.calculated_personality.conflict.primary.toUpperCase();
+
+            // Render Custom SVG Radar Chart
+            renderSVGRadarChart(report.category_scores);
+
+            // Render Custom SVG Bar Charts (Big Five OCEAN differences)
+            renderBigFiveBarCharts(profileA.calculated_personality.big_five, profileB.calculated_personality.big_five, false);
+
+            // Bullets rendering helper
+            function fillList(container, list) {
+                container.innerHTML = "";
+                list.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = isAr ? item.ar : item.en;
+                    container.appendChild(li);
+                });
+            }
+
+            fillList(dom.reportStrengthsList, report.strengths);
+            fillList(dom.reportChallengesList, report.challenges);
+            fillList(dom.reportDiscussionList, report.discussion_topics);
+            fillList(dom.reportGrowthList, report.growth_opportunities);
+
+            // Dealbreaker Alerts (Render only if any exists)
+            if (report.deal_breakers.length > 0) {
+                dom.reportSectionDealbreakers.classList.remove("hidden");
+                fillList(dom.reportDealbreakersList, report.deal_breakers);
+            } else {
+                dom.reportSectionDealbreakers.classList.add("hidden");
+            }
+
+            // Recommendations
+            dom.reportRecommendationsContainer.innerHTML = "";
+            report.recommendations.forEach(rec => {
+                const p = document.createElement("p");
+                p.className = "summary-p";
+                p.textContent = isAr ? rec.ar : rec.en;
+                dom.reportRecommendationsContainer.appendChild(p);
+            });
+        }
     }
 
     // --- 10. LIGHTWEIGHT CUSTOM SVG GRAPHICS ---
@@ -773,7 +903,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dom.radarChartContainer.appendChild(svg);
     }
 
-    function renderBigFiveBarCharts(oceanA, oceanB) {
+    function renderBigFiveBarCharts(oceanA, oceanB, isSingle = false) {
         dom.bigFiveBarChartContainer.innerHTML = "";
         const traits = Object.keys(oceanA);
 
@@ -786,10 +916,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const labelInfo = document.createElement("div");
             labelInfo.className = "bar-label-info";
-            labelInfo.innerHTML = `
-                <span style="text-transform: capitalize; font-weight: 700;">${trait}</span>
-                <span>${scoreA}% vs ${scoreB}%</span>
-            `;
+            if (isSingle) {
+                labelInfo.innerHTML = `
+                    <span style="text-transform: capitalize; font-weight: 700;">${trait}</span>
+                    <span>${scoreA}%</span>
+                `;
+            } else {
+                labelInfo.innerHTML = `
+                    <span style="text-transform: capitalize; font-weight: 700;">${trait}</span>
+                    <span>${scoreA}% vs ${scoreB}%</span>
+                `;
+            }
 
             const track = document.createElement("div");
             track.className = "bar-track";
@@ -800,17 +937,23 @@ document.addEventListener("DOMContentLoaded", () => {
             fillA.className = "bar-fill";
             fillA.style.width = `${scoreA}%`;
             fillA.style.backgroundColor = "var(--success)";
-            fillA.style.height = "50%";
-
-            // Person B colored line
-            const fillB = document.createElement("div");
-            fillB.className = "bar-fill";
-            fillB.style.width = `${scoreB}%`;
-            fillB.style.backgroundColor = "var(--warning)";
-            fillB.style.height = "50%";
-
+            if (isSingle) {
+                fillA.style.height = "100%";
+            } else {
+                fillA.style.height = "50%";
+            }
             track.appendChild(fillA);
-            track.appendChild(fillB);
+
+            if (!isSingle) {
+                // Person B colored line
+                const fillB = document.createElement("div");
+                fillB.className = "bar-fill";
+                fillB.style.width = `${scoreB}%`;
+                fillB.style.backgroundColor = "var(--warning)";
+                fillB.style.height = "50%";
+                track.appendChild(fillB);
+            }
+
             row.appendChild(labelInfo);
             row.appendChild(track);
 

@@ -1078,6 +1078,11 @@ body.rtl .report-bullet-list li::before {
     }
 }
 
+/* Hide elements dynamically */
+.hidden, .person-b-col.hidden {
+    display: none !important;
+}
+
 /* Mobile responsive scaling */
 @media (max-width: 600px) {
     .app-content {

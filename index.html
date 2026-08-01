@@ -151,9 +151,9 @@
 
                 <div class="action-card">
                     <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
-                    <p data-i18n="compare_instructions" class="action-desc">Select two checkboxed profiles below and click 'Compare Selected' to generate a full report.</p>
+                    <p data-i18n="compare_instructions" class="action-desc">Select one or two checkboxed profiles below and click 'Compare / View Selected' to generate a report.</p>
                     <button id="btnCompareSelected" class="primary-btn" style="width: 100%;">
-                        <span data-i18n="compare">Compare Selected</span>
+                        <span id="btnCompareText">Compare / View Selected</span>
                     </button>
                 </div>
             </div>
@@ -191,10 +191,10 @@
                 </div>
 
                 <!-- Executive Summary -->
-                <section class="report-section">
+                <section class="report-section" id="reportSectionSummary">
                     <h3 class="section-title" data-i18n="executive_summary">Executive Summary</h3>
                     <div class="overall-index-gauge-container">
-                        <div class="gauge-card">
+                        <div class="gauge-card" id="gaugeCardContainer">
                             <span data-i18n="overall_comp">Overall Compatibility</span>
                             <div class="gauge-number-wrapper">
                                 <span id="reportOverallIndex" class="gauge-index-num">85%</span>
@@ -224,29 +224,29 @@
                                 <tr>
                                     <th>Parameter</th>
                                     <th id="reportHeaderPersonA">Person A</th>
-                                    <th id="reportHeaderPersonB">Person B</th>
+                                    <th id="reportHeaderPersonB" class="person-b-col">Person B</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td data-i18n="id">ID</td>
                                     <td id="reportIdA">--</td>
-                                    <td id="reportIdB">--</td>
+                                    <td id="reportIdB" class="person-b-col">--</td>
                                 </tr>
                                 <tr>
                                     <td data-i18n="created_at">Created At</td>
                                     <td id="reportDateA">--</td>
-                                    <td id="reportDateB">--</td>
+                                    <td id="reportDateB" class="person-b-col">--</td>
                                 </tr>
                                 <tr>
                                     <td data-i18n="app_version">Version</td>
                                     <td id="reportVerA">--</td>
-                                    <td id="reportVerB">--</td>
+                                    <td id="reportVerB" class="person-b-col">--</td>
                                 </tr>
                                 <tr>
                                     <td data-i18n="confidence_score">Confidence</td>
                                     <td id="reportConfidenceA">--</td>
-                                    <td id="reportConfidenceB">--</td>
+                                    <td id="reportConfidenceB" class="person-b-col">--</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -259,8 +259,8 @@
 
                     <div class="personality-visuals-grid">
                         <!-- Custom Radar Chart for Category Scores -->
-                        <div class="chart-card">
-                            <h4>Multivariable Compatibility Index</h4>
+                        <div class="chart-card" id="radarChartCard">
+                            <h4 id="radarChartTitle">Multivariable Compatibility Index</h4>
                             <div id="radarChartContainer" class="chart-container">
                                 <!-- Dynamic SVG Radar Chart -->
                             </div>
@@ -268,7 +268,7 @@
 
                         <!-- Side Bar Comparisons -->
                         <div class="chart-card">
-                            <h4>Big Five / Temperament Alignment</h4>
+                            <h4 id="barChartTitle">Big Five / Temperament Alignment</h4>
                             <div id="bigFiveBarChartContainer" class="bars-container">
                                 <!-- Dynamic SVG Bar Charts -->
                             </div>
@@ -281,28 +281,28 @@
                             <h5 data-i18n="mbti_label">MBTI Tendency</h5>
                             <div class="type-row">
                                 <div class="person-type-badge type-a" id="mbtiBadgeA">INFP</div>
-                                <div class="person-type-badge type-b" id="mbtiBadgeB">ENFJ</div>
+                                <div class="person-type-badge type-b person-b-col" id="mbtiBadgeB">ENFJ</div>
                             </div>
                         </div>
                         <div class="type-card">
                             <h5 data-i18n="attachment_label">Attachment Style</h5>
                             <div class="type-row">
                                 <div class="person-type-badge type-a" id="attachmentBadgeA">Secure</div>
-                                <div class="person-type-badge type-b" id="attachmentBadgeB">Anxious</div>
+                                <div class="person-type-badge type-b person-b-col" id="attachmentBadgeB">Anxious</div>
                             </div>
                         </div>
                         <div class="type-card">
                             <h5 data-i18n="communication_label">Communication Style</h5>
                             <div class="type-row">
                                 <div class="person-type-badge type-a" id="commBadgeA">Assertive</div>
-                                <div class="person-type-badge type-b" id="commBadgeB">Reserved</div>
+                                <div class="person-type-badge type-b person-b-col" id="commBadgeB">Reserved</div>
                             </div>
                         </div>
                         <div class="type-card">
                             <h5 data-i18n="conflict_label">Conflict Style</h5>
                             <div class="type-row">
                                 <div class="person-type-badge type-a" id="conflictBadgeA">Collaborative</div>
-                                <div class="person-type-badge type-b" id="conflictBadgeB">Avoiding</div>
+                                <div class="person-type-badge type-b person-b-col" id="conflictBadgeB">Avoiding</div>
                             </div>
                         </div>
                     </div>
