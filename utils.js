@@ -15,6 +15,17 @@ const TRANSLATIONS = {
         compare_profiles: "Compare Saved Profiles",
         dashboard_title: "Dashboard",
         import_profile: "Import Profile",
+        import_desc_json: "Upload a partner's decrypted or exported JSON file directly to compare.",
+        import_code_title: "Import Shareable Code",
+        import_desc_code: "Paste a partner's copied result code directly to import.",
+        import_code_btn: "Import Code",
+        gender: "Gender",
+        gender_male: "Male",
+        gender_female: "Female",
+        marital_status: "Marital Status",
+        marital_single: "Single",
+        marital_married: "Married",
+        marital_used_to_be_married: "Used to be married",
         no_profiles: "No saved profiles found. Start an assessment or import a profile to begin.",
         delete: "Delete",
         compare: "Compare Selected",
@@ -62,7 +73,7 @@ const TRANSLATIONS = {
         app_version: "Version",
         person_a: "Person A (Left Profile)",
         person_b: "Person B (Right Profile)",
-        select_profiles_to_compare: "Please select exactly two profiles to compare.",
+        select_profiles_to_compare: "Please select 1 or 2 profiles to compare or view.",
         import_btn_label: "Select Profile JSON File",
         close: "Close",
         required_questions_info: "Note: Adaptive engine selects the most relevant questions based on your responses (Minimum 45, Maximum 70).",
@@ -83,6 +94,17 @@ const TRANSLATIONS = {
         compare_profiles: "مقارنة الملفات الشخصية المحفوظة",
         dashboard_title: "لوحة التحكم",
         import_profile: "استيراد ملف شخصي",
+        import_desc_json: "قم برفع ملف JSON المشفر أو المصدر الخاص بالطرف الآخر مباشرة للمقارنة.",
+        import_code_title: "استيراد رمز مشاركة النتيجة",
+        import_desc_code: "قم بلصق رمز المشاركة المنسوخ الخاص بالطرف الآخر مباشرة لاستيراده.",
+        import_code_btn: "استيراد الرمز",
+        gender: "الجنس",
+        gender_male: "ذكر",
+        gender_female: "أنثى",
+        marital_status: "الحالة الاجتماعية",
+        marital_single: "أعزب / عزباء",
+        marital_married: "متزوج / متزوجة",
+        marital_used_to_be_married: "منفصل / منفصلة (سبق له الزواج)",
         no_profiles: "لم يتم العثور على ملفات شخصية محفوظة. ابدأ تقييماً أو استورد ملفاً للبدء.",
         delete: "حذف",
         compare: "مقارنة المحددين",
@@ -130,7 +152,7 @@ const TRANSLATIONS = {
         app_version: "نسخة التطبيق",
         person_a: "الطرف أ (الملف الأيسر)",
         person_b: "الطرف ب (الملف الأيمن)",
-        select_profiles_to_compare: "يرجى تحديد ملفين شخصيين بالضبط للمقارنة.",
+        select_profiles_to_compare: "يرجى تحديد ملف شخصي واحد أو ملفين للمقارنة أو العرض.",
         import_btn_label: "اختر ملف JSON للملف الشخصي",
         close: "إغلاق",
         required_questions_info: "ملاحظة: يقوم المحرك التكيفي باختيار الأسئلة الأكثر صلة بناءً على إجاباتك (الحد الأدنى 45، الأقصى 70).",
@@ -287,6 +309,64 @@ const Cryptography = {
             return null;
         } catch (e) {
             console.error("Failed to decrypt profile data.", e);
+            return null;
+        }
+    },
+
+    generateResultCode(profile) {
+        const compactObj = {
+            id: profile.id,
+            n: profile.owner_name,
+            g: profile.gender,
+            m: profile.marital_status,
+            a: profile.answers
+        };
+        const rawString = JSON.stringify(compactObj);
+        let result = "";
+        const key = "MatchWiseLiteV1ResultSharingKeySalt-2026";
+        for (let i = 0; i < rawString.length; i++) {
+            const charCode = rawString.charCodeAt(i);
+            const keyChar = key.charCodeAt(i % key.length);
+            const cipherVal = charCode ^ keyChar ^ (i % 256);
+            result += String.fromCharCode(cipherVal);
+        }
+        return "MWCODE-" + btoa(encodeURIComponent(result));
+    },
+
+    parseResultCode(codeString) {
+        try {
+            if (!codeString || !codeString.startsWith("MWCODE-")) return null;
+            const encryptedPart = codeString.substring(7);
+            const decoded = decodeURIComponent(atob(encryptedPart));
+            let result = "";
+            const key = "MatchWiseLiteV1ResultSharingKeySalt-2026";
+            for (let i = 0; i < decoded.length; i++) {
+                const charCode = decoded.charCodeAt(i);
+                const keyChar = key.charCodeAt(i % key.length);
+                const plainVal = charCode ^ keyChar ^ (i % 256);
+                result += String.fromCharCode(plainVal);
+            }
+            const parsed = JSON.parse(result);
+            if (parsed && parsed.n && parsed.a) {
+                // Return a full profile object, traits will be calculated dynamically on store
+                const profile = {
+                    id: parsed.id || "mw_" + Math.random().toString(36).substring(2, 10).toUpperCase(),
+                    owner_name: parsed.n,
+                    gender: parsed.g || "M",
+                    marital_status: parsed.m || "single",
+                    answers: parsed.a,
+                    created_at: new Date().toLocaleDateString("en-US", {
+                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }),
+                    app_version: "v1.2",
+                    calculated_personality: null,
+                    assessment_confidence: 85
+                };
+                return profile;
+            }
+            return null;
+        } catch (e) {
+            console.error("Failed to parse sharing result code.", e);
             return null;
         }
     }

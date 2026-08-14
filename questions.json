@@ -2,1042 +2,1319 @@
   {
     "id": "q1",
     "category": "Personality",
-    "type": "likert",
+    "type": "scenario",
     "weight": 1.0,
     "trait": "extroversion",
-    "importance": "medium",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I feel energized and recharged after spending time in lively social gatherings."
+      "text": "Scenario: After a demanding workweek in Riyadh, how would you prefer to spend your Friday evening?"
     },
     "arabic": {
-      "text": "أشعر بالحيوية والنشاط بعد قضاء الوقت في التجمعات الاجتماعية الصاخبة."
+      "text": "سيناريو: بعد أسبوع عمل شاق في الرياض، كيف تفضل قضاء مساء يوم الجمعة؟"
     },
-    "followups": [
+    "options": [
       {
-        "next_id": "q1_follow",
-        "condition": "agree"
+        "id": "opt1",
+        "english": "Attending a lively gathering (Isteraha) with a large circle of friends or extended family.",
+        "arabic": "حضور تجمع حيوي (استراحة) مع مجموعة كبيرة من الأصدقاء أو العائلة الممتدة.",
+        "trait_scores": {
+          "extroversion": 2.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Having a quiet dinner or cafe visit with one close friend or your spouse.",
+        "arabic": "تناول عشاء هادئ أو زيارة مقهى مع صديق مقرب واحد أو مع شريك حياتك.",
+        "trait_scores": {
+          "extroversion": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Staying home entirely, relaxing, and reading or watching a movie in solitude.",
+        "arabic": "البقاء في المنزل تماماً، والاسترخاء، أو القراءة أو مشاهدة فيلم بمفردك.",
+        "trait_scores": {
+          "extroversion": -1.0
+        }
       }
     ]
   },
   {
-    "id": "q1_follow",
+    "id": "q2",
     "category": "Personality",
-    "type": "choice",
-    "weight": 1.2,
-    "trait": "extroversion",
-    "importance": "low",
-    "is_followup": true,
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "mbti_sn",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When discussing a new investment or household project, you find yourself focusing on:"
+    },
+    "arabic": {
+      "text": "سيناريو: عند مناقشة استثمار جديد أو مشروع منزلي، تجد نفسك تركز على:"
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "Realistic details, immediate costs, and proven historical returns.",
+        "arabic": "التفاصيل الواقعية، التكاليف الفورية، والعوائد التاريخية المثبتة.",
         "trait_scores": {
-          "extroversion": 1.5,
-          "mbti_e": 1.5
-        },
-        "english": "Host parties or group events myself",
-        "arabic": "استضافة الحفلات أو المناسبات الجماعية بنفسي"
+          "mbti_s": 2.0
+        }
       },
       {
         "id": "opt2",
+        "english": "The future potential, creative possibilities, and long-term abstract growth.",
+        "arabic": "الإمكانيات المستقبلية، الاحتمالات الإبداعية، والنمو التجريدي طويل المدى.",
         "trait_scores": {
-          "extroversion": 1.0,
-          "mbti_e": 1.0
-        },
-        "english": "Attend events but let others organize",
-        "arabic": "حضور المناسبات ولكن أترك التنظيم للآخرين"
-      },
-      {
-        "id": "opt3",
-        "trait_scores": {
-          "extroversion": 0.5
-        },
-        "english": "Prefer small, intimate gatherings only",
-        "arabic": "أفضل التجمعات الصغيرة والحميمة فقط"
+          "mbti_n": 2.0
+        }
       }
-    ],
-    "english": {
-      "text": "As someone who enjoys social settings, what is your preferred role?"
-    },
-    "arabic": {
-      "text": "بصفتك شخصاً يستمتع بالأجواء الاجتماعية، ما هو دورك المفضل؟"
-    }
-  },
-  {
-    "id": "q2",
-    "category": "Personality",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "agreeableness",
-    "importance": "medium",
-    "english": {
-      "text": "I often prioritize other people's needs and happiness above my own."
-    },
-    "arabic": {
-      "text": "غالباً ما أقدم احتياجات الآخرين وسعادتهم على احتياجاتي وسعادتي الخاصة."
-    }
+    ]
   },
   {
     "id": "q3",
     "category": "Personality",
-    "type": "likert",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "conscientiousness",
-    "importance": "high",
+    "trait": "mbti_tf",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I prefer having a detailed plan and schedule rather than acting spontaneously."
+      "text": "Scenario: A close relative makes a serious financial planning mistake and asks you for advice. You prioritize:"
     },
     "arabic": {
-      "text": "أفضل وجود خطة وجدول زمني مفصلين بدلاً من التصرف بعفوية."
-    }
+      "text": "سيناريو: يرتكب قريب مقرب خطأً فادحاً في التخطيط المالي ويطلب منك المشورة. أنت تعطي الأولوية لـ:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Logical analysis, identifying exactly where they erred, and giving objective corrections.",
+        "arabic": "التحليل المنطقي، تحديد موضع الخطأ بدقة، وتقديم تصحيحات موضوعية.",
+        "trait_scores": {
+          "mbti_t": 2.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Empathy, protecting their feelings, and offering supportive, warm reassurance first.",
+        "arabic": "التعاطف، مراعاة مشاعرهم، وتقديم تطمين دافئ وداعم أولاً.",
+        "trait_scores": {
+          "mbti_f": 2.0
+        }
+      }
+    ]
   },
   {
     "id": "q4",
     "category": "Personality",
-    "type": "likert",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "neuroticism",
+    "trait": "mbti_jp",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I tend to worry frequently about future scenarios or unexpected setbacks."
+      "text": "Scenario: You are planning a vacation to Europe. How do you approach the itinerary?"
     },
     "arabic": {
-      "text": "أميل إلى القلق بشكل متكرر بشأن السيناريوهات المستقبلية أو العقبات غير المتوقعة."
-    }
+      "text": "سيناريو: أنت تخطط لقضاء إجازة في أوروبا. كيف تقارب جدول الرحلة؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Booking every hotel, flight, and daily activity outline in advance to ensure peace of mind.",
+        "arabic": "حجز كل فندق، طائرة، وتحديد تفاصيل الأنشطة اليومية مسبقاً لضمان راحة البال.",
+        "trait_scores": {
+          "mbti_j": 2.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Booking flights only, leaving daily schedules open and flexible to adapt to your mood.",
+        "arabic": "حجز الطيران فقط، وترك الجداول اليومية مفتوحة ومرنة للتكيف مع حالتك المزاجية.",
+        "trait_scores": {
+          "mbti_p": 2.0
+        }
+      }
+    ]
   },
   {
     "id": "q5",
     "category": "Personality",
     "type": "likert",
     "weight": 1.0,
-    "trait": "openness",
+    "trait": "agreeableness",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I am constantly seeking new intellectual concepts, abstract ideas, or artistic experiences."
+      "text": "Situation: When a minor domestic conflict arises, I tend to yield my preference immediately to keep the relationship peaceful."
     },
     "arabic": {
-      "text": "أبحث باستمرار عن مفاهيم فكرية جديدة، أو أفكار مجردة، أو تجارب فنية."
+      "text": "موقف: عند حدوث خلاف منزلي بسيط، أميل للتنازل عن تفضيلاتي فوراً للحفاظ على سلام وهدوء العلاقة."
     }
   },
   {
     "id": "q6",
     "category": "Personality",
-    "type": "choice",
+    "type": "likert",
     "weight": 1.0,
-    "trait": "mbti_t_f",
-    "importance": "medium",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "mbti_t": 1.5
-        },
-        "english": "Analyze facts, pros/cons, and logical consequences objectively.",
-        "arabic": "تحليل الحقائق، الإيجابيات والسلبيات، والنتائج المنطقية بموضوعية."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "mbti_f": 1.5
-        },
-        "english": "Consider the impact on feelings, values, and interpersonal harmony.",
-        "arabic": "مراعاة التأثير على المشاعر، القيم، والانسجام بين الأشخاص."
-      }
-    ],
+    "trait": "conscientiousness",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "When making an important life choice, what guides you most?"
+      "text": "Situation: I maintain structured spreadsheets or digital ledgers to track our monthly family budget and obligations."
     },
     "arabic": {
-      "text": "عند اتخاذ قرار حياتي مهم، ما الذي يوجهك أكثر؟"
+      "text": "موقف: أحتفظ بجداول بيانات منظمة أو دفاتر حسابات رقمية لمتابعة الميزانية الشهرية والالتزامات الأسرية."
     }
   },
   {
     "id": "q7",
     "category": "Personality",
-    "type": "scenario",
+    "type": "likert",
     "weight": 1.0,
-    "trait": "attachment_style",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "attachment_secure": 2.0
-        },
-        "english": "Communicate my feelings honestly and feel confident we can work through it.",
-        "arabic": "أعبر عن مشاعري بصدق وأشعر بالثقة في أنه يمكننا تجاوز الأمر."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "attachment_anxious": 2.0
-        },
-        "english": "Worry excessively that my partner is losing interest or pulling away.",
-        "arabic": "أقلق بشكل مفرط من أن شريكي يفقد اهتمامه أو يبتعد عني."
-      },
-      {
-        "id": "opt3",
-        "trait_scores": {
-          "attachment_avoidant": 2.0
-        },
-        "english": "Withdraw, seek space, and handle my emotions entirely on my own.",
-        "arabic": "أنسحب، وأبحث عن مساحة خاصة، وأتعامل مع مشاعري بمفردي تماماً."
-      }
-    ],
+    "trait": "neuroticism",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Scenario: Your partner has been unusually quiet and distant for two days. How do you naturally react?"
+      "text": "Situation: If my spouse does not answer my calls or messages for a few hours, I naturally begin to worry and assume something is wrong."
     },
     "arabic": {
-      "text": "سيناريو: شريكك هادئ ومتباعد بشكل غير معتاد لمدة يومين. كيف تكون ردة فعلك التلقائية؟"
+      "text": "موقف: إذا لم يرد شريكي على مكالماتي أو رسائلي لبضع ساعات، أبدأ طبيعياً بالقلق وأفترض أن مكروهاً قد حدث."
     }
   },
   {
     "id": "q8",
-    "category": "Communication",
+    "category": "Personality",
     "type": "likert",
     "weight": 1.0,
-    "trait": "communication_assertive",
-    "importance": "high",
+    "trait": "openness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I feel comfortable expressing my needs and boundaries directly, even if it causes minor tension."
+      "text": "Situation: I enjoy attending cultural events, exploring art galleries, or discussing philosophical and abstract concepts with my partner."
     },
     "arabic": {
-      "text": "أشعر بالارتياح للتعبير عن احتياجاتي وحدودي بشكل مباشر، حتى لو تسبب ذلك في توتر بسيط."
+      "text": "موقف: أستمتع بحضور الفعاليات الثقافية، أو استكشاف المعارض الفنية، أو مناقشة المفاهيم الفلسفية والتجريدية مع شريكي."
     }
   },
   {
     "id": "q9",
-    "category": "Communication",
-    "type": "choice",
-    "weight": 1.0,
-    "trait": "communication_style",
-    "importance": "medium",
+    "category": "Lifestyle",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_traditionalism",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_housing_1",
+    "english": {
+      "text": "Situation: Your parents ask you to start your marriage living in a dedicated suite inside their large family villa to preserve strong family bonds and receive daily support."
+    },
+    "arabic": {
+      "text": "موقف: يطلب منك والداك بدء حياتك الزوجية في جناح مخصص داخل فيلا العائلة الكبيرة للحفاظ على الروابط الأسرية القوية والحصول على الدعم اليومي."
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "I fully support this; it honors the parents, builds deep family bonds, and reduces unnecessary housing costs.",
+        "arabic": "أؤيد ذلك تماماً؛ فهو يبر الوالدين، يبني روابط أسرية عميقة، ويقلل من تكاليف السكن غير الضرورية.",
         "trait_scores": {
-          "communication_assertive": 1.5
-        },
-        "english": "Speak up directly and state my thoughts respectfully",
-        "arabic": "التحدث بصراحة والتعبير عن أفكاري باحترام"
+          "ideology_traditionalism": 2.0,
+          "ideology_liberalism": -1.0
+        }
       },
       {
         "id": "opt2",
+        "english": "I would accept only as a temporary financial stepping stone, but would prefer moving out within a year.",
+        "arabic": "أقبل فقط كخطوة انتقالية مؤقتة لتوفير المال، لكني أفضل الانتقال خلال عام واحد.",
         "trait_scores": {
-          "communication_passive": 1.5
-        },
-        "english": "Keep quiet to preserve peace, hoping the issue resolves itself",
-        "arabic": "الصمت للحفاظ على السلام، على أمل أن تحل المشكلة تلقائياً"
+          "ideology_traditionalism": 0.5,
+          "ideology_liberalism": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "I decline; an independent apartment from day one is non-negotiable for personal freedom and privacy.",
+        "arabic": "أرفض؛ السكن المستقل تماماً من اليوم الأول أمر غير قابل للتفاوض لضمان الحرية والخصوصية الشخصية.",
         "trait_scores": {
-          "communication_passive_aggressive": 1.5
-        },
-        "english": "Drop subtle hints or use sarcasm to express my dissatisfaction",
-        "arabic": "إلقاء تلميحات خفية أو استخدام السخرية للتعبير عن استيائي"
+          "ideology_traditionalism": -1.0,
+          "ideology_liberalism": 2.0
+        }
       }
-    ],
-    "english": {
-      "text": "When someone treats me unfairly, my immediate tendency is to:"
-    },
-    "arabic": {
-      "text": "عندما يعاملني شخص ما بغير إنصاف، فإن ميلي المباشر هو:"
-    }
+    ]
   },
   {
     "id": "q10",
-    "category": "Communication",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "communication_active_listening",
+    "category": "Lifestyle",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_liberalism",
     "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_housing_1",
     "english": {
-      "text": "During an argument, I focus fully on understanding my partner's perspective before preparing my response."
+      "text": "Situation: Your partner insists on renting an independent apartment in Riyadh to secure absolute marital privacy, despite your family having more than enough empty space in their family home."
     },
     "arabic": {
-      "text": "خلال النقاش، أركز تماماً على فهم وجهة نظر شريكي قبل تجهيز ردي."
-    }
+      "text": "موقف: يصر شريكك على استئجار شقة مستقلة في الرياض لتأمين الخصوصية الزوجية المطلقة، على الرغم من أن عائلتك لديها مساحة فارغة تزيد عن حاجتها في المنزل الأسري الكبيير."
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I completely agree with my partner. Marital privacy and individual autonomy take priority over extended family closeness.",
+        "arabic": "أتفق تماماً مع شريكي. الخصوصية الزوجية والاستقلالية الفردية لها الأولوية على القرب من العائلة الممتدة.",
+        "trait_scores": {
+          "ideology_liberalism": 2.0,
+          "ideology_traditionalism": -1.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I feel conflicted; we should try living with the family first to save money and show respect before moving.",
+        "arabic": "أشعر بالحيرة؛ يجب أن نجرب السكن مع العائلة أولاً لتوفير المال وإظهار الاحترام قبل الانتقال.",
+        "trait_scores": {
+          "ideology_liberalism": 0.5,
+          "ideology_traditionalism": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I disagree with my partner. Demanding a separate house when family space is available is financially wasteful and isolates us from the family.",
+        "arabic": "أختلف مع شريكي. المطالبة بمسكن منفصل مع توفر مساحة عائلية هو هدر مالي ويعزلنا عن العائلة.",
+        "trait_scores": {
+          "ideology_liberalism": -1.0,
+          "ideology_traditionalism": 2.0
+        }
+      }
+    ]
   },
   {
     "id": "q11",
-    "category": "Communication",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "communication_sharing",
-    "importance": "medium",
+    "category": "Money",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_capitalism",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_nafaqah_2",
     "english": {
-      "text": "I believe in sharing my daily experiences, minor thoughts, and internal feelings with my partner every day."
+      "text": "Situation: Both of you work demanding corporate jobs in Saudi Arabia earning solid salaries. When dealing with major shared bills (rent, nanny, luxury travel), how should the split be handled?"
     },
     "arabic": {
-      "text": "أؤمن بأهمية مشاركة تجاربي اليومية، وأفكاري البسيطة، ومشاكلي الداخلية مع شريكي كل يوم."
+      "text": "موقف: كلاكما يعمل في وظائف مؤسسية مرموقة في المملكة العربية السعودية برواتب ممتازة. عند سداد الفواتير المشتركة الكبرى (الإيجار، المربية، السفر الفاخر)، كيف يجب تقسيم المصاريف؟"
     },
-    "followups": [
-      {
-        "next_id": "q11_follow",
-        "condition": "disagree"
-      }
-    ]
-  },
-  {
-    "id": "q11_follow",
-    "category": "Communication",
-    "type": "choice",
-    "weight": 1.0,
-    "trait": "communication_sharing",
-    "importance": "low",
-    "is_followup": true,
     "options": [
       {
         "id": "opt1",
+        "english": "We should split everything strictly 50/50, or proportional to our salaries. Marriage is a financial contract of equal corporate partners.",
+        "arabic": "يجب تقسيم كل شيء بنسبة 50/50، أو بما يتناسب مع رواتبنا. الزواج هو شراكة مالية متساوية.",
         "trait_scores": {
-          "communication_reserved": 1.5
-        },
-        "english": "I prefer to process feelings alone first before sharing",
-        "arabic": "أفضل معالجة مشاعري بمفردي أولاً قبل مشاركتها"
+          "ideology_capitalism": 2.0,
+          "ideology_traditionalism": -1.0
+        }
       },
       {
         "id": "opt2",
+        "english": "The husband pays for basic survival costs (rent, food), while the wife contributes to luxury items (vacations, helper).",
+        "arabic": "يدفع الزوج التكاليف الأساسية المعيشية (الإيجار، الطعام)، بينما تساهم الزوجة في الرفاهيات (الإجازات، المساعدة المنزلية).",
         "trait_scores": {
-          "communication_private": 1.5
-        },
-        "english": "I value high conversational privacy and share only significant issues",
-        "arabic": "أقدر الخصوصية الحوارية العالية وأشارك الأمور المهمة فقط"
+          "ideology_capitalism": 0.5,
+          "ideology_traditionalism": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "The husband should pay for all household bills of any kind. The wife's salary is exclusively hers to keep or invest as she wishes.",
+        "arabic": "يجب على الزوج دفع جميع الفواتير المنزلية من أي نوع كان. راتب الزوجة ملك خاص لها تماماً تحفظه أو تستثمره كما تشاء.",
+        "trait_scores": {
+          "ideology_capitalism": -1.0,
+          "ideology_traditionalism": 2.0
+        }
       }
-    ],
-    "english": {
-      "text": "Since you prefer less frequent sharing, what is your primary reason?"
-    },
-    "arabic": {
-      "text": "بما أنك تفضل مشاركة أقل تواتراً، ما هو السبب الرئيسي لذلك؟"
-    }
+    ]
   },
   {
     "id": "q12",
-    "category": "Conflict",
-    "type": "choice",
-    "weight": 1.0,
-    "trait": "conflict_style",
+    "category": "Money",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_traditionalism",
     "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_nafaqah_2",
+    "english": {
+      "text": "Situation: Even if a wife earns a substantial monthly income from her full-time career, she maintains that her husband is legally and traditionally obligated (Nafaqah) to pay 100% of the household expenses."
+    },
+    "arabic": {
+      "text": "موقف: حتى لو كانت الزوجة تجني دخلاً شهرياً ممتازاً من عملها بدوام كامل، فإنها ترى أن زوجها ملزم شرعاً وعرفاً (بالنفقة الكاملة) لدفع 100٪ من المصاريف المنزلية."
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "I fully agree. Men bear sole financial duty (Nafaqah). A wife's salary is her personal property and her contribution must be voluntary.",
+        "arabic": "أتفق تماماً. الرجال يتحملون المسؤولية المالية المطلقة (النفقة). راتب الزوجة ملك خاص ومساهمتها اختيارية.",
         "trait_scores": {
-          "conflict_collaborating": 1.5
-        },
-        "english": "Discuss the issue calmly until we reach a mutually satisfying solution",
-        "arabic": "مناقشة المشكلة بهدوء حتى نصل إلى حل يرضي الطرفين"
+          "ideology_traditionalism": 2.0,
+          "ideology_capitalism": -1.0
+        }
       },
       {
         "id": "opt2",
+        "english": "I partially agree. While Nafaqah is a traditional principle, practical Riyadh living requires the working wife to contribute to shared costs.",
+        "arabic": "أتفق جزئياً. على الرغم من أن النفقة مبدأ أصيل، إلا أن الحياة الحديثة تتطلب مساهمة الزوجة العاملة في التكاليف المشتركة.",
         "trait_scores": {
-          "conflict_avoiding": 1.5
-        },
-        "english": "Wait for tempers to cool down, sometimes avoiding the topic indefinitely",
-        "arabic": "الانتظار حتى تهدأ النفوس، وأحياناً تجنب الموضوع تماماً"
+          "ideology_traditionalism": 0.5,
+          "ideology_capitalism": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "I disagree. In modern times, if the wife works full-time, keeping 100% of her salary while the husband pays for everything is unfair and exploitative.",
+        "arabic": "أختلف تماماً. في العصر الحالي، إذا كانت المرأة تعمل بدوام كامل، فإن احتفاظها براتبها كاملاً مع دفع الزوج لكل شيء هو أمر غير عادل.",
         "trait_scores": {
-          "conflict_competing": 1.5
-        },
-        "english": "Argue my point forcefully until my perspective is fully accepted",
-        "arabic": "الجدال بقوة لإثبات وجهة نظري حتى يتم قبولها بالكامل"
-      },
-      {
-        "id": "opt4",
-        "trait_scores": {
-          "conflict_compromising": 1.5
-        },
-        "english": "Quickly find a middle ground where both of us make sacrifices",
-        "arabic": "إيجاد حل وسط سريع يقدم فيه كل منا تضحيات"
+          "ideology_traditionalism": -1.0,
+          "ideology_capitalism": 2.0
+        }
       }
-    ],
-    "english": {
-      "text": "When a disagreement arises, my natural conflict resolution style is to:"
-    },
-    "arabic": {
-      "text": "عندما ينشأ خلاف، فإن أسلوبي الطبيعي لحل النزاع هو:"
-    }
+    ]
   },
   {
     "id": "q13",
-    "category": "Conflict",
-    "type": "likert",
-    "weight": 1.1,
-    "trait": "conflict_tolerance",
-    "importance": "medium",
+    "category": "Lifestyle",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_liberalism",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_mixing_3",
     "english": {
-      "text": "I view conflicts as a healthy pathway to growth rather than a threat to the relationship."
+      "text": "Situation: A highly lucrative career promotion becomes available for one of you, but it requires frequent travel and working in a highly interactive mixed-gender environment in Riyadh."
     },
     "arabic": {
-      "text": "أرى النزاعات كمسار صحي للنمو والتطور وليس كتهديد للعلاقة."
-    }
+      "text": "موقف: تتاح فرصة ترقية وظيفية مربحة وممتازة لأحدكما، ولكنها تتطلب السفر المتكرر والعمل في بيئة عمل مختلطة تشهد تفاعلاً كبيراً بالرياض."
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "We should seize it immediately. Professional growth and career freedom are fundamental personal rights.",
+        "arabic": "يجب اقتناص الفرصة فوراً. النمو المهني والحرية الوظيفية هما حقان أساسيان للفرد.",
+        "trait_scores": {
+          "ideology_liberalism": 2.0,
+          "ideology_traditionalism": -1.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Accept the job but set clear boundaries (e.g., no mixed lunches/socializing, only strictly professional interactions).",
+        "arabic": "قبول الوظيفة مع وضع حدود صارمة وواضحة (مثلاً: لا غداء عمل مختلط، فقط تفاعل مهني رسمي).",
+        "trait_scores": {
+          "ideology_liberalism": 0.5,
+          "ideology_traditionalism": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Decline the offer. Protecting traditional social conservative values and avoiding mixing is more important than career advancement.",
+        "arabic": "رفض العرض. الحفاظ على القيم الاجتماعية المحافظة وتجنب الاختلاط أهم بكثير من الترقية المهنية.",
+        "trait_scores": {
+          "ideology_liberalism": -1.0,
+          "ideology_traditionalism": 2.0
+        }
+      }
+    ]
   },
   {
     "id": "q14",
-    "category": "Conflict",
+    "category": "Lifestyle",
     "type": "scenario",
     "weight": 1.2,
-    "trait": "conflict_behavior",
+    "trait": "ideology_traditionalism",
     "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_mixing_3",
+    "english": {
+      "text": "Situation: At a professional corporate networking dinner, you observe your partner naturally participating in polite, friendly conversation with opposite-gender colleagues."
+    },
+    "arabic": {
+      "text": "موقف: في عشاء عمل رسمي للتعارف المهني، تلاحظ أن شريك حياتك يشارك بطبيعية في حديث مهذب وودي مع زملاء من الجنس الآخر."
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "I find this highly inappropriate. Mixing and friendly banter with the opposite gender outside absolute necessity violates traditional modesty.",
+        "arabic": "أجد هذا غير لائق تماماً. الاختلاط والأحاديث الودية مع الجنس الآخر خارج الضرورة القصوى تخالف قيم العفة التقليدية.",
         "trait_scores": {
-          "conflict_collaborating": 1.5,
-          "emotional_intelligence": 1.0
-        },
-        "english": "Acknowledge their distress and schedule a specific calm time to talk.",
-        "arabic": "أقدر ضيقهم وأحدد وقتاً محدداً وهادئاً للتحدث لاحقاً."
+          "ideology_traditionalism": 2.0,
+          "ideology_liberalism": -1.0
+        }
       },
       {
         "id": "opt2",
+        "english": "I feel slightly uncomfortable but will tolerate it as long as the discussion is purely professional and brief.",
+        "arabic": "أشعر بعدم ارتياح طفيف ولكني سأتقبل الأمر ما دام الحديث مقتصراً على الجانب المهني وموجزاً.",
         "trait_scores": {
-          "conflict_competing": 1.5
-        },
-        "english": "Defend myself immediately and point out their contribution to the problem.",
-        "arabic": "أدافع عن نفسي على الفور وأشير إلى مساهمتهم في حدوث المشكلة."
+          "ideology_traditionalism": 0.5,
+          "ideology_liberalism": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "I find this completely normal and healthy. Professional interaction and networking are standard parts of modern Saudi career life.",
+        "arabic": "أجد هذا طبيعياً جداً وصحياً. العلاقات والتفاعلات المهنية جزء أساسي ومعتاد من الحياة المهنية الحديثة في السعودية.",
         "trait_scores": {
-          "conflict_avoiding": 1.5
-        },
-        "english": "Walk away or shut down because the emotional intensity feels overwhelming.",
-        "arabic": "أبتعد أو أصمت لأن الشدة العاطفية للموقف تبدو غامرة ومجهدة."
+          "ideology_traditionalism": -1.0,
+          "ideology_liberalism": 2.0
+        }
       }
-    ],
-    "english": {
-      "text": "Scenario: Your partner raises their voice and blames you for something you feel was an accident. How do you respond?"
-    },
-    "arabic": {
-      "text": "سيناريو: يرفع شريكك صوته ويلومك على شيء تشعر أنه كان مجرد حادث. كيف تستجيب؟"
-    }
+    ]
   },
   {
     "id": "q15",
-    "category": "Conflict",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "conflict_forgiveness",
-    "importance": "medium",
+    "category": "Decision making",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_feminism",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_qiwamah_4",
     "english": {
-      "text": "Once an argument is resolved, I can let go of resentment completely and quickly."
+      "text": "Situation: A critical family decision (such as buying a house or selecting a school) must be made, but despite long discussions, both partners remain in complete disagreement."
     },
     "arabic": {
-      "text": "بمجرد حل الخلاف، يمكنني التخلص من مشاعر الاستياء تماماً وبسرعة."
-    }
+      "text": "موقف: يجب اتخاذ قرار عائلي حاسم (مثل شراء منزل أو اختيار مدرسة للأولاد)، ولكن على الرغم من النقاشات الطويلة، لا يزال الشريكان في حالة اختلاف تام."
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "The decision must be delayed indefinitely until true mutual consensus is reached. Neither partner has the right to override the other.",
+        "arabic": "يجب تأجيل القرار لأجل غير مسمى حتى يتم الوصول إلى توافق مشترك حقيقي. لا يحق لأي طرف فرض رأيه على الآخر.",
+        "trait_scores": {
+          "ideology_feminism": 2.0,
+          "ideology_traditionalism": -1.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "We should ask a trusted family member or elder to arbitrate and make the final decision.",
+        "arabic": "يجب أن نطلب من أحد أفراد العائلة الموثوقين أو حكيم العائلة التحكيم واتخاذ القرار النهائي.",
+        "trait_scores": {
+          "ideology_feminism": 0.5,
+          "ideology_traditionalism": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "The husband should make the final binding decision (Qiwamah) as the head of household, and the wife should accept it.",
+        "arabic": "يجب على الزوج اتخاذ القرار النهائي الملزم (بموجب القوامة ورئاسة الأسرة)، وعلى الزوجة تقبل ذلك.",
+        "trait_scores": {
+          "ideology_feminism": -1.0,
+          "ideology_traditionalism": 2.0
+        }
+      }
+    ]
   },
   {
     "id": "q16",
-    "category": "Money",
-    "type": "choice",
-    "weight": 1.3,
-    "trait": "money_management",
+    "category": "Decision making",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "ideology_traditionalism",
     "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "ideology_pair_id": "pair_qiwamah_4",
+    "english": {
+      "text": "Situation: To secure family leadership, a husband is expected to take final ownership of major critical decisions (Qiwamah), and a wife is expected to support his leadership for domestic stability."
+    },
+    "arabic": {
+      "text": "موقف: لتأمين الاستقرار العائلي، يُتوقع من الزوج تولي القيادة والمسؤولية النهائية عن القرارات الحاسمة (القوامة)، ويُتوقع من الزوجة دعم قيادته لضمان استقرار المنزل."
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "I fully agree. Clear male leadership is a divine and social order that prevents marital chaos and provides family security.",
+        "arabic": "أتفق تماماً. القيادة الواضحة للرجل هي توجيه رباني وعرفي يحمي الأسرة من التشتت ويوفر الأمان للجميع.",
         "trait_scores": {
-          "money_joint": 2.0
-        },
-        "english": "Fully combined: All income goes into joint accounts, all expenses paid together",
-        "arabic": "مشترك بالكامل: تذهب جميع المداخيل إلى حسابات مشتركة، وتُدفع جميع المصاريف معاً"
+          "ideology_traditionalism": 2.0,
+          "ideology_feminism": -1.0
+        }
       },
       {
         "id": "opt2",
+        "english": "I partially agree. The husband can lead on paper, but all actual decisions must be agreed upon mutually.",
+        "arabic": "أتفق جزئياً. للزوج حق القيادة رسمياً، ولكن جميع القرارات الفعلية في الواقع يجب أن تتم بالتوافق التام والكامل.",
         "trait_scores": {
-          "money_hybrid": 2.0
-        },
-        "english": "Hybrid: Joint accounts for shared expenses, separate accounts for personal spending",
-        "arabic": "مختلط: حسابات مشتركة للنفقات المشتركة، وحسابات منفصلة للإنفاق الشخصي"
+          "ideology_traditionalism": 0.5,
+          "ideology_feminism": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "I completely disagree. Marriage must be a 100% equal partnership; any form of unilateral male authority (Qiwamah) is outdated and patriarchal.",
+        "arabic": "أختلف تماماً. يجب أن يكون الزواج شراكة متساوية بنسبة 100٪؛ وأي شكل من أشكال سلطة الرجل الأحادية (القوامة) هو فكر ذكوري تجاوزه الزمن.",
         "trait_scores": {
-          "money_separate": 2.0
-        },
-        "english": "Fully separate: Each keeps their own money and divides mutual bills proportionally",
-        "arabic": "منفصل بالكامل: يحتفظ كل طرف بماله الخاص وتقسم الفواتير المشتركة بنسب محددة"
-      }
-    ],
-    "english": {
-      "text": "In a committed marriage, how should financial accounts be structured?"
-    },
-    "arabic": {
-      "text": "في الزواج المستقر، كيف ينبغي هيكلة الحسابات المالية؟"
-    }
-  },
-  {
-    "id": "q17",
-    "category": "Money",
-    "type": "likert",
-    "weight": 1.2,
-    "trait": "money_saver_spender",
-    "importance": "high",
-    "english": {
-      "text": "I prioritize saving for the long-term future and investments over enjoying spontaneous experiences/purchases today."
-    },
-    "arabic": {
-      "text": "أعطي الأولوية للادخار للمستقبل طويل الأجل والاستثمارات على الاستمتاع بالتجارب/المشتريات العفوية اليوم."
-    }
-  },
-  {
-    "id": "q18",
-    "category": "Money",
-    "type": "rank",
-    "weight": 1.1,
-    "trait": "money_priorities",
-    "importance": "medium",
-    "items": [
-      {
-        "id": "p1",
-        "trait": "money_priority_security",
-        "english": "Financial Security (Savings, emergency fund, owning a house)",
-        "arabic": "الأمان المالي (المدخرات، صندوق الطوارئ، امتلاك منزل)"
-      },
-      {
-        "id": "p2",
-        "trait": "money_priority_experience",
-        "english": "Life Experiences (Travel, dining out, recreation, luxury)",
-        "arabic": "تجارب الحياة (السفر، تناول الطعام بالخارج، الترفيه، الرفاهية)"
-      },
-      {
-        "id": "p3",
-        "trait": "money_priority_growth",
-        "english": "Business & Growth (Investing, starting companies, continuous education)",
-        "arabic": "الأعمال والنمو (الاستثمار، تأسيس الشركات، التعليم المستمر)"
-      },
-      {
-        "id": "p4",
-        "trait": "money_priority_charity",
-        "english": "Philanthropy/Community (Giving to family, donations, religious charity)",
-        "arabic": "العمل الخيري والمجتمعي (مساعدة العائلة، التبرعات، الصدقات الدينية)"
-      }
-    ],
-    "english": {
-      "text": "Rank your primary financial priorities from 1 (Highest) to 4 (Lowest):"
-    },
-    "arabic": {
-      "text": "رتب أولوياتك المالية الأساسية من 1 (الأعلى) إلى 4 (الأدنى):"
-    }
-  },
-  {
-    "id": "q19",
-    "category": "Money",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "money_transparency",
-    "importance": "high",
-    "english": {
-      "text": "Every purchase over a certain modest threshold (e.g., $150) should be discussed and agreed upon beforehand."
-    },
-    "arabic": {
-      "text": "يجب مناقشة كل عملية شراء تتجاوز حداً معيناً (مثلاً 150 دولاراً) والموافقة عليها مسبقاً."
-    },
-    "followups": [
-      {
-        "next_id": "q19_follow",
-        "condition": "agree"
+          "ideology_traditionalism": -1.0,
+          "ideology_feminism": 2.0
+        }
       }
     ]
   },
   {
-    "id": "q19_follow",
+    "id": "q17_m",
     "category": "Money",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "money_transparency",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "financial_values",
     "importance": "medium",
-    "is_followup": true,
+    "gender_constraint": "M",
+    "marital_constraint": null,
     "english": {
-      "text": "I would feel restricted or micro-managed if my partner wanted to inspect my daily small transactions."
+      "text": "Situation: Your potential partner's family requests a substantial dowry (Mahr) and an extravagant wedding party in a premium Riyadh hall. How do you respond?"
     },
     "arabic": {
-      "text": "سأشعر بالتقييد أو بالرقابة اللصيقة إذا أراد شريكي تفقد معاملاتي المالية الصغيرة اليومية."
-    }
+      "text": "موقف (خاص بالرجال): تطلب عائلة شريكتك المحتملة مهراً مرتفعاً وحفل زفاف فاخراً ومكلفاً للغاية في إحدى قاعات الرياض الراقية. كيف تتصرف؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I will comply willingly, even if it means taking a loan; preserving social standing and satisfying the bride is essential.",
+        "arabic": "سأوافق تلبية لرغبتهم، حتى لو اضطررت للاقتراض؛ فالمظاهر الاجتماعية وإرضاء العروس أمر أساسي.",
+        "trait_scores": {
+          "financial_values": 2.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I will negotiate firmly for a moderate, realistic dowry and a simplified, intimate wedding to start marriage debt-free.",
+        "arabic": "سأفاوض بحزم من أجل مهر معتدل وواقعي وحفل زفاف مبسط لتبدأ حياتنا الزوجية بلا ديون.",
+        "trait_scores": {
+          "financial_values": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I will refuse; any demand for excessive wedding costs indicates material mismatch, and I would walk away.",
+        "arabic": "سأرفض؛ أي مبالغة في تكاليف الزفاف والمهر تدل على عدم توافق مادي حقيقي، وقد أنسحب من الخطوبة.",
+        "trait_scores": {
+          "financial_values": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q17_f",
+    "category": "Money",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "financial_values",
+    "importance": "medium",
+    "gender_constraint": "F",
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: Your suitor requests a highly simplified, intimate wedding dinner at home and a moderate dowry (Mahr) to secure future investment funds. How do you view this?"
+    },
+    "arabic": {
+      "text": "موقف (خاص بالنساء): يطلب خاطبك إقامة حفل زفاف مبسط للغاية وعائلي في المنزل مع تقديم مهر معتدل، رغبةً منه في ادخار الأموال للاستثمار المستقبلي. كيف ترين ذلك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I find this offensive. High dowries and premium weddings represent a man's appreciation and financial seriousness.",
+        "arabic": "أجد هذا منقصاً لقدر العروس. المهر المرتفع والزفاف الفاخر هما تعبير عن تقدير الرجل وجديته وملاءته المالية.",
+        "trait_scores": {
+          "financial_values": 2.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I will agree reluctantly, but will demand a proper compensation (like a premium travel honeymoon or gold).",
+        "arabic": "سأوافق على مضض، لكني سأطلب تعويضاً لائقاً (مثل رحلة شهر عسل فاخرة أو شبكة ذهب قيمة).",
+        "trait_scores": {
+          "financial_values": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I fully support this. Pragmatic future financial security and a debt-free start are far better than a single expensive night.",
+        "arabic": "أؤيد ذلك تماماً. الأمان المالي المستقبلي والبداية الخالية من الديون أفضل بكثير من ليلة زفاف واحدة مكلفة.",
+        "trait_scores": {
+          "financial_values": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q18_mrd",
+    "category": "Conflict",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "conflict_style",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": "married",
+    "english": {
+      "text": "Situation: After a long day, you find that domestic chores are entirely neglected and your spouse seems exhausted and unresponsive. How do you react?"
+    },
+    "arabic": {
+      "text": "موقف (خاص بالمتزوجين): بعد يوم طويل، تجد أن المهام المنزلية مهملة تماماً وأن شريك حياتك يبدو مرهقاً ومكتئباً. كيف تتصرف؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I keep quiet but feel deep silent resentment, ignoring them for the rest of the evening.",
+        "arabic": "ألتزم الصمت لكني أشعر باستياء دفين، وأتجاهل شريكي طوال ما تبقى من السهرة.",
+        "trait_scores": {
+          "conflict_style": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I confront them immediately, demanding why chores aren't done and emphasizing shared duties.",
+        "arabic": "أواجه شريكي على الفور، مستفسراً عن سبب الإهمال، ومؤكداً على الواجبات المشتركة.",
+        "trait_scores": {
+          "conflict_style": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I step in to clean up myself, tell them to rest, and arrange a gentle conversation for tomorrow.",
+        "arabic": "أقوم بالتنظيف والترتيب بنفسي، وأطلب من شريكي الاستراحة، مع تأجيل الحديث اللطيف لليوم التالي.",
+        "trait_scores": {
+          "conflict_style": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q19_utb",
+    "category": "Boundaries",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "emotional_intelligence",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": "used_to_be_married",
+    "english": {
+      "text": "Situation: When entering a new potential relationship, how do you communicate or process your previous marital experience?"
+    },
+    "arabic": {
+      "text": "موقف (لمن سبق لهم الزواج): عند الدخول في علاقة محتملة جديدة، كيف تتواصل بشأن تجربتك الزوجية السابقة وتصفياتها؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I avoid talking about my past entirely; it is closed, and bringing it up only causes unnecessary jealousy and pain.",
+        "arabic": "أتجنب الحديث عن الماضي تماماً؛ فقد أغلق هذا الملف، وإثارته تسبب فقط الغيرة والمشاكل غير الضرورية.",
+        "trait_scores": {
+          "emotional_intelligence": 0.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I discuss it openly and objectively in the early stages, highlighting my learnings and clear boundaries to prevent past mistakes.",
+        "arabic": "أناقش الأمر بصراحة وموضوعية في المراحل الأولى، موضحاً الدروس المستفادة والحدود الواضحة لمنع تكرار الأخطاء.",
+        "trait_scores": {
+          "emotional_intelligence": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I find myself frequently comparing new potentials to my ex-spouse, venting about past injustices.",
+        "arabic": "أجد نفسي أقارن الشريك الجديد باستمرار بالزوج السابق، وأشكو بمرارة من المظالم السابقة.",
+        "trait_scores": {
+          "emotional_intelligence": -1.0
+        }
+      }
+    ]
   },
   {
     "id": "q20",
-    "category": "Lifestyle",
-    "type": "likert",
+    "category": "Communication",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "lifestyle_neatness",
+    "trait": "conflict_style",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I need my living space to be highly organized and tidy at all times to feel relaxed."
+      "text": "Situation: During a serious disagreement about Riyadh travel plans, how do you express your thoughts?"
     },
     "arabic": {
-      "text": "أحتاج أن تكون مساحة معيشتي مرتبة ومنظمة للغاية في جميع الأوقات لأشعر بالراحة والاسترخاء."
-    }
+      "text": "موقف: خلال خلاف جدي حول خطط السفر، كيف تعبر عن وجهة نظرك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "conflict_style": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "conflict_style": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "conflict_style": -1.0
+        }
+      }
+    ]
   },
   {
     "id": "q21",
-    "category": "Lifestyle",
-    "type": "choice",
+    "category": "Conflict",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "lifestyle_leisure",
+    "trait": "conflict_style",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: When a heated debate begins to escalate into shouting or emotional triggers, your immediate instinct is to:"
+    },
+    "arabic": {
+      "text": "موقف: عندما يبدأ نقاش ساخن في التصاعد إلى الصراخ أو الانفعال العاطفي، فإن غريزتك الأولى هي:"
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
         "trait_scores": {
-          "lifestyle_active": 1.5
-        },
-        "english": "Active outdoor sports, traveling, or busy social plans.",
-        "arabic": "الرياضات الخارجية النشطة، السفر، أو المخططات الاجتماعية المزدحمة."
+          "conflict_style": 1.5
+        }
       },
       {
         "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
         "trait_scores": {
-          "lifestyle_quiet": 1.5
-        },
-        "english": "Quiet domestic rest, reading, movies, or hobbies at home.",
-        "arabic": "الراحة المنزلية الهادئة، القراءة، مشاهدة الأفلام، أو الهوايات في البيت."
+          "conflict_style": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "conflict_style": -1.0
+        }
       }
-    ],
-    "english": {
-      "text": "My absolute ideal way to spend a free weekend is:"
-    },
-    "arabic": {
-      "text": "طريقتي المثالية المطلقة لقضاء عطلة نهاية أسبوع مجانية هي:"
-    }
+    ]
   },
   {
     "id": "q22",
-    "category": "Lifestyle",
-    "type": "likert",
+    "category": "Children",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "lifestyle_social_frequency",
+    "trait": "family_values",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I want to host guests, friends, or family in our home multiple times every week."
+      "text": "Situation: Regarding the discipline and upbringing of future children (such as academic pressure vs. personal freedom):"
     },
     "arabic": {
-      "text": "أرغب في استضافة الضيوف، الأصدقاء، أو العائلة في منزلنا عدة مرات كل أسبوع."
-    }
+      "text": "موقف: بخصوص تربية وتأديب الأطفال في المستقبل (مثل الضغط الدراسي والتفوق مقابل إعطائهم الحرية الشخصية):"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "family_values": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "family_values": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "family_values": -1.0
+        }
+      }
+    ]
   },
   {
     "id": "q23",
-    "category": "Lifestyle",
-    "type": "likert",
+    "category": "Religion",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "lifestyle_health",
+    "trait": "religious_alignment",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Maintaining a strict diet, exercise routine, and health-focused lifestyle is essential for me."
+      "text": "Situation: When aligning on religious practices and spiritual expectations within the household (such as daily prayers or Hijab):"
     },
     "arabic": {
-      "text": "الحفاظ على نظام غذائي صارم، وممارسة الرياضة، وأسلوب حياة يركز على الصحة أمر ضروري بالنسبة لي."
-    }
+      "text": "موقف: عند مواءمة الممارسات الدينية والتوقعات الروحانية داخل المنزل (مثل الصلاة أو الحجاب):"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "religious_alignment": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "religious_alignment": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "religious_alignment": -1.0
+        }
+      }
+    ]
   },
   {
     "id": "q24",
-    "category": "Marriage",
-    "type": "choice",
-    "weight": 1.3,
-    "trait": "marriage_roles",
-    "importance": "high",
+    "category": "Career",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "career_support",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: If your partner's high-stress career requires them to work late hours or attend business dinners multiple times a week:"
+    },
+    "arabic": {
+      "text": "موقف: إذا تطلبت مهنة شريكك عالية الضغط منه العمل لساعات متأخرة أو حضور عشاء عمل عدة مرات في الأسبوع:"
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
         "trait_scores": {
-          "marriage_traditional": 2.0
-        },
-        "english": "Traditional: Distinct roles (e.g., one primary provider, one primary homemaker)",
-        "arabic": "تقليدي: أدوار متميزة (مثل: معيل أساسي واحد، ورب منزل أساسي واحد)"
+          "career_support": 1.5
+        }
       },
       {
         "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
         "trait_scores": {
-          "marriage_egalitarian": 2.0
-        },
-        "english": "Egalitarian: Shared breadwinning, housework, and child-rearing responsibilities equally",
-        "arabic": "متساوي: مشاركة متساوية في جلب الرزق، الأعمال المنزلية، ومسؤوليات تربية الأطفال"
+          "career_support": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
         "trait_scores": {
-          "marriage_fluid": 1.5
-        },
-        "english": "Fluid: Responsibilities shift dynamically based on career stages and personal strengths",
-        "arabic": "مرن: تتغير المسؤوليات ديناميكياً بناءً على مراحل العمل ونقاط القوة الشخصية"
+          "career_support": -1.0
+        }
       }
-    ],
-    "english": {
-      "text": "Which model of marital roles aligns closest with your vision of marriage?"
-    },
-    "arabic": {
-      "text": "أي نموذج للأدوار الزوجية يتماشى بشكل أقرب مع رؤيتك للزواج؟"
-    }
+    ]
   },
   {
     "id": "q25",
-    "category": "Marriage",
-    "type": "likert",
-    "weight": 1.1,
-    "trait": "marriage_commitment",
-    "importance": "high",
-    "english": {
-      "text": "I view marriage as an unbreakable lifetime vow that should be preserved through almost all personal differences."
-    },
-    "arabic": {
-      "text": "أرى الزواج كعهد أبدي لا ينفصم ويجب الحفاظ عليه رغم معظم الخلافات الشخصية."
-    }
-  },
-  {
-    "id": "q26",
-    "category": "Marriage",
-    "type": "likert",
-    "weight": 1.0,
-    "trait": "marriage_independence",
-    "importance": "medium",
-    "english": {
-      "text": "Even after marriage, it is critical that both spouses maintain individual friendships and separate hobbies."
-    },
-    "arabic": {
-      "text": "حتى بعد الزواج، من الضروري جداً أن يحافظ كلا الزوجين على صداقات فردية وهوايات منفصلة."
-    }
-  },
-  {
-    "id": "q27",
-    "category": "Marriage",
+    "category": "Trust",
     "type": "scenario",
-    "weight": 1.2,
-    "trait": "marriage_expectations",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "marriage_egalitarian": 1.5
-        },
-        "english": "Work together to balance chores, or hire help so neither is overburdened.",
-        "arabic": "العمل معاً لموازنة الأعمال المنزلية، أو استئجار المساعدة حتى لا يثقل كاهل أي منا."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "marriage_traditional": 1.5
-        },
-        "english": "Expect the partner with fewer career hours to absorb the majority of housework.",
-        "arabic": "توقع أن يقوم الطرف الذي يقضي ساعات عمل أقل باستيعاب غالبية الأعمال المنزلية."
-      }
-    ],
-    "english": {
-      "text": "Scenario: Both of you work, but the house is messy and dinner isn't prepared. How do you resolve this?"
-    },
-    "arabic": {
-      "text": "سيناريو: كلاكما يعمل، لكن المنزل فوضوي والعشاء لم يُعد. كيف تحلان هذه المشكلة؟"
-    }
-  },
-  {
-    "id": "q28",
-    "category": "Family",
-    "type": "likert",
-    "weight": 1.1,
-    "trait": "family_influence",
-    "importance": "high",
-    "english": {
-      "text": "I consult my parents/extended family before making major decisions in my life."
-    },
-    "arabic": {
-      "text": "أستشير والديّ/عائلتي الممتدة قبل اتخاذ قرارات كبرى في حياتي."
-    },
-    "followups": [
-      {
-        "next_id": "q28_follow",
-        "condition": "agree"
-      }
-    ]
-  },
-  {
-    "id": "q28_follow",
-    "category": "Family",
-    "type": "likert",
-    "weight": 1.2,
-    "trait": "family_influence",
-    "importance": "high",
-    "is_followup": true,
-    "english": {
-      "text": "If my parents strongly disapproved of my spouse's decision, I would support my parents over my spouse."
-    },
-    "arabic": {
-      "text": "إذا عارض والداي بشدة قرار زوجتي/زوجي، فسوف أدعم والديّ على حساب شريكي."
-    }
-  },
-  {
-    "id": "q29",
-    "category": "Family",
-    "type": "likert",
     "weight": 1.0,
-    "trait": "family_closeness",
+    "trait": "trust_index",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I expect to visit or host my extended family almost every single week."
+      "text": "Situation: If you notice your partner has set a new passcode on their phone without sharing it with you:"
     },
     "arabic": {
-      "text": "أتوقع زيارة عائلتي الممتدة أو استضافتهم كل أسبوع تقريباً."
-    }
-  },
-  {
-    "id": "q30",
-    "category": "Family",
-    "type": "scenario",
-    "weight": 1.2,
-    "trait": "family_boundaries",
-    "importance": "high",
+      "text": "موقف: إذا لاحظت أن شريكك قد وضع رمز مرور جديداً لهاتفه دون مشاركته معك:"
+    },
     "options": [
       {
         "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
         "trait_scores": {
-          "family_boundaries_firm": 2.0
-        },
-        "english": "Politely but firmly tell my family that this is a private matter between us.",
-        "arabic": "أخبر عائلتي بأدب ولكن بحزم أن هذا أمر خاص بيننا."
+          "trust_index": 1.5
+        }
       },
       {
         "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
         "trait_scores": {
-          "family_boundaries_permeable": 2.0
-        },
-        "english": "Listen to their advice and try to incorporate it to keep the family happy.",
-        "arabic": "أستمع إلى نصيحتهم وأحاول دمجها للحفاظ على سعادة العائلة."
-      }
-    ],
-    "english": {
-      "text": "Scenario: Your family gives unsolicited, critical advice regarding how you manage your household. What do you do?"
-    },
-    "arabic": {
-      "text": "سيناريو: تقدم عائلتك نصائح غير مرغوب فيها وانتقادية بشأن كيفية إدارة منزلك. ماذا تفعل؟"
-    }
-  },
-  {
-    "id": "q31",
-    "category": "Children",
-    "type": "choice",
-    "weight": 1.5,
-    "trait": "children_desire",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "children_want": 2.0
-        },
-        "english": "Yes, having children is a fundamental, non-negotiable life goal.",
-        "arabic": "نعم، إنجاب الأطفال هو هدف حياتي أساسي وغير قابل للتفاوض."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "children_not_want": 2.0
-        },
-        "english": "No, I do not want to have children.",
-        "arabic": "لا، لا أريد إنجاب الأطفال."
+          "trust_index": 0.5
+        }
       },
       {
         "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
         "trait_scores": {
-          "children_unsure": 1.0
-        },
-        "english": "I am open or undecided, depending heavily on circumstances and my partner.",
-        "arabic": "أنا منفتح على الفكرة أو لم أقرر بعد، ويعتمد ذلك كثيراً على الظروف وشريكي."
-      }
-    ],
-    "english": {
-      "text": "What is your stance on having children in this marriage?"
-    },
-    "arabic": {
-      "text": "ما هو موقفك من إنجاب الأطفال في هذا الزواج؟"
-    },
-    "followups": [
-      {
-        "next_id": "q31_follow",
-        "condition": "agree"
+          "trust_index": -1.0
+        }
       }
     ]
   },
   {
-    "id": "q31_follow",
-    "category": "Children",
-    "type": "likert",
-    "weight": 1.2,
-    "trait": "children_parenting_style",
-    "importance": "high",
-    "is_followup": true,
+    "id": "q26",
+    "category": "Boundaries",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "family_boundaries",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I believe children require strict discipline, rules, and clear hierarchical boundaries to grow up well."
+      "text": "Situation: When your extended family members make unannounced visits to your house or comment critically on your marriage decisions:"
     },
     "arabic": {
-      "text": "أعتقد أن الأطفال يحتاجون إلى انضباط صارم، وقواعد، وحدود هرمية واضحة لينشأوا بشكل جيد."
+      "text": "موقف: عندما يقوم أفراد عائلتك الممتدة بزيارات غير معلنة لمنزلك أو يبدون تعليقات نقدية على قراراتك الزوجية:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "family_boundaries": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "family_boundaries": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "family_boundaries": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q27",
+    "category": "Emotional intelligence",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "emotional_intelligence",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: If your spouse returns home visibly upset after a failure at their Riyadh office, your natural approach is to:"
+    },
+    "arabic": {
+      "text": "موقف: إذا عاد زوجك إلى المنزل منزعجاً وغاضباً بعد فشل في مكتبه بالرياض، فإن أسلوبك الطبيعي هو:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "emotional_intelligence": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "emotional_intelligence": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "emotional_intelligence": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q28",
+    "category": "Affection",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "love_language",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: I feel most loved and appreciated when my partner expresses affection through:"
+    },
+    "arabic": {
+      "text": "موقف: أشعر بأنني محبوب ومقدر للغاية عندما يعبر شريكي عن عاطفته من خلال:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "love_language": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "love_language": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "love_language": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q29",
+    "category": "Future planning",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "future_planning_index",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: When defining long-term life plans (such as purchasing a villa, moving abroad, or career changes):"
+    },
+    "arabic": {
+      "text": "موقف: عند تحديد خطط الحياة طويلة المدى (مثل شراء فيلا، أو الانتقال للعيش بالخارج، أو التغييرات المهنية الكبرى):"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "future_planning_index": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "future_planning_index": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "future_planning_index": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q30",
+    "category": "Marriage",
+    "type": "scenario",
+    "weight": 1.0,
+    "trait": "marriage_readiness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: What is your perspective on the core legal and romantic structure of modern marriage?"
+    },
+    "arabic": {
+      "text": "موقف: ما هي نظرتك للهيكل القانوني والرومانسي الأساسي للزواج الحديث؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Handle with absolute logic and structural rules.",
+        "arabic": "التعامل بـمنطقية مطلقة وقواعد هيكلية صارمة.",
+        "trait_scores": {
+          "marriage_readiness": 1.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Handle with deep empathy and compromise.",
+        "arabic": "التعامل بـتعاطف عميق وتقديم تنازلات مرضية.",
+        "trait_scores": {
+          "marriage_readiness": 0.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Handle by avoiding direct confrontation entirely.",
+        "arabic": "التعامل بـتجنب المواجهة المباشرة تماماً.",
+        "trait_scores": {
+          "marriage_readiness": -1.0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q31",
+    "category": "Conflict",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "conflict_style",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
+    },
+    "arabic": {
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q32",
-    "category": "Children",
+    "category": "Money",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "children_education",
+    "weight": 1.0,
+    "trait": "financial_values",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I believe religious/spiritual instruction and moral homeschooling or private tutoring should be core parts of parenting."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أعتقد أن التعليم الديني/الروحي والتربية الأخلاقية أو التعليم الخاص يجب أن تكون أجزاءً أساسية من التربية."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q33",
-    "category": "Children",
-    "type": "scenario",
-    "weight": 1.2,
-    "trait": "children_care",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "children_care_parental": 1.5
-        },
-        "english": "One of us must put their career on hold to raise the children personally.",
-        "arabic": "يجب على أحدنا تعليق مسيرته المهنية مؤقتاً لتربية الأطفال شخصياً."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "children_care_shared": 1.5
-        },
-        "english": "We should use nurseries, nannies, or grandparents so both can work.",
-        "arabic": "ينبغي لنا الاستعانة بدور الحضانة، أو المربيات، أو الأجداد لتمكين كلا الطرفين من العمل."
-      }
-    ],
+    "category": "Lifestyle",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "individualism",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Scenario: You have a baby. How do you envision managing early childhood care during working hours?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سيناريو: رزقتما بطفل. كيف تتخيلان إدارة رعاية الطفولة المبكرة خلال ساعات العمل؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q34",
-    "category": "Religion",
+    "category": "Marriage",
     "type": "likert",
-    "weight": 1.5,
-    "trait": "religion_importance",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "marriage_readiness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Religion/spirituality plays a central role in my daily lifestyle, actions, and decisions."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "تلعب الديانة/الروحانية دوراً مركزياً في أسلوب حياتي اليومي، وأفعالي، وقراراتي."
-    },
-    "followups": [
-      {
-        "next_id": "q34_follow",
-        "condition": "agree"
-      }
-    ]
-  },
-  {
-    "id": "q34_follow",
-    "category": "Religion",
-    "type": "likert",
-    "weight": 1.3,
-    "trait": "religion_orthodoxy",
-    "importance": "high",
-    "is_followup": true,
-    "english": {
-      "text": "It is essential that my partner shares the exact same religious beliefs and practices."
-    },
-    "arabic": {
-      "text": "من الضروري جداً أن يشاركني شريكي نفس المعتقدات والممارسات الدينية تماماً."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q35",
-    "category": "Religion",
-    "type": "choice",
-    "weight": 1.2,
-    "trait": "religion_values",
+    "category": "Family",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "family_involvement",
     "importance": "medium",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "religion_conservative": 2.0
-        },
-        "english": "Traditional, conservative, adhering strictly to scriptures.",
-        "arabic": "تقليدي، محافظ، يلتزم بالنصوص والشرائع بدقة."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "religion_liberal": 2.0
-        },
-        "english": "Progressive, modern, focusing on moral essence over rituals.",
-        "arabic": "تقدمي، حديث، يركز على الجوهر الأخلاقي قبل الطقوس."
-      },
-      {
-        "id": "opt3",
-        "trait_scores": {
-          "religion_secular": 2.0
-        },
-        "english": "Secular, agnostic, or spiritual but not religious.",
-        "arabic": "علماني، لا أدري، أو روحي ولكن غير متدين."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "How would you describe your theological worldview or ethical orientation?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "كيف تصف نظرتك اللاهوتية للعالم أو توجهك الأخلاقي؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q36",
-    "category": "Career",
+    "category": "Children",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "career_ambition",
+    "weight": 1.0,
+    "trait": "parenting_style",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "My professional ambition and career success are central to my identity, and I dedicate substantial extra hours to them."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of children, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "طموحي المهني ونجاحي في العمل أمران مركزيان في هويتي، وأنا أخصص لهما ساعات إضافية كبيرة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا children (المتعلقة بـ Children)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q37",
-    "category": "Career",
-    "type": "scenario",
-    "weight": 1.3,
-    "trait": "career_priority",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "career_supportive": 2.0
-        },
-        "english": "We should relocate so they can take this life-changing opportunity.",
-        "arabic": "يجب أن ننتقل حتى يتمكنوا من اغتنام هذه الفرصة المغيرة للحياة."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "career_stability": 2.0
-        },
-        "english": "Decline the offer because staying near family and stable roots is more important.",
-        "arabic": "رفض العرض لأن البقاء بالقرب من العائلة والاستقرار أكثر أهمية."
-      }
-    ],
+    "category": "Religion",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "religious_alignment",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Scenario: Your partner receives a brilliant career offer in another country. How do you approach this?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of religion, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سيناريو: يتلقى شريكك عرض عمل رائعاً في بلد آخر. كيف تتعامل مع هذا الموقف؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا religion (المتعلقة بـ Religion)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
@@ -1045,727 +1322,615 @@
     "category": "Career",
     "type": "likert",
     "weight": 1.0,
-    "trait": "career_worklife_balance",
+    "trait": "career_drive",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I believe in completely turning off work notifications and refusing professional calls once I return home."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of career, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أؤمن بإيقاف تشغيل إشعارات العمل تماماً ورفض المكالمات المهنية بمجرد عودتي إلى المنزل."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا career (المتعلقة بـ Career)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q39",
     "category": "Decision making",
-    "type": "choice",
-    "weight": 1.1,
-    "trait": "decision_style",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "decisional_equality",
     "importance": "medium",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "decision_analytical": 1.5
-        },
-        "english": "Analytical: Gather maximum data, compare spreadsheets, and logically optimize",
-        "arabic": "تحليلي: جمع أكبر قدر من البيانات، مقارنة الجداول، والتحسين منطقياً"
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "decision_intuitive": 1.5
-        },
-        "english": "Intuitive: Trust my gut feeling, instincts, and immediate emotional alignment",
-        "arabic": "حدسي: الثقة في شعوري الباطني، والحدس، والمواءمة العاطفية الفورية"
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "How do you make complex, multi-variable decisions in life?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of decision making, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "كيف تتخذ قرارات معقدة ومتعددة المتغيرات في الحياة؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا decision making (المتعلقة بـ Decision making)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q40",
-    "category": "Decision making",
+    "category": "Trust",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "decision_consensus",
-    "importance": "high",
-    "english": {
-      "text": "In a marriage, all major household decisions must have 100% agreement/consensus before proceeding."
-    },
-    "arabic": {
-      "text": "في الزواج، يجب أن تحظى جميع القرارات المنزلية الكبرى بموافقة وإجماع بنسبة 100% قبل المضي قدماً."
-    },
-    "followups": [
-      {
-        "next_id": "q40_follow",
-        "condition": "disagree"
-      }
-    ]
-  },
-  {
-    "id": "q40_follow",
-    "category": "Decision making",
-    "type": "choice",
     "weight": 1.0,
-    "trait": "decision_veto",
+    "trait": "trust_index",
     "importance": "medium",
-    "is_followup": true,
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "decision_veto_husband": 1.5
-        },
-        "english": "The husband should have the final decision-making power in stalemates.",
-        "arabic": "يجب أن يكون للزوج سلطة اتخاذ القرار النهائي عند طريق مسدود."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "decision_veto_delegated": 1.5
-        },
-        "english": "We should divide domains (e.g., one controls finance, the other home/kids).",
-        "arabic": "يجب تقسيم المجالات (مثال: أحدهما يتحكم في المال والآخر في المنزل/الأطفال)."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "When consensus is impossible, how should deadlocks be broken?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of trust, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "عندما يكون الإجماع مستحيلاً، كيف ينبغي حل الطريق المسدود؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا trust (المتعلقة بـ Trust)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q41",
-    "category": "Trust",
+    "category": "Boundaries",
     "type": "likert",
-    "weight": 1.3,
-    "trait": "trust_jealousy",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "boundaries_index",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I feel anxious or jealous if my spouse maintains warm, friendly interactions with coworkers or friends of the opposite gender."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of boundaries, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أشعر بالقلق أو الغيرة إذا حافظ شريكي على تفاعلات ودية مع زملاء العمل أو الأصدقاء من الجنس الآخر."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا boundaries (المتعلقة بـ Boundaries)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q42",
-    "category": "Trust",
+    "category": "Emotional intelligence",
     "type": "likert",
-    "weight": 1.4,
-    "trait": "trust_privacy",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "emotional_intelligence",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "True intimacy means both spouses share passwords to their phones and email accounts without hesitation."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of emotional intelligence, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "الحميمية الحقيقية تعني مشاركة كلا الزوجين كلمات المرور لهواتفهما وحساباتهما البريدية دون تردد."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا emotional intelligence (المتعلقة بـ Emotional intelligence)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q43",
-    "category": "Trust",
-    "type": "scenario",
-    "weight": 1.2,
-    "trait": "trust_vulnerability",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "trust_vulnerability_open": 2.0
-        },
-        "english": "Share the mistake immediately and work through the fallout transparently.",
-        "arabic": "أشارك الخطأ على الفور وأعمل على معالجة التداعيات بشفافية."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "trust_vulnerability_guarded": 2.0
-        },
-        "english": "Try to fix the issue privately first, sharing only if absolutely necessary.",
-        "arabic": "أحاول حل المشكلة بشكل خاص أولاً، وأشاركها فقط إذا لزم الأمر تماماً."
-      }
-    ],
+    "category": "Affection",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "love_language",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Scenario: You made a major financial mistake or failed at a significant personal commitment. What do you do?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of affection, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سيناريو: ارتكبت خطأً مالياً كبيراً أو فشلت في التزام شخصي هام. ماذا تفعل؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا affection (المتعلقة بـ Affection)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q44",
-    "category": "Boundaries",
+    "category": "Future planning",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "boundaries_independence",
+    "weight": 1.0,
+    "trait": "future_planning_index",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I require significant alone time (several hours per week) that is entirely mine, separate from my partner."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of future planning, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أحتاج إلى وقت خاص بمفردي (عدة ساعات في الأسبوع) يكون ملكي بالكامل، وبمعزل عن شريكي."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا future planning (المتعلقة بـ Future planning)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q45",
-    "category": "Boundaries",
+    "category": "Communication",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "boundaries_secrets",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "assertiveness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "It is healthy to keep secrets from my spouse if I believe revealing them would cause unnecessary worry/stress."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of communication, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "من الصحي إخفاء بعض الأسرار عن شريكي إذا كنت أعتقد أن كشفها قد يسبب قلقاً أو توتراً غير ضروري."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا communication (المتعلقة بـ Communication)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q46",
-    "category": "Boundaries",
-    "type": "choice",
-    "weight": 1.1,
-    "trait": "boundaries_opposite_gender",
+    "category": "Conflict",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "conflict_style",
     "importance": "medium",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "boundaries_strict_gender": 2.0
-        },
-        "english": "Zero one-on-one friendships with the opposite gender outside professional work.",
-        "arabic": "منع الصداقات الفردية تماماً مع الجنس الآخر خارج نطاق العمل المهني."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "boundaries_open_gender": 2.0
-        },
-        "english": "One-on-one friendships are perfectly fine as long as there is full transparency.",
-        "arabic": "الصداقات الفردية مقبولة تماماً طالما أن هناك شفافية كاملة."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "What boundaries should exist around close friendships with the opposite gender?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "ما هي الحدود التي يجب أن توجد حول الصداقات المقربة مع الجنس الآخر؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q47",
-    "category": "Emotional intelligence",
+    "category": "Money",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "emotional_regulation",
+    "weight": 1.0,
+    "trait": "financial_values",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "When experiencing intense anger or sadness, I can calm myself down before speaking to my spouse."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "عندما أشعر بغضب شديد أو حزن، يمكنني تهدئة نفسي قبل التحدث إلى شريكي."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q48",
-    "category": "Emotional intelligence",
+    "category": "Lifestyle",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "emotional_empathy",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "individualism",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I easily sense when my partner is upset or stressed, even before they say anything."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أشعر بسهولة عندما يكون شريكي متضايقاً أو متوتراً، حتى قبل أن يقول أي شيء."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q49",
-    "category": "Emotional intelligence",
-    "type": "scenario",
-    "weight": 1.1,
-    "trait": "emotional_validation",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "emotional_validation_empathy": 2.0
-        },
-        "english": "Listen fully, validate their frustration, and offer a comforting hug.",
-        "arabic": "أستمع بالكامل، وأعبر عن تفهمي لإحباطهم، وأقدم لهم عناقاً دافئاً مواسياً."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "emotional_validation_fixer": 2.0
-        },
-        "english": "Immediately offer logical steps and direct solutions to solve their work issue.",
-        "arabic": "أقدم على الفور خطوات منطقية وحلولاً مباشرة لحل مشكلة عملهم."
-      }
-    ],
+    "category": "Marriage",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "marriage_readiness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Scenario: Your partner comes home crying about a terrible conflict with their boss. Your immediate reaction is to:"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سيناريو: يعود شريكك إلى المنزل باكياً بسبب خلاف حاد مع رئيسه في العمل. ردة فعلك الفورية هي:"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q50",
-    "category": "Affection",
+    "category": "Family",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "affection_physical",
+    "weight": 1.0,
+    "trait": "family_involvement",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Holding hands, hugging, and physical touch are critical components of my daily happiness."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "إمساك الأيدي، العناق، والتلامس الجسدي مكونات أساسية لسعادتي اليومية."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q51",
-    "category": "Affection",
-    "type": "rank",
-    "weight": 1.3,
-    "trait": "love_languages",
-    "importance": "high",
-    "items": [
-      {
-        "id": "l1",
-        "trait": "love_words",
-        "english": "Words of Affirmation (Compliments, words of appreciation, love notes)",
-        "arabic": "كلمات التشجيع والتقدير (المديح، عبارات الامتنان، رسائل الحب)"
-      },
-      {
-        "id": "l2",
-        "trait": "love_quality_time",
-        "english": "Quality Time (Undivided attention, meaningful shared activities)",
-        "arabic": "الوقت النوعي (الانتباه الكامل، الأنشطة المشتركة الهادفة)"
-      },
-      {
-        "id": "l3",
-        "trait": "love_gifts",
-        "english": "Receiving Gifts (Thoughtful tokens of appreciation, surprise presents)",
-        "arabic": "تلقي الهدايا (عربون تقدير مدروس، هدايا مفاجئة)"
-      },
-      {
-        "id": "l4",
-        "trait": "love_acts",
-        "english": "Acts of Service (Doing helpful chores, fixing things, making life easier)",
-        "arabic": "تقديم الخدمات (المساعدة في الأعمال المنزلية، إصلاح الأشياء)"
-      },
-      {
-        "id": "l5",
-        "trait": "love_touch",
-        "english": "Physical Touch (Holding hands, hugging, physical proximity)",
-        "arabic": "التلامس الجسدي (إمساك الأيدي، العناق، التقارب الجسدي)"
-      }
-    ],
+    "category": "Children",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "parenting_style",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Rank the Love Languages in order of how you prefer to receive love from 1 (Most preferred) to 5 (Least preferred):"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of children, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "رتب لغات الحب بالترتيب الذي تفضل به استقبال الحب من 1 (الأكثر تفضيلاً) إلى 5 (الأقل تفضيلاً):"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا children (المتعلقة بـ Children)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q52",
-    "category": "Affection",
+    "category": "Religion",
     "type": "likert",
     "weight": 1.0,
-    "trait": "affection_public",
-    "importance": "low",
+    "trait": "religious_alignment",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I feel comfortable showing mild romantic affection (holding hands, simple hugs) in public settings."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of religion, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أشعر بالارتياح لإظهار المودة الرومانسية الخفيفة (إمساك الأيدي، العناق البسيط) في الأماكن العامة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا religion (المتعلقة بـ Religion)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q53",
-    "category": "Future planning",
-    "type": "likert",
-    "weight": 1.2,
-    "trait": "future_stability",
-    "importance": "high",
-    "english": {
-      "text": "I have a highly detailed 5-to-10 year plan regarding my location, house purchase, and financial targets."
-    },
-    "arabic": {
-      "text": "لدي خطة مفصلة للغاية تتراوح بين 5 إلى 10 سنوات فيما يتعلق بموقعي، وشراء منزلي، وأهدافي المالية."
-    },
-    "followups": [
-      {
-        "next_id": "q53_follow",
-        "condition": "agree"
-      }
-    ]
-  },
-  {
-    "id": "q53_follow",
-    "category": "Future planning",
+    "category": "Career",
     "type": "likert",
     "weight": 1.0,
-    "trait": "future_stability",
+    "trait": "career_drive",
     "importance": "medium",
-    "is_followup": true,
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I would feel extremely uncomfortable modifying my long-term life plans to accommodate my partner's sudden desires."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of career, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سأشعر بعدم ارتياح شديد إذا اضطررت لتعديل خطط حياتي طويلة الأجل للتكيف مع رغبات شريكي المفاجئة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا career (المتعلقة بـ Career)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q54",
-    "category": "Future planning",
-    "type": "choice",
-    "weight": 1.1,
-    "trait": "future_location",
-    "importance": "high",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "future_location_home": 1.5
-        },
-        "english": "Stay in my home city/country close to my family and established roots.",
-        "arabic": "البقاء في مدينتي/بلدي الأصلي بالقرب من عائلتي وجذوري المستقرة."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "future_location_abroad": 1.5
-        },
-        "english": "Open or actively planning to relocate abroad for better opportunities or experience.",
-        "arabic": "منفتح أو أخطط بنشاط للانتقال إلى الخارج بحثاً عن فرص أو تجارب أفضل."
-      }
-    ],
+    "category": "Decision making",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "decisional_equality",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Where do you envision settling down long term?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of decision making, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أين تتخيل الاستقرار على المدى الطويل؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا decision making (المتعلقة بـ Decision making)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q55",
-    "category": "Personality",
+    "category": "Trust",
     "type": "likert",
     "weight": 1.0,
-    "trait": "mbti_s_n",
+    "trait": "trust_index",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I naturally focus on concrete facts and current realities rather than exploring future possibilities and theories."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of trust, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أركز بشكل طبيعي على الحقائق الملموسة والواقع الحالي بدلاً من استكشاف الاحتمالات والنظريات المستقبلية."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا trust (المتعلقة بـ Trust)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q56",
-    "category": "Personality",
+    "category": "Boundaries",
     "type": "likert",
     "weight": 1.0,
-    "trait": "mbti_j_p",
+    "trait": "boundaries_index",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I feel much more comfortable once a decision has been finalized rather than keeping options open."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of boundaries, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أشعر براحة أكبر بمجرد اتخاذ قرار نهائي بدلاً من إبقاء الخيارات مفتوحة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا boundaries (المتعلقة بـ Boundaries)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q57",
-    "category": "Communication",
+    "category": "Emotional intelligence",
     "type": "likert",
     "weight": 1.0,
-    "trait": "communication_timing",
+    "trait": "emotional_intelligence",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "If my partner is upset, I believe we should discuss the problem immediately, even if it is late at night."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of emotional intelligence, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "إذا كان شريكي متضايقاً، أعتقد أنه يجب علينا مناقشة المشكلة على الفور، حتى لو كان ذلك في وقت متأخر من الليل."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا emotional intelligence (المتعلقة بـ Emotional intelligence)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q58",
-    "category": "Religion",
+    "category": "Affection",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "religion_finances",
+    "weight": 1.0,
+    "trait": "love_language",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I believe we should give a fixed portion of our monthly household income as religious charity or tithing."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of affection, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أعتقد أنه ينبغي لنا تقديم جزء ثابت من دخلنا الشهري كصدقة دينية أو زكاة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا affection (المتعلقة بـ Affection)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q59",
-    "category": "Career",
+    "category": "Future planning",
     "type": "likert",
     "weight": 1.0,
-    "trait": "career_prestige",
-    "importance": "low",
+    "trait": "future_planning_index",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "It is important to me that my spouse holds a highly respected, high-status professional career."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of future planning, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "من المهم بالنسبة لي أن يشغل شريكي وظيفة مهنية تحظى باحترام ومكانة عالية."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا future planning (المتعلقة بـ Future planning)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q60",
-    "category": "Trust",
+    "category": "Communication",
     "type": "likert",
-    "weight": 1.2,
-    "trait": "trust_past",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "assertiveness",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I need full, detailed transparency about my partner's romantic and personal history to build deep trust."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of communication, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أحتاج إلى شفافية كاملة ومفصلة حول التاريخ العاطفي والشخصي لشريكي لبناء ثقة عميقة."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا communication (المتعلقة بـ Communication)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q61",
-    "category": "Boundaries",
+    "category": "Conflict",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "boundaries_family_privacy",
-    "importance": "high",
+    "weight": 1.0,
+    "trait": "conflict_style",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "What happens inside our marriage/home stays entirely between us and should never be shared with friends or in-laws."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "ما يحدث داخل زواجنا/منزلنا يظل بيننا تماماً ولا ينبغي أبداً مشاركته مع الأصدقاء أو الأصهار."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q62",
-    "category": "Emotional intelligence",
+    "category": "Money",
     "type": "likert",
     "weight": 1.0,
-    "trait": "emotional_comforting",
+    "trait": "financial_values",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I sometimes struggle to find the right words to comfort my partner when they are going through a tough time."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أجد أحياناً صعوبة في العثور على الكلمات المناسبة لمواساة شريكي عندما يمر بوقت عصيب."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q63",
-    "category": "Affection",
+    "category": "Lifestyle",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "affection_words",
+    "weight": 1.0,
+    "trait": "individualism",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Hearing 'I love you' or words of affirmation daily is an absolute necessity for me to feel loved."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "سماع عبارة 'أنا أحبك' أو كلمات التقدير والتشجيع يومياً ضرورة مطلقة بالنسبة لي لأشعر بالحب."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q64",
-    "category": "Future planning",
-    "type": "choice",
-    "weight": 1.1,
-    "trait": "future_lifestyle",
+    "category": "Marriage",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "marriage_readiness",
     "importance": "medium",
-    "options": [
-      {
-        "id": "opt1",
-        "trait_scores": {
-          "future_lifestyle_suburban": 1.5
-        },
-        "english": "Suburban or rural: Spacious quiet life, close to nature, larger home.",
-        "arabic": "الضواحي أو الريف: حياة هادئة وواسعة، قريبة من الطبيعة، منزل أكبر."
-      },
-      {
-        "id": "opt2",
-        "trait_scores": {
-          "future_lifestyle_urban": 1.5
-        },
-        "english": "Urban city-center: Energetic fast-paced life, close to culture, convenience, and apartments.",
-        "arabic": "وسط المدينة: حياة نشيطة وسريعة الإيقاع، قريبة من الثقافة والخدمات والشقق."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "What setting do you prefer for your future family home?"
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "ما هي البيئة التي تفضلها لمنزل عائلتك المستقبلي؟"
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q65",
-    "category": "Marriage",
+    "category": "Family",
     "type": "likert",
-    "weight": 1.1,
-    "trait": "marriage_growth",
+    "weight": 1.0,
+    "trait": "family_involvement",
     "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "I believe partners should actively push each other to improve, even if it leads to some discomfort."
+      "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "أعتقد أنه يجب على الشريكين دفع بعضهما البعض بنشاط للتحسن والنمو، حتى لو أدى ذلك إلى بعض عدم الارتياح."
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
     }
   },
   {
     "id": "q66",
     "category": "Lifestyle",
-    "type": "choice",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "self_physical_presentation",
+    "trait": "aesthetic_profile",
     "importance": "medium",
-    "options": [
-      {
-        "id": "fit",
-        "trait_scores": { "aesthetic_self_fit": 2.0 },
-        "english": "Active fitness: I dedicate daily energy to maintaining athletic posture or muscles.",
-        "arabic": "اللياقة النشطة: أخصص طاقة يومية للحفاظ على قوام رياضي أو عضلات."
-      },
-      {
-        "id": "natural",
-        "trait_scores": { "aesthetic_self_natural": 2.0 },
-        "english": "Natural comfort: I prioritize organic wellness, health, and a balanced, effortless look.",
-        "arabic": "الراحة الطبيعية: أركز على العافية العضوية، والصحة، ومظهر متوازن ومريح دون تكلف."
-      },
-      {
-        "id": "polished",
-        "trait_scores": { "aesthetic_self_polished": 2.0 },
-        "english": "Polished refinement: I highly value elegant, tailored presence, grooming, and high-quality presentation.",
-        "arabic": "الأناقة المصقولة: أقدر جداً المظهر الأنيق المرتب، والاهتمام بالتفاصيل والهندام الفاخر."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "Which of these best describes your approach to physical conditioning and daily self-presentation?"
+      "text": "Situation: Regarding your personal physical fitness, grooming, and aesthetic self-presentation in Riyadh:"
     },
     "arabic": {
-      "text": "أي مما يلي يصف بشكل أفضل أسلوبك في الحفاظ على لياقتك البدنية ومظهرك اليومي؟"
-    }
+      "text": "موقف: بخصوص لياقتك البدنية الشخصية، العناية بجمالك، والمظهر الخارجي الأنيق في الرياض:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I devote high energy to daily fitness, structured diets, and pristine styling.",
+        "arabic": "أكرس طاقة عالية للياقة البدنية اليومية، الأنظمة الغذائية الصارمة، والتصفيف الراقي والمثالي.",
+        "trait_scores": {
+          "aesthetic_self": 3.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I value moderate active lifestyle and healthy grooming, without strict rules.",
+        "arabic": "أهتم بنمط حياة نشط معتدل وعناية صحية، دون تضييق القيود الصارمة.",
+        "trait_scores": {
+          "aesthetic_self": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I prioritize comfort and ease over rigid beauty or cosmetic expectations.",
+        "arabic": "أعطي الأولوية للراحة التامة والبساطة على حساب توقعات الجمال الصارمة ومستحضرات التجميل.",
+        "trait_scores": {
+          "aesthetic_self": 1.0
+        }
+      }
+    ]
   },
   {
     "id": "q67",
     "category": "Lifestyle",
-    "type": "choice",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "partner_physical_attraction",
+    "trait": "aesthetic_profile",
     "importance": "medium",
-    "options": [
-      {
-        "id": "fit",
-        "trait_scores": { "aesthetic_expect_fit": 2.0 },
-        "english": "Strong dedication to athletic fitness, tone, and high-energy conditioning.",
-        "arabic": "تفانٍ قوي في اللياقة الرياضية، وتناسق القوام، والتدريبات عالية النشاط."
-      },
-      {
-        "id": "natural",
-        "trait_scores": { "aesthetic_expect_natural": 2.0 },
-        "english": "A natural, healthy, realistic body type that values balance over strict gym routines.",
-        "arabic": "بنية جسدية طبيعية، صحية وواقعية تقدر التوازن على حساب روتين النادي الصارم."
-      },
-      {
-        "id": "polished",
-        "trait_scores": { "aesthetic_expect_polished": 2.0 },
-        "english": "A highly elegant, neat, and pristine physical structure with emphasis on clean presentation.",
-        "arabic": "بنية جسدية أنيقة للغاية، مرتبة ونظيفة مع التركيز على المظهر العام المصقول."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "What physical attributes and presentation style do you find most appealing in a partner?"
+      "text": "Situation: What are your underlying visual attraction expectations for your partner's body type and fitness habits?"
     },
     "arabic": {
-      "text": "ما هي الملامح الجسدية وأسلوب تقديم النفس الذي تجده أكثر جاذبية في شريك حياتك؟"
-    }
+      "text": "موقف: ما هي توقعاتك الدفينة بخصوص الجاذبية البصرية، البنية الجسدية، وعادات اللياقة البدنية لشريك حياتك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I expect my partner to actively maintain peak fitness, athletic body, and meticulous styling.",
+        "arabic": "أتوقع من شريكي المحافظة بجدية على ذروة اللياقة البدنية، القوام الرياضي الممشوق، والأناقة الدقيقة الساحرة.",
+        "trait_scores": {
+          "aesthetic_expect": 3.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I prefer a healthy, natural, and average body shape, focusing on warmth rather than model standards.",
+        "arabic": "أفضل بنية جسدية طبيعية صحية ومتوسطة، مع التركيز على الدفء الداخلي بدلاً من معايير عارضات الأزياء.",
+        "trait_scores": {
+          "aesthetic_expect": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I do not place significant importance on body shape or fitness levels; character is all that matters.",
+        "arabic": "لا أولي أهمية تذكر لشكل الجسم أو مستويات اللياقة البدنية؛ فالأخلاق والجوهر هما كل ما يهم.",
+        "trait_scores": {
+          "aesthetic_expect": 1.0
+        }
+      }
+    ]
   },
   {
     "id": "q68",
     "category": "Lifestyle",
-    "type": "choice",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "self_fashion_style",
+    "trait": "aesthetic_profile",
     "importance": "medium",
-    "options": [
-      {
-        "id": "classic",
-        "trait_scores": { "fashion_self_classic": 2.0 },
-        "english": "Timeless & Elegant: Traditional, tailored, formal or smart professional attire.",
-        "arabic": "خالد وأنيق: ملابس تقليدية، مفصلة بدقة، رسمية أو مهنية أنيقة."
-      },
-      {
-        "id": "casual",
-        "trait_scores": { "fashion_self_casual": 2.0 },
-        "english": "Minimalist & Casual: Comfortable, practical, clean lines, and simple athleisure.",
-        "arabic": "بسيط وعملي: مريح، عملي، خطوط تصميم واضحة، وملابس كاجوال مريحة."
-      },
-      {
-        "id": "expressive",
-        "trait_scores": { "fashion_self_expressive": 2.0 },
-        "english": "Expressive & Modern: Creative, trendy, bold colors, or highly unique designer pieces.",
-        "arabic": "تعبيري وعصري: إبداعي، متماشٍ مع الموضة، ألوان جريئة، أو قطع مصممة فريدة."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "How would you describe your personal fashion choice and wardrobe style?"
+      "text": "Situation: When choosing your daily wardrobe, style presentation, and public fashion choices in Riyadh, you align with:"
     },
     "arabic": {
-      "text": "كيف تصف اختيارك الشخصي للأزياء وأسلوب خزانة ملابسك؟"
-    }
+      "text": "موقف: عند اختيار ملابسك اليومية، أسلوب أناقتك، واختيارات الموضة العامة التي تظهر بها في الرياض، تجد نفسك تميل لـ:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Premium luxury brands, latest modern fashion, and high-status, eye-catching wardrobe.",
+        "arabic": "العلامات التجارية الفاخرة المرموقة، أحدث صيحات الموضة الحديثة، والملابس الجذابة ذات المكانة الرفيعة.",
+        "trait_scores": {
+          "fashion_self": 3.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Classic conservative, elegant, and standard modest attire that blends premium simplicity.",
+        "arabic": "الملابس المحافظة الكلاسيكية، الأناقة الراقية والمحتشمة التي تمزج بين البساطة والتميز.",
+        "trait_scores": {
+          "fashion_self": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Minimalist, casual, and comfort-focused clothes with zero brand obsession.",
+        "arabic": "الملابس البسيطة العملية المريحة والخالية من أي هوس بالعلامات التجارية الباهظة.",
+        "trait_scores": {
+          "fashion_self": 1.0
+        }
+      }
+    ]
   },
   {
     "id": "q69",
     "category": "Lifestyle",
-    "type": "choice",
+    "type": "scenario",
     "weight": 1.0,
-    "trait": "partner_fashion_expectation",
+    "trait": "aesthetic_profile",
     "importance": "medium",
-    "options": [
-      {
-        "id": "classic",
-        "trait_scores": { "fashion_expect_classic": 2.0 },
-        "english": "Timeless sophistication, modest tailoring, clean cuts, or elegant formalwear.",
-        "arabic": "رقي خالد، حشمة أنيقة، قصات نظيفة، أو ملابس رسمية فاخرة."
-      },
-      {
-        "id": "casual",
-        "trait_scores": { "fashion_expect_casual": 2.0 },
-        "english": "Effortless casual comfort, practical, activewear, or simple clean aesthetics.",
-        "arabic": "راحة كاجوال طبيعية، ملابس عملية، ملابس رياضية، أو جماليات بسيطة ونظيفة."
-      },
-      {
-        "id": "expressive",
-        "trait_scores": { "fashion_expect_expressive": 2.0 },
-        "english": "Vibrant, fashion-forward, bold statements, or modern artistic styling.",
-        "arabic": "حيوي، رائد في عالم الموضة، اختيارات مميزة، أو تصاميم فنية حديثة."
-      }
-    ],
+    "gender_constraint": null,
+    "marital_constraint": null,
     "english": {
-      "text": "What type of fashion/dress styling do you expect or prefer your future spouse to wear in public settings?"
+      "text": "Situation: What are your stylistic or social expectations for your partner's fashion sense and public wardrobe?"
     },
     "arabic": {
-      "text": "ما هو نمط الأزياء/الملابس الذي تتوقع أو تفضل أن يرتديه شريك حياتك المستقبلي في الأماكن العامة؟"
-    }
+      "text": "موقف: ما هي توقعاتك الاجتماعية أو الجمالية لأسلوب أناقة شريك حياتك وخزانة ملابسه العامة؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I expect my partner to dress in high-end, luxury, and visually outstanding style.",
+        "arabic": "أتوقع من شريكي التأنق بأرقى الملابس والماركات الفاخرة، والظهور بأسلوب عصري ملفت ومميز.",
+        "trait_scores": {
+          "fashion_expect": 3.0
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I expect highly elegant, respectful, and classic conservative modesty.",
+        "arabic": "أتوقع مظهراً شديد الأناقة، وقوراً، وملتزماً بالاحتشام الكلاسيكي المحافظ والراقي.",
+        "trait_scores": {
+          "fashion_expect": 2.0
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I am fully comfortable with relaxed, casual, or simple attire without styling guidelines.",
+        "arabic": "أنا مرتاح تماماً للملابس البسيطة المريحة والعملية لزوجي دون فرض أي شروط تصفيف أو تنسيق.",
+        "trait_scores": {
+          "fashion_expect": 1.0
+        }
+      }
+    ]
   }
 ]

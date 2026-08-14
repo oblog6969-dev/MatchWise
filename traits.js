@@ -24,6 +24,9 @@ const PersonalityEngine = {
         const love_languages = { words: 0, quality_time: 0, gifts: 0, acts: 0, touch: 0 };
         const other_traits = {};
 
+        // Ideology scoring
+        const ideology = { traditionalism: 0, feminism: 0, liberalism: 0, capitalism: 0 };
+
         let totalWeight = 0;
         let answeredCount = 0;
 
@@ -140,7 +143,11 @@ const PersonalityEngine = {
                 if (opt && opt.trait_scores) {
                     for (const [traitKey, tScore] of Object.entries(opt.trait_scores)) {
                         const scaledScore = tScore * weight;
-                        if (traitKey === "extroversion") ocean.extroversion += scaledScore * 10;
+                        if (traitKey === "ideology_traditionalism") ideology.traditionalism += scaledScore;
+                        else if (traitKey === "ideology_feminism") ideology.feminism += scaledScore;
+                        else if (traitKey === "ideology_liberalism") ideology.liberalism += scaledScore;
+                        else if (traitKey === "ideology_capitalism") ideology.capitalism += scaledScore;
+                        else if (traitKey === "extroversion") ocean.extroversion += scaledScore * 10;
                         else if (traitKey === "mbti_e") mbti.mbti_e += scaledScore * 2;
                         else if (traitKey === "mbti_i") mbti.mbti_i += scaledScore * 2;
                         else if (traitKey === "mbti_t") mbti.mbti_t += scaledScore * 2;
@@ -319,6 +326,46 @@ const PersonalityEngine = {
             finalOthers[k] = clamp(v);
         }
 
+        // Calculate relative Ideology Percentages
+        const tradScore = Math.max(0, ideology.traditionalism);
+        const femScore = Math.max(0, ideology.feminism);
+        const libScore = Math.max(0, ideology.liberalism);
+        const capScore = Math.max(0, ideology.capitalism);
+
+        const totalIdeologySum = tradScore + femScore + libScore + capScore;
+        let ideologyPercentages = { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
+        if (totalIdeologySum > 0) {
+            ideologyPercentages = {
+                traditionalism: Math.round((tradScore / totalIdeologySum) * 100),
+                feminism: Math.round((femScore / totalIdeologySum) * 100),
+                liberalism: Math.round((libScore / totalIdeologySum) * 100),
+                capitalism: Math.round((capScore / totalIdeologySum) * 100)
+            };
+        }
+
+        // Calculate Ideology Consistency Index
+        let ideologyConsistency = 100;
+        if (answers["q9"] && answers["q10"]) {
+            if ((answers["q9"] === "opt1" && answers["q10"] === "opt1") || (answers["q9"] === "opt3" && answers["q10"] === "opt3")) {
+                ideologyConsistency -= 25;
+            }
+        }
+        if (answers["q11"] && answers["q12"]) {
+            if ((answers["q11"] === "opt1" && answers["q12"] === "opt1") || (answers["q11"] === "opt3" && answers["q12"] === "opt3")) {
+                ideologyConsistency -= 25;
+            }
+        }
+        if (answers["q13"] && answers["q14"]) {
+            if ((answers["q13"] === "opt1" && answers["q14"] === "opt1") || (answers["q13"] === "opt3" && answers["q14"] === "opt3")) {
+                ideologyConsistency -= 25;
+            }
+        }
+        if (answers["q15"] && answers["q16"]) {
+            if ((answers["q15"] === "opt1" && answers["q16"] === "opt1") || (answers["q15"] === "opt3" && answers["q16"] === "opt3")) {
+                ideologyConsistency -= 25;
+            }
+        }
+
         // Calculate Assessment Confidence Percentage
         // Formula: completeness_ratio (40%) + response_variance (30%) + core_consistency (30%)
         const minQuestions = 45;
@@ -374,6 +421,8 @@ const PersonalityEngine = {
             },
             values_and_lifestyle: finalOthers,
             aesthetic_profile: aesthetic_profile,
+            ideology_profile: ideologyPercentages,
+            ideology_consistency: ideologyConsistency,
             assessment_confidence: clamp(calculatedConfidence, 55, 98) // never state 100% certainty
         };
     }

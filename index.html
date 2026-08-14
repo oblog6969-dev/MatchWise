@@ -141,12 +141,21 @@
             <div class="dashboard-actions-grid">
                 <div class="action-card">
                     <h3 data-i18n="import_profile">Import Profile</h3>
-                    <p class="action-desc">Upload a partner's decrypted or exported JSON file directly to compare.</p>
+                    <p class="action-desc" data-i18n="import_desc_json">Upload a partner's decrypted or exported JSON file directly to compare.</p>
 
                     <label for="profileFileInput" class="file-upload-label" data-i18n="import_btn_label">
                         Select Profile JSON File
                     </label>
                     <input type="file" id="profileFileInput" accept=".json" style="display: none;">
+                </div>
+
+                <div class="action-card">
+                    <h3 data-i18n="import_code_title">Import Shareable Code</h3>
+                    <p class="action-desc" data-i18n="import_desc_code">Paste a partner's copied result code directly to import.</p>
+                    <input type="text" id="profileCodeInput" class="premium-text-input" placeholder="Paste code (MWCODE-...)" style="width: 100%; margin-bottom: 12px; font-family: monospace; font-size: 13px;">
+                    <button id="btnImportCode" class="primary-btn" style="width: 100%;">
+                        <span data-i18n="import_code_btn">Import Code</span>
+                    </button>
                 </div>
 
                 <div class="action-card">
@@ -374,7 +383,30 @@
         <div class="premium-modal">
             <h3 id="modalTitle">Modal Title</h3>
             <div id="modalBody" class="modal-body">
-                <!-- Contextually injected -->
+                <!-- Static layout for Assessment Start Prompt -->
+                <div id="modalStartForm" class="modal-form-container" style="display: none; text-align: left;">
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="modalInputName" data-i18n="enter_name" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Enter Profile Owner's Name:</label>
+                        <input type="text" id="modalInputName" class="premium-text-input" placeholder="Owner Name" required style="width: 100%;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="modalInputGender" data-i18n="gender" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Gender:</label>
+                        <select id="modalInputGender" class="premium-select" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 8px;">
+                            <option value="M" data-i18n="gender_male">Male</option>
+                            <option value="F" data-i18n="gender_female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="modalInputMarital" data-i18n="marital_status" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Marital Status:</label>
+                        <select id="modalInputMarital" class="premium-select" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 8px;">
+                            <option value="single" data-i18n="marital_single">Single</option>
+                            <option value="married" data-i18n="marital_married">Married</option>
+                            <option value="used_to_be_married" data-i18n="marital_used_to_be_married">Used to be married</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Div for feedback messaging -->
+                <div id="modalFeedbackContent" class="modal-feedback-container" style="display: none;"></div>
             </div>
             <div class="modal-footer-row">
                 <button id="btnModalCancel" class="secondary-btn" data-i18n="close">Close</button>

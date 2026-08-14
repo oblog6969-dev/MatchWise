@@ -346,7 +346,91 @@ const CompatibilityEngine = {
         }
         categoryScores["Marriage"] = Math.round(Math.max(30, marriageScore));
 
-        // --- 11. SUBTLE PHYSICAL & FASHION EXPECTATION MATCHING (CROSS-MATCH) ---
+        // --- 11. IDEOLOGY & SAUDI-SPECIFIC CLASH EVALUATION ---
+        const ideologyA = traitsA.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
+        const ideologyB = traitsB.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
+
+        const ideologyDiffs = {
+            traditionalism: Math.abs(ideologyA.traditionalism - ideologyB.traditionalism),
+            feminism: Math.abs(ideologyA.feminism - ideologyB.feminism),
+            liberalism: Math.abs(ideologyA.liberalism - ideologyB.liberalism),
+            capitalism: Math.abs(ideologyA.capitalism - ideologyB.capitalism)
+        };
+
+        let ideologyCompatibility = 100 - (
+            (ideologyDiffs.traditionalism * 0.3) +
+            (ideologyDiffs.feminism * 0.3) +
+            (ideologyDiffs.liberalism * 0.2) +
+            (ideologyDiffs.capitalism * 0.2)
+        );
+        ideologyCompatibility = Math.round(Math.max(20, Math.min(100, ideologyCompatibility)));
+        categoryScores["Ideology Alignment"] = ideologyCompatibility;
+
+        if (ideologyCompatibility >= 80) {
+            strengths.push({
+                en: "Excellent Ideological Alignment: Highly compatible worldviews and shared social expectations.",
+                ar: "توافق فكري ممتاز: رؤى كونية متوافقة للغاية وتوقعات اجتماعية مشتركة."
+            });
+        } else if (ideologyCompatibility <= 55) {
+            challenges.push({
+                en: "Severe Ideological Divergence: Deep contrast in core beliefs (Feminism, Traditionalism, Liberalism, or Capitalism).",
+                ar: "تباعد فكري حاد: تباين عميق في المعتقدات الأساسية والتوجهات الاجتماعية والمنزلية."
+            });
+            discussionTopics.push({
+                en: "Talk openly about your core lifestyle values to establish mutual respect for varying viewpoints.",
+                ar: "تحدثا بصراحة عن قيم الحياة الأساسية لتأسيس احترام متبادل لوجهات النظر المختلفة."
+            });
+        }
+
+        // Specific Saudi Conflict 1: Extended Family vs. Privacy
+        if (ansA["q9"] && ansB["q9"] && ansA["q9"] !== ansB["q9"]) {
+            challenges.push({
+                en: "Extended Family Housing Discrepancy: Disagreement on living with family (family villa) vs. renting an independent apartment.",
+                ar: "خلاف السكن مع العائلة: عدم اتفاق على العيش مع الأهل في فيلا العائلة مقابل استئجار شقة مستقلة."
+            });
+            discussionTopics.push({
+                en: "Establish a clear compromise timeline for transition to fully independent housing.",
+                ar: "تأسيس جدول زمني واضح للتسوية والانتقال إلى سكن مستقل بالكامل."
+            });
+        }
+
+        // Specific Saudi Conflict 2: Salary sharing vs. Nafaqah
+        if (ansA["q11"] && ansB["q11"] && ansA["q11"] !== ansB["q11"]) {
+            challenges.push({
+                en: "Marital Financial Split Friction: Clash between modern dual-income sharing and traditional male sole provider duties (Nafaqah).",
+                ar: "احتكاك في تقسيم الأعباء المالية: تصادم بين فكرة مشاركة الدخل الحديثة والالتزام التقليدي بنفقة الزوج الكاملة."
+            });
+            discussionTopics.push({
+                en: "Draft a clear, written agreement on how rent, groceries, and household help will be funded.",
+                ar: "صياغة اتفاق مكتوب واضح حول كيفية تمويل الإيجار، المقاضي، والمساعدة المنزلية."
+            });
+        }
+
+        // Specific Saudi Conflict 3: Gender Mixing in Work/Social
+        if (ansA["q13"] && ansB["q13"] && ansA["q13"] !== ansB["q13"]) {
+            challenges.push({
+                en: "Gender Mixing Boundaries: Varying comfort levels with mixed workplace environments and friendly opposite-gender conversation.",
+                ar: "حدود الاختلاط بين الجنسين: تفاوت مستويات الارتياح تجاه بيئات العمل المختلطة والأحاديث الودية مع الجنس الآخر."
+            });
+            discussionTopics.push({
+                en: "Discuss professional networking boundaries and comfort levels in public work functions.",
+                ar: "مناقشة حدود شبكات العلاقات المهنية ومستويات الارتياح في الفعاليات العامة للعمل."
+            });
+        }
+
+        // Specific Saudi Conflict 4: Qiwamah vs. Equal Partnership
+        if (ansA["q15"] && ansB["q15"] && ansA["q15"] !== ansB["q15"]) {
+            challenges.push({
+                en: "Decisional Leadership Friction: Diverging views on traditional male final headship (Qiwamah) vs. strict equal-partner consensus.",
+                ar: "احتكاك في قيادة القرار: تباعد في وجهات النظر بين القيادة النهائية التقليدية للرجل (القوامة) والتوافق المتساوي التام."
+            });
+            discussionTopics.push({
+                en: "Define how to break deadlocks when mutually deciding on critical life matters.",
+                ar: "تحديد كيفية كسر الجمود عند اتخاذ القرارات المشتركة في شؤون الحياة الحرجة."
+            });
+        }
+
+        // --- 12. SUBTLE PHYSICAL & FASHION EXPECTATION MATCHING (CROSS-MATCH) ---
         // Cross-match Person A's self-presentation with Person B's expectations and vice-versa
         let aestheticScore = 100;
         const aesA = traitsA.aesthetic_profile || { self_presentation: "natural", expect_presentation: "natural", self_fashion: "casual", expect_fashion: "casual" };
