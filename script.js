@@ -21,20 +21,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const dom = {
         languageSelector: document.getElementById("languageSelector"),
         themeToggleBtn: document.getElementById("themeToggleBtn"),
-
+        
         // Panels
         panelHome: document.getElementById("panelHome"),
         panelAssessment: document.getElementById("panelAssessment"),
         panelDashboard: document.getElementById("panelDashboard"),
         panelReport: document.getElementById("panelReport"),
-
+        
         // Navigation Buttons
         btnStartNewAssessment: document.getElementById("btnStartNewAssessment"),
         btnGoToDashboard: document.getElementById("btnGoToDashboard"),
         btnHomeFromDashboard: document.getElementById("btnHomeFromDashboard"),
         btnDashboardFromReport: document.getElementById("btnDashboardFromReport"),
         btnPrintReport: document.getElementById("btnPrintReport"),
-
+        
         // Assessment elements
         questionCategory: document.getElementById("questionCategory"),
         progressPercent: document.getElementById("progressPercent"),
@@ -43,13 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
         answerOptionsContainer: document.getElementById("answerOptionsContainer"),
         btnBackQuestion: document.getElementById("btnBackQuestion"),
         btnNextQuestion: document.getElementById("btnNextQuestion"),
-
+        
         // Dashboard elements
         profileFileInput: document.getElementById("profileFileInput"),
+        profileCodeInput: document.getElementById("profileCodeInput"),
+        btnImportCode: document.getElementById("btnImportCode"),
         btnCompareSelected: document.getElementById("btnCompareSelected"),
         btnCompareText: document.getElementById("btnCompareText"),
         profilesListContainer: document.getElementById("profilesListContainer"),
-
+        
         // Report Elements
         reportSectionSummary: document.getElementById("reportSectionSummary"),
         gaugeCardContainer: document.getElementById("gaugeCardContainer"),
@@ -70,10 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
         reportVerB: document.getElementById("reportVerB"),
         reportConfidenceA: document.getElementById("reportConfidenceA"),
         reportConfidenceB: document.getElementById("reportConfidenceB"),
-
+        
         radarChartContainer: document.getElementById("radarChartContainer"),
         bigFiveBarChartContainer: document.getElementById("bigFiveBarChartContainer"),
-
+        
         mbtiBadgeA: document.getElementById("mbtiBadgeA"),
         mbtiBadgeB: document.getElementById("mbtiBadgeB"),
         attachmentBadgeA: document.getElementById("attachmentBadgeA"),
@@ -82,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         commBadgeB: document.getElementById("commBadgeB"),
         conflictBadgeA: document.getElementById("conflictBadgeA"),
         conflictBadgeB: document.getElementById("conflictBadgeB"),
-
+        
         reportStrengthsList: document.getElementById("reportStrengthsList"),
         reportChallengesList: document.getElementById("reportChallengesList"),
         reportSectionDealbreakers: document.getElementById("reportSectionDealbreakers"),
@@ -90,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reportDiscussionList: document.getElementById("reportDiscussionList"),
         reportGrowthList: document.getElementById("reportGrowthList"),
         reportRecommendationsContainer: document.getElementById("reportRecommendationsContainer"),
-
+        
         // Modals
         modalBackdrop: document.getElementById("modalBackdrop"),
         modalTitle: document.getElementById("modalTitle"),
@@ -133,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panels.forEach(p => {
             p.classList.remove("active-panel");
         });
-
+        
         // Show target
         const target = document.getElementById(panelId);
         if (target) {
@@ -144,9 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     dom.btnStartNewAssessment.addEventListener("click", () => {
-        promptForName((name) => {
-            if (name && name.trim()) {
-                state.assessmentSession.personName = name.trim();
+        promptForName((userData) => {
+            if (userData && userData.name && userData.name.trim()) {
+                state.assessmentSession.personName = userData.name.trim();
+                state.assessmentSession.gender = userData.gender;
+                state.assessmentSession.maritalStatus = userData.maritalStatus;
                 state.sessionAnswers = {};
                 state.assessmentSession.history = ["q1"]; // Force q1 as starting point
                 navigateTo("panelAssessment");
@@ -162,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dom.btnHomeFromDashboard.addEventListener("click", () => navigateTo("panelHome"));
     dom.btnDashboardFromReport.addEventListener("click", () => navigateTo("panelDashboard"));
-
+    
     dom.btnPrintReport.addEventListener("click", () => {
         window.print();
     });
@@ -190,13 +194,26 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Default path: traverse linear questions.json index, skipping follow-ups not triggered
+        // Default path: traverse linear questions.json index, skipping follow-ups and constraint mismatches
         const currentIndex = questions.findIndex(q => q.id === currentQId);
+        const currentGender = state.assessmentSession.gender;
+        const currentMarital = state.assessmentSession.maritalStatus;
+
         for (let i = currentIndex + 1; i < questions.length; i++) {
             const candidate = questions[i];
-            if (!candidate.is_followup) {
-                return candidate.id;
+            if (candidate.is_followup) continue;
+
+            // Skip if question is restricted to a different gender
+            if (candidate.gender_constraint && candidate.gender_constraint !== currentGender) {
+                continue;
             }
+
+            // Skip if question is restricted to a different marital status
+            if (candidate.marital_constraint && candidate.marital_constraint !== currentMarital) {
+                continue;
+            }
+
+            return candidate.id;
         }
         return null;
     }
@@ -210,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Update translations & metadata
         dom.questionCategory.textContent = q.category;
-
+        
         // Progress Calculation
         // Estimate progress based on current history length vs 55 target questions
         const currentLength = history.length;
@@ -415,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dom.btnNextQuestion.addEventListener("click", () => {
         const history = state.assessmentSession.history;
         const currentQId = history[history.length - 1];
-
+        
         // Ensure user answered before going forward
         if (state.sessionAnswers[currentQId] === undefined) {
             alert("Please answer the current question to proceed.");
@@ -423,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const nextQId = getNextQuestionId(currentQId);
-
+        
         if (nextQId) {
             state.assessmentSession.history.push(nextQId);
             renderCurrentQuestion();
@@ -437,16 +454,18 @@ document.addEventListener("DOMContentLoaded", () => {
     function completeAndExportSession() {
         // Run Trait calculations
         const calculatedTraits = window.PersonalityEngine.calculate(state.sessionAnswers, questions);
-
+        
         // Build Profile object
         const profileId = "mw_" + Math.random().toString(36).substring(2, 10).toUpperCase();
         const profile = {
             id: profileId,
             owner_name: state.assessmentSession.personName,
+            gender: state.assessmentSession.gender || "M",
+            marital_status: state.assessmentSession.maritalStatus || "single",
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v1.0",
+            app_version: "v1.2",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence
@@ -558,6 +577,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.click();
             });
 
+            // Share Result Code Button
+            const btnShareCode = document.createElement("button");
+            btnShareCode.className = "icon-btn";
+            btnShareCode.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+            btnShareCode.title = state.localization.currentLang === "ar" ? "نسخ رمز المشاركة" : "Copy Share Code";
+            btnShareCode.addEventListener("click", () => {
+                const code = window.Cryptography.generateResultCode(p);
+                navigator.clipboard.writeText(code).then(() => {
+                    showFeedbackModal(
+                        state.localization.currentLang === "ar" ? "تم نسخ الرمز" : "Code Copied",
+                        (state.localization.currentLang === "ar" ? "تم نسخ رمز المشاركة الخاص بـ " : "Shareable result code for ") + p.owner_name + (state.localization.currentLang === "ar" ? " بنجاح إلى الحافظة. يمكنك مشاركته الآن!" : " successfully copied to clipboard. You can share it now!")
+                    );
+                }).catch(() => {
+                    // Fallback if clipboard API fails
+                    showFeedbackModal(
+                        state.localization.currentLang === "ar" ? "مشاركة الرمز" : "Shareable Code",
+                        `<p style="margin-bottom:8px;">${state.localization.currentLang === "ar" ? "يرجى نسخ الرمز يدويًا:" : "Please copy the code manually:"}</p><textarea class="premium-text-input" readonly style="width:100%; height:120px; font-family:monospace; font-size:12px; white-space:pre-wrap; word-break:break-all;">${code}</textarea>`
+                    );
+                });
+            });
+
             // Delete Button
             const btnDelete = document.createElement("button");
             btnDelete.className = "icon-btn";
@@ -573,6 +613,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             actionsCol.appendChild(btnViewDirect);
             actionsCol.appendChild(btnDownload);
+            actionsCol.appendChild(btnShareCode);
             actionsCol.appendChild(btnDelete);
 
             row.appendChild(selectCol);
@@ -612,6 +653,33 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.readAsText(file);
     });
 
+    // Handle Sharing Code imports
+    dom.btnImportCode.addEventListener("click", () => {
+        const code = dom.profileCodeInput.value.trim();
+        if (!code) {
+            alert(state.localization.currentLang === "ar" ? "يرجى لصق رمز النتيجة أولاً." : "Please paste a result code first.");
+            return;
+        }
+
+        const parsedProfile = window.Cryptography.parseResultCode(code);
+        if (parsedProfile) {
+            // Recalculate traits on import
+            const calculatedTraits = window.PersonalityEngine.calculate(parsedProfile.answers, questions);
+            parsedProfile.calculated_personality = calculatedTraits;
+            parsedProfile.assessment_confidence = calculatedTraits.assessment_confidence;
+            
+            window.Storage.saveProfile(parsedProfile);
+            showFeedbackModal(
+                state.localization.get("import_profile"),
+                state.localization.get("success_import")
+            );
+            dom.profileCodeInput.value = "";
+            renderSavedProfiles();
+        } else {
+            alert(state.localization.get("invalid_file"));
+        }
+    });
+
     // Compare / View action
     dom.btnCompareSelected.addEventListener("click", () => {
         const checkedBoxes = dom.profilesListContainer.querySelectorAll(".premium-checkbox:checked");
@@ -649,7 +717,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.gaugeCardContainer.classList.add("hidden");
             dom.radarChartCard.classList.add("hidden");
             dom.reportSectionDealbreakers.classList.add("hidden");
-
+            
             dom.barChartTitle.textContent = isAr ? "تحليل السمات الشخصية الخمس الكبرى" : "Big Five Personality Analysis";
 
             const traitsA = profileA.calculated_personality;
@@ -732,7 +800,7 @@ document.addEventListener("DOMContentLoaded", () => {
             bCols.forEach(el => el.classList.remove("hidden"));
             dom.gaugeCardContainer.classList.remove("hidden");
             dom.radarChartCard.classList.remove("hidden");
-
+            
             dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد" : "Multivariable Compatibility Index";
             dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
 
@@ -746,7 +814,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Bilingual Dynamic Summary Builder
             let summaryText = "";
             if (report.overall_index >= 85) {
-                summaryText = isAr
+                summaryText = isAr 
                     ? `تناغم استثنائي وتوافق فكري وعاطفي عميق تم رصده بين ${profileA.owner_name} و ${profileB.owner_name}. تتلاقى الأهداف الحياتية والرؤى المستقبلية لإنشاء علاقة مستدامة للغاية.`
                     : `Outstanding structural synergy and deep emotional alignment detected between ${profileA.owner_name} and ${profileB.owner_name}. Core life visions and communication patterns are beautifully synchronized.`;
             } else if (report.overall_index >= 70) {
@@ -763,7 +831,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Meta parameters
             dom.reportHeaderPersonA.textContent = profileA.owner_name;
             dom.reportHeaderPersonB.textContent = profileB.owner_name;
-
+            
             dom.reportIdA.textContent = profileA.id;
             dom.reportIdB.textContent = profileB.id;
             dom.reportDateA.textContent = profileA.created_at;
@@ -863,7 +931,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dataPoints = [];
         categories.forEach((cat, idx) => {
             const angle = (idx * 2 * Math.PI) / numAxes - Math.PI / 2;
-
+            
             // Axis line
             const axX = center + maxRadius * Math.cos(angle);
             const axY = center + maxRadius * Math.sin(angle);
@@ -965,21 +1033,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 11. MODAL HELPER FUNCTIONS ---
     function promptForName(callback) {
         dom.modalTitle.textContent = state.localization.get("start_new");
-        dom.modalBody.innerHTML = `
-            <p class="summary-p" style="margin-bottom: 12px;">${state.localization.get("enter_name")}</p>
-            <input type="text" id="modalInputName" class="premium-text-input" placeholder="Owner Name" required>
-        `;
-
+        
+        // Clear name input
+        document.getElementById("modalInputName").value = "";
+        
+        // Hide feedback, show form
+        document.getElementById("modalFeedbackContent").style.display = "none";
+        document.getElementById("modalStartForm").style.display = "block";
+        
         dom.modalBackdrop.classList.add("active-backdrop");
         dom.btnModalSubmit.style.display = "block";
-
+        
         // Remove old events cleanly
         const cleanSubmit = () => {
-            const inputVal = document.getElementById("modalInputName").value;
-            if (inputVal && inputVal.trim()) {
+            const nameVal = document.getElementById("modalInputName").value;
+            const genderVal = document.getElementById("modalInputGender").value;
+            const maritalVal = document.getElementById("modalInputMarital").value;
+            
+            if (nameVal && nameVal.trim()) {
                 dom.modalBackdrop.classList.remove("active-backdrop");
                 cleanup();
-                callback(inputVal);
+                callback({
+                    name: nameVal.trim(),
+                    gender: genderVal,
+                    maritalStatus: maritalVal
+                });
             } else {
                 alert("Please enter a valid name.");
             }
@@ -1001,9 +1079,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showFeedbackModal(title, text, onCloseCallback) {
         dom.modalTitle.textContent = title;
-        dom.modalBody.innerHTML = `<p class="p-container">${text}</p>`;
+        
+        // Hide form, show feedback
+        document.getElementById("modalStartForm").style.display = "none";
+        const fb = document.getElementById("modalFeedbackContent");
+        fb.style.display = "block";
+        fb.innerHTML = `<p class="p-container">${text}</p>`;
+        
         dom.btnModalSubmit.style.display = "none";
-
+        
         dom.modalBackdrop.classList.add("active-backdrop");
 
         const handler = () => {
