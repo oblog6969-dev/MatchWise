@@ -400,6 +400,39 @@ const PersonalityEngine = {
             (completeness * 40) + (normalizedVariance * 30) + (consistencyScore * 30)
         );
 
+        // Physical Appearance, Modesty, and Fashion Profiling (v2.0)
+        const physical_appearance_profile = {
+            attraction_priority: clamp(finalOthers["appearance_attraction_priority"] || 50),
+            fitness_grooming_effort: clamp(finalOthers["appearance_fitness_effort"] || 50)
+        };
+
+        const publicModestyRaw = (
+            (finalOthers["modesty_public_hijab_niqab"] || 50) +
+            (finalOthers["modesty_public_mixed_gatherings"] || 50) +
+            (finalOthers["modesty_vacation_resort_attire"] || 50)
+        ) / 3;
+
+        const privateFreedomRaw = (
+            (finalOthers["modesty_private_freedom"] || 50) +
+            (finalOthers["modesty_private_intimacy_openness"] || 50)
+        ) / 2;
+
+        const socialSharingRaw = finalOthers["modesty_social_media_sharing"] || 50;
+        const socialMediaPrivacyIndex = clamp(100 - socialSharingRaw);
+
+        const modesty_profile = {
+            public_modesty_index: clamp(publicModestyRaw),
+            private_modesty_freedom: clamp(privateFreedomRaw),
+            social_media_privacy_index: socialMediaPrivacyIndex
+        };
+
+        const fashion_profile = {
+            traditional: clamp(finalOthers["fashion_traditional"] || 50),
+            modern_elegant: clamp(finalOthers["fashion_modern_elegant"] || 50),
+            casual_relaxed: clamp(finalOthers["fashion_casual"] || 50),
+            high_fashion: clamp(finalOthers["fashion_high_fashion"] || 50)
+        };
+
         return {
             big_five: finalOcean,
             mbti: {
@@ -421,6 +454,9 @@ const PersonalityEngine = {
             },
             values_and_lifestyle: finalOthers,
             aesthetic_profile: aesthetic_profile,
+            physical_appearance_profile: physical_appearance_profile,
+            modesty_profile: modesty_profile,
+            fashion_profile: fashion_profile,
             ideology_profile: ideologyPercentages,
             ideology_consistency: ideologyConsistency,
             assessment_confidence: clamp(calculatedConfidence, 55, 98) // never state 100% certainty

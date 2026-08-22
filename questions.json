@@ -1932,5 +1932,305 @@
         }
       }
     ]
+  },
+  {
+    "id": "q70",
+    "category": "Appearance & Modesty",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "appearance_attraction_priority",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: How essential is ongoing physical attraction and active fitness/grooming maintenance after marriage to your overall marital happiness?"
+    },
+    "arabic": {
+      "text": "موقف: ما مدى أهمية الجاذبية الجسدية المستمرة والمحافظة النشطة على اللياقة والعناية بالمظهر بعد الزواج لرضاك الزوجي العام؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Critical top priority: I expect both of us to actively maintain our fitness, grooming, and body weight throughout marriage.",
+        "arabic": "أولوية قصوى: أتوقع من كلانا المحافظة النشطة على اللياقة والعناية بالمظهر والوزن طوال الحياة الزوجية.",
+        "trait_scores": {
+          "appearance_attraction_priority": 3,
+          "appearance_fitness_effort": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Moderate priority: Physical attraction matters, but character, emotional connection, and mutual support are far more vital.",
+        "arabic": "أولوية متوسطة: الجاذبية المادية مهمة، لكن الأخلاق والتواصل العاطفي والدعم المتبادل أكثر أهمية بكثير.",
+        "trait_scores": {
+          "appearance_attraction_priority": 1,
+          "appearance_fitness_effort": 1
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Secondary priority: Emotional bond and spiritual alignment easily transcend physical appearance fluctuations over time.",
+        "arabic": "أولوية ثانوية: الترابط العاطفي والانسجام الروحي يتجاوزان بسهولة تقلبات المظهر المادي مع مرور الوقت.",
+        "trait_scores": {
+          "appearance_attraction_priority": 0,
+          "appearance_fitness_effort": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q71",
+    "category": "Appearance & Modesty",
+    "type": "scenario",
+    "weight": 1.2,
+    "trait": "modesty_public_hijab_niqab",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: Regarding public attire and modesty standards when attending public spaces or gatherings in Saudi Arabia or abroad:"
+    },
+    "arabic": {
+      "text": "موقف: بخصوص الملابس العامة ومعايير الحشمة والاحتساب عند ارتياد الأماكن أو التجمعات العامة في السعودية أو الخارج:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Strict Traditional Modesty: Full Niqab or traditional full cover Abaya in public is essential for our family identity.",
+        "arabic": "حشمة تقليدية محتاطة: النقاب الكامل أو العباءة المحافظة التقليدية في الأماكن العامة جزء أساسي من هويتنا.",
+        "trait_scores": {
+          "modesty_public_hijab_niqab": 3,
+          "fashion_traditional": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Modern Conservative Modesty: Modest headscarf (Hijab) with stylish, loose-fitting elegant conservative clothing.",
+        "arabic": "حشمة محافظة حديثة: الحجاب المتناسق مع ملابس أنيقة وواسعة ومحتشمة.",
+        "trait_scores": {
+          "modesty_public_hijab_niqab": 2,
+          "fashion_modern_elegant": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Flexible / Modern Modesty: Standard modest attire without insistence on head coverings or specific traditional garments.",
+        "arabic": "مرونة واحتشام عصري: ملابس محشمة عامة دون اشتراط غطاء رأس محدد أو عباءة تقليدية.",
+        "trait_scores": {
+          "modesty_public_hijab_niqab": 1,
+          "fashion_casual": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "q72",
+    "category": "Appearance & Modesty",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "modesty_social_media_sharing",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: Regarding sharing personal photos, family vacation moments, or fashion outfits on public or personal social media accounts:"
+    },
+    "arabic": {
+      "text": "موقف: بخصوص مشاركة الصور الشخصية، لقطات الإجازات العائلية، أو إطلالات الأناقة على حسابات التواصل الاجتماعي العامة أو الشخصية:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Strict Private Policy: Zero personal photos or family portraits should ever be posted on social media to maintain maximum privacy and avoid Ayn (evil eye).",
+        "arabic": "خصوصية مطلقة: يمنع تماماً نشر أي صور شخصية أو عائلية على منصات التواصل الاجتماعي للحفاظ على الخصوصية التامة والحذر من العين.",
+        "trait_scores": {
+          "modesty_social_media_sharing": 0,
+          "modesty_public_hijab_niqab": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Selective Sharing: Only sharing milestone moments on strictly private/locked accounts with close trusted friends and family.",
+        "arabic": "مشاركة انتقائية: نشر المناسبات الخاصة فقط على حسابات مغلقة ومخصصة للمقربين والأصدقاء الموثوقين.",
+        "trait_scores": {
+          "modesty_social_media_sharing": 1,
+          "modesty_public_hijab_niqab": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Open & Expressive Sharing: Enjoying sharing lifestyle, fashion, travel, and happy family moments openly on public or personal profiles.",
+        "arabic": "انفتاح وتعبير اجتماعي: الاستمتاع بمشاركة نمط الحياة والسفر والإطلالات واللحظات السعيدة بصراحة على المنصات.",
+        "trait_scores": {
+          "modesty_social_media_sharing": 3,
+          "modesty_public_hijab_niqab": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "q73",
+    "category": "Appearance & Modesty",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "modesty_private_freedom",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: Within the private boundaries of your home (the marital bedroom and living space), what are your expectations for domestic dress and romantic expression?"
+    },
+    "arabic": {
+      "text": "موقف: داخل حدود المنزل الخاصة (غرفة النوم والمساحة الزوجية)، ما هي توقعاتك لملابس البيت والحرية والتعبير الرومانسي بين الزوجين؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Total Openness & Romantic Freedom: Complete freedom, high sensuality, and absolute domestic comfort without any inhibition.",
+        "arabic": "انفتاح كامل وحرية رومانسية: حرية مطلقة، أناقة منزلية جذابة، وتعبير عاطفي كامل دون أي تحفظ بين الزوجين.",
+        "trait_scores": {
+          "modesty_private_freedom": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Balanced Domestic Comfort: Relaxed, comfortable loungewear with natural romantic expression.",
+        "arabic": "راحة منزلية متوازنة: ملابس منزلية مريحة مع تعبير عاطفي طبيعي ومريح.",
+        "trait_scores": {
+          "modesty_private_freedom": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Reserved / Formal Domestic Style: Maintaining a certain baseline of formality and modesty even inside the home.",
+        "arabic": "تحفظ وأناقة هادئة: الحفاظ على قدر من التحفظ والأناقة التقليدية حتى داخل البيت.",
+        "trait_scores": {
+          "modesty_private_freedom": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "q74",
+    "category": "Appearance & Modesty",
+    "type": "scenario",
+    "weight": 1.1,
+    "trait": "fashion_style_preference",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: When preparing for high-profile social events, luxury dining, or weddings in Saudi Arabia, which aesthetic vibe best represents your personal style?"
+    },
+    "arabic": {
+      "text": "موقف: عند الاستعداد للمناسبات الاجتماعية الراقية، مطاعم الفخامة، أو الزواجات في السعودية، أي أسلوب يعبر عن أناقتك الشخصية؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Traditional Prestige: Tailored traditional Thobe with premium Bisht / Bespoke Luxury Traditional Abaya with gold/jewel accents.",
+        "arabic": "فخامة تقليدية أصيلة: ثوب مصمم بدقة مع بشت فاخر / عباءة تقليدية راقية بتطريزات فخمة.",
+        "trait_scores": {
+          "fashion_traditional": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Modern High Fashion & Designer: International luxury designer labels, modern tailored suits, contemporary high-couture Abayas.",
+        "arabic": "أناتقة عالمية وعصرية: أرقى الماركات العالمية، بدلات أنيقة متناسقة، أو عباءات عصرية بتصاميم حديثة.",
+        "trait_scores": {
+          "fashion_modern_elegant": 3,
+          "fashion_high_fashion": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Minimalist & Effortless Casual: Clean, minimal, understated elegant attire focused on comfort and subtle quality.",
+        "arabic": "بساطة وأناقة مريحة: ملابس هادئة وبسيطة بلمسات راقية تركز على الراحة والجودة دون تكلف.",
+        "trait_scores": {
+          "fashion_casual": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q75",
+    "category": "Appearance & Modesty",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "appearance_fitness_effort",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: I consider regular fitness training, skincare, personal grooming, and maintaining healthy body weight an essential daily responsibility after marriage."
+    },
+    "arabic": {
+      "text": "موقف: أعتبر ممارسة الرياضة والاهتمام بالبشرة والمظهر والمحافظة على الوزن الصحي مسؤولية يومية أساسية بعد الزواج."
+    }
+  },
+  {
+    "id": "q76",
+    "category": "Appearance & Modesty",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "modesty_public_mixed_gatherings",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: At mixed family or corporate gatherings, I expect strict adherence to traditional seating separation and formal modest dress codes."
+    },
+    "arabic": {
+      "text": "موقف: في اللقاءات العائلية أو المهنية المختلطة، أتوقع الالتزام التام بفصل الجلسات ومعايير الحشمة التقليدية الرسمية."
+    }
+  },
+  {
+    "id": "q77",
+    "category": "Appearance & Modesty",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "modesty_vacation_resort_attire",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: When traveling on vacation to international beach resorts or private resorts, I prefer maintaining our full public modesty standards rather than relaxing them."
+    },
+    "arabic": {
+      "text": "موقف: عند السفر للإجازة في المنتجعات الشاطئية أو المنتجات الخاصة، أفضّل الحفاظ على نفس معايير الحشمة العامة بدلاً من التخفف منها."
+    }
+  },
+  {
+    "id": "q78",
+    "category": "Appearance & Modesty",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "fashion_coordination_expectation",
+    "importance": "low",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: It is important to me that my partner and I coordinate our fashion styles and appearance level when stepping out together publicly."
+    },
+    "arabic": {
+      "text": "موقف: من المهم بالنسبة لي أن ننسق أنا وشريكي أسلوب الأناقة ومستوى المظهر الخارجي عند الخروج معاً أمام الناس."
+    }
+  },
+  {
+    "id": "q79",
+    "category": "Appearance & Modesty",
+    "type": "likert",
+    "weight": 1.0,
+    "trait": "modesty_private_intimacy_openness",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Situation: In private, a spouse should feel completely free to wear vibrant, expressive, and sensual clothing without feeling self-conscious."
+    },
+    "arabic": {
+      "text": "موقف: في الخصوصية الزوجية، يجب أن يشعر الشريك بالحرية التامة في ارتداء الملابس الجذابة والتعبير دون أي حرج أو خجل."
+    }
   }
 ]

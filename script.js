@@ -84,6 +84,14 @@ document.addEventListener("DOMContentLoaded", () => {
         commBadgeB: document.getElementById("commBadgeB"),
         conflictBadgeA: document.getElementById("conflictBadgeA"),
         conflictBadgeB: document.getElementById("conflictBadgeB"),
+        publicModestyA: document.getElementById("publicModestyA"),
+        publicModestyB: document.getElementById("publicModestyB"),
+        privateFreedomA: document.getElementById("privateFreedomA"),
+        privateFreedomB: document.getElementById("privateFreedomB"),
+        socialPrivacyA: document.getElementById("socialPrivacyA"),
+        socialPrivacyB: document.getElementById("socialPrivacyB"),
+        fitnessGroomingA: document.getElementById("fitnessGroomingA"),
+        fitnessGroomingB: document.getElementById("fitnessGroomingB"),
 
         reportStrengthsList: document.getElementById("reportStrengthsList"),
         reportChallengesList: document.getElementById("reportChallengesList"),
@@ -465,7 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v1.2",
+            app_version: "v2.0",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence
@@ -741,6 +749,13 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.commBadgeA.textContent = traitsA.communication.primary.toUpperCase();
             dom.conflictBadgeA.textContent = traitsA.conflict.primary.toUpperCase();
 
+            const modA = traitsA.modesty_profile || { public_modesty_index: 50, private_modesty_freedom: 50, social_media_privacy_index: 50 };
+            const physA = traitsA.physical_appearance_profile || { fitness_grooming_effort: 50 };
+            dom.publicModestyA.textContent = `${modA.public_modesty_index}%`;
+            dom.privateFreedomA.textContent = `${modA.private_modesty_freedom}%`;
+            dom.socialPrivacyA.textContent = `${modA.social_media_privacy_index}%`;
+            dom.fitnessGroomingA.textContent = `${physA.fitness_grooming_effort}%`;
+
             // Big Five rendering (just pass A for both to render single)
             renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true);
 
@@ -850,6 +865,20 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.commBadgeB.textContent = profileB.calculated_personality.communication.primary.toUpperCase();
             dom.conflictBadgeA.textContent = profileA.calculated_personality.conflict.primary.toUpperCase();
             dom.conflictBadgeB.textContent = profileB.calculated_personality.conflict.primary.toUpperCase();
+
+            const modCompA = profileA.calculated_personality.modesty_profile || { public_modesty_index: 50, private_modesty_freedom: 50, social_media_privacy_index: 50 };
+            const modCompB = profileB.calculated_personality.modesty_profile || { public_modesty_index: 50, private_modesty_freedom: 50, social_media_privacy_index: 50 };
+            const physCompA = profileA.calculated_personality.physical_appearance_profile || { fitness_grooming_effort: 50 };
+            const physCompB = profileB.calculated_personality.physical_appearance_profile || { fitness_grooming_effort: 50 };
+
+            dom.publicModestyA.textContent = `${modCompA.public_modesty_index}%`;
+            dom.publicModestyB.textContent = `${modCompB.public_modesty_index}%`;
+            dom.privateFreedomA.textContent = `${modCompA.private_modesty_freedom}%`;
+            dom.privateFreedomB.textContent = `${modCompB.private_modesty_freedom}%`;
+            dom.socialPrivacyA.textContent = `${modCompA.social_media_privacy_index}%`;
+            dom.socialPrivacyB.textContent = `${modCompB.social_media_privacy_index}%`;
+            dom.fitnessGroomingA.textContent = `${physCompA.fitness_grooming_effort}%`;
+            dom.fitnessGroomingB.textContent = `${physCompB.fitness_grooming_effort}%`;
 
             // Render Custom SVG Radar Chart
             renderSVGRadarChart(report.category_scores);

@@ -471,6 +471,62 @@ const CompatibilityEngine = {
         // Add to Category Scores for holistic profiling
         categoryScores["Aesthetic Alignment"] = aestheticMatchPercentage;
 
+        // --- 13. PUBLIC & PRIVATE MODESTY DYNAMICS (v2.0) ---
+        const modA = traitsA.modesty_profile || { public_modesty_index: 50, private_modesty_freedom: 50, social_media_privacy_index: 50 };
+        const modB = traitsB.modesty_profile || { public_modesty_index: 50, private_modesty_freedom: 50, social_media_privacy_index: 50 };
+
+        const publicModDiff = Math.abs(modA.public_modesty_index - modB.public_modesty_index);
+        const privateModDiff = Math.abs(modA.private_modesty_freedom - modB.private_modesty_freedom);
+        const socialPrivDiff = Math.abs(modA.social_media_privacy_index - modB.social_media_privacy_index);
+
+        let modestyCompatibility = 100 - ((publicModDiff * 0.45) + (privateModDiff * 0.25) + (socialPrivDiff * 0.3));
+        modestyCompatibility = Math.round(Math.max(30, Math.min(100, modestyCompatibility)));
+        categoryScores["Modesty Dynamics"] = modestyCompatibility;
+
+        if (publicModDiff > 30) {
+            challenges.push({
+                en: "Public Modesty Standards Discrepancy: Diverging expectations regarding public dress code, headcover, or mixed gathering boundaries.",
+                ar: "تفاوت معايير الحشمة العامة: توقعات متباعدة بشأن لباس الخروج، الحجاب/النقاب، أو حدود التجمعات المختلطة."
+            });
+            discussionTopics.push({
+                en: "Discuss public dress and modesty expectations when traveling or attending family and mixed gatherings.",
+                ar: "مناقشة توقعات اللباس والحشمة العامة أثناء السفر أو حضور المناسبات العائلية واللقاءات المختلطة."
+            });
+        }
+
+        if (socialPrivDiff > 35) {
+            challenges.push({
+                en: "Social Media Privacy Friction: One partner prioritizes total photo privacy while the other enjoys expressive public sharing.",
+                ar: "احتكاك الخصوصية الرقمية: يفضل أحد الطرفين الخصوصية التامة للصور بينما يستمتع الآخر بالمشاركة الاجتماعية."
+            });
+            discussionTopics.push({
+                en: "Establish clear shared boundaries regarding posting personal or family photos on social media.",
+                ar: "وضع حدود مشتركة وواضحة بشأن نشر الصور الشخصية أو العائلية على منصات التواصل الاجتماعي."
+            });
+        }
+
+        // --- 14. PHYSICAL APPEARANCE & FITNESS HARMONY (v2.0) ---
+        const physA = traitsA.physical_appearance_profile || { attraction_priority: 50, fitness_grooming_effort: 50 };
+        const physB = traitsB.physical_appearance_profile || { attraction_priority: 50, fitness_grooming_effort: 50 };
+
+        const attractionDiff = Math.abs(physA.attraction_priority - physB.attraction_priority);
+        const fitnessDiff = Math.abs(physA.fitness_grooming_effort - physB.fitness_grooming_effort);
+
+        let physicalHarmonyScore = 100 - ((attractionDiff * 0.5) + (fitnessDiff * 0.5));
+        physicalHarmonyScore = Math.round(Math.max(30, Math.min(100, physicalHarmonyScore)));
+        categoryScores["Physical & Fitness Harmony"] = physicalHarmonyScore;
+
+        if (fitnessDiff > 35) {
+            challenges.push({
+                en: "Fitness & Grooming Investment Variance: Different personal emphasis on daily exercise, skincare, and weight maintenance.",
+                ar: "تفاوت الاستثمار في اللياقة والمظهر: اختلاف في التركيز الشخصي على الرياضة اليومية والعناية بالبشرة والمحافظة على الوزن."
+            });
+            growthOpportunities.push({
+                en: "Encourage shared health activities like walking or gym sessions together without pressure.",
+                ar: "تشجيع الأنشطة الصحية المشتركة مثل المشي أو التمرين معاً دون ممارسة ضغوط."
+            });
+        }
+
         // --- 12. OVERALL COMPATIBILITY INDEX CALCULATIONS ---
         const totalCategories = Object.keys(categoryScores).length;
         const sumScores = Object.values(categoryScores).reduce((a, b) => a + b, 0);
