@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         assessmentSession: {
             personName: "",
             history: [] // question ID history to support dynamic backing up
-        }
+        },
+        activeReportProfileA: null,
+        activeReportProfileB: null
     };
 
     // --- 2. DOM ELEMENT CACHE ---
@@ -129,6 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCurrentQuestion();
         } else if (state.currentPanel === "panelDashboard") {
             renderSavedProfiles();
+        } else if (state.currentPanel === "panelReport" && state.activeReportProfileA) {
+            generateAndRenderReport(state.activeReportProfileA, state.activeReportProfileB);
         }
     });
 
@@ -715,6 +719,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 9. GENERATE & RENDER GRAPHIC REPORTS ---
     function generateAndRenderReport(profileA, profileB) {
+        state.activeReportProfileA = profileA;
+        state.activeReportProfileB = profileB;
         navigateTo("panelReport");
         const isAr = state.localization.currentLang === "ar";
 
@@ -982,7 +988,7 @@ document.addEventListener("DOMContentLoaded", () => {
             text.setAttribute("y", textY);
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("class", "radar-label");
-            text.textContent = cat;
+            text.textContent = state.localization.get(cat);
             svg.appendChild(text);
 
             // Compute data point position
