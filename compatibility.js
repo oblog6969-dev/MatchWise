@@ -201,9 +201,9 @@ const CompatibilityEngine = {
 
         // --- 6. FAMILY & BOUNDARIES ---
         let familyScore = 80;
-        const famBoundA = ansA["q30"];
-        const famBoundB = ansB["q30"];
-        if (famBoundA && famBoundB && famBoundA !== famBoundB) {
+        const famBoundA = parseInt(ansA["q30"] || "4", 10);
+        const famBoundB = parseInt(ansB["q30"] || "4", 10);
+        if (Math.abs(famBoundA - famBoundB) >= 3) {
             familyScore -= 20;
             challenges.push({
                 en: "In-law Boundary Disparities: Diverging views on allowing extended family members to influence household decisions.",
@@ -218,29 +218,26 @@ const CompatibilityEngine = {
 
         // --- 7. CHILDREN EXPECTATIONS (Potential Deal-breaker) ---
         let childrenScore = 90;
-        const desireA = ansA["q31"];
-        const desireB = ansB["q31"];
+        const desireA = parseInt(ansA["q31"] || "4", 10);
+        const desireB = parseInt(ansB["q31"] || "4", 10);
 
-        if (desireA && desireB) {
-            // opt1: Yes, opt2: No, opt3: Unsure
-            if ((desireA === "opt1" && desireB === "opt2") || (desireA === "opt2" && desireB === "opt1")) {
-                childrenScore = 30;
-                dealBreakers.push({
-                    en: "Incompatible Family Vows: One partner absolutely demands children, while the other does not want any.",
-                    ar: "رغبات عائلية غير متوافقة: يطلب أحد الشريكين إنجاب الأطفال كلياً، بينما لا يرغب الآخر في ذلك مطلقاً."
-                });
-            } else if (desireA === "opt3" || desireB === "opt3") {
-                childrenScore = 70;
-                discussionTopics.push({
-                    en: "A timeline to decide on parenthood expectations to avoid unspoken resentment later.",
-                    ar: "جدول زمني لحسم التوقعات بشأن الأبوة والأمومة لتجنب الاستياء الصامت لاحقاً."
-                });
-            } else if (desireA === "opt1" && desireB === "opt1") {
-                strengths.push({
-                    en: "Shared Parenting Goals: Complete alignment on the beautiful intention of raising a family.",
-                    ar: "أهداف تربوية مشتركة: توافق تام على الرغبة الجميلة في بناء عائلة وتربية أطفال."
-                });
-            }
+        if (Math.abs(desireA - desireB) >= 4) {
+            childrenScore = 35;
+            dealBreakers.push({
+                en: "Incompatible Family Vows: One partner strongly prioritizes having children, while the other holds opposing expectations.",
+                ar: "رغبات عائلية غير متوافقة: يعطي أحد الشريكين أولوية قصوى لإنجاب الأطفال، بينما يحمل الآخر توقعات مغايرة تماماً."
+            });
+        } else if (Math.abs(desireA - desireB) >= 2) {
+            childrenScore = 70;
+            discussionTopics.push({
+                en: "A timeline to decide on parenthood expectations to avoid unspoken resentment later.",
+                ar: "جدول زمني لحسم التوقعات بشأن الأبوة والأمومة لتجنب الاستياء الصامت لاحقاً."
+            });
+        } else {
+            strengths.push({
+                en: "Shared Parenting Goals: Complete alignment on family expansion and parenting expectations.",
+                ar: "أهداف تربوية مشتركة: توافق تام على الرغبة في تكوين عائلة وتوقعات التربية."
+            });
         }
         categoryScores["Children"] = childrenScore;
 
@@ -248,8 +245,6 @@ const CompatibilityEngine = {
         let religionScore = 85;
         const relImpA = traitsA.values_and_lifestyle?.religion_importance || 50;
         const relImpB = traitsB.values_and_lifestyle?.religion_importance || 50;
-        const orthodoxyA = ansA["q34_follow"];
-        const orthodoxyB = ansB["q34_follow"];
 
         if (Math.abs(relImpA - relImpB) > 35) {
             religionScore -= 20;
@@ -263,10 +258,9 @@ const CompatibilityEngine = {
             });
         }
 
-        // Deal-breaker: if religion is central to one and requires matching, but they differ
-        const worldviewA = ansA["q35"];
-        const worldviewB = ansB["q35"];
-        if (worldviewA && worldviewB && worldviewA !== worldviewB && (relImpA > 70 || relImpB > 70)) {
+        const worldviewA = parseInt(ansA["q35"] || "4", 10);
+        const worldviewB = parseInt(ansB["q35"] || "4", 10);
+        if (Math.abs(worldviewA - worldviewB) >= 4 && (relImpA > 65 || relImpB > 65)) {
             religionScore -= 15;
             dealBreakers.push({
                 en: "Worldview and Theological Divergence: Significant differences in core beliefs when religion is highly valued.",
@@ -331,9 +325,9 @@ const CompatibilityEngine = {
             });
         }
 
-        const locA = ansA["q54"];
-        const locB = ansB["q54"];
-        if (locA && locB && locA !== locB) {
+        const locA = parseInt(ansA["q54"] || "4", 10);
+        const locB = parseInt(ansB["q54"] || "4", 10);
+        if (Math.abs(locA - locB) >= 3) {
             marriageScore -= 15;
             challenges.push({
                 en: "Geographic Future Discrepancy: Conflicting wishes regarding settling down locally versus relocating abroad.",

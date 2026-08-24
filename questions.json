@@ -39,7 +39,9 @@
           "extroversion": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q2",
@@ -73,7 +75,9 @@
           "mbti_n": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q3",
@@ -107,7 +111,9 @@
           "mbti_f": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q4",
@@ -141,7 +147,9 @@
           "mbti_p": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q5",
@@ -157,7 +165,9 @@
     },
     "arabic": {
       "text": "موقف: عند حدوث خلاف منزلي بسيط، أميل للتنازل عن تفضيلاتي فوراً للحفاظ على سلام وهدوء العلاقة."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q6",
@@ -173,7 +183,9 @@
     },
     "arabic": {
       "text": "موقف: أحتفظ بجداول بيانات منظمة أو دفاتر حسابات رقمية لمتابعة الميزانية الشهرية والالتزامات الأسرية."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q7",
@@ -189,7 +201,9 @@
     },
     "arabic": {
       "text": "موقف: إذا لم يرد شريكي على مكالماتي أو رسائلي لبضع ساعات، أبدأ طبيعياً بالقلق وأفترض أن مكروهاً قد حدث."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q8",
@@ -205,7 +219,9 @@
     },
     "arabic": {
       "text": "موقف: أستمتع بحضور الفعاليات الثقافية، أو استكشاف المعارض الفنية، أو مناقشة المفاهيم الفلسفية والتجريدية مع شريكي."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q9",
@@ -251,7 +267,19 @@
           "ideology_liberalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1",
+          "opt3"
+        ],
+        "inject_questions": [
+          "q10"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q10",
@@ -297,7 +325,9 @@
           "ideology_traditionalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q11",
@@ -343,7 +373,19 @@
           "ideology_traditionalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1",
+          "opt3"
+        ],
+        "inject_questions": [
+          "q12"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q12",
@@ -389,7 +431,9 @@
           "ideology_capitalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q13",
@@ -435,7 +479,19 @@
           "ideology_traditionalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1",
+          "opt3"
+        ],
+        "inject_questions": [
+          "q14"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q14",
@@ -481,7 +537,9 @@
           "ideology_liberalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q15",
@@ -527,7 +585,19 @@
           "ideology_traditionalism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1",
+          "opt3"
+        ],
+        "inject_questions": [
+          "q16"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q16",
@@ -573,7 +643,9 @@
           "ideology_feminism": 2.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q17_m",
@@ -615,7 +687,9 @@
           "financial_values": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q17_f",
@@ -657,7 +731,9 @@
           "financial_values": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q18_mrd",
@@ -699,7 +775,9 @@
           "conflict_style": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q19_utb",
@@ -741,7 +819,9 @@
           "emotional_intelligence": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q20",
@@ -783,7 +863,9 @@
           "conflict_style": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q21",
@@ -825,7 +907,9 @@
           "conflict_style": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q22",
@@ -867,7 +951,9 @@
           "family_values": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q23",
@@ -909,7 +995,9 @@
           "religious_alignment": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q24",
@@ -951,7 +1039,9 @@
           "career_support": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q25",
@@ -993,7 +1083,9 @@
           "trust_index": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q26",
@@ -1035,7 +1127,9 @@
           "family_boundaries": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q27",
@@ -1077,7 +1171,9 @@
           "emotional_intelligence": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q28",
@@ -1119,7 +1215,9 @@
           "love_language": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q29",
@@ -1161,7 +1259,9 @@
           "future_planning_index": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q30",
@@ -1203,7 +1303,9 @@
           "marriage_readiness": -1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q31",
@@ -1218,8 +1320,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون حل الخلافات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q32",
@@ -1234,8 +1338,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الشؤون المالية والإنفاق، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q33",
@@ -1250,8 +1356,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون نمط الحياة واليوميات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q34",
@@ -1266,8 +1374,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الحياة الزوجية والأدوار، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q35",
@@ -1282,8 +1392,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون العائلة والعلاقات الأسرية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q36",
@@ -1298,8 +1410,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of children, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا children (المتعلقة بـ Children)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الأطفال والتربية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q37",
@@ -1314,8 +1428,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of religion, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا religion (المتعلقة بـ Religion)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون القيم والدين، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q38",
@@ -1330,8 +1446,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of career, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا career (المتعلقة بـ Career)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون العمل والمسار المهني، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q39",
@@ -1346,8 +1464,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of decision making, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا decision making (المتعلقة بـ Decision making)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون اتخاذ القرارات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q40",
@@ -1362,8 +1482,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of trust, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا trust (المتعلقة بـ Trust)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الثقة والخصوصية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q41",
@@ -1378,8 +1500,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of boundaries, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا boundaries (المتعلقة بـ Boundaries)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الحدود الشخصية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q42",
@@ -1394,8 +1518,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of emotional intelligence, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا emotional intelligence (المتعلقة بـ Emotional intelligence)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الذكاء العاطفي، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q43",
@@ -1410,8 +1536,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of affection, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا affection (المتعلقة بـ Affection)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون المودة ولغات الحب، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q44",
@@ -1426,8 +1554,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of future planning, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا future planning (المتعلقة بـ Future planning)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون التخطيط للمستقبل، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q45",
@@ -1442,8 +1572,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of communication, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا communication (المتعلقة بـ Communication)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون التواصل والحوار، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q46",
@@ -1458,8 +1590,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون حل الخلافات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q47",
@@ -1474,8 +1608,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الشؤون المالية والإنفاق، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q48",
@@ -1490,8 +1626,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون نمط الحياة واليوميات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q49",
@@ -1506,8 +1644,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الحياة الزوجية والأدوار، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q50",
@@ -1522,8 +1662,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون العائلة والعلاقات الأسرية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q51",
@@ -1538,8 +1680,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of children, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا children (المتعلقة بـ Children)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الأطفال والتربية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q52",
@@ -1554,8 +1698,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of religion, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا religion (المتعلقة بـ Religion)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون القيم والدين، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q53",
@@ -1570,8 +1716,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of career, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا career (المتعلقة بـ Career)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون العمل والمسار المهني، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q54",
@@ -1586,8 +1734,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of decision making, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا decision making (المتعلقة بـ Decision making)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون اتخاذ القرارات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q55",
@@ -1602,8 +1752,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of trust, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا trust (المتعلقة بـ Trust)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الثقة والخصوصية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q56",
@@ -1618,8 +1770,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of boundaries, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا boundaries (المتعلقة بـ Boundaries)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الحدود الشخصية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q57",
@@ -1634,8 +1788,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of emotional intelligence, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا emotional intelligence (المتعلقة بـ Emotional intelligence)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الذكاء العاطفي، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q58",
@@ -1650,8 +1806,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of affection, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا affection (المتعلقة بـ Affection)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون المودة ولغات الحب، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q59",
@@ -1666,8 +1824,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of future planning, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا future planning (المتعلقة بـ Future planning)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون التخطيط للمستقبل، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q60",
@@ -1682,8 +1842,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of communication, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا communication (المتعلقة بـ Communication)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون التواصل والحوار، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q61",
@@ -1698,8 +1860,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of conflict, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا conflict (المتعلقة بـ Conflict)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون حل الخلافات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q62",
@@ -1714,8 +1878,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of money, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا money (المتعلقة بـ Money)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الشؤون المالية والإنفاق، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q63",
@@ -1730,8 +1896,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of lifestyle, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا lifestyle (المتعلقة بـ Lifestyle)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون نمط الحياة واليوميات، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q64",
@@ -1746,8 +1914,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of marriage, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا marriage (المتعلقة بـ Marriage)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون الحياة الزوجية والأدوار، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q65",
@@ -1762,8 +1932,10 @@
       "text": "Situation: In our daily Riyadh life, when dealing with issues of family, I prioritize structure, clarity, and shared rules over spontaneous adjustment."
     },
     "arabic": {
-      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع قضايا family (المتعلقة بـ Family)، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
-    }
+      "text": "موقف: في حياتنا اليومية بالرياض، عند التعامل مع شؤون العائلة والعلاقات الأسرية، أعطي الأولوية للتنظيم والوضوح والقواعد المشتركة على التعديل العفوي."
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q66",
@@ -1805,7 +1977,9 @@
           "aesthetic_self": 1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q67",
@@ -1847,7 +2021,9 @@
           "aesthetic_expect": 1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q68",
@@ -1889,7 +2065,9 @@
           "fashion_self": 1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q69",
@@ -1931,7 +2109,9 @@
           "fashion_expect": 1.0
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q70",
@@ -1976,7 +2156,18 @@
           "appearance_fitness_effort": 0
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1"
+        ],
+        "inject_questions": [
+          "q75"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q71",
@@ -2021,7 +2212,19 @@
           "fashion_casual": 2
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1",
+          "opt3"
+        ],
+        "inject_questions": [
+          "q72"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q72",
@@ -2066,7 +2269,9 @@
           "modesty_public_hijab_niqab": 1
         }
       }
-    ]
+    ],
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q73",
@@ -2108,7 +2313,18 @@
           "modesty_private_freedom": 1
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt1"
+        ],
+        "inject_questions": [
+          "q79"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q74",
@@ -2151,7 +2367,18 @@
           "fashion_casual": 3
         }
       }
-    ]
+    ],
+    "followup_rules": [
+      {
+        "trigger_options": [
+          "opt2"
+        ],
+        "inject_questions": [
+          "q78"
+        ]
+      }
+    ],
+    "is_followup": false
   },
   {
     "id": "q75",
@@ -2167,7 +2394,9 @@
     },
     "arabic": {
       "text": "موقف: أعتبر ممارسة الرياضة والاهتمام بالبشرة والمظهر والمحافظة على الوزن الصحي مسؤولية يومية أساسية بعد الزواج."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q76",
@@ -2183,7 +2412,9 @@
     },
     "arabic": {
       "text": "موقف: في اللقاءات العائلية أو المهنية المختلطة، أتوقع الالتزام التام بفصل الجلسات ومعايير الحشمة التقليدية الرسمية."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q77",
@@ -2199,7 +2430,9 @@
     },
     "arabic": {
       "text": "موقف: عند السفر للإجازة في المنتجعات الشاطئية أو المنتجات الخاصة، أفضّل الحفاظ على نفس معايير الحشمة العامة بدلاً من التخفف منها."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": false
   },
   {
     "id": "q78",
@@ -2215,7 +2448,9 @@
     },
     "arabic": {
       "text": "موقف: من المهم بالنسبة لي أن ننسق أنا وشريكي أسلوب الأناقة ومستوى المظهر الخارجي عند الخروج معاً أمام الناس."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": true
   },
   {
     "id": "q79",
@@ -2231,6 +2466,8 @@
     },
     "arabic": {
       "text": "موقف: في الخصوصية الزوجية، يجب أن يشعر الشريك بالحرية التامة في ارتداء الملابس الجذابة والتعبير دون أي حرج أو خجل."
-    }
+    },
+    "followup_rules": [],
+    "is_followup": true
   }
 ]

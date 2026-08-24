@@ -188,16 +188,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentQ = questions.find(q => q.id === currentQId);
         if (!currentQ) return null;
 
-        // Check for specific follow-ups
-        if (currentQ.followups && currentQ.followups.length > 0) {
+        // Check concern-driven followup_rules
+        if (currentQ.followup_rules && currentQ.followup_rules.length > 0) {
             const answer = state.sessionAnswers[currentQId];
-            for (const followup of currentQ.followups) {
-                // If Likert and condition is agree/disagree
-                if (followup.condition === "agree" && parseInt(answer, 10) >= 5) {
-                    return followup.next_id;
-                }
-                if (followup.condition === "disagree" && parseInt(answer, 10) <= 3) {
-                    return followup.next_id;
+            for (const rule of currentQ.followup_rules) {
+                if (rule.trigger_options && rule.trigger_options.includes(answer)) {
+                    if (rule.inject_questions && rule.inject_questions.length > 0) {
+                        const nextId = rule.inject_questions[0];
+                        if (!state.assessmentSession.history.includes(nextId)) {
+                            return nextId;
+                        }
+                    }
                 }
             }
         }

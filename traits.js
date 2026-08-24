@@ -385,15 +385,11 @@ const PersonalityEngine = {
         // Consistency check: check logical alignment between reverse questions
         // Let's analyze alignment of introversion/extroversion, trust, parents
         let consistencyScore = 0.85; // baseline
-        if (answers["q1"] && answers["q1_follow"]) {
-            const isQ1Extroverted = parseInt(answers["q1"], 10) > 4;
-            const followRole = answers["q1_follow"];
-            if (isQ1Extroverted && followRole === "opt3") consistencyScore -= 0.2; // slight contradiction
+        if (answers["q1"] && answers["q2"]) {
+            if (answers["q1"] === "opt1" && answers["q2"] === "opt3") consistencyScore -= 0.2;
         }
-        if (answers["q34"] && answers["q34_follow"]) {
-            const isReligious = parseInt(answers["q34"], 10) > 4;
-            const orthoAgree = parseInt(answers["q34_follow"], 10);
-            if (!isReligious && orthoAgree > 5) consistencyScore -= 0.25; // major contradiction
+        if (answers["q71"] && answers["q72"]) {
+            if (answers["q71"] === "opt1" && answers["q72"] === "opt3") consistencyScore -= 0.25;
         }
 
         const calculatedConfidence = Math.round(
