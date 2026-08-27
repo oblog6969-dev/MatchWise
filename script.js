@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         assessmentSession: {
             personName: "",
             history: [] // question ID history to support dynamic backing up
-        }
+        },
+        isAiMode: false,
+        aiService: null
     };
 
     // --- 2. DOM ELEMENT CACHE ---
@@ -30,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Navigation Buttons
         btnStartNewAssessment: document.getElementById("btnStartNewAssessment"),
+        btnStartAIAssessment: document.getElementById("btnStartAIAssessment"),
         btnGoToDashboard: document.getElementById("btnGoToDashboard"),
         btnHomeFromDashboard: document.getElementById("btnHomeFromDashboard"),
         btnDashboardFromReport: document.getElementById("btnDashboardFromReport"),
@@ -148,6 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dom.btnStartNewAssessment.addEventListener("click", () => {
         promptForName((userData) => {
             if (userData && userData.name && userData.name.trim()) {
+                state.isAiMode = true;
+                state.aiService = new window.AIService();
                 state.assessmentSession.personName = userData.name.trim();
                 state.assessmentSession.gender = userData.gender;
                 state.assessmentSession.maritalStatus = userData.maritalStatus;
@@ -482,7 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    dom.btnNextQuestion.addEventListener("click", () => {
+    dom.btnNextQuestion.addEventListener("click", async () => {
         const history = state.assessmentSession.history;
         const currentQId = history[history.length - 1];
         
@@ -493,8 +498,40 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const nextQId = getNextQuestionId(currentQId);
-        
+        // Show loading state
+        const oldText = dom.btnNextQuestion.querySelector("span").textContent;
+        dom.btnNextQuestion.querySelector("span").textContent = "...";
+        dom.btnNextQuestion.disabled = true;
+
+        let nextQId = null;
+
+        try {
+            if (state.isAiMode && state.aiService) {
+                const askedCount = Object.keys(state.sessionAnswers).length;
+                if (askedCount >= 45) {
+                     nextQId = null; // AI test completion threshold (can be adjusted)
+                } else {
+                     const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
+                     if (aiResponse.next_id === "NEW" && aiResponse.new_question) {
+                         questions.push(aiResponse.new_question);
+                         nextQId = aiResponse.new_question.id;
+                     } else if (aiResponse.next_id === "STANDARD" || !aiResponse.next_id) {
+                         nextQId = getNextQuestionId(currentQId);
+                     } else {
+                         nextQId = aiResponse.next_id;
+                     }
+                }
+            } else {
+                nextQId = getNextQuestionId(currentQId);
+            }
+        } catch (e) {
+            console.error(e);
+            nextQId = getNextQuestionId(currentQId); // fallback
+        }
+
+        dom.btnNextQuestion.disabled = false;
+        dom.btnNextQuestion.querySelector("span").textContent = oldText;
+
         if (nextQId) {
             state.assessmentSession.history.push(nextQId);
             renderCurrentQuestion();
@@ -948,6 +985,53 @@ document.addEventListener("DOMContentLoaded", () => {
                 p.textContent = isAr ? rec.ar : rec.en;
                 dom.reportRecommendationsContainer.appendChild(p);
             });
+        }
+        // --- AI Insights Generation ---
+        const aiSection = document.getElementById("aiInsightsSection");
+        const aiContainer = document.getElementById("reportAIInsightsContainer");
+        
+        if (state.isAiMode && state.aiService && !profileB) {
+            aiSection.style.display = "block";
+            aiContainer.innerHTML = "<p>Generating AI analysis...</p>";
+            
+            // Asynchronously fetch AI insights
+            state.aiService.analyzeReport(profileA.answers, questions, state.localization.currentLang).then(aiData => {
+                aiContainer.innerHTML = "";
+                const isAr = state.localization.currentLang === "ar";
+                
+                const addSection = (title, items, color) => {
+                    if (items && items.length > 0) {
+                        const h4 = document.createElement("h4");
+                        h4.textContent = title;
+                        h4.style.color = color;
+                        h4.style.marginTop = "16px";
+                        aiContainer.appendChild(h4);
+                        
+                        const ul = document.createElement("ul");
+                        ul.className = "report-bullet-list";
+                        items.forEach(item => {
+                            const li = document.createElement("li");
+                            li.textContent = item;
+                            ul.appendChild(li);
+                        });
+                        aiContainer.appendChild(ul);
+                    }
+                };
+
+                addSection(isAr ? "السمات الإيجابية ونقاط القوة" : "Positive Traits & Strengths", aiData.positiveTraits, "var(--success)");
+                addSection(isAr ? "السمات السلبية المحتملة" : "Potential Negative Traits", aiData.negativeTraits, "var(--warning)");
+                addSection(isAr ? "نقاط مثيرة للقلق / خطوط حمراء" : "Points of Concern / Red Flags", aiData.concerns, "var(--danger)");
+                addSection(isAr ? "مجالات التركيز والتطور" : "Areas of Focus / Growth", aiData.focusAreas, "var(--info)");
+                
+                if (!aiData.positiveTraits?.length && !aiData.negativeTraits?.length && !aiData.concerns?.length && !aiData.focusAreas?.length) {
+                    aiContainer.innerHTML = `<p>${isAr ? "لم يحدد الذكاء الاصطناعي أي رؤى محددة في هذا الوقت." : "AI did not identify any specific insights at this time."}</p>`;
+                }
+            }).catch(err => {
+                aiContainer.innerHTML = "<p>Failed to generate AI insights.</p>";
+                console.error(err);
+            });
+        } else {
+            aiSection.style.display = "none";
         }
     }
 

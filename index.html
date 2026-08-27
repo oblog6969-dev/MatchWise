@@ -16,7 +16,7 @@
                 </svg>
                 <div class="logo-text">
                     <h1 data-i18n="app_title">MatchWise Lite</h1>
-                    <p data-i18n="app_subtitle">Offline Relationship Compatibility Assessment</p>
+                    <p data-i18n="app_subtitle">AI-Powered Relationship Compatibility Assessment</p>
                 </div>
             </div>
             
@@ -55,8 +55,8 @@
         <section id="panelHome" class="spa-panel active-panel">
             <div class="premium-hero">
                 <h2 data-i18n="app_title">MatchWise Lite</h2>
-                <p data-i18n="app_subtitle" class="hero-desc">Offline Relationship Compatibility Assessment</p>
-                <div class="hero-badge">v1.2 • Offline Production Quality</div>
+                <p data-i18n="app_subtitle" class="hero-desc">AI-Powered Relationship Compatibility Assessment</p>
+                <div class="hero-badge">v2.0 • AI-Powered Insights</div>
             </div>
 
             <div class="menu-cards-grid">
@@ -71,6 +71,7 @@
                     <h3 data-i18n="start_new">Start New Assessment</h3>
                     <p class="card-text">Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.</p>
                 </div>
+
 
                 <!-- Card 2: Compare Profiles -->
                 <div class="menu-card" id="btnGoToDashboard">
@@ -364,6 +365,20 @@
                     </div>
                 </section>
 
+                <!-- AI Insights Section -->
+                <section class="report-section" id="aiInsightsSection" style="display: none;">
+                    <h3 class="section-title" style="color: #8b5cf6;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                            <circle cx="12" cy="12" r="4"></circle>
+                        </svg>
+                        AI Insights & Concerns
+                    </h3>
+                    <div id="reportAIInsightsContainer" class="p-container">
+                        <p>Generating AI analysis...</p>
+                    </div>
+                </section>
+
                 <!-- Appendix / Footer -->
                 <section class="report-section appendix-section">
                     <h3 class="section-title" data-i18n="appendix">Appendix & Technical Parameters</h3>
@@ -405,6 +420,7 @@
                         </select>
                     </div>
                 </div>
+
                 <!-- Div for feedback messaging -->
                 <div id="modalFeedbackContent" class="modal-feedback-container" style="display: none;"></div>
             </div>
@@ -416,6 +432,7 @@
     </div>
 
     <!-- Script loading chain -->
+    <script src="ai_service.js"></script>
     <script src="utils.js"></script>
     <script src="traits.js"></script>
     <script src="compatibility.js"></script>
