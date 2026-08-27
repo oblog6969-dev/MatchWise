@@ -1,16 +1,18 @@
 /**
- * MatchWise Lite v1.0
- * compatibility.js - Premium Compatibility Assessment Engine
- * Compares two profiles using structured psychological and lifestyle modeling.
- * Computes scores based on similarity (values, children, religion),
- * complementarity (extroversion, communication, attachment styles),
- * triggers deal-breakers, and formats detailed strengths/challenges/topics to discuss.
+ * MatchWise Lite v1.2
+ * compatibility.js - Relationship Compatibility Engine
+ * Compares two psychological profiles across 12 distinct dimensions:
+ * Big Five Alignment, Communication, Conflict Dynamics, Financial Systems,
+ * Housing Autonomy, Family Boundaries, Children/Parenthood, Religious Values,
+ * Emotional Synergy & Love Languages, Career Support, Ideology, and Aesthetics.
  */
 
 const CompatibilityEngine = {
     compare(profileA, profileB) {
         const traitsA = profileA.calculated_personality;
         const traitsB = profileB.calculated_personality;
+        const ansA = profileA.answers || {};
+        const ansB = profileB.answers || {};
 
         const categoryScores = {};
         const dealBreakers = [];
@@ -19,51 +21,48 @@ const CompatibilityEngine = {
         const discussionTopics = [];
         const growthOpportunities = [];
 
-        // --- 1. PERSONALITY DYNAMICS DEDUCTION ---
-        // Big Five Similarity / Balance
-        const bigFiveDiffs = {
-            openness: Math.abs(traitsA.big_five.openness - traitsB.big_five.openness),
-            conscientiousness: Math.abs(traitsA.big_five.conscientiousness - traitsB.big_five.conscientiousness),
-            extroversion: Math.abs(traitsA.big_five.extroversion - traitsB.big_five.extroversion),
-            agreeableness: Math.abs(traitsA.big_five.agreeableness - traitsB.big_five.agreeableness),
-            neuroticism: Math.abs(traitsA.big_five.neuroticism - traitsB.big_five.neuroticism)
-        };
+        // --- 1. PERSONALITY DYNAMICS (BIG FIVE) ---
+        const oA = traitsA.big_five;
+        const oB = traitsB.big_five;
+        const diffOpen = Math.abs(oA.openness - oB.openness);
+        const diffConsc = Math.abs(oA.conscientiousness - oB.conscientiousness);
+        const diffExtro = Math.abs(oA.extroversion - oB.extroversion);
+        const diffAgree = Math.abs(oA.agreeableness - oB.agreeableness);
+        const diffNeuro = Math.abs(oA.neuroticism - oB.neuroticism);
 
-        // Big Five compatibility: High agreeableness on both is great. High neuroticism on both is challenging.
-        // Big difference in openness is a source of lifestyle drift.
         let personalityScore = 100 - (
-            (bigFiveDiffs.openness * 0.2) +
-            (bigFiveDiffs.conscientiousness * 0.15) +
-            (bigFiveDiffs.extroversion * 0.1) + // Extroversion difference can be complementary
-            (bigFiveDiffs.agreeableness * 0.2) +
-            (bigFiveDiffs.neuroticism * 0.35)
+            (diffOpen * 0.18) +
+            (diffConsc * 0.15) +
+            (diffExtro * 0.10) +
+            (diffAgree * 0.20) +
+            (diffNeuro * 0.35)
         );
-        categoryScores["Personality"] = Math.round(Math.max(30, Math.min(100, personalityScore)));
+        categoryScores["Personality"] = Math.round(Math.max(35, Math.min(98, personalityScore)));
 
-        if (bigFiveDiffs.openness > 35) {
+        if (diffOpen > 30) {
             challenges.push({
-                en: "Diverging Intellectual and Artistic Outlets: One partner seeks constant novelty while the other values stable routines.",
-                ar: "تفاوت المخارج الفكرية والفنية: يسعى أحد الشريكين إلى التجدد المستمر بينما يقدّر الآخر الروتين المستقر."
+                en: "Diverging Intellectual and Novelty Interests: One partner seeks constant new experiences while the other values comfortable routines.",
+                ar: "تفاوت في الاهتمامات والتجارب الجديدة: يسعى أحد الشريكين للتجدد المستمر بينما يفضل الآخر الروتين المستقر."
             });
             discussionTopics.push({
-                en: "How to balance structured comfort with the pursuit of new hobbies and experiences.",
-                ar: "كيفية تحقيق التوازن بين الراحة المنظمة والسعي وراء هوايات وتجارب جديدة."
+                en: "How to balance structured domestic comfort with exploring new mutual hobbies, culture, and travel.",
+                ar: "كيفية الموازنة بين الهدوء المنزلي وبين استكشاف هوايات وثقافات وسفر مشترك."
             });
         } else {
             strengths.push({
-                en: "Harmonious Experience Orientation: Both partners share a similar level of openness to life's adventures and thoughts.",
-                ar: "توجّه متناغم نحو التجارب: يتشارك الشريكان مستوى مماثلاً من الانفتاح على مغامرات الحياة وأفكارها."
+                en: "Harmonious Experience Orientation: Both partners share a beautifully aligned outlook toward life's adventures and new ideas.",
+                ar: "توجّه متناغم نحو التجارب: يتشارك الشريكان مستوى متقارباً من الانفتاح على أفكار وتجارب الحياة."
             });
         }
 
-        if (traitsA.big_five.neuroticism > 65 && traitsB.big_five.neuroticism > 65) {
+        if (oA.neuroticism > 65 && oB.neuroticism > 65) {
             challenges.push({
-                en: "Shared Stress Amplification: Both partners tend to react strongly to uncertainty, potentially escalating tension.",
-                ar: "تضخيم متبادل للتوتر: يميل كلا الشريكين إلى التفاعل بقوة مع حالات عدم اليقين، مما قد يؤدي إلى تصاعد التوتر."
+                en: "Mutual Stress Amplification: Both tend to react strongly to uncertainty, which can escalate minor domestic friction.",
+                ar: "تضخيم متبادل للتوتر: يميل كلا الشريكين للتفاعل بقوة مع الضغوط والمفاجآت، مما قد يصعد الخلافات البسيطة."
             });
             growthOpportunities.push({
-                en: "Develop an agreed external circuit-breaker, like professional coaching, when both feel overwhelmed.",
-                ar: "تطوير أسلوب متبادل متفق عليه لتهدئة الأوضاع، مثل التوجيه المهني، عندما يشعر كلا الطرفين بالإرهاق."
+                en: "Practice a structured 15-minute emotional cool-down protocol before discussing contentious issues.",
+                ar: "التدرب على بروتوكول تهدئة لمدة 15 دقيقة قبل الخوض في أي نقاش شائك تحت الضغط."
             });
         }
 
@@ -73,30 +72,30 @@ const CompatibilityEngine = {
 
         let commScore = 80;
         if (commA === "assertive" && commB === "assertive") {
-            commScore = 95;
+            commScore = 96;
             strengths.push({
                 en: "Direct & Healthy Dialogue: Both communicate transparently and respectfully without passive mind-games.",
-                ar: "حوار مباشر وصحي: يتواصل كلا الشريكين بشفافية واحترام متبادل دون ألعاب ذهنية سلبية."
+                ar: "حوار مباشر وصحي: يتواصل كلا الشريكين بشفافية واحترام متبادل دون تلميحات سلبية أو غموض."
             });
         } else if (commA === "passive_aggressive" || commB === "passive_aggressive") {
             commScore = 55;
             challenges.push({
-                en: "Indirect Communication Triggers: Subtle resentment or sarcasm could stall emotional clarity.",
-                ar: "محفزات التواصل غير المباشر: الاستياء الخفي أو السخرية قد يعطلان الوضوح العاطفي بينكما."
+                en: "Indirect Communication Triggers: Subtle resentment or cold silence could stall emotional clarity.",
+                ar: "تواصل غير مباشر: قد يؤدي الصمت البارد أو العتب غير المباشر إلى تعليق الوضوح العاطفي."
             });
             discussionTopics.push({
-                en: "Set a rule of sharing frustrations within 24 hours rather than letting them accumulate.",
-                ar: "ضعا قاعدة لمشاركة مشاعر الإحباط خلال 24 ساعة بدلاً من تركها تتراكم."
+                en: "Agree on a safe rule of expressing hurt feelings within 24 hours rather than letting resentment brew.",
+                ar: "الاتفاق على التعبير عن المشاعر المجروحة خلال 24 ساعة بدلاً من ترك العتب يتراكم."
             });
         } else if ((commA === "passive" || commA === "reserved") && (commB === "passive" || commB === "reserved")) {
-            commScore = 60;
+            commScore = 65;
             challenges.push({
-                en: "Unexpressed Frustrations: A tendency for both to bury negative feelings to preserve superficial peace.",
-                ar: "مشاعر إحباط غير معلنة: ميل كلا الطرفين إلى دفن المشاعر السلبية للحفاظ على سلام سطحي."
+                en: "Unexpressed Emotional Needs: Both tend to withhold sensitive feelings to maintain superficial peace.",
+                ar: "احتياجات عاطفية غير معلنة: يميل كلا الطرفين لكتمان المشاعر الحساسة للحفاظ على سلام سطحي."
             });
             growthOpportunities.push({
-                en: "Initiate a scheduled 'Heart-to-Heart Check-in' weekly to proactively ask for thoughts.",
-                ar: "احرصا على إجراء 'جلسة مصارحة' أسبوعية مجدولة لطرح الأفكار والمشاعر بانتظام."
+                en: "Schedule regular weekly 'Heart-to-Heart Check-ins' to proactively voice unstated thoughts.",
+                ar: "تخصيص جلسة مصارحة وحوار أسبوعية منتظمة للحديث عن الأفكار غير المعلنة بودية."
             });
         }
         categoryScores["Communication"] = commScore;
@@ -104,59 +103,61 @@ const CompatibilityEngine = {
         // --- 3. CONFLICT SYSTEM ---
         const confA = traitsA.conflict.primary;
         const confB = traitsB.conflict.primary;
-        let conflictScore = 75;
+        let conflictScore = 78;
 
         if (confA === "collaborating" && confB === "collaborating") {
             conflictScore = 98;
             strengths.push({
-                en: "Collaborative Problem Solvers: Problems are faced as a team against the issue, not against each other.",
-                ar: "حل المشكلات بشكل تعاوني: تُواجَه المشكلات كفريق ضد العقبة، وليس ضد بعضكما البعض."
+                en: "Collaborative Problem Solvers: Problems are faced as a united team against the obstacle, not against each other.",
+                ar: "حل تعاوني للمشكلات: مواجهة الخلافات كفريق واحد ضد العقبة، وليس ضد بعضكما البعض."
             });
         } else if (confA === "competing" && confB === "competing") {
-            conflictScore = 45;
+            conflictScore = 48;
             challenges.push({
-                en: "Ego and Power Struggles: Arguments might turn into battlefields where winning is prioritized over resolving.",
-                ar: "صراعات الأنا والقوة: قد تتحول النقاشات إلى ساحات معارك تُعطى فيها الأولوية للفوز على حساب الحل."
+                en: "Ego and Win-Lose Dynamics: Arguments may turn into power struggles where being right is prioritized over harmony.",
+                ar: "صراعات الأنا والرغبة في الفوز: قد تتحول النقاشات إلى رغبة في إثبات الخطأ على حساب الود والتوافق."
             });
             discussionTopics.push({
-                en: "Agree to use 'I feel' statements and a structural timeout system when voices rise.",
-                ar: "اتفقا على استخدام عبارات تبدأ بـ 'أشعر' ونظام مهلة مؤقتة عندما ترتفع الأصوات."
+                en: "Establish a golden rule to use 'I feel' statements and a timeout system when voices rise.",
+                ar: "تثبيت قاعدة ذهبية لاستخدام عبارات تبدأ بـ 'أشعر' وطلب مهلة مؤقتة فور ارتفاع نبرة الصوت."
             });
         } else if ((confA === "competing" && confB === "avoiding") || (confB === "competing" && confA === "avoiding")) {
-            conflictScore = 55;
+            conflictScore = 58;
             challenges.push({
-                en: "Pursuer-Distancer Dynamic: One partner pursues resolution forcefully while the other withdraws defensively.",
-                ar: "ديناميكية الملاحِق والمتهرّب: يسعى أحد الشريكين بقوة إلى الحل بينما ينسحب الآخر دفاعياً."
+                en: "Pursuer-Distancer Cycle: One partner pursues immediate resolution intensely while the other withdraws defensively.",
+                ar: "حلقة الملاحق والمنسحب: يضغط أحد الشريكين للحل الفوري بينما ينسحب الآخر دفاعياً للهروب من الضغط."
             });
             growthOpportunities.push({
-                en: "The pursuer practices giving space, while the distancer commits to returning to the topic within 12 hours.",
-                ar: "يتدرب الشريك الملاحِق على إعطاء مساحة، بينما يلتزم الشريك المنسحب بالعودة إلى الموضوع خلال 12 ساعة."
+                en: "The pursuer practices giving emotional space, while the distancer commits to returning to the topic within 12 hours.",
+                ar: "يتدرب الطرف الملاحق على إعطاء مساحة، بينما يلتزم الطرف المنسحب بالعودة للحوار خلال 12 ساعة."
             });
         }
         categoryScores["Conflict"] = conflictScore;
 
-        // --- 4. MONEY VALUES ---
-        // Compare financial models: joint, hybrid, separate
-        const ansA = profileA.answers;
-        const ansB = profileB.answers;
-
-        let moneyScore = 80;
-        const modelA = ansA["q16"];
-        const modelB = ansB["q16"];
-
-        if (modelA && modelB) {
-            if (modelA !== modelB) {
-                moneyScore -= 25;
-                dealBreakers.push({
-                    en: "Divergent Financial Architecture: Partners have conflicting expectations of account structures (Joint vs. Separate).",
-                    ar: "هيكلية مالية متباعدة: لدى الشريكين توقعات متضاربة حول هيكلة الحسابات (مشتركة مقابل منفصلة)."
+        // --- 4. MONEY VALUES & EXPENSE ARCHITECTURE (q11, q12) ---
+        let moneyScore = 85;
+        if (ansA["q11"] && ansB["q11"]) {
+            if (ansA["q11"] !== ansB["q11"]) {
+                moneyScore -= 20;
+                challenges.push({
+                    en: "Divergent Financial Contribution Models: Discrepancy between shared dual-income pooling vs traditional male sole provider duties.",
+                    ar: "تفاوت في نموذج تقاسم المصاريف: اختلاف بين تقاسم الأعباء المالية مناصفة ونموذج النفقة التقليدية الكاملة."
+                });
+                discussionTopics.push({
+                    en: "Draft a written monthly budget clarifying exact responsibilities for housing, groceries, travel, and personal savings.",
+                    ar: "صياغة ميزانية شهرية واضحة تحدد مسؤوليات السكن والمقاضي ومصاريف السفر والادخار الخاص."
                 });
             } else {
                 strengths.push({
-                    en: "Aligned Financial Philosophy: Agreement on how to structure shared and personal bank accounts.",
-                    ar: "فلسفة مالية متوافقة: اتفاق تام على كيفية هيكلة الحسابات المصرفية المشتركة والشخصية."
+                    en: "Synchronized Financial Philosophy: Complete agreement on household expense division and contribution expectations.",
+                    ar: "فلسفة مالية متطابقة: اتفاق تام وواضح على توزيع النفقات والمساهمة في بناء المستقبل."
                 });
             }
+        }
+
+        // Account separation (q12)
+        if (ansA["q12"] && ansB["q12"] && ansA["q12"] !== ansB["q12"]) {
+            moneyScore -= 12;
         }
 
         // Saver vs Spender
@@ -166,345 +167,218 @@ const CompatibilityEngine = {
         if (saverDiff > 30) {
             moneyScore -= 15;
             challenges.push({
-                en: "Saver vs. Spender Friction: One prioritizes long-term investments, while the other values immediate lifestyle experience.",
-                ar: "احتجاج المدّخر والمنفِق: يعطي أحدكما الأولوية للاستثمار طويل الأجل، بينما يقدّر الآخر متعة الإنفاق الآني."
-            });
-            discussionTopics.push({
-                en: "Create a strict budget containing both a dedicated savings target and guilt-free personal spending allowances.",
-                ar: "إنشاء ميزانية صارمة تحتوي على هدف ادخار مخصص ومصروف شخصي حر لكل طرف."
+                en: "Saver vs. Spender Friction: One prioritizes long-term investments, while the other values immediate lifestyle experiences.",
+                ar: "تفاوت المدّخر والمنفِق: يعطي أحدكما الأولوية للاستثمار طويل الأجل، بينما يقدّر الآخر متعة الإنفاق والرحلات الآنية."
             });
         }
-        categoryScores["Money"] = Math.round(Math.max(30, moneyScore));
+        categoryScores["Money"] = Math.round(Math.max(35, moneyScore));
 
-        // --- 5. LIFESTYLE MAPPING ---
-        let lifestyleScore = 85;
-        const neatA = traitsA.values_and_lifestyle?.lifestyle_neatness || 50;
-        const neatB = traitsB.values_and_lifestyle?.lifestyle_neatness || 50;
-        if (Math.abs(neatA - neatB) > 30) {
-            lifestyleScore -= 15;
-            challenges.push({
-                en: "Cleanliness and Order Discrepancy: Significant difference in domestic tidiness expectations.",
-                ar: "تفاوت معايير النظافة والترتيب: اختلاف كبير في توقعات الترتيب المنزلي والتمسك بالنظام."
-            });
+        // --- 5. HOUSING & LIFESTYLE AUTONOMY (q9, q10) ---
+        let housingScore = 85;
+        if (ansA["q9"] && ansB["q9"]) {
+            if ((ansA["q9"] === "opt1" && ansB["q9"] === "opt3") || (ansA["q9"] === "opt3" && ansB["q9"] === "opt1")) {
+                housingScore = 40;
+                dealBreakers.push({
+                    en: "Housing Independence Clash: One partner demands living inside the family villa, while the other strictly requires an independent home from day one.",
+                    ar: "تعارض حاسم في ترتيبات السكن: يصر أحد الشريكين على السكن بفيلا العائلة، بينما يشترط الآخر سكناً مستقلاً تماماً من اليوم الأول."
+                });
+            } else if (ansA["q9"] === ansB["q9"]) {
+                strengths.push({
+                    en: "Unified Housing Vision: Complete consensus on residential independence and extended family proximity.",
+                    ar: "رؤية سكنية موحدة: توافق تام على ترتيبات السكن والاستقلالية والمسافة المناسبة من العائلة."
+                });
+            }
         }
+        categoryScores["Lifestyle"] = Math.round(Math.max(35, housingScore));
 
-        const socialA = traitsA.values_and_lifestyle?.social_frequency || 50;
-        const socialB = traitsB.values_and_lifestyle?.social_frequency || 50;
-        if (Math.abs(socialA - socialB) > 30) {
-            lifestyleScore -= 10;
-            discussionTopics.push({
-                en: "How many days per week to host guests, ensuring quiet private time for the introverted partner.",
-                ar: "تحديد عدد أيام استضافة الزوار أسبوعياً، بما يضمن وقتاً هادئاً وخاصاً للشريك الأكثر انطوائية."
-            });
-        }
-        categoryScores["Lifestyle"] = Math.round(Math.max(40, lifestyleScore));
-
-        // --- 6. FAMILY & BOUNDARIES ---
-        let familyScore = 80;
-        const famBoundA = ansA["q30"];
-        const famBoundB = ansB["q30"];
-        if (famBoundA && famBoundB && famBoundA !== famBoundB) {
+        // --- 6. FAMILY PRIVACY & IN-LAW BOUNDARIES (q26, q41) ---
+        let familyScore = 82;
+        if (ansA["q26"] && ansB["q26"] && ansA["q26"] !== ansB["q26"]) {
             familyScore -= 20;
             challenges.push({
-                en: "In-law Boundary Disparities: Diverging views on allowing extended family members to influence household decisions.",
-                ar: "تفاوت حدود العائلتين: وجهات نظر متباعدة بشأن السماح لأفراد العائلة الممتدة بالتأثير على قرارات المنزل."
+                en: "In-Law Boundary Variances: Diverging expectations regarding extended family involvement in marital affairs.",
+                ar: "تفاوت حدود العائلة: وجهات نظر متباعدة بشأن السماح لأفراد العائلة بالاطلاع على شؤون الزوجين."
             });
             discussionTopics.push({
-                en: "Formulate concrete limits regarding parental involvement in marital arguments.",
-                ar: "صياغة حدود ملموسة فيما يتعلق بتدخل الوالدين في الخلافات الزوجية."
+                en: "Establish explicit, respectful guidelines for protecting marital privacy while honoring family relations.",
+                ar: "وضع ضوابط واضحة ومحترمة لحماية خصوصية البيت مع بر الوالدين والصلة الطيبة."
+            });
+        } else {
+            strengths.push({
+                en: "Aligned Family Boundaries: United commitment to maintaining marital privacy as a core team.",
+                ar: "حدود أسرية متوافقة: التزام مشترك بحفظ خصوصية الحياة الزوجية وحل المشكلات داخلياً."
             });
         }
-        categoryScores["Family"] = Math.round(Math.max(30, familyScore));
+        categoryScores["Family"] = Math.round(Math.max(35, familyScore));
 
-        // --- 7. CHILDREN EXPECTATIONS (Potential Deal-breaker) ---
+        // --- 7. CHILDREN & PARENTHOOD (q22 - POTENTIAL DEAL-BREAKER) ---
         let childrenScore = 90;
-        const desireA = ansA["q31"];
-        const desireB = ansB["q31"];
-
-        if (desireA && desireB) {
-            // opt1: Yes, opt2: No, opt3: Unsure
-            if ((desireA === "opt1" && desireB === "opt2") || (desireA === "opt2" && desireB === "opt1")) {
+        if (ansA["q22"] && ansB["q22"]) {
+            if ((ansA["q22"] === "opt1" && ansB["q22"] === "opt3") || (ansA["q22"] === "opt3" && ansB["q22"] === "opt1")) {
                 childrenScore = 30;
                 dealBreakers.push({
-                    en: "Incompatible Family Vows: One partner absolutely demands children, while the other does not want any.",
-                    ar: "رغبات عائلية غير متوافقة: يطلب أحد الشريكين إنجاب الأطفال كلياً، بينما لا يرغب الآخر في ذلك مطلقاً."
+                    en: "Irreconcilable Family Goals: One partner strongly desires children, whereas the other prefers a child-free lifestyle.",
+                    ar: "تعارض جوهري في الرغبة الإنجابية: أحد الشريكين يضع إنجاب الأطفال كأولوية قصوى، بينما يفضل الآخر حياة خالية من الأبناء."
                 });
-            } else if (desireA === "opt3" || desireB === "opt3") {
-                childrenScore = 70;
+            } else if (ansA["q22"] === "opt3" || ansB["q22"] === "opt3") {
+                childrenScore = 65;
                 discussionTopics.push({
-                    en: "A timeline to decide on parenthood expectations to avoid unspoken resentment later.",
-                    ar: "جدول زمني لحسم التوقعات بشأن الأبوة والأمومة لتجنب الاستياء الصامت لاحقاً."
+                    en: "A clear timeline to align on parenthood expectations to avoid unspoken resentment later.",
+                    ar: "جدول زمني لحسم التوقعات بشأن الأبوة والأمومة لتجنب الخلافات الصامتة لاحقاً."
                 });
-            } else if (desireA === "opt1" && desireB === "opt1") {
+            } else if (ansA["q22"] === ansB["q22"]) {
                 strengths.push({
-                    en: "Shared Parenting Goals: Complete alignment on the beautiful intention of raising a family.",
-                    ar: "أهداف تربوية مشتركة: توافق تام على الرغبة الجميلة في بناء عائلة وتربية أطفال."
+                    en: "Aligned Parenthood Intentions: Mutual harmony on the timing, significance, and vision of raising a family.",
+                    ar: "رؤية تربوية وأسرية موحدة: انسجام تام في توقيت وأهمية وبناء الأسرة وتربية الأبناء."
                 });
             }
         }
         categoryScores["Children"] = childrenScore;
 
-        // --- 8. RELIGION & VALUES (Potential Deal-breaker) ---
-        let religionScore = 85;
+        // --- 8. RELIGIOUS VALUES & SPIRITUALITY (q23, q47, q48) ---
+        let relScore = 85;
         const relImpA = traitsA.values_and_lifestyle?.religion_importance || 50;
         const relImpB = traitsB.values_and_lifestyle?.religion_importance || 50;
-        const orthodoxyA = ansA["q34_follow"];
-        const orthodoxyB = ansB["q34_follow"];
+
+        if (ansA["q23"] && ansB["q23"]) {
+            if ((ansA["q23"] === "opt1" && ansB["q23"] === "opt3") || (ansA["q23"] === "opt3" && ansB["q23"] === "opt1")) {
+                relScore = 45;
+                dealBreakers.push({
+                    en: "Spiritual Life Discrepancy: Contrast between viewing strict daily religious practice as a relationship pillar vs a private individual matter.",
+                    ar: "تباين في الالتزام الديني: فجوة بين اعتبار الالتزام الديني اليومي ركيزة في إدارة المنزل وبين اعتباره شأناً فردياً بحتاً."
+                });
+            } else if (ansA["q23"] === ansB["q23"]) {
+                strengths.push({
+                    en: "Shared Spiritual Compass: Harmonious expectations for religious values, prayer, and moral foundations in the home.",
+                    ar: "بوصلة قيمية وإيمانية مشتركة: توقعات متوافقة حول القيم الروحية والأخلاقية وأداء الفرائض في البيت."
+                });
+            }
+        }
 
         if (Math.abs(relImpA - relImpB) > 35) {
-            religionScore -= 20;
+            relScore -= 15;
             challenges.push({
-                en: "Varying Spiritual Priorities: One partner lives with religious observance as a daily compass, while the other is secular or less observant.",
-                ar: "أولويات روحية متفاوتة: يعيش أحد الشريكين بامتثال ديني كبوصلة يومية، بينما يعيش الآخر بنمط علماني أو أقل تدبيراً."
-            });
-            discussionTopics.push({
-                en: "What religious traditions will be taught to children, and how will daily rituals be respected.",
-                ar: "ما هي التقاليد الدينية التي ستُعلّم للأطفال، وكيف سيتم احترام الطقوس اليومية للطرفين."
+                en: "Varying Religious Observance Pacing: Differences in daily spiritual routines and expectations of partner's practice.",
+                ar: "تفاوت وتيرة الالتزام الديني: فوارق في الممارسات الروحية اليومية والتوقعات المتبادلة."
             });
         }
+        categoryScores["Religion"] = Math.round(Math.max(30, relScore));
 
-        // Deal-breaker: if religion is central to one and requires matching, but they differ
-        const worldviewA = ansA["q35"];
-        const worldviewB = ansB["q35"];
-        if (worldviewA && worldviewB && worldviewA !== worldviewB && (relImpA > 70 || relImpB > 70)) {
-            religionScore -= 15;
-            dealBreakers.push({
-                en: "Worldview and Theological Divergence: Significant differences in core beliefs when religion is highly valued.",
-                ar: "تباعد الرؤية العقائدية والكونية: اختلافات جوهرية في المعتقدات الأساسية عندما يكون للدين قيمة عالية لدى أحد الطرفين."
-            });
-        }
-        categoryScores["Religion"] = Math.round(Math.max(30, religionScore));
-
-        // --- 9. EMOTIONAL NEEDS & LOVE LANGUAGES ---
+        // --- 9. EMOTIONAL CONNECTION & LOVE LANGUAGES (q28, Attachment) ---
         let emotionalScore = 80;
-        const loveA = traitsA.love_languages.primary;
-        const loveB = traitsB.love_languages.primary;
+        const loveA = traitsA.love_languages?.primary || "words";
+        const loveB = traitsB.love_languages?.primary || "words";
+
         if (loveA === loveB) {
-            emotionalScore = 95;
+            emotionalScore += 12;
             strengths.push({
-                en: `Identical Love Languages: Both partners express and receive love primarily through ${loveA.replace("_", " ")}, creating immediate resonance.`,
-                ar: `لغة حب متطابقة: يعبر كلا الشريكين عن الحب ويستقبلانه أساساً عبر نفس اللغة، مما يخلق انسجاماً فورياً.`
+                en: `Shared Primary Love Language (${loveA.replace("_", " ")}): Both express and receive affection in the exact same emotional frequency.`,
+                ar: `لغة حب أساسية متطابقة: يعبر كلا الشريكين عن المودة ويستقبلانها بنفس الطريقة، مما يسهل الانسجام العاطفي الفوري.`
             });
         } else {
             discussionTopics.push({
-                en: `Bridging Love Languages: Partner A feels loved via ${loveA.replace("_", " ")}; Partner B feels loved via ${loveB.replace("_", " ")}.`,
-                ar: `سد فجوة لغات الحب: الطرف (أ) يشعر بالحب عبر لغة أخرى عن الطرف (ب). يحتاج كل منكما لتعلم لغة شريكه.`
+                en: `Bridging Love Languages: Partner A connects via ${loveA.replace("_", " ")}, while Partner B connects via ${loveB.replace("_", " ")}.`,
+                ar: `سد فجوة لغات الحب: الطرف (أ) يشعر بالحب بطريقة مختلفة عن الطرف (ب). يحتاج كل منكما لتعلم لغة شريكه العاطفية.`
             });
         }
 
-        // Attachment styles matching (Secure + Secure = wonderful, Anxious + Avoidant = Classic challenging spiral)
-        const attachA = traitsA.attachment.primary;
-        const attachB = traitsB.attachment.primary;
+        // Attachment styles matching
+        const attachA = traitsA.attachment?.primary || "secure";
+        const attachB = traitsB.attachment?.primary || "secure";
         if (attachA === "secure" && attachB === "secure") {
-            emotionalScore += 5;
+            emotionalScore += 8;
             strengths.push({
-                en: "Double-Secure Emotional Foundation: High levels of mutual trust and safe interdependence.",
-                ar: "قاعدة عاطفية آمنة ومزدوجة: مستويات عالية من الثقة المتبادلة والاعتماد الآمن المشترك."
+                en: "Dual-Secure Attachment: High emotional safety, trust, and healthy interdependence.",
+                ar: "ارتباط عاطفي آمن ومزدوج: بيئة عاطفية يسودها الأمان والثقة المتبادلة والاعتماد الصحي المشترك."
             });
         } else if ((attachA === "anxious" && attachB === "avoidant") || (attachB === "anxious" && attachA === "avoidant")) {
-            emotionalScore -= 20;
+            emotionalScore -= 18;
             challenges.push({
-                en: "Anxious-Avoidant Trap: One pursues reassurance when anxious, triggering the other's avoidance and space-seeking.",
-                ar: "فخ القلق والتجنب: يطلب أحدكما الطمأنينة عند القلق، مما يحفز الآخر على التجنب والانسحاب."
+                en: "Anxious-Avoidant Cycle: Seeking reassurance triggers retreat in the other partner, creating a repetitive pursue-withdraw loop.",
+                ar: "فخ القلق والتجنب: طلب التطمين المستمر قد يدفع الطرف الآخر للانسحاب، مما يعزز دوامة القلق والتباعد."
             });
             growthOpportunities.push({
-                en: "Learn to recognize the spiral early. Practice stating: 'I need reassurance' versus 'I need 20 minutes to process.'",
-                ar: "تعلما تمييز هذه الدوامة مبكراً. تمرنا على قول: 'أحتاج إلى طمأنينة' مقابل 'أحتاج إلى 20 دقيقة لمعالجة مشاعري'."
+                en: "Learn to recognize the loop early: state 'I need gentle reassurance' instead of criticism, and give time without abandoning the dialogue.",
+                ar: "تعلما تمييز هذه الدوامة مبكراً: اطلبا التطمين بهدوء دون هجوم، وامنحا وقتاً للتفكير دون قطع الحوار."
             });
         }
-        categoryScores["Emotional Needs"] = Math.round(Math.max(40, Math.min(100, emotionalScore)));
+        categoryScores["Emotional Needs"] = Math.round(Math.max(40, Math.min(98, emotionalScore)));
 
-        // --- 10. MARRIAGE & FUTURE PLANNING ---
+        // --- 10. MARRIAGE & FUTURE VISION (q15, q24, q30) ---
         let marriageScore = 85;
-        const rolesA = ansA["q24"];
-        const rolesB = ansB["q24"];
-        if (rolesA && rolesB && rolesA !== rolesB) {
-            marriageScore -= 20;
-            dealBreakers.push({
-                en: "Diverging Marital Roles Paradigm: One expects a traditional homemaker/provider setup, the other demands strict egalitarianism.",
-                ar: "تضارب نموذج الأدوار الزوجية: يتوقع أحدكما إعداداً تقليدياً لرب المنزل/المعيل، بينما يطلب الآخر مساواة صارمة."
-            });
-        } else {
-            strengths.push({
-                en: "Aligned Domestic Visions: Highly coordinated views on division of marital responsibilities and roles.",
-                ar: "رؤية منزلية متوافقة: وجهات نظر متطابقة حول تقسيم المسؤوليات والأدوار الزوجية داخل البيت."
-            });
-        }
-
-        const locA = ansA["q54"];
-        const locB = ansB["q54"];
-        if (locA && locB && locA !== locB) {
-            marriageScore -= 15;
-            challenges.push({
-                en: "Geographic Future Discrepancy: Conflicting wishes regarding settling down locally versus relocating abroad.",
-                ar: "تفاوت مستقبلي جغرافي: رغبات متعارضة بشأن الاستقرار محلياً مقابل الهجرة والعمل بالخارج."
-            });
-            discussionTopics.push({
-                en: "A concrete discussion on compromise locations or career timelines.",
-                ar: "نقاش ملموس حول مواقع وسطية للتسوية أو جداول زمنية للعمل والدراسة."
-            });
-        }
-        categoryScores["Marriage"] = Math.round(Math.max(30, marriageScore));
-
-        // --- 11. IDEOLOGY & SAUDI-SPECIFIC CLASH EVALUATION ---
-        const ideologyA = traitsA.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
-        const ideologyB = traitsB.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
-
-        const ideologyDiffs = {
-            traditionalism: Math.abs(ideologyA.traditionalism - ideologyB.traditionalism),
-            feminism: Math.abs(ideologyA.feminism - ideologyB.feminism),
-            liberalism: Math.abs(ideologyA.liberalism - ideologyB.liberalism),
-            capitalism: Math.abs(ideologyA.capitalism - ideologyB.capitalism)
-        };
-
-        let ideologyCompatibility = 100 - (
-            (ideologyDiffs.traditionalism * 0.3) +
-            (ideologyDiffs.feminism * 0.3) +
-            (ideologyDiffs.liberalism * 0.2) +
-            (ideologyDiffs.capitalism * 0.2)
-        );
-        ideologyCompatibility = Math.round(Math.max(20, Math.min(100, ideologyCompatibility)));
-        categoryScores["Ideology Alignment"] = ideologyCompatibility;
-
-        if (ideologyCompatibility >= 80) {
-            strengths.push({
-                en: "Excellent Ideological Alignment: Highly compatible worldviews and shared social expectations.",
-                ar: "توافق فكري ممتاز: رؤى كونية متوافقة للغاية وتوقعات اجتماعية مشتركة."
-            });
-        } else if (ideologyCompatibility <= 55) {
-            challenges.push({
-                en: "Severe Ideological Divergence: Deep contrast in core beliefs (Feminism, Traditionalism, Liberalism, or Capitalism).",
-                ar: "تباعد فكري حاد: تباين عميق في المعتقدات الأساسية والتوجهات الاجتماعية والمنزلية."
-            });
-            discussionTopics.push({
-                en: "Talk openly about your core lifestyle values to establish mutual respect for varying viewpoints.",
-                ar: "تحدثا بصراحة عن قيم الحياة الأساسية لتأسيس احترام متبادل لوجهات النظر المختلفة."
-            });
-        }
-
-        // Specific Saudi Conflict 1: Extended Family vs. Privacy
-        if (ansA["q9"] && ansB["q9"] && ansA["q9"] !== ansB["q9"]) {
-            challenges.push({
-                en: "Extended Family Housing Discrepancy: Disagreement on living with family (family villa) vs. renting an independent apartment.",
-                ar: "خلاف السكن مع العائلة: عدم اتفاق على العيش مع الأهل في فيلا العائلة مقابل استئجار شقة مستقلة."
-            });
-            discussionTopics.push({
-                en: "Establish a clear compromise timeline for transition to fully independent housing.",
-                ar: "تأسيس جدول زمني واضح للتسوية والانتقال إلى سكن مستقل بالكامل."
-            });
-        }
-
-        // Specific Saudi Conflict 2: Salary sharing vs. Nafaqah
-        if (ansA["q11"] && ansB["q11"] && ansA["q11"] !== ansB["q11"]) {
-            challenges.push({
-                en: "Marital Financial Split Friction: Clash between modern dual-income sharing and traditional male sole provider duties (Nafaqah).",
-                ar: "احتكاك في تقسيم الأعباء المالية: تصادم بين فكرة مشاركة الدخل الحديثة والالتزام التقليدي بنفقة الزوج الكاملة."
-            });
-            discussionTopics.push({
-                en: "Draft a clear, written agreement on how rent, groceries, and household help will be funded.",
-                ar: "صياغة اتفاق مكتوب واضح حول كيفية تمويل الإيجار، المقاضي، والمساعدة المنزلية."
-            });
-        }
-
-        // Specific Saudi Conflict 3: Gender Mixing in Work/Social
-        if (ansA["q13"] && ansB["q13"] && ansA["q13"] !== ansB["q13"]) {
-            challenges.push({
-                en: "Gender Mixing Boundaries: Varying comfort levels with mixed workplace environments and friendly opposite-gender conversation.",
-                ar: "حدود الاختلاط بين الجنسين: تفاوت مستويات الارتياح تجاه بيئات العمل المختلطة والأحاديث الودية مع الجنس الآخر."
-            });
-            discussionTopics.push({
-                en: "Discuss professional networking boundaries and comfort levels in public work functions.",
-                ar: "مناقشة حدود شبكات العلاقات المهنية ومستويات الارتياح في الفعاليات العامة للعمل."
-            });
-        }
-
-        // Specific Saudi Conflict 4: Qiwamah vs. Equal Partnership
         if (ansA["q15"] && ansB["q15"] && ansA["q15"] !== ansB["q15"]) {
+            marriageScore -= 18;
             challenges.push({
-                en: "Decisional Leadership Friction: Diverging views on traditional male final headship (Qiwamah) vs. strict equal-partner consensus.",
-                ar: "احتكاك في قيادة القرار: تباعد في وجهات النظر بين القيادة النهائية التقليدية للرجل (القوامة) والتوافق المتساوي التام."
+                en: "Decisional Leadership Discrepancy: Diverging views on traditional male final authority (Qiwamah) vs strict equal partnership consensus.",
+                ar: "تفاوت في قيادة القرار: تباعد بين القيادة والمسؤولية النهائية للرجل (القوامة) وبين التوافق المتساوي التام."
             });
             discussionTopics.push({
-                en: "Define how to break deadlocks when mutually deciding on critical life matters.",
-                ar: "تحديد كيفية كسر الجمود عند اتخاذ القرارات المشتركة في شؤون الحياة الحرجة."
-            });
-        }
-
-        // --- 12. SUBTLE PHYSICAL & FASHION EXPECTATION MATCHING (CROSS-MATCH) ---
-        // Cross-match Person A's self-presentation with Person B's expectations and vice-versa
-        let aestheticScore = 100;
-        const aesA = traitsA.aesthetic_profile || { self_presentation: "natural", expect_presentation: "natural", self_fashion: "casual", expect_fashion: "casual" };
-        const aesB = traitsB.aesthetic_profile || { self_presentation: "natural", expect_presentation: "natural", self_fashion: "casual", expect_fashion: "casual" };
-
-        // Cross Match 1: Person A meets Person B expectations
-        if (aesA.self_presentation !== aesB.expect_presentation) aestheticScore -= 20;
-        if (aesA.self_fashion !== aesB.expect_fashion) aestheticScore -= 20;
-
-        // Cross Match 2: Person B meets Person A expectations
-        if (aesB.self_presentation !== aesA.expect_presentation) aestheticScore -= 20;
-        if (aesB.self_fashion !== aesA.expect_fashion) aestheticScore -= 20;
-
-        const aestheticMatchPercentage = Math.max(40, aestheticScore);
-        
-        // Push subtle hint rather than private raw values
-        if (aestheticMatchPercentage >= 80) {
-            strengths.push({
-                en: `Aesthetic & Presentation Harmony: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
-                ar: `تناغم المظهر والأناقة: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
-            });
-        } else if (aestheticMatchPercentage <= 60) {
-            challenges.push({
-                en: `Evolving Aesthetic Preferences: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
-                ar: `تطور تفضيلات المظهر والأناقة: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
-            });
-            discussionTopics.push({
-                en: "Discuss expectations regarding grooming, daily presentation, and style expression in social settings.",
-                ar: "مناقشة التوقعات بشأن الهندام والاعتناء بالمظهر اليومي والتعبير عن الأناقة في المناسبات الاجتماعية."
+                en: "Agree in advance on protocols for breaking deadlocks on critical family matters.",
+                ar: "الاتفاق مسبقاً على آلية واضحة لكسر الجمود عند الخلاف في القرارات الكبرى."
             });
         } else {
             strengths.push({
-                en: `Solid Aesthetic Alignment: Physical & Fashion compatibility matches other side expectation by ${aestheticMatchPercentage}%.`,
-                ar: `توافق مظهر كافٍ ومريح: يتوافق أسلوب المظهر المادي والأزياء مع توقعات الطرف الآخر بنسبة ${aestheticMatchPercentage}%.`
+                en: "Aligned Marital Roles & Leadership: Mutual agreement on how household authority and responsibilities are handled.",
+                ar: "رؤية متوافقة للأدوار الزوجية: اتفاق متبادل على قيادة وتوزيع المسؤوليات داخل المنزل."
             });
         }
 
-        // Add to Category Scores for holistic profiling
-        categoryScores["Aesthetic Alignment"] = aestheticMatchPercentage;
+        categoryScores["Marriage"] = Math.round(Math.max(35, marriageScore));
 
-        // --- 12. OVERALL COMPATIBILITY INDEX CALCULATIONS ---
-        const totalCategories = Object.keys(categoryScores).length;
-        const sumScores = Object.values(categoryScores).reduce((a, b) => a + b, 0);
-        let calculatedIndex = sumScores / totalCategories;
+        // --- 11. IDEOLOGY & CULTURAL PROFILE ---
+        const idA = traitsA.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
+        const idB = traitsB.ideology_profile || { traditionalism: 25, feminism: 25, liberalism: 25, capitalism: 25 };
+        const ideoDiff = Math.abs(idA.traditionalism - idB.traditionalism) +
+                         Math.abs(idA.feminism - idB.feminism) +
+                         Math.abs(idA.liberalism - idB.liberalism) +
+                         Math.abs(idA.capitalism - idB.capitalism);
+        const ideoScore = Math.round(Math.max(30, Math.min(98, 100 - (ideoDiff * 0.35))));
+        categoryScores["Ideology Alignment"] = ideoScore;
 
-        // Apply progressive penalties for critical issues and deal-breakers
+        // --- 12. AESTHETICS & PRESENTATION (q66 - q69 CROSS-MATCH) ---
+        let aesScore = 100;
+        const aesA = traitsA.aesthetic_profile || {};
+        const aesB = traitsB.aesthetic_profile || {};
+
+        if (aesA.self_presentation && aesB.expect_presentation && aesA.self_presentation !== aesB.expect_presentation) aesScore -= 20;
+        if (aesB.self_presentation && aesA.expect_presentation && aesB.self_presentation !== aesA.expect_presentation) aesScore -= 20;
+        if (aesA.self_fashion && aesB.expect_fashion && aesA.self_fashion !== aesB.expect_fashion) aesScore -= 15;
+        if (aesB.self_fashion && aesA.expect_fashion && aesB.self_fashion !== aesA.expect_fashion) aesScore -= 15;
+        const finalAes = Math.max(40, aesScore);
+        categoryScores["Aesthetic Alignment"] = finalAes;
+
+        // --- OVERALL COMPATIBILITY INDEX CALCULATION ---
+        const scoresArr = Object.values(categoryScores);
+        let avg = scoresArr.reduce((a, b) => a + b, 0) / scoresArr.length;
+
+        // Penalize heavily for severe deal-breakers
         if (dealBreakers.length > 0) {
-            calculatedIndex -= (dealBreakers.length * 10);
+            avg -= (dealBreakers.length * 10);
         }
 
-        const overallCompatibilityIndex = Math.round(Math.max(30, Math.min(98, calculatedIndex)));
+        const overallCompatibilityIndex = Math.round(Math.max(30, Math.min(98, avg)));
 
-        // Generate dynamic recommendations based on calculated index
+        // Dynamic Recommendations
         const recommendations = [];
         if (overallCompatibilityIndex >= 85) {
             recommendations.push({
-                en: "Outstanding Synergy: Focus on maintaining this high alignment by practicing continuous appreciation and not taking the compatibility for granted.",
-                ar: "انسجام وتناغم متميز: ركزا على الحفاظ على هذا التوافق العالي من خلال التقدير المستمر وعدم اعتبار التوافق أمراً مسلماً به."
+                en: "Exceptional Structural Synergy: Maintain this extraordinary harmony through continuous appreciation and active communication.",
+                ar: "انسجام وتوافق استثنائي: حافظا على هذا التوافق الرائع من خلال التقدير اليومي المستمر وتجديد الحوار الودود."
             });
         } else if (overallCompatibilityIndex >= 70) {
             recommendations.push({
-                en: "Strong Core with Minor Frictions: Focus on developing clear collaborative conflict protocols to resolve the specific boundaries and lifestyle variances identified.",
-                ar: "قاعدة قوية مع بعض الاحتكاكات الطفيفة: ركزا على تطوير بروتوكولات واضحة لحل النزاعات بشكل تعاوني لمعالجة الفوارق المحددة في الحدود وأسلوب الحياة."
+                en: "Strong Core Foundation: Focus on intentional conversations around the specific financial and domestic boundary variances identified.",
+                ar: "قاعدة توافق قوية: ركزا على الحوار الواعي حول النقاط المحددة في إدارة الميزانية والحدود العائلية لمنع أي احتكاك."
             });
         } else {
             recommendations.push({
-                en: "Significant Differences Detected: A successful long-term relationship will require deep commitment, open conversations, and structured compromises on domestic roles, financial decisions, and communication styles.",
-                ar: "تم اكتشاف فروق جوهرية: سيتطلب نجاح العلاقة على المدى الطويل التزاماً عميقاً، ومحادثات صريحة، وتنازلات مدروسة ومنظمة حول الأدوار المنزلية، والقرارات المالية، وأساليب التواصل."
+                en: "Significant Perspective Variances: Bridging core differences in expectations will require open empathy, clear written agreements, and mutual compromises.",
+                ar: "فوارق واضحة في التوقعات: سيتطلب بناء علاقة متينة صراحة عميقة، واتفاقات واضحة حول المسؤوليات والتنازلات المشتركة."
             });
         }
 
-        // Confidence score of the assessment
         const averageConfidence = Math.round(
-            ((profileA.assessment_confidence || 80) + (profileB.assessment_confidence || 80)) / 2
+            ((profileA.assessment_confidence || 85) + (profileB.assessment_confidence || 85)) / 2
         );
 
         return {
@@ -521,4 +395,10 @@ const CompatibilityEngine = {
     }
 };
 
-window.CompatibilityEngine = CompatibilityEngine;
+// Export to global window namespace & CommonJS for testing
+if (typeof window !== "undefined") {
+    window.CompatibilityEngine = CompatibilityEngine;
+}
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = CompatibilityEngine;
+}

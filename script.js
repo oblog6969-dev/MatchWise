@@ -172,6 +172,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- 6. ADAPTIVE QUESTION ENGINE ---
+    const CATEGORY_TRANSLATIONS = {
+        "Personality": "سمات الشخصية",
+        "Communication": "أسلوب التواصل",
+        "Conflict": "إدارة الخلافات",
+        "Decision making": "اتخاذ القرارات",
+        "Money": "الشؤون المالية والإنفاق",
+        "Boundaries": "الحدود والخصوصية",
+        "Children": "الأطفال والتربية",
+        "Religion": "القيم الدينية والروحية",
+        "Career": "الطموح والمسار المهني",
+        "Lifestyle": "أسلوب الحياة والسكن",
+        "Trust": "الثقة والاطمئنان",
+        "Emotional intelligence": "الذكاء العاطفي",
+        "Affection": "لغات الحب والمودة",
+        "Marriage": "الرؤية الزوجية والشراكة",
+        "Future planning": "التخطيط المستقبلي",
+        "Family": "العلاقات والحدود الأسرية"
+    };
+
+    const RADAR_CATEGORY_TRANSLATIONS = {
+        "Personality": "الشخصية",
+        "Communication": "التواصل",
+        "Conflict": "إدارة الخلافات",
+        "Money": "التوافق المالي",
+        "Lifestyle": "نمط الحياة",
+        "Family": "الحدود العائلية",
+        "Children": "الأطفال والتربية",
+        "Religion": "القيم الدينية",
+        "Emotional Needs": "الاحتياجات العاطفية",
+        "Marriage": "الرؤية الزوجية",
+        "Ideology Alignment": "التوافق الفكري",
+        "Aesthetic Alignment": "تناغم المظهر"
+    };
+
+    const BIG_FIVE_TRANSLATIONS = {
+        "openness": { ar: "الانفتاح على التجارب (Openness)", en: "Openness to Experience" },
+        "conscientiousness": { ar: "الانضباط والتنظيم (Conscientiousness)", en: "Conscientiousness" },
+        "extroversion": { ar: "الانبساطية والاجتماعية (Extraversion)", en: "Extraversion" },
+        "agreeableness": { ar: "الوفاق والتعاطف (Agreeableness)", en: "Agreeableness" },
+        "neuroticism": { ar: "الحساسية للضغوط (Neuroticism)", en: "Emotional Reactivity (Neuroticism)" }
+    };
+
     /**
      * Finds the next question dynamically.
      * Evaluates followups and maps paths intelligently based on answer scores.
@@ -225,18 +267,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!q) return;
 
+        const isAr = state.localization.currentLang === "ar";
+
         // Update translations & metadata
-        dom.questionCategory.textContent = q.category;
+        dom.questionCategory.textContent = isAr
+            ? (CATEGORY_TRANSLATIONS[q.category] || q.category)
+            : q.category;
         
-        // Progress Calculation
-        // Estimate progress based on current history length vs 55 target questions
+        // Accurate Progress Calculation
+        const currentGender = state.assessmentSession.gender;
+        const currentMarital = state.assessmentSession.maritalStatus;
+        const matchingQuestionsCount = questions.filter(candidate => {
+            if (candidate.gender_constraint && candidate.gender_constraint !== currentGender) return false;
+            if (candidate.marital_constraint && candidate.marital_constraint !== currentMarital) return false;
+            return true;
+        }).length || 70;
+
         const currentLength = history.length;
-        const progressPercentage = Math.min(98, Math.round((currentLength / 55) * 100));
+        const progressPercentage = Math.min(100, Math.round((currentLength / matchingQuestionsCount) * 100));
         dom.progressPercent.textContent = `${progressPercentage}%`;
         dom.progressBarFill.style.width = `${progressPercentage}%`;
 
         // Bilingual Text Support
-        const localizedText = state.localization.currentLang === "ar" ? q.arabic.text : q.english.text;
+        const localizedText = isAr ? q.arabic.text : q.english.text;
         dom.questionText.textContent = localizedText;
 
         // Clear previous options
@@ -251,9 +304,9 @@ document.addEventListener("DOMContentLoaded", () => {
             renderPriorityRankingOptions(q);
         }
 
-        // Adjust Next Button text dynamically at end of test (usually above 45 questions)
+        // Adjust Next Button text dynamically at end of test
         const hasNext = getNextQuestionId(currentQId);
-        if (!hasNext && currentLength >= 45) {
+        if (!hasNext) {
             dom.btnNextQuestion.querySelector("span").textContent = state.localization.get("finish");
         } else {
             dom.btnNextQuestion.querySelector("span").textContent = state.localization.get("next");
@@ -435,7 +488,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Ensure user answered before going forward
         if (state.sessionAnswers[currentQId] === undefined) {
-            alert("Please answer the current question to proceed.");
+            const isAr = state.localization.currentLang === "ar";
+            alert(isAr ? "يرجى الإجابة على السؤال الحالي للمتابعة." : "Please answer the current question to proceed.");
             return;
         }
 
@@ -533,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else if (selectedCount === 1) {
                     dom.btnCompareText.textContent = state.localization.currentLang === "ar" ? "عرض الملف المحدد" : "View Selected Profile";
                 } else {
-                    dom.btnCompareText.textContent = "Compare / View Selected";
+                    dom.btnCompareText.textContent = state.localization.currentLang === "ar" ? "مقارنة / عرض المحدد" : "Compare / View Selected";
                 }
             });
 
@@ -742,7 +796,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.conflictBadgeA.textContent = traitsA.conflict.primary.toUpperCase();
 
             // Big Five rendering (just pass A for both to render single)
-            renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true);
+            renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true, profileA.owner_name, null);
 
             // Lists
             dom.reportStrengthsList.innerHTML = "";
@@ -801,7 +855,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.gaugeCardContainer.classList.remove("hidden");
             dom.radarChartCard.classList.remove("hidden");
             
-            dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد" : "Multivariable Compatibility Index";
+            dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد (12 محوراً)" : "Multivariable Compatibility Index (12 Axes)";
             dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
 
             const report = window.CompatibilityEngine.compare(profileA, profileB);
@@ -855,7 +909,13 @@ document.addEventListener("DOMContentLoaded", () => {
             renderSVGRadarChart(report.category_scores);
 
             // Render Custom SVG Bar Charts (Big Five OCEAN differences)
-            renderBigFiveBarCharts(profileA.calculated_personality.big_five, profileB.calculated_personality.big_five, false);
+            renderBigFiveBarCharts(
+                profileA.calculated_personality.big_five,
+                profileB.calculated_personality.big_five,
+                false,
+                profileA.owner_name,
+                profileB.owner_name
+            );
 
             // Bullets rendering helper
             function fillList(container, list) {
@@ -894,11 +954,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 10. LIGHTWEIGHT CUSTOM SVG GRAPHICS ---
     function renderSVGRadarChart(categoryScores) {
         dom.radarChartContainer.innerHTML = "";
+        const isAr = state.localization.currentLang === "ar";
 
-        const width = 280;
-        const height = 280;
-        const center = 140;
-        const maxRadius = 100;
+        const width = 360;
+        const height = 360;
+        const center = 180;
+        const maxRadius = 115;
 
         const categories = Object.keys(categoryScores);
         const numAxes = categories.length;
@@ -909,7 +970,17 @@ document.addEventListener("DOMContentLoaded", () => {
         svg.setAttribute("height", "100%");
         svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
-        // Draw background Concentric Hexagons (Grid levels of 25%, 50%, 75%, 100%)
+        // Defs for gradients & glowing effects
+        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        defs.innerHTML = `
+            <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="var(--accent-hover)" stop-opacity="0.15"/>
+            </linearGradient>
+        `;
+        svg.appendChild(defs);
+
+        // Draw background Concentric Polygons (Grid levels of 25%, 50%, 75%, 100%)
         const gridLevels = [0.25, 0.5, 0.75, 1.0];
         gridLevels.forEach(lvl => {
             const points = [];
@@ -918,12 +989,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const r = maxRadius * lvl;
                 const x = center + r * Math.cos(angle);
                 const y = center + r * Math.sin(angle);
-                points.push(`${x},${y}`);
+                points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
             }
             const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             polygon.setAttribute("points", points.join(" "));
             polygon.setAttribute("class", "radar-grid");
             polygon.setAttribute("fill", "none");
+            polygon.setAttribute("stroke", "var(--border-color)");
+            polygon.setAttribute("stroke-width", lvl === 1.0 ? "1.5" : "1");
+            polygon.setAttribute("stroke-dasharray", lvl < 1.0 ? "2 3" : "none");
             svg.appendChild(polygon);
         });
 
@@ -938,88 +1012,125 @@ document.addEventListener("DOMContentLoaded", () => {
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
             line.setAttribute("x1", center);
             line.setAttribute("y1", center);
-            line.setAttribute("x2", axX);
-            line.setAttribute("y2", axY);
+            line.setAttribute("x2", axX.toFixed(1));
+            line.setAttribute("y2", axY.toFixed(1));
             line.setAttribute("class", "radar-axis");
+            line.setAttribute("stroke", "var(--border-color)");
+            line.setAttribute("stroke-width", "1");
             svg.appendChild(line);
 
             // Label text
             const labelDist = maxRadius + 22;
             const textX = center + labelDist * Math.cos(angle);
-            const textY = center + labelDist * Math.sin(angle) + 4; // slight vertical adjust
+            const textY = center + labelDist * Math.sin(angle) + 4;
             const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            text.setAttribute("x", textX);
-            text.setAttribute("y", textY);
+            text.setAttribute("x", textX.toFixed(1));
+            text.setAttribute("y", textY.toFixed(1));
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("class", "radar-label");
-            text.textContent = cat;
+            text.setAttribute("fill", "var(--text-secondary)");
+            text.setAttribute("font-size", "10px");
+            text.setAttribute("font-weight", "600");
+            text.textContent = isAr ? (RADAR_CATEGORY_TRANSLATIONS[cat] || cat) : cat;
             svg.appendChild(text);
 
             // Compute data point position
-            const valueRatio = categoryScores[cat] / 100;
+            const valueRatio = (categoryScores[cat] || 75) / 100;
             const dataR = maxRadius * valueRatio;
             const dataX = center + dataR * Math.cos(angle);
             const dataY = center + dataR * Math.sin(angle);
-            dataPoints.push(`${dataX},${dataY}`);
+            dataPoints.push({ x: dataX, y: dataY });
         });
 
         // Draw shaded data area polygon
+        const pointsStr = dataPoints.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
         const areaPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        areaPoly.setAttribute("points", dataPoints.join(" "));
+        areaPoly.setAttribute("points", pointsStr);
         areaPoly.setAttribute("class", "radar-area");
+        areaPoly.setAttribute("fill", "url(#radarGrad)");
+        areaPoly.setAttribute("stroke", "var(--accent-color)");
+        areaPoly.setAttribute("stroke-width", "2.5");
         svg.appendChild(areaPoly);
+
+        // Draw vertex dots
+        dataPoints.forEach(p => {
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", p.x.toFixed(1));
+            circle.setAttribute("cy", p.y.toFixed(1));
+            circle.setAttribute("r", "4");
+            circle.setAttribute("fill", "var(--accent-color)");
+            circle.setAttribute("stroke", "#ffffff");
+            circle.setAttribute("stroke-width", "1.5");
+            svg.appendChild(circle);
+        });
 
         dom.radarChartContainer.appendChild(svg);
     }
 
-    function renderBigFiveBarCharts(oceanA, oceanB, isSingle = false) {
+    function renderBigFiveBarCharts(oceanA, oceanB, isSingle = false, nameA = "Partner A", nameB = "Partner B") {
         dom.bigFiveBarChartContainer.innerHTML = "";
+        const isAr = state.localization.currentLang === "ar";
         const traits = Object.keys(oceanA);
 
+        if (!isSingle) {
+            // Render Legend
+            const legend = document.createElement("div");
+            legend.style.cssText = "display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.85rem; font-weight: 600;";
+            legend.innerHTML = `
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <span style="width: 12px; height: 12px; border-radius: 3px; background-color: var(--success); display: inline-block;"></span>
+                    ${nameA || (isAr ? "الطرف الأول" : "Partner A")}
+                </span>
+                <span style="display: flex; align-items: center; gap: 6px;">
+                    <span style="width: 12px; height: 12px; border-radius: 3px; background-color: var(--warning); display: inline-block;"></span>
+                    ${nameB || (isAr ? "الطرف الثاني" : "Partner B")}
+                </span>
+            `;
+            dom.bigFiveBarChartContainer.appendChild(legend);
+        }
+
         traits.forEach(trait => {
-            const scoreA = oceanA[trait];
-            const scoreB = oceanB[trait];
+            const scoreA = oceanA[trait] || 50;
+            const scoreB = oceanB[trait] || 50;
+
+            const traitLabel = isAr
+                ? (BIG_FIVE_TRANSLATIONS[trait]?.ar || trait)
+                : (BIG_FIVE_TRANSLATIONS[trait]?.en || trait);
 
             const row = document.createElement("div");
             row.className = "bar-chart-row";
+            row.style.marginBottom = "14px";
 
             const labelInfo = document.createElement("div");
             labelInfo.className = "bar-label-info";
+            labelInfo.style.cssText = "display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;";
             if (isSingle) {
                 labelInfo.innerHTML = `
-                    <span style="text-transform: capitalize; font-weight: 700;">${trait}</span>
+                    <span>${traitLabel}</span>
                     <span>${scoreA}%</span>
                 `;
             } else {
                 labelInfo.innerHTML = `
-                    <span style="text-transform: capitalize; font-weight: 700;">${trait}</span>
+                    <span>${traitLabel}</span>
                     <span>${scoreA}% vs ${scoreB}%</span>
                 `;
             }
 
             const track = document.createElement("div");
             track.className = "bar-track";
-            track.style.position = "relative";
+            track.style.cssText = "width: 100%; height: 16px; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; position: relative; display: flex; flex-direction: column;";
 
             // Person A colored line
             const fillA = document.createElement("div");
             fillA.className = "bar-fill";
-            fillA.style.width = `${scoreA}%`;
-            fillA.style.backgroundColor = "var(--success)";
-            if (isSingle) {
-                fillA.style.height = "100%";
-            } else {
-                fillA.style.height = "50%";
-            }
+            fillA.style.cssText = `width: ${scoreA}%; background-color: var(--success); height: ${isSingle ? "100%" : "50%"}; transition: width 0.6s ease;`;
             track.appendChild(fillA);
 
             if (!isSingle) {
                 // Person B colored line
                 const fillB = document.createElement("div");
                 fillB.className = "bar-fill";
-                fillB.style.width = `${scoreB}%`;
-                fillB.style.backgroundColor = "var(--warning)";
-                fillB.style.height = "50%";
+                fillB.style.cssText = `width: ${scoreB}%; background-color: var(--warning); height: 50%; transition: width 0.6s ease;`;
                 track.appendChild(fillB);
             }
 

@@ -1,8 +1,8 @@
 /**
- * MatchWise Lite v1.0
+ * MatchWise Lite v1.2
  * utils.js - Core Utilities
  * Contains: Localization/Translations, LocalStorage wrapper, Theme Controller,
- * and high-quality, lightweight profile encryption-obfuscation utilities.
+ * and robust UTF-8 byte-level profile encryption & result-sharing code utilities.
  */
 
 // --- 1. LOCALIZATION & TRANSLATIONS ---
@@ -10,12 +10,12 @@ const TRANSLATIONS = {
     en: {
         app_title: "MatchWise Lite",
         app_subtitle: "Offline Relationship Compatibility Assessment",
-        lang_select: "Choose Language / اختر اللغة",
+        lang_select: "Language / اللغة",
         start_new: "Start New Assessment",
         compare_profiles: "Compare Saved Profiles",
-        dashboard_title: "Dashboard",
-        import_profile: "Import Profile",
-        import_desc_json: "Upload a partner's decrypted or exported JSON file directly to compare.",
+        dashboard_title: "Dashboard & Profiles",
+        import_profile: "Import Profile File",
+        import_desc_json: "Upload a partner's exported JSON file directly to compare.",
         import_code_title: "Import Shareable Code",
         import_desc_code: "Paste a partner's copied result code directly to import.",
         import_code_btn: "Import Code",
@@ -25,29 +25,29 @@ const TRANSLATIONS = {
         marital_status: "Marital Status",
         marital_single: "Single",
         marital_married: "Married",
-        marital_used_to_be_married: "Used to be married",
+        marital_used_to_be_married: "Previously Married",
         no_profiles: "No saved profiles found. Start an assessment or import a profile to begin.",
         delete: "Delete",
         compare: "Compare Selected",
-        export: "Export",
+        export: "Export JSON",
         theme_toggle: "Theme Mode",
-        question_header: "Assessment",
+        question_header: "Assessment Session",
         progress: "Progress",
         back: "Back",
         next: "Next",
-        finish: "Finish & Export",
+        finish: "Complete & Save",
         confirm_delete: "Are you sure you want to delete this profile?",
         enter_name: "Enter Profile Owner's Name:",
-        invalid_file: "Invalid profile file or wrong decryption key/format.",
+        invalid_file: "Invalid profile data or unsupported file format.",
         success_import: "Profile imported successfully!",
         overall_comp: "Overall Compatibility",
         strengths: "Core Strengths",
         challenges: "Potential Challenges",
         discussion_topics: "Topics to Discuss",
-        deal_breakers: "Deal-Breaker Alerts",
+        deal_breakers: "Critical Deal-Breaker Alerts",
         growth_opps: "Growth Opportunities",
         recommendations: "Psychological Recommendations",
-        save_pdf: "Print Report / Export PDF",
+        save_pdf: "Print / Export PDF",
         likert_sd: "Strongly Disagree",
         likert_d: "Disagree",
         likert_sld: "Slightly Disagree",
@@ -55,48 +55,51 @@ const TRANSLATIONS = {
         likert_sla: "Slightly Agree",
         likert_a: "Agree",
         likert_sa: "Strongly Agree",
-        rank_help: "Drag items or use buttons to rank them from 1 (Top) to 4 or 5 (Bottom)",
         mbti_label: "MBTI Tendency",
         attachment_label: "Attachment Style",
         communication_label: "Communication Style",
         conflict_label: "Conflict Style",
         decision_label: "Decision Style",
-        love_lang_label: "Love Language Tendency",
+        love_lang_label: "Love Language",
         executive_summary: "Executive Summary",
         personality_dynamics: "Personality Dynamics",
-        emotional_needs: "Emotional Needs & Love Languages",
-        appendix: "Appendix & Technical Parameters",
-        confidence_score: "Assessment Confidence Score",
-        profile_details: "Profile Details",
-        id: "ID",
+        emotional_needs: "Emotional Needs & Values",
+        appendix: "Appendix & Methodology",
+        confidence_score: "Assessment Confidence",
+        profile_details: "Profile Metadata",
+        id: "Unique ID",
         created_at: "Created At",
         app_version: "Version",
-        person_a: "Person A (Left Profile)",
-        person_b: "Person B (Right Profile)",
-        select_profiles_to_compare: "Please select exactly two profiles to compare.",
-        import_btn_label: "Select Profile JSON File",
+        person_a: "Partner A",
+        person_b: "Partner B",
+        select_profiles_to_compare: "Please select 1 profile to view or 2 profiles to compare.",
+        import_btn_label: "Choose Profile JSON File",
         close: "Close",
-        required_questions_info: "Note: Adaptive engine selects the most relevant questions based on your responses (Minimum 45, Maximum 70).",
-        export_success_msg: "Profile exported successfully! Save the downloaded file to share with your partner.",
-        confidence_explanation: "Confidence score is calculated based on answer consistency, response variance, and adaptive test completeness.",
-        report_disclaimer: "Disclaimer: This report is a simulation based on self-reported assessment questions. It is designed for reflection, coaching, and educational purposes and does not replace professional therapy or clinical consultation.",
-        no_saved_profiles: "No profiles saved yet.",
-        drag_rank_desc: "Rank by clicking or dragging up/down:",
-        move_up: "Move Up",
-        move_down: "Move Down",
-        compare_instructions: "Select two checkboxed profiles below and click 'Compare Selected' to generate a full report."
+        required_questions_info: "Note: The adaptive engine delivers deep insights across psychological, lifestyle, and relationship domains.",
+        export_success_msg: "Assessment completed and profile saved! An encrypted backup JSON file has been downloaded to your device.",
+        confidence_explanation: "Confidence score is calculated based on answer consistency across polar scales, response variance, and completeness.",
+        report_disclaimer: "Disclaimer: This report is an educational self-reflection simulation based on psychometric research and relationship dynamics. It does not replace clinical therapy or professional relationship counseling.",
+        no_saved_profiles: "No saved profiles yet. Complete an assessment or import a partner's file to begin.",
+        compare_instructions: "Select one profile to view individual results or select two profiles to generate a full compatibility report.",
+        view_single_profile: "View Profile",
+        view_selected_profile: "View Selected Profile",
+        copy_code: "Copy Share Code",
+        code_copied: "Code Copied!",
+        code_copied_desc: "Shareable result code has been copied to your clipboard.",
+        submit: "Submit",
+        please_answer: "Please select an answer to proceed."
     },
     ar: {
         app_title: "ماتش وايز لايت",
         app_subtitle: "تقييم التوافق الزوجي والعلاقات بلا إنترنت",
-        lang_select: "Choose Language / اختر اللغة",
+        lang_select: "Language / اللغة",
         start_new: "بدء تقييم جديد",
-        compare_profiles: "مقارنة الملفات الشخصية المحفوظة",
-        dashboard_title: "لوحة التحكم",
+        compare_profiles: "مقارنة الملفات المحفوظة",
+        dashboard_title: "لوحة التحكم والملفات",
         import_profile: "استيراد ملف شخصي",
-        import_desc_json: "قم برفع ملف JSON المشفر أو المصدر الخاص بالطرف الآخر مباشرة للمقارنة.",
+        import_desc_json: "قم برفع ملف JSON المشفر الخاص بالطرف الآخر مباشرة للمقارنة.",
         import_code_title: "استيراد رمز مشاركة النتيجة",
-        import_desc_code: "قم بلصق رمز المشاركة المنسوخ الخاص بالطرف الآخر مباشرة لاستيراده.",
+        import_desc_code: "قم بلصق رمز المشاركة المنسوخ الخاص بالطرف الآخر لاستيراده فوراً.",
         import_code_btn: "استيراد الرمز",
         gender: "الجنس",
         gender_male: "ذكر",
@@ -104,26 +107,26 @@ const TRANSLATIONS = {
         marital_status: "الحالة الاجتماعية",
         marital_single: "أعزب / عزباء",
         marital_married: "متزوج / متزوجة",
-        marital_used_to_be_married: "منفصل / منفصلة (سبق له الزواج)",
+        marital_used_to_be_married: "سبق له الزواج",
         no_profiles: "لم يتم العثور على ملفات شخصية محفوظة. ابدأ تقييماً أو استورد ملفاً للبدء.",
         delete: "حذف",
         compare: "مقارنة المحددين",
-        export: "تصدير",
+        export: "تصدير JSON",
         theme_toggle: "نمط المظهر",
-        question_header: "التقييم",
+        question_header: "جلسة التقييم",
         progress: "التقدم",
         back: "رجوع",
         next: "التالي",
-        finish: "إنهاء وتصدير",
+        finish: "إكمال وحفظ",
         confirm_delete: "هل أنت متأكد من رغبتك في حذف هذا الملف الشخصي؟",
         enter_name: "أدخل اسم صاحب الملف الشخصي:",
-        invalid_file: "ملف شخصي غير صالح أو صيغة تشفير خاطئة.",
+        invalid_file: "بيانات الملف الشخصي غير صالحة أو الصيغة غير مدعومة.",
         success_import: "تم استيراد الملف الشخصي بنجاح!",
         overall_comp: "التوافق الإجمالي",
         strengths: "نقاط القوة الأساسية",
         challenges: "التحديات المحتملة",
-        discussion_topics: "مواضيع للنقاش",
-        deal_breakers: "تنبيهات العقبات الحاسمة",
+        discussion_topics: "مواضيع للنقاش المشترك",
+        deal_breakers: "تنبيهات العقبات والخطوط الحمراء",
         growth_opps: "فرص النمو والتطور",
         recommendations: "التوصيات النفسية الإرشادية",
         save_pdf: "طباعة التقرير / تصدير PDF",
@@ -134,36 +137,39 @@ const TRANSLATIONS = {
         likert_sla: "موافق قليلاً",
         likert_a: "موافق",
         likert_sa: "موافق بشدة",
-        rank_help: "اسحب العناصر أو استخدم الأزرار لترتيبها من 1 (الأعلى) إلى 4 أو 5 (الأدنى)",
         mbti_label: "نمط MBTI التقريبي",
-        attachment_label: "أسلوب الارتباط عاطفياً",
+        attachment_label: "أسلوب الارتباط العاطفي",
         communication_label: "أسلوب التواصل",
         conflict_label: "أسلوب فض النزاعات",
         decision_label: "أسلوب اتخاذ القرار",
-        love_lang_label: "لغة الحب المفضلة",
+        love_lang_label: "لغة الحب الأساسية",
         executive_summary: "الملخص التنفيذي",
         personality_dynamics: "ديناميكيات الشخصية",
-        emotional_needs: "الاحتياجات العاطفية ولغات الحب",
-        appendix: "الملحق والمحددات التقنية",
+        emotional_needs: "الاحتياجات العاطفية والقيم",
+        appendix: "الملحق والمنهجية العلمية",
         confidence_score: "درجة موثوقية التقييم",
-        profile_details: "تفاصيل الملف الشخصي",
-        id: "المعرف العشوائي",
+        profile_details: "بيانات الملف الشخصي",
+        id: "المعرف الفريد",
         created_at: "تاريخ الإنشاء",
         app_version: "نسخة التطبيق",
-        person_a: "الطرف أ (الملف الأيسر)",
-        person_b: "الطرف ب (الملف الأيمن)",
-        select_profiles_to_compare: "يرجى تحديد ملفين شخصيين بالضبط للمقارنة.",
+        person_a: "الطرف الأول (أ)",
+        person_b: "الطرف الثاني (ب)",
+        select_profiles_to_compare: "يرجى تحديد ملف واحد للعرض الفردي أو ملفين للمقارنة الزوجية.",
         import_btn_label: "اختر ملف JSON للملف الشخصي",
         close: "إغلاق",
-        required_questions_info: "ملاحظة: يقوم المحرك التكيفي باختيار الأسئلة الأكثر صلة بناءً على إجاباتك (الحد الأدنى 45، الأقصى 70).",
-        export_success_msg: "تم تصدير الملف الشخصي بنجاح! احفظ الملف المنزّل لمشاركته مع شريكك.",
-        confidence_explanation: "يتم حساب درجة الموثوقية بناءً على اتساق الإجابات، وتباين الاستجابة، واكتمال التقييم التكيفي.",
-        report_disclaimer: "إخلاء مسؤولية: هذا التقرير عبارة عن محاكاة قائمة على أسئلة التقييم المبلغ عنها ذاتياً. تم تصميمه للتأمل والتوجيه والأغراض التعليمية ولا يغني عن الاستشارة النفسية أو العلاج السريري المتخصص.",
-        no_saved_profiles: "لا توجد ملفات شخصية محفوظة بعد.",
-        drag_rank_desc: "رتب بالضغط أو السحب لأعلى/لأسفل:",
-        move_up: "تحريك لأعلى",
-        move_down: "تحريك لأسفل",
-        compare_instructions: "حدد ملفين شخصيين من القائمة أدناه ثم اضغط على 'مقارنة المحددين' لإنشاء تقرير كامل ومفصل."
+        required_questions_info: "ملاحظة: يقدم المحرك التكيفي رؤى عميقة تشمل الأبعاد النفسية، ونمط الحياة، وديناميكيات العلاقة.",
+        export_success_msg: "تم إكمال التقييم وحفظ الملف بنجاح! تم تنزيل نسخة JSON مشفرة على جهازك.",
+        confidence_explanation: "يتم حساب درجة الموثوقية بناءً على اتساق الإجابات عبر المقاييس المتقابلة، وتباين الاستجابة، واكتمال المحاور.",
+        report_disclaimer: "إخلاء مسؤولية: هذا التقرير عبارة عن محاكاة للتأمل الذاتي قائمة على أبحاث القياس النفسي وديناميكيات العلاقات. وهو مصمم للتوجيه والتوعية ولا يغني عن الاستشارة النفسية أو الزوجية المتخصصة.",
+        no_saved_profiles: "لا توجد ملفات محفوظة بعد. أكمل تقييماً أو استورد ملف شريكك للبدء.",
+        compare_instructions: "حدد ملفاً واحداً لعرض النتائج الفردية أو حدد ملفين شخصيين لإنشاء تقرير توافق شامل ومفصل.",
+        view_single_profile: "عرض الملف",
+        view_selected_profile: "عرض الملف المحدد",
+        copy_code: "نسخ رمز المشاركة",
+        code_copied: "تم نسخ الرمز!",
+        code_copied_desc: "تم نسخ رمز مشاركة النتيجة بنجاح إلى الحافظة.",
+        submit: "تأكيد",
+        please_answer: "يرجى اختيار إجابة للمتابعة."
     }
 };
 
@@ -209,7 +215,7 @@ class Localization {
     }
 
     get(key) {
-        return TRANSLATIONS[this.currentLang][key] || key;
+        return TRANSLATIONS[this.currentLang]?.[key] || TRANSLATIONS["en"]?.[key] || key;
     }
 }
 
@@ -227,7 +233,6 @@ const Storage = {
 
     saveProfile(profile) {
         const profiles = this.getProfiles();
-        // Remove duplicate if it already exists by ID
         const filtered = profiles.filter(p => p.id !== profile.id);
         filtered.push(profile);
         localStorage.setItem("matchwise_profiles", JSON.stringify(filtered));
@@ -265,45 +270,58 @@ class ThemeManager {
     }
 }
 
-// --- 4. SECURE PROFILE ENCRYPTION & DECRYPTION ---
-/**
- * For a fully offline vanilla JS browser app, standard high-quality cryptography
- * can be implemented using a lightweight, robust XOR or custom RC4-like algorithm
- * with dynamic key salts and checksum tags to ensure users can't easily tamper
- * with the raw values and to guarantee files are validated upon import.
- */
+// --- 4. SECURE UTF-8 PROFILE ENCRYPTION & DECRYPTION ---
 const Cryptography = {
-    SECRET_KEY_SALT: "MatchWiseLiteV1KeySalt-2023-2025-PremiumPsychology",
+    SECRET_KEY_SALT: "MatchWiseLiteV1KeySalt-2023-2026-PremiumPsychology",
+    SHARING_KEY_SALT: "MatchWiseLiteV1ResultSharingKeySalt-2026",
+
+    _xorBytes(bytes, keyStr) {
+        const keyBytes = new TextEncoder().encode(keyStr);
+        const out = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) {
+            out[i] = bytes[i] ^ keyBytes[i % keyBytes.length] ^ (i % 256);
+        }
+        return out;
+    },
+
+    _bytesToBase64(bytes) {
+        let binary = "";
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+    },
+
+    _base64ToBytes(base64Str) {
+        const binary = atob(base64Str);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
+    },
 
     encrypt(dataObj) {
-        const rawString = JSON.stringify(dataObj);
-        let result = "";
-        const key = this.SECRET_KEY_SALT;
-        for (let i = 0; i < rawString.length; i++) {
-            const charCode = rawString.charCodeAt(i);
-            const keyChar = key.charCodeAt(i % key.length);
-            // Dynamic XOR with position shift to prevent simple frequency analysis
-            const cipherVal = charCode ^ keyChar ^ (i % 256);
-            result += String.fromCharCode(cipherVal);
+        try {
+            const jsonStr = JSON.stringify(dataObj);
+            const utf8Bytes = new TextEncoder().encode(jsonStr);
+            const cipherBytes = this._xorBytes(utf8Bytes, this.SECRET_KEY_SALT);
+            return this._bytesToBase64(cipherBytes);
+        } catch (e) {
+            console.error("Encryption failed:", e);
+            return null;
         }
-        // Encode to base64 to ensure it can be easily saved/transmitted in JSON
-        return btoa(encodeURIComponent(result));
     },
 
     decrypt(encryptedString) {
         try {
-            const decoded = decodeURIComponent(atob(encryptedString));
-            let result = "";
-            const key = this.SECRET_KEY_SALT;
-            for (let i = 0; i < decoded.length; i++) {
-                const charCode = decoded.charCodeAt(i);
-                const keyChar = key.charCodeAt(i % key.length);
-                const plainVal = charCode ^ keyChar ^ (i % 256);
-                result += String.fromCharCode(plainVal);
-            }
-            const parsed = JSON.parse(result);
-            // Verify structural profile signature integrity
-            if (parsed.id && parsed.answers && parsed.calculated_personality) {
+            if (!encryptedString) return null;
+            const cipherBytes = this._base64ToBytes(encryptedString.trim());
+            const plainBytes = this._xorBytes(cipherBytes, this.SECRET_KEY_SALT);
+            const jsonStr = new TextDecoder().decode(plainBytes);
+            const parsed = JSON.parse(jsonStr);
+            if (parsed && parsed.id && parsed.answers && parsed.calculated_personality) {
                 return parsed;
             }
             return null;
@@ -314,42 +332,36 @@ const Cryptography = {
     },
 
     generateResultCode(profile) {
-        const compactObj = {
-            id: profile.id,
-            n: profile.owner_name,
-            g: profile.gender,
-            m: profile.marital_status,
-            a: profile.answers
-        };
-        const rawString = JSON.stringify(compactObj);
-        let result = "";
-        const key = "MatchWiseLiteV1ResultSharingKeySalt-2026";
-        for (let i = 0; i < rawString.length; i++) {
-            const charCode = rawString.charCodeAt(i);
-            const keyChar = key.charCodeAt(i % key.length);
-            const cipherVal = charCode ^ keyChar ^ (i % 256);
-            result += String.fromCharCode(cipherVal);
+        try {
+            const compactObj = {
+                id: profile.id,
+                n: profile.owner_name,
+                g: profile.gender,
+                m: profile.marital_status,
+                a: profile.answers
+            };
+            const jsonStr = JSON.stringify(compactObj);
+            const utf8Bytes = new TextEncoder().encode(jsonStr);
+            const cipherBytes = this._xorBytes(utf8Bytes, this.SHARING_KEY_SALT);
+            return "MWCODE-" + this._bytesToBase64(cipherBytes);
+        } catch (e) {
+            console.error("Failed to generate result code:", e);
+            return null;
         }
-        return "MWCODE-" + btoa(encodeURIComponent(result));
     },
 
     parseResultCode(codeString) {
         try {
-            if (!codeString || !codeString.startsWith("MWCODE-")) return null;
-            const encryptedPart = codeString.substring(7);
-            const decoded = decodeURIComponent(atob(encryptedPart));
-            let result = "";
-            const key = "MatchWiseLiteV1ResultSharingKeySalt-2026";
-            for (let i = 0; i < decoded.length; i++) {
-                const charCode = decoded.charCodeAt(i);
-                const keyChar = key.charCodeAt(i % key.length);
-                const plainVal = charCode ^ keyChar ^ (i % 256);
-                result += String.fromCharCode(plainVal);
-            }
-            const parsed = JSON.parse(result);
+            if (!codeString || typeof codeString !== "string") return null;
+            const clean = codeString.trim();
+            if (!clean.startsWith("MWCODE-")) return null;
+            const encryptedPart = clean.substring(7);
+            const cipherBytes = this._base64ToBytes(encryptedPart);
+            const plainBytes = this._xorBytes(cipherBytes, this.SHARING_KEY_SALT);
+            const jsonStr = new TextDecoder().decode(plainBytes);
+            const parsed = JSON.parse(jsonStr);
             if (parsed && parsed.n && parsed.a) {
-                // Return a full profile object, traits will be calculated dynamically on store
-                const profile = {
+                return {
                     id: parsed.id || "mw_" + Math.random().toString(36).substring(2, 10).toUpperCase(),
                     owner_name: parsed.n,
                     gender: parsed.g || "M",
@@ -362,7 +374,6 @@ const Cryptography = {
                     calculated_personality: null,
                     assessment_confidence: 85
                 };
-                return profile;
             }
             return null;
         } catch (e) {
@@ -372,8 +383,13 @@ const Cryptography = {
     }
 };
 
-// Export to global window namespace
-window.Localization = Localization;
-window.Storage = Storage;
-window.ThemeManager = ThemeManager;
-window.Cryptography = Cryptography;
+// Export to global window namespace & CommonJS for testing
+if (typeof window !== "undefined") {
+    window.Localization = Localization;
+    window.Storage = Storage;
+    window.ThemeManager = ThemeManager;
+    window.Cryptography = Cryptography;
+}
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = { Localization, Storage, ThemeManager, Cryptography };
+}
