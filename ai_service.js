@@ -116,6 +116,8 @@ Return ONLY a JSON object in this exact format (translated to ${currentLanguage 
             return await this.callOpenAI(prompt);
         } else if (this.provider === 'groq') {
             return await this.callGroq(prompt);
+        } else if (this.provider === 'deepseek-ai/deepseek-v4-flash') {
+            return await this.callDeepseek(prompt);
         }
         throw new Error("Unknown provider: " + this.provider);
     }
@@ -176,6 +178,29 @@ Return ONLY a JSON object in this exact format (translated to ${currentLanguage 
 
         if (!response.ok) {
             throw new Error(`Groq API Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    }
+
+    async callDeepseek(prompt) {
+        const url = `https://integrate.api.nvidia.com/v1/chat/completions`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.apiKey}`,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'deepseek-ai/deepseek-v4-flash',
+                messages: [{ role: 'user', content: prompt }]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`DeepSeek API Error: ${response.status}`);
         }
 
         const data = await response.json();
