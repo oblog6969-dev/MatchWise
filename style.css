@@ -887,13 +887,16 @@ body.rtl .report-table th, body.rtl .report-table td {
     display: flex;
     justify-content: center;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .person-type-badge {
-    padding: 4px 12px;
+    padding: 4px 10px;
     border-radius: 980px;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
+    text-align: center;
+    word-break: break-word;
 }
 
 .person-type-badge.type-a {
