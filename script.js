@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnImportCode: document.getElementById("btnImportCode"),
         btnCompareSelected: document.getElementById("btnCompareSelected"),
         btnCompareText: document.getElementById("btnCompareText"),
+        btnLoadDemoProfiles: document.getElementById("btnLoadDemoProfiles"),
         profilesListContainer: document.getElementById("profilesListContainer"),
         
         // Report Elements
@@ -87,6 +88,57 @@ document.addEventListener("DOMContentLoaded", () => {
         commBadgeB: document.getElementById("commBadgeB"),
         conflictBadgeA: document.getElementById("conflictBadgeA"),
         conflictBadgeB: document.getElementById("conflictBadgeB"),
+
+        // Multi-Framework Badges
+        hartmanBadgeA: document.getElementById("hartmanBadgeA"),
+        hartmanBadgeB: document.getElementById("hartmanBadgeB"),
+        discBadgeA: document.getElementById("discBadgeA"),
+        discBadgeB: document.getElementById("discBadgeB"),
+        birkmanBadgeA: document.getElementById("birkmanBadgeA"),
+        birkmanBadgeB: document.getElementById("birkmanBadgeB"),
+        gottmanBadgeA: document.getElementById("gottmanBadgeA"),
+        gottmanBadgeB: document.getElementById("gottmanBadgeB"),
+
+        // Multi-Framework Sections
+        operatingManualContainer: document.getElementById("operatingManualContainer"),
+        operatingManualSection: document.getElementById("operatingManualSection"),
+        conflictProtocolSection: document.getElementById("conflictProtocolSection"),
+        fairFightingContainer: document.getElementById("fairFightingContainer"),
+
+        // Storytelling Chapters & Interactive Visualizers
+        btnTogglePrintPreview: document.getElementById("btnTogglePrintPreview"),
+        hartmanChartContainer: document.getElementById("hartmanChartContainer"),
+        discQuadrantContainer: document.getElementById("discQuadrantContainer"),
+        birkmanIcebergContainer: document.getElementById("birkmanIcebergContainer"),
+        attachmentGridContainer: document.getElementById("attachmentGridContainer"),
+        firoExchangeContainer: document.getElementById("firoExchangeContainer"),
+        gottmanGaugeContainer: document.getElementById("gottmanGaugeContainer"),
+        dyadicConflictLoopContainer: document.getElementById("dyadicConflictLoopContainer"),
+        dyadicConflictCard: document.getElementById("dyadicConflictCard"),
+        
+        chapter1Badge: document.getElementById("chapter1Badge"),
+        chapter1Title: document.getElementById("chapter1Title"),
+        chapter1Desc: document.getElementById("chapter1Desc"),
+        chapter2Badge: document.getElementById("chapter2Badge"),
+        chapter2Title: document.getElementById("chapter2Title"),
+        chapter2Desc: document.getElementById("chapter2Desc"),
+        chapter3Badge: document.getElementById("chapter3Badge"),
+        chapter3Title: document.getElementById("chapter3Title"),
+        chapter3Desc: document.getElementById("chapter3Desc"),
+        chapter4Badge: document.getElementById("chapter4Badge"),
+        chapter4Title: document.getElementById("chapter4Title"),
+        chapter4Desc: document.getElementById("chapter4Desc"),
+        chapter5Badge: document.getElementById("chapter5Badge"),
+        chapter5Title: document.getElementById("chapter5Title"),
+        chapter5Desc: document.getElementById("chapter5Desc"),
+
+        // AI Configuration Elements
+        btnOpenAiSettings: document.getElementById("btnOpenAiSettings"),
+        modalAiConfigForm: document.getElementById("modalAiConfigForm"),
+        selectAiProvider: document.getElementById("selectAiProvider"),
+        inputAiApiKey: document.getElementById("inputAiApiKey"),
+        aiInsightsSection: document.getElementById("aiInsightsSection"),
+        reportAIInsightsContainer: document.getElementById("reportAIInsightsContainer"),
         
         reportStrengthsList: document.getElementById("reportStrengthsList"),
         reportChallengesList: document.getElementById("reportChallengesList"),
@@ -152,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
         promptForName((userData) => {
             if (userData && userData.name && userData.name.trim()) {
                 state.isAiMode = true;
-                state.aiService = new window.AIService();
+                if (!state.aiService) state.aiService = new window.AIService();
                 state.assessmentSession.personName = userData.name.trim();
                 state.assessmentSession.gender = userData.gender;
                 state.assessmentSession.maritalStatus = userData.maritalStatus;
@@ -164,10 +216,88 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // AI Settings Modal Opener
+    if (dom.btnOpenAiSettings) {
+        dom.btnOpenAiSettings.addEventListener("click", () => {
+            if (!state.aiService) state.aiService = new window.AIService();
+            dom.modalTitle.textContent = state.localization.currentLang === "ar" ? "إعدادات الذكاء الاصطناعي (DeepSeek Pro)" : "AI Settings (DeepSeek Pro)";
+            
+            // Hide other modal forms
+            document.getElementById("modalStartForm").style.display = "none";
+            document.getElementById("modalFeedbackContent").style.display = "none";
+            dom.modalAiConfigForm.style.display = "block";
+            
+            // Populate current values
+            dom.selectAiProvider.value = state.aiService.provider || "deepseek";
+            dom.inputAiApiKey.value = state.aiService.apiKey !== "YOUR_API_KEY_HERE" ? state.aiService.apiKey : "";
+
+            dom.modalBackdrop.classList.add("active-backdrop");
+            dom.btnModalSubmit.style.display = "block";
+
+            const saveAiSettings = () => {
+                const prov = dom.selectAiProvider.value;
+                const key = dom.inputAiApiKey.value.trim();
+                state.aiService.setConfiguration(prov, key);
+                state.isAiMode = true;
+                cleanup();
+                dom.modalBackdrop.classList.remove("active-backdrop");
+                showFeedbackModal(
+                    state.localization.currentLang === "ar" ? "تم الحفظ" : "Settings Saved",
+                    state.localization.currentLang === "ar" ? `تم تحديث مزود الذكاء الاصطناعي إلى: ${prov}` : `AI Provider successfully set to: ${prov}`
+                );
+            };
+
+            const cancelAiSettings = () => {
+                cleanup();
+                dom.modalBackdrop.classList.remove("active-backdrop");
+            };
+
+            function cleanup() {
+                dom.btnModalSubmit.removeEventListener("click", saveAiSettings);
+                dom.btnModalCancel.removeEventListener("click", cancelAiSettings);
+            }
+
+            dom.btnModalSubmit.addEventListener("click", saveAiSettings);
+            dom.btnModalCancel.addEventListener("click", cancelAiSettings);
+        });
+    }
+
+    // Toggle Print Preview Mode
+    if (dom.btnTogglePrintPreview) {
+        dom.btnTogglePrintPreview.addEventListener("click", () => {
+            document.body.classList.toggle("print-preview-active");
+            dom.btnTogglePrintPreview.classList.toggle("active");
+            const isActive = document.body.classList.contains("print-preview-active");
+            const isAr = state.localization.currentLang === "ar";
+            const span = dom.btnTogglePrintPreview.querySelector("span");
+            if (span) {
+                span.textContent = isActive
+                    ? (isAr ? "إغلاق معاينة الطباعة" : "Exit Print View")
+                    : (isAr ? "معاينة الطباعة" : "Toggle Print View");
+            }
+        });
+    }
+
     dom.btnGoToDashboard.addEventListener("click", () => {
         navigateTo("panelDashboard");
         renderSavedProfiles();
     });
+
+    // Load Live Demo Profiles Button
+    if (dom.btnLoadDemoProfiles) {
+        dom.btnLoadDemoProfiles.addEventListener("click", () => {
+            if (window.DEMO_PROFILES && window.DEMO_PROFILES.length > 0) {
+                localStorage.setItem("matchwise_profiles", JSON.stringify(window.DEMO_PROFILES));
+                renderSavedProfiles();
+                showFeedbackModal(
+                    state.localization.currentLang === "ar" ? "تم تحميل الملفات بنجاح" : "Live Demo Profiles Loaded",
+                    state.localization.currentLang === "ar"
+                        ? "تم تحميل ملفين نفسيين متكاملين (طارق المنصور ونور الصباح) لتجربة المقارنة التفاعلية الفورية."
+                        : "Successfully loaded clinical test archetypes: Tariq Al-Mansoor (Executive Leader) & Nour Al-Sabah (Empathetic Harmonizer)!"
+                );
+            }
+        });
+    }
 
     dom.btnHomeFromDashboard.addEventListener("click", () => navigateTo("panelHome"));
     dom.btnDashboardFromReport.addEventListener("click", () => navigateTo("panelDashboard"));
@@ -556,7 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v1.2",
+            app_version: "v2.5",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence
@@ -594,7 +724,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 8. DASHBOARD RENDERING & ACTIONS ---
     function renderSavedProfiles() {
         dom.profilesListContainer.innerHTML = "";
-        const saved = window.Storage.getProfiles();
+        let saved = window.Storage.getProfiles();
+
+        // Auto-seed demo profiles if storage is completely empty
+        if (saved.length === 0 && window.DEMO_PROFILES && window.DEMO_PROFILES.length > 0) {
+            localStorage.setItem("matchwise_profiles", JSON.stringify(window.DEMO_PROFILES));
+            saved = window.DEMO_PROFILES;
+        }
 
         if (saved.length === 0) {
             dom.profilesListContainer.innerHTML = `
@@ -628,11 +764,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            const traits = p.calculated_personality || {};
+            const hColor = (traits.hartman?.primary || "blue").toUpperCase();
+            const discType = traits.disc?.type || "D";
+            const mbti = traits.mbti?.type || "INFP";
+            const need = (traits.birkman?.underlying_need || "empathy").toUpperCase();
+
             const meta = document.createElement("div");
             meta.className = "profile-meta-info";
             meta.innerHTML = `
-                <h4>${p.owner_name}</h4>
-                <p>${state.localization.get("created_at")}: ${p.created_at} • MBTI: ${p.calculated_personality.mbti.type}</p>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h4 style="margin: 0; font-size: 1.05rem;">${p.owner_name}</h4>
+                    <span class="person-type-badge hartman-badge-${hColor.toLowerCase()}" style="padding: 2px 8px; font-size: 0.72rem;">${hColor}</span>
+                    <span class="person-type-badge type-a" style="padding: 2px 8px; font-size: 0.72rem;">DISC: ${discType}</span>
+                    <span class="person-type-badge type-b" style="padding: 2px 8px; font-size: 0.72rem;">${mbti}</span>
+                </div>
+                <p style="margin-top: 4px; font-size: 0.82rem; color: var(--text-secondary);">
+                    ${state.localization.get("created_at")}: ${p.created_at} • ${state.localization.get("birkman_label")}: <strong>${need}</strong>
+                </p>
             `;
 
             selectCol.appendChild(checkbox);
@@ -826,11 +975,71 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.reportVerA.textContent = profileA.app_version;
             dom.reportConfidenceA.textContent = `${profileA.assessment_confidence || 85}%`;
 
-            // Render Badges
-            dom.mbtiBadgeA.textContent = traitsA.mbti.type;
-            dom.attachmentBadgeA.textContent = traitsA.attachment.primary.toUpperCase();
-            dom.commBadgeA.textContent = traitsA.communication.primary.toUpperCase();
-            dom.conflictBadgeA.textContent = traitsA.conflict.primary.toUpperCase();
+            // Render Legacy & Multi-Framework Badges for Person A
+            if (dom.mbtiBadgeA) dom.mbtiBadgeA.textContent = traitsA.mbti?.type || "--";
+            if (dom.attachmentBadgeA) dom.attachmentBadgeA.textContent = (traitsA.attachment?.primary || "--").toUpperCase();
+            if (dom.commBadgeA) dom.commBadgeA.textContent = (traitsA.communication?.primary || "--").toUpperCase();
+            if (dom.conflictBadgeA) dom.conflictBadgeA.textContent = (traitsA.conflict?.primary || "collaborating").toUpperCase();
+
+            // Hartman Badge
+            if (dom.hartmanBadgeA) {
+                const hColorA = traitsA.hartman?.primary || "blue";
+                dom.hartmanBadgeA.textContent = `${hColorA.toUpperCase()} (${isAr ? (traitsA.hartman?.metadata?.motive_ar || "") : (traitsA.hartman?.metadata?.motive_en || "")})`;
+                dom.hartmanBadgeA.className = `person-type-badge type-a hartman-badge-${hColorA}`;
+            }
+
+            // DISC Badge
+            if (dom.discBadgeA) {
+                const discStyleA = traitsA.disc?.primary || "D";
+                dom.discBadgeA.textContent = `${discStyleA} (${isAr ? (traitsA.disc?.pace_ar || "") : (traitsA.disc?.pace || "")})`;
+            }
+
+            // Birkman Badge
+            if (dom.birkmanBadgeA) {
+                dom.birkmanBadgeA.textContent = (traitsA.birkman?.underlying_need || "empathy").toUpperCase();
+            }
+
+            // Gottman Safety Badge
+            if (dom.gottmanBadgeA) {
+                dom.gottmanBadgeA.textContent = `${traitsA.gottman_safety?.emotional_safety_index || 85}% ${isAr ? "أمان" : "Safety"}`;
+            }
+
+            // Update Narrative Chapter Headers for SINGLE VIEW
+            if (dom.chapter1Badge) dom.chapter1Badge.textContent = isAr ? "الفصل الأول" : "Chapter 1";
+            if (dom.chapter1Title) dom.chapter1Title.textContent = state.localization.get("chapter_1_title");
+            if (dom.chapter1Desc) dom.chapter1Desc.textContent = state.localization.get("chapter_1_desc");
+
+            if (dom.chapter2Badge) dom.chapter2Badge.textContent = isAr ? "الفصل الثاني" : "Chapter 2";
+            if (dom.chapter2Title) dom.chapter2Title.textContent = state.localization.get("chapter_2_title");
+            if (dom.chapter2Desc) dom.chapter2Desc.textContent = state.localization.get("chapter_2_desc");
+
+            if (dom.chapter3Badge) dom.chapter3Badge.textContent = isAr ? "الفصل الثالث" : "Chapter 3";
+            if (dom.chapter3Title) dom.chapter3Title.textContent = state.localization.get("chapter_3_title");
+            if (dom.chapter3Desc) dom.chapter3Desc.textContent = state.localization.get("chapter_3_desc");
+
+            if (dom.chapter4Badge) dom.chapter4Badge.textContent = isAr ? "الفصل الرابع" : "Chapter 4";
+            if (dom.chapter4Title) dom.chapter4Title.textContent = state.localization.get("chapter_4_title");
+            if (dom.chapter4Desc) dom.chapter4Desc.textContent = state.localization.get("chapter_4_desc");
+
+            if (dom.chapter5Badge) dom.chapter5Badge.textContent = isAr ? "الفصل الخامس" : "Chapter 5";
+            if (dom.chapter5Title) dom.chapter5Title.textContent = state.localization.get("chapter_5_title");
+            if (dom.chapter5Desc) dom.chapter5Desc.textContent = state.localization.get("chapter_5_desc");
+
+            if (dom.dyadicConflictCard) dom.dyadicConflictCard.style.display = "none";
+
+            // Render Interactive Multi-Framework SVG Visualizers for Single View
+            renderHartmanDonut(dom.hartmanChartContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsA.disc, null, true, profileA.owner_name, null, isAr);
+            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderFiroExchange(dom.firoExchangeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+
+            // Render Relationship Operating Manual for Person A
+            renderOperatingManual(profileA, null, isAr);
+
+            // Render Personal De-escalation Box
+            renderFairFightingBox(null, profileA, isAr);
 
             // Big Five rendering (just pass A for both to render single)
             renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true, profileA.owner_name, null);
@@ -840,7 +1049,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const sampleStrengths = [
                 { en: `High emotional self-awareness using an adaptable ${traitsA.communication.primary} communication style.`, ar: `وعي ذاتي عاطفي مرتفع باستخدام أسلوب تواصل مرن.` },
                 { en: `Understands personal needs and can formulate firm boundaries to avoid burnouts.`, ar: `يفهم الاحتياجات الشخصية ويمكنه صياغة حدود حاسمة لتجنب الإرهاق.` },
-                { en: `Personal self-presentation values matches individual expectation by 100%.`, ar: `تتوافق قيم مظهرك وهندامك مع تفضيلاتك بنسبة 100%.` }
+                { en: `Core emotional fuel driven by ${traitsA.hartman?.metadata ? traitsA.hartman.metadata.fuel_en : 'authentic connection'}.`, ar: `وقودك العاطفي الأساسي مدفوع بـ: ${traitsA.hartman?.metadata ? traitsA.hartman.metadata.fuel_ar : 'الاهتمام الصادق والتقارب'}.` }
             ];
             sampleStrengths.forEach(item => {
                 const li = document.createElement("li");
@@ -850,7 +1059,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             dom.reportChallengesList.innerHTML = "";
             const sampleChallenges = [
-                { en: `Operating under high pressure might stress the underlying ${traitsA.attachment.primary} attachment tendency.`, ar: `قد يؤدي العمل تحت ضغط مرتفع إلى إجهاد نزعة الارتباط العاطفي لديك.` }
+                { en: `Operating under high pressure might trigger the defensive ${traitsA.birkman?.stress_trigger || 'withdrawal'} stress reaction.`, ar: `قد يؤدي العمل تحت ضغط مرتفع إلى تفعيل ردة الفعل الدفاعية الناتجة عن التوتر (${traitsA.birkman?.stress_trigger || 'الانعزال'}).` }
             ];
             sampleChallenges.forEach(item => {
                 const li = document.createElement("li");
@@ -891,11 +1100,33 @@ document.addEventListener("DOMContentLoaded", () => {
             bCols.forEach(el => el.classList.remove("hidden"));
             dom.gaugeCardContainer.classList.remove("hidden");
             dom.radarChartCard.classList.remove("hidden");
+            if (dom.dyadicConflictCard) dom.dyadicConflictCard.style.display = "block";
             
             dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد (12 محوراً)" : "Multivariable Compatibility Index (12 Axes)";
             dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
 
             const report = window.CompatibilityEngine.compare(profileA, profileB);
+
+            // Update Narrative Chapter Headers for COMPARISON (Acts 1-4)
+            if (dom.chapter1Badge) { dom.chapter1Badge.textContent = isAr ? "المحور الأول" : "Act 1"; dom.chapter1Badge.classList.add("act-badge"); }
+            if (dom.chapter1Title) dom.chapter1Title.textContent = state.localization.get("act_1_title");
+            if (dom.chapter1Desc) dom.chapter1Desc.textContent = state.localization.get("act_1_desc");
+
+            if (dom.chapter2Badge) { dom.chapter2Badge.textContent = isAr ? "المحور الثاني" : "Act 2"; dom.chapter2Badge.classList.add("act-badge"); }
+            if (dom.chapter2Title) dom.chapter2Title.textContent = state.localization.get("act_2_title");
+            if (dom.chapter2Desc) dom.chapter2Desc.textContent = state.localization.get("act_2_desc");
+
+            if (dom.chapter3Badge) { dom.chapter3Badge.textContent = isAr ? "التناغم العاطفي" : "Intimacy & Bond"; }
+            if (dom.chapter3Title) dom.chapter3Title.textContent = state.localization.get("chapter_3_title");
+            if (dom.chapter3Desc) dom.chapter3Desc.textContent = state.localization.get("chapter_3_desc");
+
+            if (dom.chapter4Badge) { dom.chapter4Badge.textContent = isAr ? "المحور الثالث" : "Act 3"; dom.chapter4Badge.classList.add("act-badge"); }
+            if (dom.chapter4Title) dom.chapter4Title.textContent = state.localization.get("act_3_title");
+            if (dom.chapter4Desc) dom.chapter4Desc.textContent = state.localization.get("act_3_desc");
+
+            if (dom.chapter5Badge) { dom.chapter5Badge.textContent = isAr ? "المحور الرابع" : "Act 4"; dom.chapter5Badge.classList.add("act-badge"); }
+            if (dom.chapter5Title) dom.chapter5Title.textContent = state.localization.get("act_4_title");
+            if (dom.chapter5Desc) dom.chapter5Desc.textContent = state.localization.get("act_4_desc");
 
             // Top overall summaries
             dom.reportOverallIndex.textContent = `${report.overall_index}%`;
@@ -932,15 +1163,58 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.reportConfidenceA.textContent = `${profileA.assessment_confidence || 85}%`;
             dom.reportConfidenceB.textContent = `${profileB.assessment_confidence || 85}%`;
 
-            // Render Badges
-            dom.mbtiBadgeA.textContent = profileA.calculated_personality.mbti.type;
-            dom.mbtiBadgeB.textContent = profileB.calculated_personality.mbti.type;
-            dom.attachmentBadgeA.textContent = profileA.calculated_personality.attachment.primary.toUpperCase();
-            dom.attachmentBadgeB.textContent = profileB.calculated_personality.attachment.primary.toUpperCase();
-            dom.commBadgeA.textContent = profileA.calculated_personality.communication.primary.toUpperCase();
-            dom.commBadgeB.textContent = profileB.calculated_personality.communication.primary.toUpperCase();
-            dom.conflictBadgeA.textContent = profileA.calculated_personality.conflict.primary.toUpperCase();
-            dom.conflictBadgeB.textContent = profileB.calculated_personality.conflict.primary.toUpperCase();
+            // Render Legacy Badges
+            if (dom.mbtiBadgeA) dom.mbtiBadgeA.textContent = profileA.calculated_personality.mbti?.type || "--";
+            if (dom.mbtiBadgeB) dom.mbtiBadgeB.textContent = profileB.calculated_personality.mbti?.type || "--";
+            if (dom.attachmentBadgeA) dom.attachmentBadgeA.textContent = (profileA.calculated_personality.attachment?.primary || "--").toUpperCase();
+            if (dom.attachmentBadgeB) dom.attachmentBadgeB.textContent = (profileB.calculated_personality.attachment?.primary || "--").toUpperCase();
+            if (dom.commBadgeA) dom.commBadgeA.textContent = (profileA.calculated_personality.communication?.primary || "--").toUpperCase();
+            if (dom.commBadgeB) dom.commBadgeB.textContent = (profileB.calculated_personality.communication?.primary || "--").toUpperCase();
+            if (dom.conflictBadgeA) dom.conflictBadgeA.textContent = (profileA.calculated_personality.conflict?.primary || "collaborating").toUpperCase();
+            if (dom.conflictBadgeB) dom.conflictBadgeB.textContent = (profileB.calculated_personality.conflict?.primary || "collaborating").toUpperCase();
+
+            // Render Multi-Framework Badges for A & B
+            const traitsCompA = profileA.calculated_personality;
+            const traitsCompB = profileB.calculated_personality;
+
+            if (dom.hartmanBadgeA && dom.hartmanBadgeB) {
+                const colA = traitsCompA.hartman?.primary || "blue";
+                const colB = traitsCompB.hartman?.primary || "white";
+                dom.hartmanBadgeA.textContent = colA.toUpperCase();
+                dom.hartmanBadgeA.className = `person-type-badge type-a hartman-badge-${colA}`;
+                dom.hartmanBadgeB.textContent = colB.toUpperCase();
+                dom.hartmanBadgeB.className = `person-type-badge type-b hartman-badge-${colB}`;
+            }
+
+            if (dom.discBadgeA && dom.discBadgeB) {
+                dom.discBadgeA.textContent = `${traitsCompA.disc?.primary || "D"}`;
+                dom.discBadgeB.textContent = `${traitsCompB.disc?.primary || "S"}`;
+            }
+
+            if (dom.birkmanBadgeA && dom.birkmanBadgeB) {
+                dom.birkmanBadgeA.textContent = (traitsCompA.birkman?.underlying_need || "empathy").toUpperCase();
+                dom.birkmanBadgeB.textContent = (traitsCompB.birkman?.underlying_need || "freedom").toUpperCase();
+            }
+
+            if (dom.gottmanBadgeA && dom.gottmanBadgeB) {
+                dom.gottmanBadgeA.textContent = `${traitsCompA.gottman_safety?.emotional_safety_index || 85}%`;
+                dom.gottmanBadgeB.textContent = `${traitsCompB.gottman_safety?.emotional_safety_index || 80}%`;
+            }
+
+            // Render Interactive Multi-Framework SVG Visualizers for Comparison View
+            renderHartmanDonut(dom.hartmanChartContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsCompA.disc, traitsCompB.disc, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderFiroExchange(dom.firoExchangeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderDyadicConflictLoop(dom.dyadicConflictLoopContainer, report, profileA, profileB, isAr);
+
+            // Render Relationship Operating Manual for BOTH
+            renderOperatingManual(profileA, profileB, isAr);
+
+            // Render Dyadic Conflict & De-escalation Protocol
+            renderFairFightingBox(report, profileA, isAr);
 
             // Render Custom SVG Radar Chart
             renderSVGRadarChart(report.category_scores);
@@ -986,53 +1260,648 @@ document.addEventListener("DOMContentLoaded", () => {
                 dom.reportRecommendationsContainer.appendChild(p);
             });
         }
-        // --- AI Insights Generation ---
+
+        // --- DEEPSEEK PRO AI INSIGHTS GENERATION ---
         const aiSection = document.getElementById("aiInsightsSection");
         const aiContainer = document.getElementById("reportAIInsightsContainer");
         
-        if (state.isAiMode && state.aiService && !profileB) {
+        if (state.isAiMode && state.aiService) {
             aiSection.style.display = "block";
-            aiContainer.innerHTML = "<p>Generating AI analysis...</p>";
+            aiContainer.innerHTML = `<p>${isAr ? "جارٍ توليد الاستشارة والتحليل المعمق عبر الذكاء الاصطناعي (DeepSeek Pro)..." : "Generating deep psychological consultation via DeepSeek Pro AI..."}</p>`;
             
-            // Asynchronously fetch AI insights
-            state.aiService.analyzeReport(profileA.answers, questions, state.localization.currentLang).then(aiData => {
-                aiContainer.innerHTML = "";
-                const isAr = state.localization.currentLang === "ar";
-                
-                const addSection = (title, items, color) => {
-                    if (items && items.length > 0) {
-                        const h4 = document.createElement("h4");
-                        h4.textContent = title;
-                        h4.style.color = color;
-                        h4.style.marginTop = "16px";
-                        aiContainer.appendChild(h4);
-                        
+            if (!profileB) {
+                // SINGLE REPORT AI INSIGHTS
+                state.aiService.analyzeReport(profileA, isAr ? "ar" : "en").then(aiData => {
+                    if (!aiData) {
+                        aiContainer.innerHTML = `<p>${isAr ? "تعذر إنشاء التحليل المعمق حالياً." : "Could not generate deep analysis at this time."}</p>`;
+                        return;
+                    }
+                    aiContainer.innerHTML = "";
+
+                    const appendBlock = (title, text, color) => {
+                        if (!text) return;
+                        const card = document.createElement("div");
+                        card.className = "chart-card";
+                        card.style.marginBottom = "14px";
+                        card.innerHTML = `<h4 style="color: ${color}; text-align: left;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
+                        aiContainer.appendChild(card);
+                    };
+
+                    appendBlock(isAr ? "تحليل الدافع الجوهري (Hartman Core Motive)" : "Core Motive Analysis (Hartman)", aiData.coreMotiveAnalysis, "var(--accent-color)");
+                    appendBlock(isAr ? "بروفايل الأمان العاطفي وإدارة الخلاف (TKI & Gottman)" : "Conflict & Emotional Safety Profile (TKI & Gottman)", aiData.conflictAndSafety, "#8b5cf6");
+                    appendBlock(isAr ? "نمط التعلق والاحتواء (Attachment Theory)" : "Attachment & Intimacy Dynamic", aiData.attachmentProfile, "#10b981");
+
+                    if (aiData.watchouts && aiData.watchouts.length > 0) {
+                        const warnDiv = document.createElement("div");
+                        warnDiv.className = "chart-card";
+                        warnDiv.style.borderLeft = "4px solid var(--danger)";
+                        warnDiv.innerHTML = `<h4 style="color: var(--danger); text-align: left;">${isAr ? "نقاط الحذر والتنبيه" : "Vulnerability Watchouts"}</h4>`;
                         const ul = document.createElement("ul");
                         ul.className = "report-bullet-list";
-                        items.forEach(item => {
+                        aiData.watchouts.forEach(w => {
                             const li = document.createElement("li");
-                            li.textContent = item;
+                            li.textContent = w;
                             ul.appendChild(li);
                         });
-                        aiContainer.appendChild(ul);
+                        warnDiv.appendChild(ul);
+                        aiContainer.appendChild(warnDiv);
                     }
-                };
+                }).catch(err => {
+                    aiContainer.innerHTML = "<p>Failed to generate AI insights.</p>";
+                    console.error(err);
+                });
+            } else {
+                // COMPARISON DYADIC AI CONSULTATION
+                state.aiService.compareProfilesWithAI(profileA, profileB, isAr ? "ar" : "en").then(aiData => {
+                    if (!aiData) {
+                        aiContainer.innerHTML = `<p>${isAr ? "تعذر إنشاء استشارة التوافق الثنائي حالياً." : "Could not generate dyadic consultation at this time."}</p>`;
+                        return;
+                    }
+                    aiContainer.innerHTML = "";
 
-                addSection(isAr ? "السمات الإيجابية ونقاط القوة" : "Positive Traits & Strengths", aiData.positiveTraits, "var(--success)");
-                addSection(isAr ? "السمات السلبية المحتملة" : "Potential Negative Traits", aiData.negativeTraits, "var(--warning)");
-                addSection(isAr ? "نقاط مثيرة للقلق / خطوط حمراء" : "Points of Concern / Red Flags", aiData.concerns, "var(--danger)");
-                addSection(isAr ? "مجالات التركيز والتطور" : "Areas of Focus / Growth", aiData.focusAreas, "var(--info)");
-                
-                if (!aiData.positiveTraits?.length && !aiData.negativeTraits?.length && !aiData.concerns?.length && !aiData.focusAreas?.length) {
-                    aiContainer.innerHTML = `<p>${isAr ? "لم يحدد الذكاء الاصطناعي أي رؤى محددة في هذا الوقت." : "AI did not identify any specific insights at this time."}</p>`;
-                }
-            }).catch(err => {
-                aiContainer.innerHTML = "<p>Failed to generate AI insights.</p>";
-                console.error(err);
-            });
+                    const appendBlock = (title, text, color) => {
+                        if (!text) return;
+                        const card = document.createElement("div");
+                        card.className = "chart-card";
+                        card.style.marginBottom = "14px";
+                        card.innerHTML = `<h4 style="color: ${color}; text-align: left;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
+                        aiContainer.appendChild(card);
+                    };
+
+                    appendBlock(isAr ? "الملخص التنفيذي للتوافق الزوجي (DeepSeek Pro)" : "Executive Dyadic Consultation (DeepSeek Pro)", aiData.executiveSummary, "#8b5cf6");
+                    appendBlock(isAr ? "تفاعل الدافع والإيقاع اليومي (Hartman & DISC)" : "Motive & Pace Dynamic (Hartman & DISC)", aiData.motiveAndPaceDynamic, "var(--accent-color)");
+                    appendBlock(isAr ? "توافق الاحتياجات الخفية وحساسية التوتر (Birkman)" : "Cross-Need Satisfaction & Stress Triggers (Birkman)", aiData.crossNeedCollision, "#f59e0b");
+                    appendBlock(isAr ? "دورة الخلاف التفاعلية وكيفية كسرها (Gottman & Attachment)" : "The Reactive Conflict Dance & Cycle Breaker", aiData.reactiveConflictDance, "#ef4444");
+
+                    // Conversational Bridge Scripts
+                    if (aiData.conversationalBridgeScripts && aiData.conversationalBridgeScripts.length > 0) {
+                        const scriptWrapper = document.createElement("div");
+                        scriptWrapper.style.marginTop = "20px";
+                        scriptWrapper.innerHTML = `<h4 style="color: var(--accent-color); margin-bottom: 12px;">${isAr ? "نصوص الحوار وجسور التفاهم المقترحة" : "Conversational Bridge Scripts (What to Say in Tough Moments)"}</h4>`;
+                        
+                        aiData.conversationalBridgeScripts.forEach(bs => {
+                            const sc = document.createElement("div");
+                            sc.className = "bridge-script-card";
+                            sc.innerHTML = `
+                                <div class="bridge-script-scenario">${bs.scenario}</div>
+                                <div class="bridge-quote"><strong>${profileA.owner_name}:</strong> "${bs.scriptA}"</div>
+                                <div class="bridge-quote"><strong>${profileB.owner_name}:</strong> "${bs.scriptB}"</div>
+                            `;
+                            scriptWrapper.appendChild(sc);
+                        });
+                        aiContainer.appendChild(scriptWrapper);
+                    }
+                }).catch(err => {
+                    aiContainer.innerHTML = "<p>Failed to generate dyadic AI consultation.</p>";
+                    console.error(err);
+                });
+            }
         } else {
             aiSection.style.display = "none";
         }
+    }
+
+    // Helper: Render Operating Manual Card
+    function renderOperatingManual(profileA, profileB, isAr) {
+        if (!dom.operatingManualContainer) return;
+        dom.operatingManualContainer.innerHTML = "";
+
+        const createManualCard = (profile, typeClass) => {
+            const traits = profile.calculated_personality;
+            const b = traits.birkman || {};
+            const h = traits.hartman || {};
+
+            const usualDesc = b.summary?.usual ? (isAr ? b.summary.usual.ar : b.summary.usual.en) : "Assertive and active.";
+            const needDesc = b.summary?.needs ? (isAr ? b.summary.needs.ar : b.summary.needs.en) : "Validation and patience.";
+            const stressDesc = b.summary?.stress ? (isAr ? b.summary.stress.ar : b.summary.stress.en) : "Withdrawing or impatient.";
+            const fuelDesc = h.metadata ? (isAr ? h.metadata.fuel_ar : h.metadata.fuel_en) : "Intimacy and respect.";
+            const hazardDesc = h.metadata ? (isAr ? h.metadata.hazard_ar : h.metadata.hazard_en) : "Over-sensitivity.";
+
+            const card = document.createElement("div");
+            card.className = "manual-profile-card";
+            card.innerHTML = `
+                <div class="manual-profile-header">
+                    <div class="manual-owner-title">${profile.owner_name}</div>
+                    <span class="person-type-badge ${typeClass}">${(h.primary || "Blue").toUpperCase()} • ${(traits.disc?.primary || "D")}</span>
+                </div>
+                <div class="manual-point">
+                    <div class="manual-point-label">
+                        <span>🌟</span>
+                        <span>${isAr ? "الأسلوب المعتاد في الحياة اليومية (Birkman Usual)" : "Natural Everyday Style (Birkman Usual)"}</span>
+                    </div>
+                    <div class="manual-point-content">${usualDesc}</div>
+                </div>
+                <div class="manual-point">
+                    <div class="manual-point-label">
+                        <span>🛡️</span>
+                        <span>${isAr ? "الاحتياج العاطفي الخفي (Underlying Needs)" : "Hidden Emotional Needs (Birkman Needs)"}</span>
+                    </div>
+                    <div class="manual-point-content">${needDesc}</div>
+                </div>
+                <div class="manual-point">
+                    <div class="manual-point-label">
+                        <span>⚠️</span>
+                        <span>${isAr ? "ردة الفعل عند الضغط والإنهاك (Stress Derailer)" : "Reaction Under Pressure (Stress Derailer)"}</span>
+                    </div>
+                    <div class="manual-point-content">${stressDesc}</div>
+                </div>
+                <div class="manual-point">
+                    <div class="manual-point-label">
+                        <span>🔋</span>
+                        <span>${isAr ? "الوقود العاطفي ومصدر التهدئة (Core Fuel)" : "Core Emotional Fuel & Soothing"}</span>
+                    </div>
+                    <div class="manual-point-content">${fuelDesc} • ${isAr ? "تجنب معه: " : "Avoid: "} ${hazardDesc}</div>
+                </div>
+            `;
+            return card;
+        };
+
+        dom.operatingManualContainer.appendChild(createManualCard(profileA, "type-a"));
+        if (profileB) {
+            dom.operatingManualContainer.appendChild(createManualCard(profileB, "type-b person-b-col"));
+        }
+    }
+
+    // Helper: Render De-escalation & Fair Fighting Protocol
+    function renderFairFightingBox(report, profileA, isAr) {
+        if (!dom.fairFightingContainer) return;
+        dom.fairFightingContainer.innerHTML = "";
+
+        const rules = report?.multi_framework_dynamics?.fair_fighting_rules || [
+            {
+                en: "The 20-Minute Cool-Down: If either partner feels emotionally flooded, pause immediately with reassurance.",
+                ar: "قاعدة الـ 20 دقيقة للتهدئة: عند شعور أي طرف بالضغط أو ارتفاع نبرة الصوت، يتم إيقاف النقاش فوراً مع التأكيد على العودة له بهدوء."
+            },
+            {
+                en: "Soft Startup: Begin sensitive feedback with 'I feel' and appreciation rather than accusations.",
+                ar: "البداية اللطيفة: بدء الحوارات الحساسة بعبارات مودة وتقدير والتعبير عن المشاعر بدلاً من توجيه الاتهامات."
+            },
+            {
+                en: "One Topic at a Time: Resolve the immediate issue without bringing up the past or extended family matters.",
+                ar: "حصر النقاش في موضوع واحد: مناقشة مسألة واحدة محددة دون فتح ملفات الماضي أو إقحام مواقف سابقة."
+            }
+        ];
+
+        rules.forEach((rule, idx) => {
+            const item = document.createElement("div");
+            item.className = "fair-fighting-item";
+            item.innerHTML = `
+                <div class="fair-fighting-num">${idx + 1}</div>
+                <div class="manual-point-content" style="font-weight: 500;">
+                    ${isAr ? rule.ar : rule.en}
+                </div>
+            `;
+            dom.fairFightingContainer.appendChild(item);
+        });
+    }
+
+    // --- 9B. MULTI-FRAMEWORK INTERACTIVE SVG VISUALIZERS ---
+
+    // 1. Hartman Motive Spectrum Donut
+    function renderHartmanDonut(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const hA = traitsA.hartman || { breakdown: { red: 25, blue: 25, white: 25, yellow: 25 }, primary: "blue" };
+        const bA = hA.breakdown || { red: 25, blue: 25, white: 25, yellow: 25 };
+
+        const colors = {
+            red: { hex: "#ef4444", label: isAr ? "أحمر (قيادة وإنجاز)" : "Red (Power & Progress)" },
+            blue: { hex: "#3b82f6", label: isAr ? "أزرق (قرب وأصالة)" : "Blue (Intimacy & Depth)" },
+            white: { hex: "#94a3b8", label: isAr ? "أبيض (سلام ووضوح)" : "White (Peace & Clarity)" },
+            yellow: { hex: "#eab308", label: isAr ? "أصفر (حماس وبهجة)" : "Yellow (Fun & Passion)" }
+        };
+
+        const width = 240, height = 240;
+        const cx = 120, cy = 120, r = 80, strokeW = 26;
+        const circ = 2 * Math.PI * r;
+
+        let offset = 0;
+        const colorKeys = ["red", "blue", "white", "yellow"];
+
+        let pathsSvg = "";
+        colorKeys.forEach(k => {
+            const val = Math.max(3, bA[k] || 0);
+            const dashLen = (val / 100) * circ;
+            const dashOffset = -offset;
+            offset += dashLen;
+            pathsSvg += `
+                <circle class="chart-node" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[k].hex}" stroke-width="${strokeW}"
+                    stroke-dasharray="${dashLen} ${circ - dashLen}" stroke-dashoffset="${dashOffset}"
+                    transform="rotate(-90 ${cx} ${cy})">
+                    <title>${colors[k].label}: ${Math.round(val)}%</title>
+                </circle>
+            `;
+        });
+
+        const primaryColor = (hA.primary || "blue").toLowerCase();
+        const primaryHex = colors[primaryColor]?.hex || "#3b82f6";
+        const motiveName = hA.metadata ? (isAr ? hA.metadata.motive_ar : hA.metadata.motive_en) : primaryColor.toUpperCase();
+
+        const svg = `
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 190px; height: 190px;">
+                    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${strokeW}" />
+                    ${pathsSvg}
+                    <text x="${cx}" y="${cy - 6}" text-anchor="middle" fill="${primaryHex}" font-size="14" font-weight="800">${primaryColor.toUpperCase()}</text>
+                    <text x="${cx}" y="${cy + 12}" text-anchor="middle" fill="var(--text-secondary)" font-size="9" font-weight="600">${motiveName}</text>
+                </svg>
+                <div class="visual-legend">
+                    ${colorKeys.map(k => `
+                        <div class="legend-item" title="${colors[k].label}">
+                            <span class="legend-color-dot" style="background-color: ${colors[k].hex};"></span>
+                            <span>${isAr ? k.toUpperCase() : k.charAt(0).toUpperCase() + k.slice(1)}: ${Math.round(bA[k] || 0)}%</span>
+                        </div>
+                    `).join('')}
+                </div>
+                ${hA.metadata ? `
+                    <div style="font-size: 0.8rem; margin-top: 10px; color: var(--text-secondary); line-height: 1.4; text-align: center; max-width: 280px;">
+                        <strong>${isAr ? "الوقود العاطفي:" : "Core Fuel:"}</strong> ${isAr ? hA.metadata.fuel_ar : hA.metadata.fuel_en}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+        container.innerHTML = svg;
+    }
+
+    // 2. DISC Behavioral Rhythm & Tempo (2x2 Matrix)
+    function renderDiscQuadrantMap(container, discA, discB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const width = 260, height = 260;
+        const cx = 130, cy = 130;
+
+        const getCoords = (disc) => {
+            if (!disc) return { x: cx, y: cy };
+            const b = disc.breakdown || { D: 25, I: 25, S: 25, C: 25 };
+            const taskPeople = ((b.I + b.S) - (b.D + b.C)) / 100;
+            const fastSteady = ((b.D + b.I) - (b.S + b.C)) / 100;
+            const x = cx + taskPeople * 68;
+            const y = cy - fastSteady * 68;
+            return { x: Math.max(35, Math.min(225, x)), y: Math.max(35, Math.min(225, y)) };
+        };
+
+        const ptA = getCoords(discA);
+        const ptB = !isSingle ? getCoords(discB) : null;
+
+        let connectingLine = "";
+        if (ptB) {
+            connectingLine = `<line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />`;
+        }
+
+        const svg = `
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 210px; height: 210px;">
+                    <!-- Quadrant backgrounds -->
+                    <rect x="20" y="20" width="110" height="110" fill="rgba(239, 68, 68, 0.08)" rx="8" />
+                    <rect x="130" y="20" width="110" height="110" fill="rgba(234, 179, 8, 0.08)" rx="8" />
+                    <rect x="130" y="130" width="110" height="110" fill="rgba(16, 185, 129, 0.08)" rx="8" />
+                    <rect x="20" y="130" width="110" height="110" fill="rgba(59, 130, 246, 0.08)" rx="8" />
+
+                    <!-- Axes -->
+                    <line x1="20" y1="${cy}" x2="240" y2="${cy}" stroke="var(--border-color)" stroke-width="1.5" />
+                    <line x1="${cx}" y1="20" x2="${cx}" y2="240" stroke="var(--border-color)" stroke-width="1.5" />
+
+                    <!-- Quadrant labels -->
+                    <text x="32" y="42" fill="#ef4444" font-size="12" font-weight="800">D</text>
+                    <text x="228" y="42" fill="#eab308" font-size="12" font-weight="800" text-anchor="end">I</text>
+                    <text x="228" y="230" fill="#10b981" font-size="12" font-weight="800" text-anchor="end">S</text>
+                    <text x="32" y="230" fill="#3b82f6" font-size="12" font-weight="800">C</text>
+
+                    <!-- Axis descriptors -->
+                    <text x="${cx}" y="14" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر" : "Fast-Paced"}</text>
+                    <text x="${cx}" y="254" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / ثابت" : "Reflective"}</text>
+                    <text x="12" y="${cy + 3}" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="end">${isAr ? "المهام" : "Task"}</text>
+                    <text x="248" y="${cy + 3}" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="start">${isAr ? "الناس" : "People"}</text>
+
+                    ${connectingLine}
+
+                    <!-- Point A -->
+                    <g class="chart-node">
+                        <circle cx="${ptA.x}" cy="${ptA.y}" r="8" fill="#10b981" stroke="#fff" stroke-width="2" />
+                        <text x="${ptA.x}" y="${ptA.y - 12}" text-anchor="middle" fill="#10b981" font-size="9" font-weight="800">${nameA || "A"}</text>
+                    </g>
+
+                    ${ptB ? `
+                        <g class="chart-node">
+                            <circle cx="${ptB.x}" cy="${ptB.y}" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2" />
+                            <text x="${ptB.x}" y="${ptB.y - 12}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="800">${nameB || "B"}</text>
+                        </g>
+                    ` : ''}
+                </svg>
+                <div style="font-size: 0.82rem; margin-top: 8px; color: var(--text-secondary); text-align: center;">
+                    <strong>${nameA}:</strong> ${discA?.type || "D"} (${isAr ? (discA?.pace_ar || "") : (discA?.pace || "")})
+                    ${!isSingle ? `<br><strong>${nameB}:</strong> ${discB?.type || "S"} (${isAr ? (discB?.pace_ar || "") : (discB?.pace || "")})` : ''}
+                </div>
+            </div>
+        `;
+        container.innerHTML = svg;
+    }
+
+    // 3. Birkman Tri-Layer Iceberg Cross-Section
+    function renderBirkmanIceberg(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const bA = traitsA.birkman || {};
+        const bB = traitsB?.birkman || {};
+
+        const svg = `
+            <div style="width: 100%; max-width: 520px; margin: 0 auto;">
+                <svg class="interactive-svg" viewBox="0 0 500 240" style="width: 100%; height: auto;">
+                    <defs>
+                        <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#f0f9ff" stop-opacity="0.8"/>
+                            <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.5"/>
+                        </linearGradient>
+                        <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
+                            <stop offset="50%" stop-color="#0369a1" stop-opacity="0.6"/>
+                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                        </linearGradient>
+                        <linearGradient id="iceTip" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#e2e8f0"/>
+                        </linearGradient>
+                        <linearGradient id="iceDeep" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8"/>
+                            <stop offset="60%" stop-color="#0284c7"/>
+                            <stop offset="100%" stop-color="#1e3a8a"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Sky & Sea Backgrounds -->
+                    <rect x="0" y="0" width="500" height="70" fill="url(#skyGrad)" rx="8" />
+                    <rect x="0" y="70" width="500" height="170" fill="url(#seaGrad)" rx="8" />
+
+                    <!-- Iceberg Tip (Visible) -->
+                    <polygon points="250,15 200,70 300,70" fill="url(#iceTip)" stroke="#cbd5e1" stroke-width="1.5" />
+
+                    <!-- Waterline Wave -->
+                    <path d="M0,70 Q62,66 125,70 T250,70 T375,70 T500,70" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4 2" />
+
+                    <!-- Iceberg Submerged Base -->
+                    <polygon points="200,70 155,145 185,225 315,225 345,145 300,70" fill="url(#iceDeep)" opacity="0.85" stroke="#0ea5e9" stroke-width="1.5" />
+
+                    <!-- Level Labels for Person A -->
+                    <rect x="15" y="20" width="155" height="32" rx="6" fill="rgba(255,255,255,0.92)" stroke="#94a3b8" stroke-width="1" />
+                    <text x="23" y="34" font-size="8.5" font-weight="800" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
+                    <text x="23" y="46" font-size="8" font-weight="600" fill="#0284c7">${nameA}: ${bA.usual_style || "Assertive"}</text>
+
+                    <rect x="15" y="105" width="155" height="32" rx="6" fill="rgba(15,23,42,0.85)" stroke="#38bdf8" stroke-width="1" />
+                    <text x="23" y="119" font-size="8.5" font-weight="800" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
+                    <text x="23" y="131" font-size="8" font-weight="600" fill="#e2e8f0">${nameA}: ${bA.underlying_need || "Empathy"}</text>
+
+                    <rect x="15" y="180" width="155" height="32" rx="6" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1" />
+                    <text x="23" y="194" font-size="8.5" font-weight="800" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Derailer"}</text>
+                    <text x="23" y="206" font-size="8" font-weight="600" fill="#fca5a5">${nameA}: ${bA.stress_trigger || "Withdrawal"}</text>
+
+                    ${!isSingle ? `
+                        <!-- Person B Callouts -->
+                        <rect x="330" y="20" width="155" height="32" rx="6" fill="rgba(255,255,255,0.92)" stroke="#f59e0b" stroke-width="1" />
+                        <text x="338" y="34" font-size="8.5" font-weight="800" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
+                        <text x="338" y="46" font-size="8" font-weight="600" fill="#334155">${bB.usual_style || "Reflective"}</text>
+
+                        <rect x="330" y="105" width="155" height="32" rx="6" fill="rgba(15,23,42,0.85)" stroke="#f59e0b" stroke-width="1" />
+                        <text x="338" y="119" font-size="8.5" font-weight="800" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
+                        <text x="338" y="131" font-size="8" font-weight="600" fill="#e2e8f0">${bB.underlying_need || "Freedom"}</text>
+
+                        <rect x="330" y="180" width="155" height="32" rx="6" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1" />
+                        <text x="338" y="194" font-size="8.5" font-weight="800" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
+                        <text x="338" y="206" font-size="8" font-weight="600" fill="#fca5a5">${bB.stress_trigger || "Demanding"}</text>
+                    ` : ''}
+                </svg>
+            </div>
+        `;
+        container.innerHTML = svg;
+    }
+
+    // 4. Attachment Security 2D Coordinate Field (ECR)
+    function renderAttachmentCoordinateMap(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const width = 260, height = 260;
+        const cx = 130, cy = 130;
+
+        const getCoords = (traits) => {
+            if (!traits) return { x: cx, y: cy };
+            const ecr = traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
+            const anx = Math.max(5, Math.min(95, ecr.anxiety_score || 30));
+            const avoid = Math.max(5, Math.min(95, ecr.avoidance_score || 30));
+            // x: anxiety (0 left to 100 right), y: avoidance (0 bottom to 100 top)
+            const x = 30 + (anx / 100) * 200;
+            const y = 230 - (avoid / 100) * 200;
+            return { x, y };
+        };
+
+        const ptA = getCoords(traitsA);
+        const ptB = !isSingle ? getCoords(traitsB) : null;
+
+        const svg = `
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 210px; height: 210px;">
+                    <!-- 4 Quadrants -->
+                    <rect x="25" y="130" width="105" height="105" fill="rgba(16, 185, 129, 0.1)" rx="6" /> <!-- Secure -->
+                    <rect x="130" y="130" width="105" height="105" fill="rgba(245, 158, 11, 0.1)" rx="6" /> <!-- Anxious -->
+                    <rect x="25" y="25" width="105" height="105" fill="rgba(59, 130, 246, 0.1)" rx="6" /> <!-- Avoidant -->
+                    <rect x="130" y="25" width="105" height="105" fill="rgba(239, 68, 68, 0.1)" rx="6" /> <!-- Fearful -->
+
+                    <!-- Axes -->
+                    <line x1="25" y1="${cy}" x2="235" y2="${cy}" stroke="var(--border-color)" stroke-width="1.5" />
+                    <line x1="${cx}" y1="25" x2="${cx}" y2="235" stroke="var(--border-color)" stroke-width="1.5" />
+
+                    <!-- Labels -->
+                    <text x="35" y="225" fill="#10b981" font-size="9" font-weight="800">${isAr ? "آمن (Secure)" : "SECURE"}</text>
+                    <text x="225" y="225" fill="#f59e0b" font-size="9" font-weight="800" text-anchor="end">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
+                    <text x="35" y="42" fill="#3b82f6" font-size="9" font-weight="800">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
+                    <text x="225" y="42" fill="#ef4444" font-size="9" font-weight="800" text-anchor="end">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
+
+                    <text x="${cx}" y="16" fill="var(--text-secondary)" font-size="7.5" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
+                    <text x="245" y="${cy + 3}" fill="var(--text-secondary)" font-size="7.5" font-weight="700" text-anchor="start">${isAr ? "قلق" : "Anxiety"}</text>
+
+                    <!-- Point A -->
+                    <circle cx="${ptA.x}" cy="${ptA.y}" r="8" fill="#10b981" stroke="#fff" stroke-width="2" class="chart-node" />
+                    <text x="${ptA.x}" y="${ptA.y - 12}" text-anchor="middle" fill="#10b981" font-size="9" font-weight="800">${nameA}</text>
+
+                    ${ptB ? `
+                        <line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="3 3" />
+                        <circle cx="${ptB.x}" cy="${ptB.y}" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2" class="chart-node" />
+                        <text x="${ptB.x}" y="${ptB.y - 12}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="800">${nameB}</text>
+                    ` : ''}
+                </svg>
+                <div style="font-size: 0.8rem; margin-top: 8px; color: var(--text-secondary); text-align: center;">
+                    ${nameA}: <strong>${traitsA.attachment?.primary?.toUpperCase()}</strong>
+                    ${!isSingle ? ` | ${nameB}: <strong>${traitsB.attachment?.primary?.toUpperCase()}</strong>` : ''}
+                </div>
+            </div>
+        `;
+        container.innerHTML = svg;
+    }
+
+    // 5. FIRO-B Interpersonal Exchange (Control & Affection)
+    function renderFiroExchange(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const fA = traitsA.firo_b || { control_expressed: 50, control_wanted: 50, affection_expressed: 50, affection_wanted: 50 };
+        const fB = traitsB?.firo_b || { control_expressed: 50, control_wanted: 50, affection_expressed: 50, affection_wanted: 50 };
+
+        const makeBar = (label, valA, valB, color) => `
+            <div style="margin-bottom: 12px; width: 100%;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px;">
+                    <span>${label}</span>
+                    <span>${nameA}: ${valA}% ${!isSingle ? `| ${nameB}: ${valB}%` : ''}</span>
+                </div>
+                <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; display: flex;">
+                    <div style="width: ${valA}%; background: ${color}; height: 100%; opacity: 0.9;"></div>
+                </div>
+                ${!isSingle ? `
+                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; margin-top: 3px;">
+                        <div style="width: ${valB}%; background: #f59e0b; height: 100%;"></div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+
+        const wrapper = document.createElement("div");
+        wrapper.style.cssText = "width: 100%; max-width: 280px; text-align: left;";
+        if (isAr) wrapper.style.textAlign = "right";
+
+        wrapper.innerHTML = `
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-color); margin-bottom: 12px; text-align: center;">
+                ${isAr ? "موازين المبادرة والاحتياج في العلاقة" : "Expressed Initiation vs. Wanted Reciprocity"}
+            </div>
+            ${makeBar(isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", fA.control_expressed, fB.control_expressed, "#3b82f6")}
+            ${makeBar(isAr ? "الحاجة لتوجيه الشريك (Control Wanted)" : "Receptivity to Guidance (Wanted)", fA.control_wanted, fB.control_wanted, "#8b5cf6")}
+            ${makeBar(isAr ? "المبادرة العاطفية والتعبير (Affection Expressed)" : "Affection Expression", fA.affection_expressed, fB.affection_expressed, "#ec4899")}
+            ${makeBar(isAr ? "الاحتياج للتعبير العاطفي (Affection Wanted)" : "Affection Craved", fA.affection_wanted, fB.affection_wanted, "#10b981")}
+        `;
+        container.appendChild(wrapper);
+    }
+
+    // 6. Gottman Emotional Safety & Four Horsemen Risk Gauge
+    function renderGottmanSafetyGauge(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const gA = traitsA.gottman_safety || { emotional_safety_index: 85, four_horsemen_risk: { criticism: 10, defensiveness: 15, stonewalling: 10, contempt: 5 } };
+        const gB = traitsB?.gottman_safety || { emotional_safety_index: 80, four_horsemen_risk: { criticism: 15, defensiveness: 20, stonewalling: 15, contempt: 5 } };
+
+        const safetyScore = isSingle ? gA.emotional_safety_index : Math.round((gA.emotional_safety_index + gB.emotional_safety_index) / 2);
+        const risks = gA.four_horsemen_risk || {};
+
+        const makeRiskRow = (label, val, max = 100) => {
+            const color = val > 40 ? "#ef4444" : (val > 25 ? "#f59e0b" : "#10b981");
+            return `
+                <div style="margin-bottom: 6px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 2px;">
+                        <span>${label}</span>
+                        <span style="color: ${color};">${val}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
+                        <div style="width: ${val}%; background: ${color}; height: 100%;"></div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const wrapper = document.createElement("div");
+        wrapper.style.cssText = "width: 100%; max-width: 280px; text-align: center;";
+        wrapper.innerHTML = `
+            <div style="display: inline-block; position: relative; margin-bottom: 12px;">
+                <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" />
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="${safetyScore > 75 ? "#10b981" : "#f59e0b"}" stroke-width="8"
+                        stroke-dasharray="${(safetyScore / 100) * 264} 264" stroke-dashoffset="0" transform="rotate(-90 50 50)" />
+                    <text x="50" y="55" font-size="18" font-weight="800" text-anchor="middle" fill="var(--text-primary)">${safetyScore}%</text>
+                </svg>
+                <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-top: 2px;">
+                    ${isAr ? "مؤشر الأمان العاطفي" : "Emotional Safety Index"}
+                </div>
+            </div>
+            <div style="text-align: left; margin-top: 8px;">
+                <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-align: center;">
+                    ${isAr ? "رادار فرسان الهلاك الأربعة (Gottman)" : "Four Horsemen Risk Monitors"}
+                </div>
+                ${makeRiskRow(isAr ? "النقد واللوم (Criticism)" : "Criticism Tendency", risks.criticism || 15)}
+                ${makeRiskRow(isAr ? "الدفاعية والتبرير (Defensiveness)" : "Defensiveness", risks.defensiveness || 20)}
+                ${makeRiskRow(isAr ? "الانعزال والجدار الصامت (Stonewalling)" : "Stonewalling", risks.stonewalling || 15)}
+                ${makeRiskRow(isAr ? "الازدراء والتقليل (Contempt)" : "Contempt (Toxic)", risks.contempt || 5)}
+            </div>
+        `;
+        container.appendChild(wrapper);
+    }
+
+    // 7. Interactive Dyadic Conflict Loop Flowchart
+    function renderDyadicConflictLoop(container, report, profileA, profileB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (!profileB) {
+            container.innerHTML = `<p style="font-size: 0.88rem; color: var(--text-secondary);">${isAr ? "متاح في تقارير المقارنة الزوجية الثنائية." : "Active in dyadic 2-profile comparison mode."}</p>`;
+            return;
+        }
+
+        const traitsA = profileA.calculated_personality;
+        const traitsB = profileB.calculated_personality;
+
+        const loopSteps = [
+            {
+                type: "trigger",
+                title: isAr ? `1. شرارة الخلاف: التباين في أسلوب الحوار` : `1. The Spark: Pace & Delivery Discrepancy`,
+                desc: isAr 
+                    ? `عندما يبادر ${profileA.owner_name} بأسلوب مباشر أو نبرة سريعة في لحظة انشغال أو إرهاق.`
+                    : `When ${profileA.owner_name} uses a direct, urgent tone while discussing plans or concerns.`
+            },
+            {
+                type: "need",
+                title: isAr ? `2. جرس الإنذار الخفي: جرح الاحتياج` : `2. The Unspoken Alarm: Threatened Need`,
+                desc: isAr
+                    ? `يشعر ${profileB.owner_name} بأن احتياجه لـ (${traitsB.birkman?.underlying_need || "الهدوء والتقدير"}) مهدد، مما يولد توتراً داخلياً صامتاً.`
+                    : `${profileB.owner_name}'s underlying need for (${traitsB.birkman?.underlying_need || "freedom and empathy"}) feels cornered or invalidated.`
+            },
+            {
+                type: "reaction",
+                title: isAr ? `3. ردة الفعل الدفاعية: التراجع أو الاحتداد` : `3. The Defensive Reflex`,
+                desc: isAr
+                    ? `يفعل ${profileB.owner_name} نمط التوتر (${traitsB.birkman?.stress_trigger || "الانعزال أو المقاومة"})، مما يربك الطرف الآخر.`
+                    : `${profileB.owner_name} activates the stress derailer (${traitsB.birkman?.stress_trigger || "withdrawal / quiet defiance"}).`
+            },
+            {
+                type: "reaction",
+                title: isAr ? `4. دورة التصعيد التفاعلي` : `4. The Escalation Loop`,
+                desc: isAr
+                    ? `يشعر ${profileA.owner_name} بعدم الاستجابة، فيرفع وتيرة الحزم، مما يعزز انغلاق الطرف الثاني.`
+                    : `${profileA.owner_name} perceives the silence as disinterest and pushes harder, deepening the withdrawal.`
+            },
+            {
+                type: "breaker",
+                title: isAr ? `5. قاطع الدائرة وقاعدة التهدئة (Circuit Breaker)` : `5. The Circuit Breaker & Antidote`,
+                desc: isAr
+                    ? `التوقف فوراً لمدة 20 دقيقة مع التأكيد بالقول: "أنا أحترمك وأحبك، لنأخذ استراحة ونكمل بهدوء".`
+                    : `Execute the 20-minute de-escalation timeout with emotional reassurance: "I value us; let's pause and resume calmly."`
+            }
+        ];
+
+        const loopWrapper = document.createElement("div");
+        loopWrapper.className = "conflict-loop-flow";
+
+        loopSteps.forEach((step, idx) => {
+            const card = document.createElement("div");
+            card.className = "conflict-step-card";
+            card.innerHTML = `
+                <div class="conflict-step-num ${step.type}">${idx + 1}</div>
+                <div class="conflict-step-body">
+                    <h5>${step.title}</h5>
+                    <p>${step.desc}</p>
+                </div>
+            `;
+            loopWrapper.appendChild(card);
+        });
+
+        container.appendChild(loopWrapper);
     }
 
     // --- 10. LIGHTWEIGHT CUSTOM SVG GRAPHICS ---

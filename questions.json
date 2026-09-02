@@ -21,7 +21,11 @@
         "arabic": "حضور تجمع اجتماعي حيوي أو جمعة عائلية/استراحة مع الأصدقاء.",
         "trait_scores": {
           "extroversion": 2,
-          "mbti_e": 2
+          "mbti_e": 2,
+          "disc_i": 1.5,
+          "firo_exp_inc": 1.5,
+          "hartman_yellow": 1.2,
+          "birkman_usual_social": 1.5
         }
       },
       {
@@ -31,7 +35,11 @@
         "trait_scores": {
           "extroversion": 0.5,
           "mbti_e": 0.5,
-          "mbti_i": 0.5
+          "mbti_i": 0.5,
+          "disc_i": 1.5,
+          "firo_exp_inc": 1.5,
+          "hartman_yellow": 1.2,
+          "birkman_usual_social": 1.5
         }
       },
       {
@@ -40,7 +48,10 @@
         "arabic": "البقاء في المنزل بمفردي في هدوء تام، للاسترخاء أو القراءة أو مشاهدة عمل مفضل.",
         "trait_scores": {
           "extroversion": -1.5,
-          "mbti_i": 2
+          "mbti_i": 2,
+          "disc_c": 1.2,
+          "hartman_white": 1.2,
+          "birkman_need_freedom": 1.5
         }
       }
     ]
@@ -103,7 +114,12 @@
         "arabic": "تحليل الموقف بعقلانية ومنطقية، تشخيص مواضع الخلل، وتقديم حلول عملية مباشرة.",
         "trait_scores": {
           "mbti_t": 2,
-          "agreeableness": -0.5
+          "agreeableness": -0.5,
+          "disc_d": 1.5,
+          "hartman_red": 1.5,
+          "birkman_usual_assertive": 1.5,
+          "firo_exp_ctrl": 1.2,
+          "schwartz_achievement": 1.2
         }
       },
       {
@@ -112,7 +128,15 @@
         "arabic": "الاحتواء والتعاطف العاطفي الصادق، وتطييب خاطره وطمأنته قبل مناقشة أي أسباب.",
         "trait_scores": {
           "mbti_f": 2,
-          "agreeableness": 1.5
+          "agreeableness": 1.5,
+          "disc_s": 1.5,
+          "hartman_blue": 1.5,
+          "birkman_need_empathy": 1.5,
+          "birkman_usual_supportive": 1.5,
+          "firo_exp_aff": 1.2,
+          "attachment_secure": 1,
+          "schwartz_benevolence": 1.5,
+          "gottman_repair_receptivity": 1.5
         }
       }
     ]
@@ -139,7 +163,12 @@
         "arabic": "تنظيم دقيق مع مواعيد محددة وحجوزات مسبقة وخطط واضحة تعطي شعوراً بالاطمئنان.",
         "trait_scores": {
           "mbti_j": 2,
-          "conscientiousness": 1.5
+          "conscientiousness": 1.5,
+          "disc_c": 1.5,
+          "hartman_red": 1,
+          "birkman_need_structure": 1.5,
+          "birkman_usual_structured": 1.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -148,7 +177,10 @@
         "arabic": "عفوية ومرونة تامة، وترك الخيارات مفتوحة للتكيف مع المزاج والفرص اللحظية.",
         "trait_scores": {
           "mbti_p": 2,
-          "conscientiousness": -1
+          "conscientiousness": -1,
+          "hartman_yellow": 1.5,
+          "schwartz_hedonism": 1.5,
+          "schwartz_self_direction": 1.2
         }
       }
     ]
@@ -239,7 +271,10 @@
         "arabic": "السكن في جناح ملحق بفيلا العائلة خيار ممتاز؛ يعزز صلة الرحم ويوفر تكاليف المعيشة.",
         "trait_scores": {
           "ideology_traditionalism": 2,
-          "ideology_liberalism": -1
+          "ideology_liberalism": -1,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5,
+          "schwartz_self_direction": 2.5
         }
       },
       {
@@ -248,7 +283,10 @@
         "arabic": "مقبول كحل مؤقت لمدة سنة أو سنتين كحد أقصى مع التزام بالانتقال إلى مسكن مستقل.",
         "trait_scores": {
           "ideology_traditionalism": 0.5,
-          "ideology_liberalism": 0.5
+          "ideology_liberalism": 0.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5,
+          "schwartz_self_direction": 2.5
         }
       },
       {
@@ -257,7 +295,10 @@
         "arabic": "الاستقلال التام في منزل منفصل من أول يوم شرط أساسي لا تنازل فيه لحفظ الخصوصية وبناء الأسرة.",
         "trait_scores": {
           "ideology_traditionalism": -1.5,
-          "ideology_liberalism": 2
+          "ideology_liberalism": 2,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5,
+          "schwartz_self_direction": 2.5
         }
       }
     ]
@@ -284,7 +325,9 @@
         "arabic": "الزيارات العائلية الأسبوعية أولوية قصوى ودائمة تسبق أي برامج ترفيهية خاصة.",
         "trait_scores": {
           "ideology_traditionalism": 2,
-          "family_influence": 1.5
+          "family_influence": 1.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -293,7 +336,10 @@
         "arabic": "توازن منصف: تخصيص يوم للعائلة ويوم آخر محمي وخاص تماماً للزوجين للاسترخاء.",
         "trait_scores": {
           "ideology_traditionalism": 0.5,
-          "ideology_liberalism": 0.5
+          "ideology_liberalism": 0.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5,
+          "schwartz_self_direction": 2.5
         }
       },
       {
@@ -302,7 +348,8 @@
         "arabic": "استقلالية الزوجين أولاً، والزيارات العائلية تتم بمرونة وبحسب الرغبة والوقت المتاح.",
         "trait_scores": {
           "ideology_liberalism": 1.5,
-          "boundaries_independence": 1.5
+          "boundaries_independence": 1.5,
+          "schwartz_self_direction": 2.5
         }
       }
     ]
@@ -338,7 +385,9 @@
         "arabic": "نموذج مرن: الزوج يتكفل بالأساسيات (السكن والمقاضي)، ومشاركة الزوجة اختيارية في الكماليات والسفر.",
         "trait_scores": {
           "ideology_traditionalism": 1,
-          "ideology_capitalism": 0.5
+          "ideology_capitalism": 0.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -347,7 +396,9 @@
         "arabic": "النموذج التقليدي الكامل (النفقة الواجبة): الزوج يتحمل كافة التكاليف، ومال الزوجة خاص بها بالكامل.",
         "trait_scores": {
           "ideology_traditionalism": 2,
-          "ideology_feminism": -1
+          "ideology_feminism": -1,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       }
     ]
@@ -419,7 +470,8 @@
         "arabic": "أتقبل بيئات العمل العصرية بثقة تامة، وأدعم التواصل المهني الفعال وحضور فعاليات العمل.",
         "trait_scores": {
           "ideology_liberalism": 2,
-          "trust_jealousy": -1
+          "trust_jealousy": -1,
+          "schwartz_self_direction": 2.5
         }
       },
       {
@@ -428,7 +480,10 @@
         "arabic": "مقبول مع الالتزام التام بالحدود المهنية واللباقة والوضوح والشفافية بين الزوجين.",
         "trait_scores": {
           "ideology_traditionalism": 0.5,
-          "ideology_liberalism": 0.5
+          "ideology_liberalism": 0.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5,
+          "schwartz_self_direction": 2.5
         }
       },
       {
@@ -437,7 +492,9 @@
         "arabic": "أفضل البيئات المحافظة جداً والحد الأدنى الضروري من التعامل لحفظ الراحة والغيرة الزوجية.",
         "trait_scores": {
           "ideology_traditionalism": 2,
-          "trust_jealousy": 1.5
+          "trust_jealousy": 1.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       }
     ]
@@ -464,7 +521,11 @@
         "arabic": "بشكل متكرر ومستمر (عدة مرات أسبوعياً)؛ أحب البيت العامر بالضيافة والمجالس الحية.",
         "trait_scores": {
           "social_frequency": 2,
-          "extroversion": 1.5
+          "extroversion": 1.5,
+          "disc_i": 1.5,
+          "firo_exp_inc": 1.5,
+          "hartman_yellow": 1.2,
+          "birkman_usual_social": 1.5
         }
       },
       {
@@ -481,7 +542,10 @@
         "arabic": "نادراً؛ أعتبر المنزل ملاذاً شخصياً للراحة والهدوء، وأفضل لقاء المعارف في الخارج.",
         "trait_scores": {
           "social_frequency": -1.5,
-          "extroversion": -1
+          "extroversion": -1,
+          "disc_c": 1.2,
+          "hartman_white": 1.2,
+          "birkman_need_freedom": 1.5
         }
       }
     ]
@@ -526,7 +590,9 @@
         "arabic": "يمتلك الزوج حق القيادة وحسم القرار النهائي (القوامة) لتحريك الأمور وتحمل المسؤولية.",
         "trait_scores": {
           "ideology_traditionalism": 2,
-          "ideology_feminism": -1.5
+          "ideology_feminism": -1.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       }
     ]
@@ -588,7 +654,9 @@
         "arabic": "مستعد لتحمل تكاليف حفل زفاف فخم ومهر مرتفع تكريماً للعروس ومواكبة للوجاهة الاجتماعية.",
         "trait_scores": {
           "ideology_traditionalism": 1.5,
-          "money_saver": -1
+          "money_saver": -1,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -597,7 +665,12 @@
         "arabic": "أفضل احتفالاً معتدلاً وذكياً، وتوجيه الجزء الأكبر من الميزانية لتأثيث المنزل والاستثمار.",
         "trait_scores": {
           "money_saver": 1.5,
-          "conscientiousness": 1
+          "conscientiousness": 1,
+          "disc_c": 1.5,
+          "hartman_red": 1,
+          "birkman_need_structure": 1.5,
+          "birkman_usual_structured": 1.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -606,7 +679,8 @@
         "arabic": "أؤمن بحفل عائلي مصغر ومختصر لبدء الحياة الزوجية دون أي أعباء مالية أو ديون.",
         "trait_scores": {
           "money_saver": 2,
-          "ideology_liberalism": 1
+          "ideology_liberalism": 1,
+          "schwartz_self_direction": 2.5
         }
       }
     ]
@@ -633,7 +707,9 @@
         "arabic": "حفل الزفاف المميز والمهر اللائق تعبير أساسي عن التقدير والفرحة والكرامة الاجتماعية.",
         "trait_scores": {
           "ideology_traditionalism": 1.5,
-          "money_saver": -1
+          "money_saver": -1,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -642,7 +718,12 @@
         "arabic": "أفضل زفافاً أنيقاً ومعتدلاً، مع توفير الميزانية للسفر وشهر العسل وتجهيز المنزل.",
         "trait_scores": {
           "money_saver": 1.5,
-          "conscientiousness": 1
+          "conscientiousness": 1,
+          "disc_c": 1.5,
+          "hartman_red": 1,
+          "birkman_need_structure": 1.5,
+          "birkman_usual_structured": 1.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -651,7 +732,8 @@
         "arabic": "الاحتفال البسيط والمختصر أكثر راحة وعصرية، ويبعد الزواج عن الإسراف والتكلف.",
         "trait_scores": {
           "money_saver": 2,
-          "ideology_liberalism": 1
+          "ideology_liberalism": 1,
+          "schwartz_self_direction": 2.5
         }
       }
     ]
@@ -678,7 +760,13 @@
         "arabic": "أبادر بحوار هادئ وودود لإعادة تنظيم المسؤوليات والاستعانة بمساعدة خارجية إن لزم.",
         "trait_scores": {
           "conflict_collaborating": 2,
-          "communication_assertive": 1.5
+          "communication_assertive": 1.5,
+          "tki_collaborating": 2.5,
+          "attachment_secure": 1.5,
+          "gottman_repair_receptivity": 2,
+          "hartman_blue": 1,
+          "birkman_usual_assertive": 1.5,
+          "firo_exp_ctrl": 1.2
         }
       },
       {
@@ -687,7 +775,12 @@
         "arabic": "أفضل الصمت وإنجاز المهام بنفسي مع كتمان العتب تجنباً لافتعال مشادة في المنزل.",
         "trait_scores": {
           "conflict_avoiding": 1.5,
-          "communication_passive": 1.5
+          "communication_passive": 1.5,
+          "tki_avoiding": 2.5,
+          "hartman_white": 3.5,
+          "gottman_stonewalling_risk": 1.8,
+          "birkman_stress_withdrawing": 3.2,
+          "disc_s": 1.2
         }
       },
       {
@@ -696,7 +789,13 @@
         "arabic": "أعبر عن رفضي فوراً وبوضوح لضمان تصحيح الخلل فوراً وعدم تكرار الإهمال.",
         "trait_scores": {
           "conflict_competing": 1.5,
-          "communication_assertive": 1
+          "communication_assertive": 1,
+          "tki_competing": 2.5,
+          "disc_d": 1.5,
+          "hartman_red": 2,
+          "firo_exp_ctrl": 3.2,
+          "gottman_defensiveness_risk": 1.5,
+          "birkman_usual_assertive": 1.5
         }
       }
     ]
@@ -732,7 +831,9 @@
         "arabic": "أشارك الدروس والعبر بكل نضج وموضوعية عند الحاجة، مع حفظ الخصوصية وبناء الثقة.",
         "trait_scores": {
           "emotional_regulation": 1.5,
-          "communication_assertive": 1.5
+          "communication_assertive": 1.5,
+          "birkman_usual_assertive": 1.5,
+          "firo_exp_ctrl": 1.2
         }
       },
       {
@@ -741,7 +842,10 @@
         "arabic": "أشعر بالحذر والحاجة للمزيد من الوقت والأمان العاطفي قبل فتح قلبي والاندماج الكامل.",
         "trait_scores": {
           "attachment_avoidant": 1.5,
-          "trust_past": -1
+          "trust_past": -1,
+          "birkman_need_freedom": 2,
+          "gottman_stonewalling_risk": 1.5,
+          "firo_wnt_aff": -1
         }
       }
     ]
@@ -768,7 +872,13 @@
         "arabic": "أوضح ما شعرت به بهدوء ووضوح في الوقت المناسب معبراً عن مشاعري دون هجوم.",
         "trait_scores": {
           "communication_assertive": 2,
-          "conflict_collaborating": 1.5
+          "conflict_collaborating": 1.5,
+          "tki_collaborating": 2.5,
+          "attachment_secure": 1.5,
+          "gottman_repair_receptivity": 2,
+          "hartman_blue": 1,
+          "birkman_usual_assertive": 1.5,
+          "firo_exp_ctrl": 1.2
         }
       },
       {
@@ -777,7 +887,12 @@
         "arabic": "ألتزم الصمت والبرود أو ألمح بضيق غير مباشر حتى ينتبه بنفسه ويسأل عما بي.",
         "trait_scores": {
           "communication_passive_aggressive": 2,
-          "attachment_anxious": 1
+          "attachment_anxious": 1,
+          "gottman_criticism_risk": 2.7,
+          "gottman_defensiveness_risk": 1.5,
+          "birkman_stress_defensive": 1.8,
+          "birkman_need_esteem": 2,
+          "firo_wnt_aff": 2
         }
       },
       {
@@ -786,7 +901,12 @@
         "arabic": "أتجاهل الأمر وأكتم المشاعر في داخلي وأتصرف كأن شيئاً لم يحدث لتفادي المشاكل.",
         "trait_scores": {
           "communication_passive": 2,
-          "conflict_avoiding": 1.5
+          "conflict_avoiding": 1.5,
+          "tki_avoiding": 2.5,
+          "hartman_white": 3.5,
+          "gottman_stonewalling_risk": 1.8,
+          "birkman_stress_withdrawing": 3.2,
+          "disc_s": 1.2
         }
       }
     ]
@@ -813,7 +933,11 @@
         "arabic": "اقتراح استراحة قصيرة لتهدئة النفوس، مع التزام واضح ومؤكد بالعودة لحل الموضوع بهدوء.",
         "trait_scores": {
           "conflict_collaborating": 2,
-          "emotional_regulation": 2
+          "emotional_regulation": 2,
+          "tki_collaborating": 2.5,
+          "attachment_secure": 1.5,
+          "gottman_repair_receptivity": 2,
+          "hartman_blue": 1
         }
       },
       {
@@ -822,7 +946,12 @@
         "arabic": "الإصرار على مواصلة النقاش الحاد حتى نصل لنتيجة أو يعترف الطرف الآخر بالخطأ فوراً.",
         "trait_scores": {
           "conflict_competing": 2,
-          "emotional_regulation": -1
+          "emotional_regulation": -1,
+          "tki_competing": 2.5,
+          "disc_d": 1.5,
+          "hartman_red": 2,
+          "firo_exp_ctrl": 2,
+          "gottman_defensiveness_risk": 1.5
         }
       },
       {
@@ -831,7 +960,13 @@
         "arabic": "الانسحاب التام والصمت لأيام وتجنب فتح الموضوع مرة أخرى بأي شكل.",
         "trait_scores": {
           "conflict_avoiding": 2,
-          "attachment_avoidant": 1.5
+          "attachment_avoidant": 1.5,
+          "tki_avoiding": 2.5,
+          "hartman_white": 2,
+          "gottman_stonewalling_risk": 3.3,
+          "birkman_stress_withdrawing": 2,
+          "birkman_need_freedom": 2,
+          "firo_wnt_aff": -1
         }
       }
     ]
@@ -1011,7 +1146,10 @@
         "arabic": "أشعر بالقلق والريبة إذا كان الهاتف مغلقاً برمز سري أو مقلوباً، وأحتاج لتطمين صريح ومباشر.",
         "trait_scores": {
           "trust_jealousy": 2,
-          "attachment_anxious": 1.5
+          "attachment_anxious": 1.5,
+          "birkman_need_esteem": 2,
+          "firo_wnt_aff": 2,
+          "gottman_criticism_risk": 1.2
         }
       }
     ]
@@ -1083,7 +1221,12 @@
         "arabic": "المبادرة بتقديم حلول منطقية وخطوات سريعة لكيفية حل مشكلته والتغلب على الموقف.",
         "trait_scores": {
           "mbti_t": 1.5,
-          "emotional_empathy": 0.5
+          "emotional_empathy": 0.5,
+          "disc_d": 1.5,
+          "hartman_red": 1.5,
+          "birkman_usual_assertive": 1.5,
+          "firo_exp_ctrl": 1.2,
+          "schwartz_achievement": 1.2
         }
       },
       {
@@ -1092,7 +1235,10 @@
         "arabic": "إعطاؤه مساحة كاملة وتركه بمفرده في الغرفة حتى يتحسن مزاجه بمفرده.",
         "trait_scores": {
           "attachment_avoidant": 1,
-          "emotional_comforting": -0.5
+          "emotional_comforting": -0.5,
+          "birkman_need_freedom": 2,
+          "gottman_stonewalling_risk": 1.5,
+          "firo_wnt_aff": -1
         }
       }
     ]
@@ -1818,7 +1964,12 @@
         "arabic": "عناية فائقة: تمارين رياضية منتظمة، واهتمام دقيق بالهندام والأناقة والعناية بالمظهر.",
         "trait_scores": {
           "lifestyle_health": 2,
-          "conscientiousness": 1
+          "conscientiousness": 1,
+          "disc_c": 1.5,
+          "hartman_red": 1,
+          "birkman_need_structure": 1.5,
+          "birkman_usual_structured": 1.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -1911,7 +2062,9 @@
         "english": "Classic & conservative: Dignified, timeless traditional or formal attire with elegant modesty.",
         "arabic": "كلاسيكي ومحافظ: لباس وقور ومحتشم وأنيق يجمع بين الأصالة والهيبة والوقار.",
         "trait_scores": {
-          "ideology_traditionalism": 1.5
+          "ideology_traditionalism": 1.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -1953,7 +2106,9 @@
         "english": "Dignified, classically elegant, and tastefully modest reflecting maturity.",
         "arabic": "مظهر وقور وكلاسيكي ومحتشم يعكس الرزانة والذوق الرفيع والهيبة.",
         "trait_scores": {
-          "ideology_traditionalism": 1.5
+          "ideology_traditionalism": 1.5,
+          "schwartz_tradition": 2.5,
+          "schwartz_security": 1.5
         }
       },
       {
@@ -1962,6 +2117,302 @@
         "arabic": "مظهر عفوي وبسيط وطبيعي دون تكلف أو اهتمام بالماركات الاستعراضية.",
         "trait_scores": {
           "openness": 0
+        }
+      }
+    ]
+  },
+  {
+    "id": "q71",
+    "category": "Personality",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "hartman_core_motive",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: If you could ensure your home environment guarantees one fundamental quality above all else, which would it be?"
+    },
+    "arabic": {
+      "text": "سيناريو: إذا كان بإمكانك ضمان ميزة جوهرية واحدة في بيئة منزلك وحياتك الزوجية تفوق كل شيء، فماذا تختار؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "High ambition, tangible achievements, and an orderly, organized household where everyone excels.",
+        "arabic": "طموح عالٍ، إنجازات ملموسة، ونظام منزلي متقن يسعى فيه الجميع للتميز والنجاح.",
+        "trait_scores": {
+          "hartman_red": 3.5,
+          "disc_d": 2.5,
+          "birkman_usual_assertive": 2,
+          "birkman_need_structure": 2,
+          "schwartz_achievement": 2.5,
+          "firo_exp_ctrl": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Deep emotional closeness, heartfelt vulnerability, and feeling intensely loved, cherished, and understood.",
+        "arabic": "قرب عاطفي عميق، ومصارحة من القلب، وشعور غامر بالحب والاهتمام والاحتواء المتبادل.",
+        "trait_scores": {
+          "hartman_blue": 3.5,
+          "disc_s": 2,
+          "birkman_need_empathy": 3,
+          "firo_wnt_aff": 3,
+          "attachment_secure": 2,
+          "schwartz_benevolence": 2.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Absolute peace, complete absence of conflict, no drama, and a serene, low-pressure sanctuary.",
+        "arabic": "سلام مطلق، وخلو تام من الخلافات والمشاحنات، وهدوء وسكينة دون أي ضغوط نفسية.",
+        "trait_scores": {
+          "hartman_white": 3.5,
+          "disc_s": 2.5,
+          "birkman_need_freedom": 2.5,
+          "tki_avoiding": 1.5,
+          "firo_exp_ctrl": -1.5,
+          "schwartz_security": 2
+        }
+      },
+      {
+        "id": "opt4",
+        "english": "Laughter, spontaneous adventures, vibrant social energy, and keeping life exciting, playful, and fun.",
+        "arabic": "ضحك ومرح، ومغامرات عفوية، وطاقة اجتماعية متجددة تجعل الحياة اليومية ممتعة ومليئة بالبهجة.",
+        "trait_scores": {
+          "hartman_yellow": 3.5,
+          "disc_i": 3,
+          "birkman_usual_social": 2.5,
+          "firo_exp_inc": 2.5,
+          "schwartz_hedonism": 3,
+          "openness": 1.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q72",
+    "category": "Conflict",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "birkman_needs_stress",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When you are exhausted and your partner brings up an unexpected problem or task, what is your involuntary reaction?"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما تكون منهكاً تماماً ويطرح شريكك مشكلة غير متوقعة أو طلباً مفاجئاً، ما هو تصرفك العفوي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I shut down and go silent; I need them to give me space and not pressure me to talk immediately.",
+        "arabic": "أنغلق وألتزم الصمت التام؛ أحتاج منه أن يترك لي مساحة هادئة وألا يضغط عليّ للحديث فوراً.",
+        "trait_scores": {
+          "birkman_stress_withdrawing": 3,
+          "birkman_need_freedom": 2.5,
+          "gottman_stonewalling_risk": 2.5,
+          "hartman_white": 2,
+          "attachment_avoidant": 2,
+          "tki_avoiding": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I become blunt, impatient, and irritated; I demand they get straight to the point or handle it logically.",
+        "arabic": "أصبح حاداً وقليل الصبر؛ وأطلب منه الدخول في صلب الموضوع مباشرة أو حله بمنطقية دون تضخيم.",
+        "trait_scores": {
+          "birkman_stress_demanding": 3,
+          "birkman_usual_assertive": 2,
+          "disc_d": 2.5,
+          "hartman_red": 2.5,
+          "gottman_criticism_risk": 2,
+          "tki_competing": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I feel unappreciated and anxious; I need them to acknowledge my hard day before dumping issues on me.",
+        "arabic": "أشعر بعدم التقدير والقلق؛ وأحتاج منه أن يعترف بتعبي ومجهودي أولاً قبل طرح أي هموم.",
+        "trait_scores": {
+          "birkman_need_esteem": 3,
+          "birkman_stress_defensive": 2,
+          "attachment_anxious": 2.5,
+          "gottman_defensiveness_risk": 2,
+          "hartman_blue": 2
+        }
+      },
+      {
+        "id": "opt4",
+        "english": "I take a deep breath, validate their concern, and gently propose addressing it together over coffee after resting.",
+        "arabic": "آخذ نفساً عميقاً، وأقدر اهتمامه، ثم أقترح بلطف أن نناقش الأمر معاً بهدوء بعد أخذ قسط من الراحة.",
+        "trait_scores": {
+          "attachment_secure": 3,
+          "gottman_repair_receptivity": 3.5,
+          "tki_collaborating": 3,
+          "birkman_usual_supportive": 2.5,
+          "agreeableness": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "q73",
+    "category": "Decision making",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "firo_control_leadership",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: In managing major household decisions (relocation, major purchases, investments), what is your preferred dynamic?"
+    },
+    "arabic": {
+      "text": "سيناريو: في القرارات الكبرى للأسرة (السكن، الشراء الكبير، الاستثمار)، ما هو النمط الذي تفضله بينكما؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I prefer to take the lead in research and make the final call, keeping my partner informed and reassured.",
+        "arabic": "أفضل أن أتولى زمام البحث واتخاذ القرار النهائي بنفسي، مع إطلاع شريكي وطمأنته.",
+        "trait_scores": {
+          "firo_exp_ctrl": 3,
+          "firo_wnt_ctrl": -2,
+          "disc_d": 2.5,
+          "hartman_red": 2.5,
+          "birkman_usual_assertive": 2.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I want an absolute 50/50 consensus where neither of us moves forward without full mutual agreement.",
+        "arabic": "أريد توافقاً تاماً بنسبة 50/50، بحيث لا يخطو أي منا خطوة دون موافقة ورضا كامل من الطرفين.",
+        "trait_scores": {
+          "firo_exp_ctrl": 1,
+          "firo_wnt_ctrl": 1,
+          "tki_collaborating": 3,
+          "hartman_blue": 2,
+          "decision_consensus": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I prefer my partner to take the main responsibility for major logistics, as long as they consult me with respect.",
+        "arabic": "أفضل أن يتحمل شريكي المسؤولية الأساسية واللوجستية، طالما أنه يستشيرني باحترام ومودة.",
+        "trait_scores": {
+          "firo_wnt_ctrl": 3,
+          "firo_exp_ctrl": -1.5,
+          "disc_s": 2.5,
+          "birkman_need_structure": 2,
+          "hartman_white": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "q74",
+    "category": "Communication",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "gottman_repair_attempt",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: During a tense disagreement, your partner smiles gently, touches your arm, or uses light humor to break the tension. How do you respond?"
+    },
+    "arabic": {
+      "text": "سيناريو: أثناء نقاش محتدم ومشحون، ابتسم شريكك بلطف، أو لمس يدك، أو استخدم دعابة خفيفة لتلطيف الأجواء. كيف تتفاعل؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I immediately soften, smile back, and welcome the de-escalation; human connection matters more than winning.",
+        "arabic": "أهدأ فوراً وأبادله الابتسامة وأرحب بكسر التوتر؛ فدفء العلاقة أهم عندي بكثير من كسب النقاش.",
+        "trait_scores": {
+          "gottman_repair_receptivity": 4,
+          "attachment_secure": 3,
+          "hartman_blue": 2.5,
+          "tki_collaborating": 2.5,
+          "agreeableness": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I feel annoyed that they are not taking the issue seriously, pull away, and insist on finishing the argument.",
+        "arabic": "أتضايق وأشعر أنه لا يأخذ الموضوع بجدية، وأبتعد عنه مصرّاً على حسم المشكلة أولاً.",
+        "trait_scores": {
+          "gottman_repair_receptivity": -3,
+          "gottman_defensiveness_risk": 3,
+          "gottman_criticism_risk": 2.5,
+          "tki_competing": 2,
+          "birkman_stress_demanding": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I feel conflicted and stay cautious; I accept the gesture politely but remain guarded until facts are resolved.",
+        "arabic": "أشعر بالحيرة وأبقى حذراً؛ أقبل الإيماءة بتهذيب لكنني أظل متحفظاً حتى نتفق على التفاصيل.",
+        "trait_scores": {
+          "gottman_repair_receptivity": 1,
+          "disc_c": 2.5,
+          "hartman_white": 1.5,
+          "attachment_anxious": 1.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q75",
+    "category": "Lifestyle",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "schwartz_human_values",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When balancing family traditions, social expectations, and personal individuality, your ultimate allegiance lies with:"
+    },
+    "arabic": {
+      "text": "سيناريو: عند الموازنة بين تقاليد العائلة، وتوقعات المجتمع، واستقلاليتك الفردية، يكون ولاؤك الحاسم لـ:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Honoring our cultural heritage, familial customs, and time-tested social values above personal desires.",
+        "arabic": "إكرام عادات العائلة والتقاليد العريقة والواجبات الاجتماعية فوق الرغبات الفردية الآنية.",
+        "trait_scores": {
+          "schwartz_tradition": 3.5,
+          "schwartz_security": 2.5,
+          "ideology_traditionalism": 3,
+          "birkman_need_structure": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Protecting our nuclear couple bubble, personal freedom, and authenticity, even if it defies conventional expectations.",
+        "arabic": "حماية استقلالية الأسرة الصغيرة وحريتها وخصوصيتها، حتى لو تعارضت مع التوقعات السائدة.",
+        "trait_scores": {
+          "schwartz_self_direction": 3.5,
+          "birkman_need_freedom": 3,
+          "ideology_liberalism": 3,
+          "openness": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Serving and supporting our extended family and community with generosity and close interdependence.",
+        "arabic": "خدمة العائلة الممتدة والمجتمع بعطاء وتكافل وترابط وثيق في كل الظروف.",
+        "trait_scores": {
+          "schwartz_benevolence": 3.5,
+          "hartman_blue": 2.5,
+          "firo_exp_inc": 2.5,
+          "agreeableness": 2
         }
       }
     ]
