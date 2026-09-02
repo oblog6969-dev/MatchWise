@@ -35,7 +35,7 @@
                         <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
                         <circle cx="12" cy="12" r="4"></circle>
                     </svg>
-                    <span>DeepSeek Pro AI</span>
+                    <span data-i18n="ai_settings_btn">MatchWise AI</span>
                 </button>
                 
                 <!-- Dark Mode Toggle Button -->
@@ -224,15 +224,15 @@
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
                     <div>
-                        <h2>MatchWise Lite v2.0</h2>
-                        <p>Executive Multi-Framework Behavioral & Relationship Dossier</p>
+                        <h2 data-i18n="report_dossier_title">MatchWise Lite v2.5</h2>
+                        <p data-i18n="report_dossier_subtitle">Executive Multi-Framework Behavioral & Relationship Dossier</p>
                     </div>
                 </div>
 
                 <!-- EXECUTIVE SUMMARY & METADATA -->
                 <section class="story-chapter" id="reportSectionSummary">
                     <div class="chapter-header">
-                        <span class="chapter-badge">Executive Overview</span>
+                        <span class="chapter-badge" data-i18n="executive_overview">Executive Overview</span>
                         <h3 class="chapter-title" data-i18n="executive_summary">Executive Summary & Confidence</h3>
                     </div>
                     <div class="overall-index-gauge-container">
@@ -328,13 +328,13 @@
                     <!-- Interactive Visualizers: Hartman Spectrum Donut + DISC Quadrant Map -->
                     <div class="visual-grid-2col">
                         <div class="interactive-chart-card">
-                            <h4>Hartman Motive Spectrum (Fuel & Motives)</h4>
+                            <h4 data-i18n="hartman_card_title">Hartman Motive Spectrum (Fuel & Motives)</h4>
                             <div class="chart-center-wrapper" id="hartmanChartContainer">
                                 <!-- Dynamic SVG Donut -->
                             </div>
                         </div>
                         <div class="interactive-chart-card">
-                            <h4>DISC Behavioral Rhythm & Tempo (2x2 Matrix)</h4>
+                            <h4 data-i18n="disc_card_title">DISC Behavioral Rhythm & Tempo (2x2 Matrix)</h4>
                             <div class="chart-center-wrapper" id="discQuadrantContainer">
                                 <!-- Dynamic SVG 2x2 Quadrant -->
                             </div>
@@ -384,7 +384,7 @@
 
                     <!-- Interactive Visualizer: Birkman Iceberg Cross-Section -->
                     <div class="interactive-chart-card" style="margin-bottom: 24px;">
-                        <h4>The Tri-Layer Iceberg: Usual Style vs. Hidden Needs vs. Stress Reaction</h4>
+                        <h4 data-i18n="birkman_card_title">The Tri-Layer Iceberg: Usual Style vs. Hidden Needs vs. Stress Reaction</h4>
                         <div class="chart-center-wrapper" id="birkmanIcebergContainer">
                             <!-- Dynamic SVG Iceberg -->
                         </div>
@@ -406,13 +406,13 @@
 
                     <div class="visual-grid-2col">
                         <div class="interactive-chart-card">
-                            <h4>Attachment Security Field (Anxiety vs. Avoidance)</h4>
+                            <h4 data-i18n="attachment_card_title">Attachment Security Field (Anxiety vs. Avoidance)</h4>
                             <div class="chart-center-wrapper" id="attachmentGridContainer">
                                 <!-- Dynamic SVG 2D Coordinate Grid -->
                             </div>
                         </div>
                         <div class="interactive-chart-card">
-                            <h4>FIRO-B Interpersonal Exchange (Control & Affection)</h4>
+                            <h4 data-i18n="firo_card_title">FIRO-B Interpersonal Exchange (Control & Affection)</h4>
                             <div class="chart-center-wrapper" id="firoExchangeContainer">
                                 <!-- Dynamic SVG/HTML Reciprocal Scale -->
                             </div>
@@ -430,13 +430,13 @@
 
                     <div class="visual-grid-2col">
                         <div class="interactive-chart-card">
-                            <h4>Gottman Emotional Safety & Four Horsemen Risk Radar</h4>
+                            <h4 data-i18n="gottman_card_title">Gottman Emotional Safety & Four Horsemen Risk Radar</h4>
                             <div class="chart-center-wrapper" id="gottmanGaugeContainer">
                                 <!-- Dynamic SVG Meter -->
                             </div>
                         </div>
                         <div class="interactive-chart-card" id="dyadicConflictCard">
-                            <h4>Interactive Dyadic Conflict Cycle & Circuit Breaker</h4>
+                            <h4 data-i18n="conflict_card_title">Interactive Dyadic Conflict Cycle & Circuit Breaker</h4>
                             <div id="dyadicConflictLoopContainer">
                                 <!-- Dynamic Flowchart -->
                             </div>
@@ -537,7 +537,7 @@
             <h3 id="modalTitle">Modal Title</h3>
             <div id="modalBody" class="modal-body">
                 <!-- Static layout for Assessment Start Prompt -->
-                <div id="modalStartForm" class="modal-form-container" style="display: none; text-align: left;">
+                <div id="modalStartForm" class="modal-form-container" style="display: none; text-align: start;">
                     <div class="form-group" style="margin-bottom: 16px;">
                         <label for="modalInputName" data-i18n="enter_name" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Enter Profile Owner's Name:</label>
                         <input type="text" id="modalInputName" class="premium-text-input" placeholder="Owner Name" required style="width: 100%;">
@@ -560,22 +560,23 @@
                 </div>
 
                 <!-- AI Configuration Form -->
-                <div id="modalAiConfigForm" class="modal-form-container" style="display: none; text-align: left;">
+                <div id="modalAiConfigForm" class="modal-form-container" style="display: none; text-align: start;">
                     <div class="form-group" style="margin-bottom: 16px;">
-                        <label for="selectAiProvider" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">AI Provider:</label>
+                        <label for="selectAiProvider" data-i18n="ai_provider_label" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">AI Provider:</label>
                         <select id="selectAiProvider" class="premium-select" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 8px;">
-                            <option value="deepseek">DeepSeek Pro (Direct api.deepseek.com)</option>
-                            <option value="deepseek-ai/deepseek-v4-flash">DeepSeek V4 Flash (NVIDIA NIM)</option>
-                            <option value="gemini">Google Gemini 1.5</option>
+                            <option value="builtin">✨ MatchWise Autonomous AI (Free / No Key Required / Unlimited)</option>
+                            <option value="gemini">⚡ Google Gemini 1.5 Flash (Free Tier - 1,500 reqs/day)</option>
+                            <option value="groq">🚀 Groq Llama 3.3 70B (Fast Free Tier)</option>
+                            <option value="deepseek">🧠 DeepSeek Pro (Direct api.deepseek.com)</option>
+                            <option value="deepseek-ai/deepseek-v4-flash">NVIDIA NIM (DeepSeek V4 Flash)</option>
                             <option value="openai">OpenAI (GPT-4o Mini)</option>
-                            <option value="groq">Groq (Llama 3.1)</option>
                         </select>
                     </div>
                     <div class="form-group" style="margin-bottom: 16px;">
-                        <label for="inputAiApiKey" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">API Key:</label>
-                        <input type="password" id="inputAiApiKey" class="premium-text-input" placeholder="sk-..." style="width: 100%;">
-                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px;">
-                            Stored locally in your browser. Used for adaptive testing, question selection, and deep psychological consultation.
+                        <label for="inputAiApiKey" data-i18n="ai_key_label" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">API Key (Optional for Built-in AI):</label>
+                        <input type="password" id="inputAiApiKey" class="premium-text-input" placeholder="Leave blank for Built-in AI, or paste sk-..." style="width: 100%;">
+                        <p id="aiKeyHelpText" data-i18n="ai_key_help" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px;">
+                            MatchWise Autonomous AI works 100% free with unlimited requests and zero setup. External API keys are optional.
                         </p>
                     </div>
                 </div>

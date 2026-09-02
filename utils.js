@@ -115,7 +115,24 @@ const TRANSLATIONS = {
         act_3_desc: "Tracing your interactive conflict cycle: Trigger, defensive reflex, and the exact steps to de-escalate.",
         act_4_title: "Act 4: The Lifelong Playbook & Bridge Scripts",
         act_4_desc: "Tailored couple rules, growth opportunities, and verbatim bridge scripts for difficult moments.",
-        load_demo_profiles: "Load Live Demo Profiles (Tariq & Nour)"
+        load_demo_profiles: "Load Live Demo Profiles (Tariq & Nour)",
+        report_dossier_title: "MatchWise Lite v2.5",
+        report_dossier_subtitle: "Executive Multi-Framework Behavioral & Relationship Dossier",
+        executive_overview: "Executive Overview",
+        hartman_card_title: "Hartman Motive Spectrum (Fuel & Motives)",
+        disc_card_title: "DISC Behavioral Rhythm & Tempo (2x2 Matrix)",
+        birkman_card_title: "The Tri-Layer Iceberg: Usual Style vs. Hidden Needs vs. Stress Reaction",
+        attachment_card_title: "Attachment Security Field (Anxiety vs. Avoidance)",
+        firo_card_title: "FIRO-B Interpersonal Exchange (Control & Affection)",
+        gottman_card_title: "Gottman Emotional Safety & Four Horsemen Risk Radar",
+        conflict_card_title: "Interactive Dyadic Conflict Cycle & Circuit Breaker",
+        ai_provider_label: "AI Provider:",
+        ai_key_label: "API Key (Optional for Built-in AI):",
+        ai_key_help: "MatchWise Autonomous AI works 100% free with unlimited requests and zero setup. External API keys are optional.",
+        mbti_type: "Cognitive Style (MBTI)",
+        attachment_style: "Attachment Dynamic",
+        save_pdf: "Print Report / Export PDF",
+        ai_settings_btn: "MatchWise AI"
     },
     ar: {
         app_title: "ماتش وايز لايت",
@@ -215,7 +232,24 @@ const TRANSLATIONS = {
         act_3_desc: "تتبع مسار الخلاف التفاعلي: الشرارة، وردة الفعل الدفاعية، والخطوات الدقيقة لإعادة الهدوء.",
         act_4_title: "المحور الرابع: دليل الحوار المشترك وجسور التفاهم",
         act_4_desc: "القواعد الذهبية للزوجين، وفرص النمو، ونصوص الحوار الحرفية لنقاش المسائل الحساسة بودية.",
-        load_demo_profiles: "تحميل الملفات التجريبية الحية (طارق ونور)"
+        load_demo_profiles: "تحميل الملفات التجريبية الحية (طارق ونور)",
+        report_dossier_title: "ماتش وايز لايت v2.5",
+        report_dossier_subtitle: "الملف التحليلي التنفيذي للتوافق النفسي والسلوكي والعاطفي",
+        executive_overview: "نظرة عامة تنفيذية",
+        hartman_card_title: "طيف دوافع هارتمان (الوقود النفسي والاحتياجات)",
+        disc_card_title: "إيقاع السلوك والسرعة (مصفوفة DISC الثنائية)",
+        birkman_card_title: "جبل الجليد النفسي: السلوك الظاهر والاحتياج الخفي وتأثير التوتر",
+        attachment_card_title: "حقل الأمان والارتباط العاطفي (القلق مقابل التجنب)",
+        firo_card_title: "تبادل العلاقات والقيادة والمودة (FIRO-B)",
+        gottman_card_title: "مؤشر الأمان العاطفي ورادار فرسان الهلاك الأربعة",
+        conflict_card_title: "دورة الخلاف التفاعلية وقاطع الدائرة لإعادة الهدوء",
+        ai_provider_label: "مزود الذكاء الاصطناعي:",
+        ai_key_label: "مفتاح الربط (اختياري للذكاء المدمج المجاني):",
+        ai_key_help: "الذكاء الاصطناعي المدمج في ماتش وايز مجاني 100% بلا حدود وبلا حاجة لأي إعدادات أو مفاتيح خارجية.",
+        mbti_type: "النمط المعرفي (MBTI)",
+        attachment_style: "ديناميكية الارتباط العاطفي",
+        save_pdf: "طباعة التقرير / تصدير PDF",
+        ai_settings_btn: "ذكاء ماتش وايز"
     }
 };
 

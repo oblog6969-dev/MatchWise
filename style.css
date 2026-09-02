@@ -68,6 +68,7 @@ body {
 body.rtl {
     direction: rtl;
     text-align: right;
+    font-family: "Segoe UI Arabic", "Cairo", "Tajawal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* --- 3. PREMIUM TOP BAR (GLASSMORPHISM) --- */
@@ -1470,6 +1471,77 @@ body.rtl .conflict-step-card:hover {
     font-size: 0.88rem;
     color: var(--text-secondary);
     line-height: 1.5;
+}
+
+/* Fair-Fighting Rules Protocol Container */
+.fair-fighting-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fair-fighting-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.fair-fighting-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(0, 113, 227, 0.15);
+    color: var(--accent-color);
+    border: 1px solid rgba(0, 113, 227, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+/* Comprehensive RTL Alignment Overrides */
+body.rtl .report-header-toolbar {
+    flex-direction: row-reverse;
+}
+
+body.rtl .chapter-header,
+body.rtl .chapter-title,
+body.rtl .chapter-desc,
+body.rtl .summary-p,
+body.rtl .meta-item,
+body.rtl .action-desc,
+body.rtl .action-card h3,
+body.rtl .saved-profiles-section h3,
+body.rtl .interactive-chart-card h4,
+body.rtl .chart-card h4,
+body.rtl .manual-point-label,
+body.rtl .manual-point-content,
+body.rtl .conflict-step-body h5,
+body.rtl .conflict-step-body p,
+body.rtl .fair-fighting-item {
+    text-align: right;
+}
+
+body.rtl .profile-meta-info {
+    text-align: right;
+}
+
+body.rtl .modal-form-container {
+    text-align: right !important;
+}
+
+body.rtl .bridge-script-card {
+    border-left: 1px solid var(--border-color);
+    border-right: 4px solid var(--accent-color);
+    text-align: right;
 }
 
 /* Static Print Preview Mode Toolbar Toggle */

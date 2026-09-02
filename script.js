@@ -15,8 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
             personName: "",
             history: [] // question ID history to support dynamic backing up
         },
-        isAiMode: false,
-        aiService: null
+        isAiMode: true,
+        aiService: null,
+        activeReportA: null,
+        activeReportB: null
     };
 
     // --- 2. DOM ELEMENT CACHE ---
@@ -176,6 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCurrentQuestion();
         } else if (state.currentPanel === "panelDashboard") {
             renderSavedProfiles();
+        } else if (state.currentPanel === "panelReport" && state.activeReportA) {
+            generateAndRenderReport(state.activeReportA, state.activeReportB);
         }
     });
 
@@ -228,8 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.modalAiConfigForm.style.display = "block";
             
             // Populate current values
-            dom.selectAiProvider.value = state.aiService.provider || "deepseek";
-            dom.inputAiApiKey.value = state.aiService.apiKey !== "YOUR_API_KEY_HERE" ? state.aiService.apiKey : "";
+            dom.selectAiProvider.value = state.aiService.provider || "builtin";
+            dom.inputAiApiKey.value = (state.aiService.apiKey && state.aiService.apiKey !== "YOUR_API_KEY_HERE") ? state.aiService.apiKey : "";
 
             dom.modalBackdrop.classList.add("active-backdrop");
             dom.btnModalSubmit.style.display = "block";
@@ -327,8 +331,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const RADAR_CATEGORY_TRANSLATIONS = {
-        "Personality": "الشخصية",
-        "Communication": "التواصل",
+        "Personality": "سمات الشخصية",
+        "Emotional Safety": "الأمان العاطفي",
+        "Conflict Dynamics": "ديناميكية الخلاف",
+        "Core Values": "منظومة القيم",
+        "Finances": "الشؤون المالية",
+        "Housing & Boundaries": "السكن والحدود",
+        "Children & Parenting": "الأطفال والتربية",
+        "Cultural & Spiritual": "القيم الروحية والثقافية",
+        "Aesthetic Alignment": "التناغم الشكلي والجمالي",
+        "Communication": "أسلوب التواصل",
         "Conflict": "إدارة الخلافات",
         "Money": "التوافق المالي",
         "Lifestyle": "نمط الحياة",
@@ -337,8 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Religion": "القيم الدينية",
         "Emotional Needs": "الاحتياجات العاطفية",
         "Marriage": "الرؤية الزوجية",
-        "Ideology Alignment": "التوافق الفكري",
-        "Aesthetic Alignment": "تناغم المظهر"
+        "Ideology Alignment": "التوافق الفكري"
     };
 
     const BIG_FIVE_TRANSLATIONS = {
@@ -946,6 +957,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 9. GENERATE & RENDER GRAPHIC REPORTS ---
     function generateAndRenderReport(profileA, profileB) {
+        state.activeReportA = profileA;
+        state.activeReportB = profileB;
+        if (!state.aiService) state.aiService = new window.AIService();
         navigateTo("panelReport");
         const isAr = state.localization.currentLang === "ar";
 
@@ -1283,7 +1297,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const card = document.createElement("div");
                         card.className = "chart-card";
                         card.style.marginBottom = "14px";
-                        card.innerHTML = `<h4 style="color: ${color}; text-align: left;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
+                        card.innerHTML = `<h4 style="color: ${color}; text-align: start;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
                         aiContainer.appendChild(card);
                     };
 
@@ -1294,8 +1308,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (aiData.watchouts && aiData.watchouts.length > 0) {
                         const warnDiv = document.createElement("div");
                         warnDiv.className = "chart-card";
-                        warnDiv.style.borderLeft = "4px solid var(--danger)";
-                        warnDiv.innerHTML = `<h4 style="color: var(--danger); text-align: left;">${isAr ? "نقاط الحذر والتنبيه" : "Vulnerability Watchouts"}</h4>`;
+                        warnDiv.style.borderInlineStart = "4px solid var(--danger)";
+                        warnDiv.innerHTML = `<h4 style="color: var(--danger); text-align: start;">${isAr ? "نقاط الحذر والتنبيه" : "Vulnerability Watchouts"}</h4>`;
                         const ul = document.createElement("ul");
                         ul.className = "report-bullet-list";
                         aiData.watchouts.forEach(w => {
@@ -1324,7 +1338,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const card = document.createElement("div");
                         card.className = "chart-card";
                         card.style.marginBottom = "14px";
-                        card.innerHTML = `<h4 style="color: ${color}; text-align: left;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
+                        card.innerHTML = `<h4 style="color: ${color}; text-align: start;">${title}</h4><p style="font-size: 0.92rem; line-height: 1.6;">${text}</p>`;
                         aiContainer.appendChild(card);
                     };
 
@@ -1687,9 +1701,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const getCoords = (traits) => {
             if (!traits) return { x: cx, y: cy };
-            const ecr = traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
-            const anx = Math.max(5, Math.min(95, ecr.anxiety_score || 30));
-            const avoid = Math.max(5, Math.min(95, ecr.avoidance_score || 30));
+            const ecr = traits.attachment || traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
+            const anx = Math.max(5, Math.min(95, ecr.anxiety_score !== undefined ? ecr.anxiety_score : 30));
+            const avoid = Math.max(5, Math.min(95, ecr.avoidance_score !== undefined ? ecr.avoidance_score : 30));
             // x: anxiety (0 left to 100 right), y: avoidance (0 bottom to 100 top)
             const x = 30 + (anx / 100) * 200;
             const y = 230 - (avoid / 100) * 200;
@@ -1821,7 +1835,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${isAr ? "مؤشر الأمان العاطفي" : "Emotional Safety Index"}
                 </div>
             </div>
-            <div style="text-align: left; margin-top: 8px;">
+            <div style="text-align: start; margin-top: 8px;">
                 <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-align: center;">
                     ${isAr ? "رادار فرسان الهلاك الأربعة (Gottman)" : "Four Horsemen Risk Monitors"}
                 </div>

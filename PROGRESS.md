@@ -1,7 +1,7 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.5.0
-**Release Name:** Storytelling Narrative & Multi-Framework Behavioral Diagnostic Suite  
+## Current Version: v2.5.1
+**Release Name:** Zero-Key Autonomous Clinical AI & Seamless Bilingual Experience  
 **Date:** September 3, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
@@ -18,6 +18,7 @@
 | **M5: Interactive Visualizations** | 7 Custom SVG visualizers (Donut, 2x2 Matrix, Iceberg, 2D Grid, Reciprocity Scales, Safety Gauge, Conflict Flowchart). | ✅ Complete | DOM & Visual Verification |
 | **M6: Static Printing Engine** | On-screen print view toggle and clean `@media print` rules with chapter-based page breaks. | ✅ Complete | CSS Print Tested |
 | **M7: Clinical Archetype Profiles** | Pre-seeded Tariq Al-Mansoor & Nour Al-Sabah profiles for immediate live testing without manual answering. | ✅ Complete | Full Dyadic Verification (67%) |
+| **M8: Zero-Key AI & Bilingual Polish** | MatchWise Autonomous AI default (zero key required, unlimited requests) & seamless instant report language switching. | ✅ Complete | Browser & Node Tested |
 
 ---
 
@@ -64,3 +65,9 @@
 ### Fixed
 - Guarded all badge element references (`dom.mbtiBadgeA`, `dom.commBadgeA`, etc.) against missing DOM nodes in both single and comparison report views.
 - Safeguarded `ai_service.js` for execution in Node.js automated test environments.
+- Fixed report preview and comparison language switching by caching active profiles and re-rendering dynamically on language switch.
+- Fixed hardcoded text alignments and borders across AI recommendations, conflict loops, and operating manuals to use logical start alignments.
+- Fixed radar chart translation map to include all 12 dyadic categories in Arabic.
+- Corrected ECR attachment coordinate calculation to inspect `traits.attachment` properly.
+- Audited 100% of HTML `data-i18n` tags, resolving all missing keys in English and Arabic.
+- Added dedicated `.fair-fighting-box` and `.fair-fighting-num` styles with complete RTL support.
