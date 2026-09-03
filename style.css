@@ -1046,19 +1046,28 @@ body.rtl .report-bullet-list li::before {
     gap: 12px;
 }
 
-/* --- 11. PRINT STYLE OVERRIDES --- */
+/* --- 11. EXECUTIVE PRINT & PDF DOSSIER STYLES --- */
+.print-dossier-page {
+    position: relative;
+    margin-bottom: 28px;
+}
+
 @media print {
     body {
         background-color: #ffffff !important;
-        color: #000000 !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
     
-    .app-header, .report-header-toolbar, .assessment-nav-row {
+    .app-header, .report-header-toolbar, .assessment-nav-row, #modalBackdrop {
         display: none !important;
     }
 
     .app-content {
         padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
     }
 
     .spa-panel {
@@ -1073,18 +1082,218 @@ body.rtl .report-bullet-list li::before {
         box-shadow: none !important;
         padding: 0 !important;
         background-color: #ffffff !important;
+        color: #0f172a !important;
+        max-width: 100% !important;
     }
 
-    .compatibility-report-document * {
-        color: #000000 !important;
+    .print-dossier-page {
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        padding-top: 10px !important;
+        padding-bottom: 20px !important;
+        margin-bottom: 0 !important;
     }
 
-    .chart-card, .gauge-card, .type-card, .interactive-chart-card, .score-overview-grid, .parameter-table-wrapper, .matrix-section, .conflict-step-card {
-        background-color: #f5f5f7 !important;
-        border: 1px solid #d2d2d7 !important;
+    .print-dossier-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+
+    .report-top-banner {
+        border-bottom: 2px solid #0f172a !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 18px !important;
+    }
+
+    .report-top-banner h2 {
+        color: #0f172a !important;
+    }
+
+    .report-top-banner p {
+        color: #475569 !important;
+    }
+
+    /* Executive Clean Cards in Print */
+    .chart-card, .interactive-chart-card, .type-card, .gauge-card, .conflict-step-card, .operating-manual-card, .fair-fighting-item {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
     }
+
+    /* Table Fixes: Eliminate Black Blocks */
+    .report-table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+
+    .report-table th {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        font-weight: 800 !important;
+    }
+
+    .report-table td {
+        background-color: #ffffff !important;
+        color: #334155 !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+
+    /* Trait Badges: High Contrast Pastel */
+    .person-type-badge {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        font-weight: 800 !important;
+        box-shadow: none !important;
+    }
+
+    .type-card h5 {
+        color: #475569 !important;
+    }
+
+    .fair-fighting-item {
+        background-color: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+    }
+
+    .fair-fighting-num {
+        background-color: #e0f2fe !important;
+        color: #0284c7 !important;
+        border: 1px solid #bae6fd !important;
+    }
+
+    .chapter-badge {
+        background-color: #e0f2fe !important;
+        color: #0284c7 !important;
+    }
+
+    .chapter-title, .section-title {
+        color: #0f172a !important;
+    }
+
+    .chapter-desc, .summary-p, .meta-item, .appendix-p, .disclaimer-p {
+        color: #475569 !important;
+    }
+
+    .bar-track {
+        background-color: #f1f5f9 !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+}
+
+/* Explicit .exporting-pdf mode used during high-resolution jsPDF capture */
+.compatibility-report-document.exporting-pdf {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    width: 1000px !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 30px !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.compatibility-report-document.exporting-pdf * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+.compatibility-report-document.exporting-pdf .report-top-banner {
+    border-bottom: 2px solid #0f172a !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 20px !important;
+}
+
+.compatibility-report-document.exporting-pdf .report-top-banner h2 {
+    color: #0f172a !important;
+}
+
+.compatibility-report-document.exporting-pdf .report-top-banner p {
+    color: #475569 !important;
+}
+
+.compatibility-report-document.exporting-pdf .print-dossier-page {
+    background-color: #ffffff !important;
+    padding: 10px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.compatibility-report-document.exporting-pdf .chart-card,
+.compatibility-report-document.exporting-pdf .interactive-chart-card,
+.compatibility-report-document.exporting-pdf .type-card,
+.compatibility-report-document.exporting-pdf .gauge-card,
+.compatibility-report-document.exporting-pdf .conflict-step-card,
+.compatibility-report-document.exporting-pdf .operating-manual-card {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    color: #0f172a !important;
+}
+
+.compatibility-report-document.exporting-pdf .report-table th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    font-weight: 800 !important;
+}
+
+.compatibility-report-document.exporting-pdf .report-table td {
+    background-color: #ffffff !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.compatibility-report-document.exporting-pdf .person-type-badge {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    font-weight: 800 !important;
+}
+
+.compatibility-report-document.exporting-pdf .type-card h5 {
+    color: #475569 !important;
+}
+
+.compatibility-report-document.exporting-pdf .fair-fighting-item {
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+.compatibility-report-document.exporting-pdf .fair-fighting-num {
+    background-color: #e0f2fe !important;
+    color: #0284c7 !important;
+    border: 1px solid #bae6fd !important;
+}
+
+.compatibility-report-document.exporting-pdf .chapter-badge {
+    background-color: #e0f2fe !important;
+    color: #0284c7 !important;
+}
+
+.compatibility-report-document.exporting-pdf .chapter-title,
+.compatibility-report-document.exporting-pdf .section-title {
+    color: #0f172a !important;
+}
+
+.compatibility-report-document.exporting-pdf .chapter-desc,
+.compatibility-report-document.exporting-pdf .summary-p,
+.compatibility-report-document.exporting-pdf .meta-item,
+.compatibility-report-document.exporting-pdf .appendix-p,
+.compatibility-report-document.exporting-pdf .disclaimer-p {
+    color: #475569 !important;
+}
+
+.compatibility-report-document.exporting-pdf .bar-track {
+    background-color: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
 }
 
 /* Hide elements dynamically */

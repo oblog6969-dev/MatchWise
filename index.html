@@ -226,315 +226,330 @@
             </div>
 
             <div class="compatibility-report-document" id="printableReportDocument">
-                <!-- Top Dossier Banner -->
-                <div class="report-top-banner">
-                    <svg class="report-banner-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    <div>
-                        <h2 data-i18n="report_dossier_title">MatchWise Lite v2.5</h2>
-                        <p data-i18n="report_dossier_subtitle">Executive Multi-Framework Behavioral & Relationship Dossier</p>
+                <!-- DOSSIER PAGE 1: EXECUTIVE SUMMARY & PROFILE PARAMETERS -->
+                <div class="print-dossier-page" id="dossierPage1">
+                    <!-- Top Dossier Banner -->
+                    <div class="report-top-banner">
+                        <svg class="report-banner-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <div>
+                            <h2 data-i18n="report_dossier_title">MatchWise Lite v2.5</h2>
+                            <p data-i18n="report_dossier_subtitle">Executive Multi-Framework Behavioral & Relationship Dossier</p>
+                        </div>
                     </div>
+
+                    <!-- EXECUTIVE SUMMARY & METADATA -->
+                    <section class="story-chapter" id="reportSectionSummary">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" data-i18n="executive_overview">Executive Overview</span>
+                            <h3 class="chapter-title" data-i18n="executive_summary">Executive Summary & Confidence</h3>
+                        </div>
+                        <div class="overall-index-gauge-container">
+                            <div class="gauge-card" id="gaugeCardContainer">
+                                <span data-i18n="overall_comp">Overall Compatibility</span>
+                                <div class="gauge-number-wrapper">
+                                    <span id="reportOverallIndex" class="gauge-index-num">85%</span>
+                                    <svg class="progress-circle" viewBox="0 0 36 36">
+                                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                        <path id="circleProgressFill" class="circle-fill" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="gauge-details">
+                                <div class="meta-item">
+                                    <strong data-i18n="confidence_score">Assessment Confidence Score</strong>: <span id="reportConfidence">92%</span>
+                                </div>
+                                <p class="summary-p" id="reportExecutiveSummaryText">
+                                    Summary analysis goes here...
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Meta Table -->
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <table class="report-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="parameter_label">Parameter</th>
+                                        <th id="reportHeaderPersonA">Person A</th>
+                                        <th id="reportHeaderPersonB" class="person-b-col">Person B</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-i18n="id">ID</td>
+                                        <td id="reportIdA">--</td>
+                                        <td id="reportIdB" class="person-b-col">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="created_at">Created At</td>
+                                        <td id="reportDateA">--</td>
+                                        <td id="reportDateB" class="person-b-col">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="app_version">Version</td>
+                                        <td id="reportVerA">v2.5</td>
+                                        <td id="reportVerB" class="person-b-col">v2.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="confidence_score">Confidence</td>
+                                        <td id="reportConfidenceA">--</td>
+                                        <td id="reportConfidenceB" class="person-b-col">--</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="hartman_label">Hartman Motive</td>
+                                        <td><span id="hartmanBadgeA" class="person-type-badge type-a">--</span></td>
+                                        <td class="person-b-col"><span id="hartmanBadgeB" class="person-type-badge type-b">--</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="disc_label">DISC Style</td>
+                                        <td><span id="discBadgeA" class="person-type-badge type-a">--</span></td>
+                                        <td class="person-b-col"><span id="discBadgeB" class="person-type-badge type-b">--</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="mbti_type">Cognitive Type</td>
+                                        <td><span id="mbtiBadgeA" class="person-type-badge type-a">--</span></td>
+                                        <td class="person-b-col"><span id="mbtiBadgeB" class="person-type-badge type-b">--</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="attachment_style">Attachment</td>
+                                        <td><span id="attachmentBadgeA" class="person-type-badge type-a">--</span></td>
+                                        <td class="person-b-col"><span id="attachmentBadgeB" class="person-type-badge type-b">--</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td data-i18n="birkman_label">Birkman Need</td>
+                                        <td><span id="birkmanBadgeA" class="person-type-badge type-a">--</span></td>
+                                        <td class="person-b-col"><span id="birkmanBadgeB" class="person-type-badge type-b">--</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
 
-                <!-- EXECUTIVE SUMMARY & METADATA -->
-                <section class="story-chapter" id="reportSectionSummary">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" data-i18n="executive_overview">Executive Overview</span>
-                        <h3 class="chapter-title" data-i18n="executive_summary">Executive Summary & Confidence</h3>
-                    </div>
-                    <div class="overall-index-gauge-container">
-                        <div class="gauge-card" id="gaugeCardContainer">
-                            <span data-i18n="overall_comp">Overall Compatibility</span>
-                            <div class="gauge-number-wrapper">
-                                <span id="reportOverallIndex" class="gauge-index-num">85%</span>
-                                <svg class="progress-circle" viewBox="0 0 36 36">
-                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
-                                    <path id="circleProgressFill" class="circle-fill" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                <!-- DOSSIER PAGE 2: CHAPTER 1 - THE CORE OPERATING ENGINE -->
+                <div class="print-dossier-page" id="dossierPage2">
+                    <section class="story-chapter page-break-chapter" id="chapter1Section">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" id="chapter1Badge">Chapter 1</span>
+                            <h3 class="chapter-title" id="chapter1Title" data-i18n="chapter_1_title">Chapter 1: The Core Operating Engine</h3>
+                            <p class="chapter-desc" id="chapter1Desc" data-i18n="chapter_1_desc">Who you are at your core: Hartman Core Motives and DISC Pace & Focus dynamics.</p>
+                        </div>
+
+                        <!-- Interactive Visualizers: Hartman Spectrum Donut + DISC Quadrant Map -->
+                        <div class="visual-grid-2col">
+                            <div class="interactive-chart-card">
+                                <h4 data-i18n="hartman_card_title">Hartman Motive Spectrum (Fuel & Motives)</h4>
+                                <div class="chart-center-wrapper" id="hartmanChartContainer">
+                                    <!-- Dynamic SVG Donut -->
+                                </div>
+                            </div>
+                            <div class="interactive-chart-card">
+                                <h4 data-i18n="disc_card_title">DISC Behavioral Rhythm & Tempo (2x2 Matrix)</h4>
+                                <div class="chart-center-wrapper" id="discQuadrantContainer">
+                                    <!-- Dynamic SVG 2x2 Quadrant -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Framework Badge Overview -->
+                        <div class="types-comparison-grid" style="margin-top: 24px;">
+                            <div class="type-card">
+                                <h5 data-i18n="mbti_label">MBTI Tendency</h5>
+                                <div class="type-row">
+                                    <div class="person-type-badge type-a" id="mbtiBadgeA">INFP</div>
+                                    <div class="person-type-badge type-b person-b-col" id="mbtiBadgeB">ENFJ</div>
+                                </div>
+                            </div>
+                            <div class="type-card">
+                                <h5 data-i18n="hartman_label">Core Motive (Hartman)</h5>
+                                <div class="type-row">
+                                    <div class="person-type-badge type-a" id="hartmanBadgeA">BLUE</div>
+                                    <div class="person-type-badge type-b person-b-col" id="hartmanBadgeB">WHITE</div>
+                                </div>
+                            </div>
+                            <div class="type-card">
+                                <h5 data-i18n="disc_label">Pace & Focus (DISC)</h5>
+                                <div class="type-row">
+                                    <div class="person-type-badge type-a" id="discBadgeA">DI</div>
+                                    <div class="person-type-badge type-b person-b-col" id="discBadgeB">SC</div>
+                                </div>
+                            </div>
+                            <div class="type-card">
+                                <h5 data-i18n="attachment_label">Attachment Style</h5>
+                                <div class="type-row">
+                                    <div class="person-type-badge type-a" id="attachmentBadgeA">Secure</div>
+                                    <div class="person-type-badge type-b person-b-col" id="attachmentBadgeB">Anxious</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- DOSSIER PAGE 3: CHAPTER 2 - THE EMOTIONAL ICEBERG & OPERATING MANUAL -->
+                <div class="print-dossier-page" id="dossierPage3">
+                    <section class="story-chapter page-break-chapter" id="chapter2Section">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" id="chapter2Badge">Chapter 2</span>
+                            <h3 class="chapter-title" id="chapter2Title" data-i18n="chapter_2_title">Chapter 2: The Emotional Iceberg</h3>
+                            <p class="chapter-desc" id="chapter2Desc" data-i18n="chapter_2_desc">The Birkman Method: Outward visible habits vs. hidden emotional needs and reactive stress.</p>
+                        </div>
+
+                        <!-- Interactive Visualizer: Birkman Iceberg Cross-Section -->
+                        <div class="interactive-chart-card" style="margin-bottom: 24px;">
+                            <h4 data-i18n="birkman_card_title">The Tri-Layer Iceberg: Usual Style vs. Hidden Needs vs. Stress Reaction</h4>
+                            <div class="chart-center-wrapper" id="birkmanIcebergContainer">
+                                <!-- Dynamic SVG Iceberg -->
+                            </div>
+                        </div>
+
+                        <!-- Relationship Operating Manual Cards -->
+                        <div class="operating-manual-container" id="operatingManualContainer">
+                            <!-- Dynamic Manual Cards for Person A & Person B -->
+                        </div>
+                    </section>
+                </div>
+
+                <!-- DOSSIER PAGE 4: CHAPTER 3 & 4 - ATTACHMENT, FIRO-B & CONFLICT PROTOCOL -->
+                <div class="print-dossier-page" id="dossierPage4">
+                    <!-- CHAPTER 3: ATTACHMENT SAFE HARBOR & INTERPERSONAL EXCHANGE (ECR & FIRO-B) -->
+                    <section class="story-chapter page-break-chapter" id="chapter3Section">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" id="chapter3Badge">Chapter 3</span>
+                            <h3 class="chapter-title" id="chapter3Title" data-i18n="chapter_3_title">Chapter 3: The Attachment Safe Harbor & Trust</h3>
+                            <p class="chapter-desc" id="chapter3Desc" data-i18n="chapter_3_desc">Adult Attachment (ECR) & FIRO-B: How you bond, seek closeness, and balance shared leadership.</p>
+                        </div>
+
+                        <div class="visual-grid-2col">
+                            <div class="interactive-chart-card">
+                                <h4 data-i18n="attachment_card_title">Attachment Security Field (Anxiety vs. Avoidance)</h4>
+                                <div class="chart-center-wrapper" id="attachmentGridContainer">
+                                    <!-- Dynamic SVG 2D Coordinate Grid -->
+                                </div>
+                            </div>
+                            <div class="interactive-chart-card">
+                                <h4 data-i18n="firo_card_title">FIRO-B Interpersonal Exchange (Control & Affection)</h4>
+                                <div class="chart-center-wrapper" id="firoExchangeContainer">
+                                    <!-- Dynamic SVG/HTML Reciprocal Scale -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CHAPTER 4: THE FIRE & HEALING SCRIPT (TKI & Gottman Conflict Loop) -->
+                    <section class="story-chapter page-break-chapter" id="chapter4Section" style="margin-top: 24px;">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" id="chapter4Badge">Chapter 4</span>
+                            <h3 class="chapter-title" id="chapter4Title" data-i18n="chapter_4_title">Chapter 4: The Fire & Healing Script</h3>
+                            <p class="chapter-desc" id="chapter4Desc" data-i18n="chapter_4_desc">TKI Conflict Modes & Gottman Emotional Safety: Your argument reflexes and fair-fighting rules.</p>
+                        </div>
+
+                        <div class="visual-grid-2col">
+                            <div class="interactive-chart-card">
+                                <h4 data-i18n="gottman_card_title">Gottman Emotional Safety & Four Horsemen Risk Radar</h4>
+                                <div class="chart-center-wrapper" id="gottmanGaugeContainer">
+                                    <!-- Dynamic SVG Meter -->
+                                </div>
+                            </div>
+                            <div class="interactive-chart-card" id="dyadicConflictCard">
+                                <h4 data-i18n="conflict_card_title">Interactive Dyadic Conflict Cycle & Circuit Breaker</h4>
+                                <div id="dyadicConflictLoopContainer">
+                                    <!-- Dynamic Flowchart -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fair-Fighting Protocol Box -->
+                        <div class="fair-fighting-box" id="fairFightingContainer" style="margin-top: 24px;">
+                            <!-- Dynamic Rules -->
+                        </div>
+                    </section>
+                </div>
+
+                <!-- DOSSIER PAGE 5: CHAPTER 5 - WORLDVIEW & PERSONALITY ALIGNMENT -->
+                <div class="print-dossier-page" id="dossierPage5">
+                    <section class="story-chapter page-break-chapter" id="chapter5Section">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" id="chapter5Badge">Chapter 5</span>
+                            <h3 class="chapter-title" id="chapter5Title" data-i18n="chapter_5_title">Chapter 5: Worldview & The Shared Horizon</h3>
+                            <p class="chapter-desc" id="chapter5Desc" data-i18n="chapter_5_desc">Schwartz Human Values & Life Domain Priorities: Financial, familial, and lifestyle compatibility.</p>
+                        </div>
+
+                        <div class="personality-visuals-grid">
+                            <div class="chart-card" id="radarChartCard">
+                                <h4 id="radarChartTitle" data-i18n="radar_title">Multivariable Compatibility Index</h4>
+                                <div id="radarChartContainer" class="chart-container"></div>
+                            </div>
+                            <div class="chart-card">
+                                <h4 id="barChartTitle" data-i18n="bar_title">Big Five / Temperament Alignment</h4>
+                                <div id="bigFiveBarChartContainer" class="bars-container"></div>
+                            </div>
+                        </div>
+
+                        <!-- Strengths & Challenges Narratives -->
+                        <div style="margin-top: 24px;">
+                            <h4 class="section-title bullet-strengths" data-i18n="strengths">Core Strengths</h4>
+                            <ul id="reportStrengthsList" class="report-bullet-list"></ul>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <h4 class="section-title bullet-challenges" data-i18n="challenges">Potential Challenges</h4>
+                            <ul id="reportChallengesList" class="report-bullet-list"></ul>
+                        </div>
+
+                        <div id="reportSectionDealbreakers" class="alert-section" style="margin-top: 24px;">
+                            <h4 class="section-title bullet-dealbreakers" data-i18n="deal_breakers">Deal-Breaker Alerts</h4>
+                            <ul id="reportDealbreakersList" class="report-bullet-list"></ul>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <h4 class="section-title bullet-discussion" data-i18n="discussion_topics">Topics to Discuss</h4>
+                            <ul id="reportDiscussionList" class="report-bullet-list"></ul>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <h4 class="section-title bullet-growth" data-i18n="growth_opps">Growth Opportunities</h4>
+                            <ul id="reportGrowthList" class="report-bullet-list"></ul>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <h4 class="section-title bullet-recommendations" data-i18n="recommendations">Psychological Recommendations</h4>
+                            <div id="reportRecommendationsContainer" class="p-container"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- DOSSIER PAGE 6: CHAPTER 6 - AI CONSULTATION & APPENDIX -->
+                <div class="print-dossier-page" id="dossierPage6">
+                    <!-- AI INSIGHTS & CONVERSATIONAL BRIDGE SCRIPTS (Powered by DeepSeek Pro) -->
+                    <section class="story-chapter page-break-chapter" id="aiInsightsSection" style="display: none;">
+                        <div class="chapter-header">
+                            <span class="chapter-badge" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">DeepSeek Pro AI</span>
+                            <h3 class="chapter-title" style="color: #8b5cf6;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px; vertical-align: middle; margin-right: 8px;">
+                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                                    <circle cx="12" cy="12" r="4"></circle>
                                 </svg>
-                            </div>
+                                <span data-i18n="ai_consultation_title">Deep Psychological Consultation & Bridge Scripts</span>
+                            </h3>
                         </div>
-                        <div class="gauge-details">
-                            <div class="meta-item">
-                                <strong data-i18n="confidence_score">Assessment Confidence Score</strong>: <span id="reportConfidence">92%</span>
-                            </div>
-                            <p class="summary-p" id="reportExecutiveSummaryText">
-                                Summary analysis goes here...
-                            </p>
+                        <div id="reportAIInsightsContainer" class="p-container">
+                            <p>Generating AI analysis...</p>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- Meta Table -->
-                    <div class="table-responsive" style="margin-top: 20px;">
-                        <table class="report-table">
-                            <thead>
-                                <tr>
-                                    <th data-i18n="parameter_label">Parameter</th>
-                                    <th id="reportHeaderPersonA">Person A</th>
-                                    <th id="reportHeaderPersonB" class="person-b-col">Person B</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td data-i18n="id">ID</td>
-                                    <td id="reportIdA">--</td>
-                                    <td id="reportIdB" class="person-b-col">--</td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="created_at">Created At</td>
-                                    <td id="reportDateA">--</td>
-                                    <td id="reportDateB" class="person-b-col">--</td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="app_version">Version</td>
-                                    <td id="reportVerA">v2.5</td>
-                                    <td id="reportVerB" class="person-b-col">v2.5</td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="confidence_score">Confidence</td>
-                                    <td id="reportConfidenceA">--</td>
-                                    <td id="reportConfidenceB" class="person-b-col">--</td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="hartman_label">Hartman Motive</td>
-                                    <td><span id="hartmanBadgeA" class="person-type-badge type-a">--</span></td>
-                                    <td class="person-b-col"><span id="hartmanBadgeB" class="person-type-badge type-b">--</span></td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="disc_label">DISC Style</td>
-                                    <td><span id="discBadgeA" class="person-type-badge type-a">--</span></td>
-                                    <td class="person-b-col"><span id="discBadgeB" class="person-type-badge type-b">--</span></td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="mbti_type">Cognitive Type</td>
-                                    <td><span id="mbtiBadgeA" class="person-type-badge type-a">--</span></td>
-                                    <td class="person-b-col"><span id="mbtiBadgeB" class="person-type-badge type-b">--</span></td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="attachment_style">Attachment</td>
-                                    <td><span id="attachmentBadgeA" class="person-type-badge type-a">--</span></td>
-                                    <td class="person-b-col"><span id="attachmentBadgeB" class="person-type-badge type-b">--</span></td>
-                                </tr>
-                                <tr>
-                                    <td data-i18n="birkman_label">Birkman Need</td>
-                                    <td><span id="birkmanBadgeA" class="person-type-badge type-a">--</span></td>
-                                    <td class="person-b-col"><span id="birkmanBadgeB" class="person-type-badge type-b">--</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <!-- CHAPTER 1: THE CORE OPERATING ENGINE (Hartman & DISC) -->
-                <section class="story-chapter page-break-chapter" id="chapter1Section">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" id="chapter1Badge">Chapter 1</span>
-                        <h3 class="chapter-title" id="chapter1Title" data-i18n="chapter_1_title">Chapter 1: The Core Operating Engine</h3>
-                        <p class="chapter-desc" id="chapter1Desc" data-i18n="chapter_1_desc">Who you are at your core: Hartman Core Motives and DISC Pace & Focus dynamics.</p>
-                    </div>
-
-                    <!-- Interactive Visualizers: Hartman Spectrum Donut + DISC Quadrant Map -->
-                    <div class="visual-grid-2col">
-                        <div class="interactive-chart-card">
-                            <h4 data-i18n="hartman_card_title">Hartman Motive Spectrum (Fuel & Motives)</h4>
-                            <div class="chart-center-wrapper" id="hartmanChartContainer">
-                                <!-- Dynamic SVG Donut -->
-                            </div>
-                        </div>
-                        <div class="interactive-chart-card">
-                            <h4 data-i18n="disc_card_title">DISC Behavioral Rhythm & Tempo (2x2 Matrix)</h4>
-                            <div class="chart-center-wrapper" id="discQuadrantContainer">
-                                <!-- Dynamic SVG 2x2 Quadrant -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Multi-Framework Badge Overview -->
-                    <div class="types-comparison-grid" style="margin-top: 24px;">
-                        <div class="type-card">
-                            <h5 data-i18n="mbti_label">MBTI Tendency</h5>
-                            <div class="type-row">
-                                <div class="person-type-badge type-a" id="mbtiBadgeA">INFP</div>
-                                <div class="person-type-badge type-b person-b-col" id="mbtiBadgeB">ENFJ</div>
-                            </div>
-                        </div>
-                        <div class="type-card">
-                            <h5 data-i18n="hartman_label">Core Motive (Hartman)</h5>
-                            <div class="type-row">
-                                <div class="person-type-badge type-a" id="hartmanBadgeA">BLUE</div>
-                                <div class="person-type-badge type-b person-b-col" id="hartmanBadgeB">WHITE</div>
-                            </div>
-                        </div>
-                        <div class="type-card">
-                            <h5 data-i18n="disc_label">Pace & Focus (DISC)</h5>
-                            <div class="type-row">
-                                <div class="person-type-badge type-a" id="discBadgeA">DI</div>
-                                <div class="person-type-badge type-b person-b-col" id="discBadgeB">SC</div>
-                            </div>
-                        </div>
-                        <div class="type-card">
-                            <h5 data-i18n="attachment_label">Attachment Style</h5>
-                            <div class="type-row">
-                                <div class="person-type-badge type-a" id="attachmentBadgeA">Secure</div>
-                                <div class="person-type-badge type-b person-b-col" id="attachmentBadgeB">Anxious</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- CHAPTER 2: THE EMOTIONAL ICEBERG (Birkman Method) -->
-                <section class="story-chapter page-break-chapter" id="chapter2Section">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" id="chapter2Badge">Chapter 2</span>
-                        <h3 class="chapter-title" id="chapter2Title" data-i18n="chapter_2_title">Chapter 2: The Emotional Iceberg</h3>
-                        <p class="chapter-desc" id="chapter2Desc" data-i18n="chapter_2_desc">The Birkman Method: Outward visible habits vs. hidden emotional needs and reactive stress.</p>
-                    </div>
-
-                    <!-- Interactive Visualizer: Birkman Iceberg Cross-Section -->
-                    <div class="interactive-chart-card" style="margin-bottom: 24px;">
-                        <h4 data-i18n="birkman_card_title">The Tri-Layer Iceberg: Usual Style vs. Hidden Needs vs. Stress Reaction</h4>
-                        <div class="chart-center-wrapper" id="birkmanIcebergContainer">
-                            <!-- Dynamic SVG Iceberg -->
-                        </div>
-                    </div>
-
-                    <!-- Relationship Operating Manual Cards -->
-                    <div class="operating-manual-container" id="operatingManualContainer">
-                        <!-- Dynamic Manual Cards for Person A & Person B -->
-                    </div>
-                </section>
-
-                <!-- CHAPTER 3: ATTACHMENT SAFE HARBOR & INTERPERSONAL EXCHANGE (ECR & FIRO-B) -->
-                <section class="story-chapter page-break-chapter" id="chapter3Section">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" id="chapter3Badge">Chapter 3</span>
-                        <h3 class="chapter-title" id="chapter3Title" data-i18n="chapter_3_title">Chapter 3: The Attachment Safe Harbor & Trust</h3>
-                        <p class="chapter-desc" id="chapter3Desc" data-i18n="chapter_3_desc">Adult Attachment (ECR) & FIRO-B: How you bond, seek closeness, and balance shared leadership.</p>
-                    </div>
-
-                    <div class="visual-grid-2col">
-                        <div class="interactive-chart-card">
-                            <h4 data-i18n="attachment_card_title">Attachment Security Field (Anxiety vs. Avoidance)</h4>
-                            <div class="chart-center-wrapper" id="attachmentGridContainer">
-                                <!-- Dynamic SVG 2D Coordinate Grid -->
-                            </div>
-                        </div>
-                        <div class="interactive-chart-card">
-                            <h4 data-i18n="firo_card_title">FIRO-B Interpersonal Exchange (Control & Affection)</h4>
-                            <div class="chart-center-wrapper" id="firoExchangeContainer">
-                                <!-- Dynamic SVG/HTML Reciprocal Scale -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- CHAPTER 4: THE FIRE & HEALING SCRIPT (TKI & Gottman Conflict Loop) -->
-                <section class="story-chapter page-break-chapter" id="chapter4Section">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" id="chapter4Badge">Chapter 4</span>
-                        <h3 class="chapter-title" id="chapter4Title" data-i18n="chapter_4_title">Chapter 4: The Fire & Healing Script</h3>
-                        <p class="chapter-desc" id="chapter4Desc" data-i18n="chapter_4_desc">TKI Conflict Modes & Gottman Emotional Safety: Your argument reflexes and fair-fighting rules.</p>
-                    </div>
-
-                    <div class="visual-grid-2col">
-                        <div class="interactive-chart-card">
-                            <h4 data-i18n="gottman_card_title">Gottman Emotional Safety & Four Horsemen Risk Radar</h4>
-                            <div class="chart-center-wrapper" id="gottmanGaugeContainer">
-                                <!-- Dynamic SVG Meter -->
-                            </div>
-                        </div>
-                        <div class="interactive-chart-card" id="dyadicConflictCard">
-                            <h4 data-i18n="conflict_card_title">Interactive Dyadic Conflict Cycle & Circuit Breaker</h4>
-                            <div id="dyadicConflictLoopContainer">
-                                <!-- Dynamic Flowchart -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Fair-Fighting Protocol Box -->
-                    <div class="fair-fighting-box" id="fairFightingContainer" style="margin-top: 24px;">
-                        <!-- Dynamic Rules -->
-                    </div>
-                </section>
-
-                <!-- CHAPTER 5: WORLDVIEW & THE SHARED HORIZON (Schwartz & Core Values) -->
-                <section class="story-chapter page-break-chapter" id="chapter5Section">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" id="chapter5Badge">Chapter 5</span>
-                        <h3 class="chapter-title" id="chapter5Title" data-i18n="chapter_5_title">Chapter 5: Worldview & The Shared Horizon</h3>
-                        <p class="chapter-desc" id="chapter5Desc" data-i18n="chapter_5_desc">Schwartz Human Values & Life Domain Priorities: Financial, familial, and lifestyle compatibility.</p>
-                    </div>
-
-                    <div class="personality-visuals-grid">
-                        <div class="chart-card" id="radarChartCard">
-                            <h4 id="radarChartTitle" data-i18n="radar_title">Multivariable Compatibility Index</h4>
-                            <div id="radarChartContainer" class="chart-container"></div>
-                        </div>
-                        <div class="chart-card">
-                            <h4 id="barChartTitle" data-i18n="bar_title">Big Five / Temperament Alignment</h4>
-                            <div id="bigFiveBarChartContainer" class="bars-container"></div>
-                        </div>
-                    </div>
-
-                    <!-- Strengths & Challenges Narratives -->
-                    <div style="margin-top: 24px;">
-                        <h4 class="section-title bullet-strengths" data-i18n="strengths">Core Strengths</h4>
-                        <ul id="reportStrengthsList" class="report-bullet-list"></ul>
-                    </div>
-
-                    <div style="margin-top: 24px;">
-                        <h4 class="section-title bullet-challenges" data-i18n="challenges">Potential Challenges</h4>
-                        <ul id="reportChallengesList" class="report-bullet-list"></ul>
-                    </div>
-
-                    <div id="reportSectionDealbreakers" class="alert-section" style="margin-top: 24px;">
-                        <h4 class="section-title bullet-dealbreakers" data-i18n="deal_breakers">Deal-Breaker Alerts</h4>
-                        <ul id="reportDealbreakersList" class="report-bullet-list"></ul>
-                    </div>
-
-                    <div style="margin-top: 24px;">
-                        <h4 class="section-title bullet-discussion" data-i18n="discussion_topics">Topics to Discuss</h4>
-                        <ul id="reportDiscussionList" class="report-bullet-list"></ul>
-                    </div>
-
-                    <div style="margin-top: 24px;">
-                        <h4 class="section-title bullet-growth" data-i18n="growth_opps">Growth Opportunities</h4>
-                        <ul id="reportGrowthList" class="report-bullet-list"></ul>
-                    </div>
-
-                    <div style="margin-top: 24px;">
-                        <h4 class="section-title bullet-recommendations" data-i18n="recommendations">Psychological Recommendations</h4>
-                        <div id="reportRecommendationsContainer" class="p-container"></div>
-                    </div>
-                </section>
-
-                <!-- AI INSIGHTS & CONVERSATIONAL BRIDGE SCRIPTS (Powered by DeepSeek Pro) -->
-                <section class="story-chapter page-break-chapter" id="aiInsightsSection" style="display: none;">
-                    <div class="chapter-header">
-                        <span class="chapter-badge" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;">DeepSeek Pro AI</span>
-                        <h3 class="chapter-title" style="color: #8b5cf6;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px; vertical-align: middle; margin-right: 8px;">
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                                <circle cx="12" cy="12" r="4"></circle>
-                            </svg>
-                            <span data-i18n="ai_consultation_title">Deep Psychological Consultation & Bridge Scripts</span>
-                        </h3>
-                    </div>
-                    <div id="reportAIInsightsContainer" class="p-container">
-                        <p>Generating AI analysis...</p>
-                    </div>
-                </section>
-
-                <!-- APPENDIX -->
-                <section class="story-chapter appendix-section">
-                    <h3 class="section-title" data-i18n="appendix">Appendix & Technical Parameters</h3>
-                    <p data-i18n="confidence_explanation" class="appendix-p">
-                        Confidence score is calculated based on answer consistency, response variance, and adaptive test completeness.
-                    </p>
-                    <p data-i18n="report_disclaimer" class="disclaimer-p">
-                        Disclaimer: This report is a simulation based on self-reported assessment questions. It is designed for reflection, coaching, and educational purposes and does not replace professional therapy or clinical consultation.
-                    </p>
-                </section>
+                    <!-- APPENDIX -->
+                    <section class="story-chapter appendix-section">
+                        <h3 class="section-title" data-i18n="appendix">Appendix & Technical Parameters</h3>
+                        <p data-i18n="confidence_explanation" class="appendix-p">
+                            Confidence score is calculated based on answer consistency, response variance, and adaptive test completeness.
+                        </p>
+                        <p data-i18n="report_disclaimer" class="disclaimer-p">
+                            Disclaimer: This report is a simulation based on self-reported assessment questions. It is designed for reflection, coaching, and educational purposes and does not replace professional therapy or clinical consultation.
+                        </p>
+                    </section>
+                </div>
             </div>
         </section>
     </main>

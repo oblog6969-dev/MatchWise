@@ -356,40 +356,69 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const isDark = state.themeManager.isDark();
-            const canvas = await window.html2canvas(reportElem, {
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                allowTaint: true,
-                backgroundColor: isDark ? "#161617" : "#ffffff",
-                windowWidth: 1200
-            });
+            // 1. Apply Executive Light Dossier styling (clean pure white background, dark high-contrast typography)
+            reportElem.classList.add("exporting-pdf");
+            await new Promise(r => setTimeout(r, 80)); // Allow styles to reflow
 
-            const imgData = canvas.toDataURL("image/jpeg", 0.96);
             const { jsPDF } = window.jspdf || window;
             const pdf = new jsPDF({
                 orientation: "portrait",
                 unit: "mm",
-                format: "a4"
+                format: "a4",
+                compress: true
             });
 
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pageWidth;
-            const imgHeight = (canvas.height * pageWidth) / canvas.width;
+            const pageWidth = pdf.internal.pageSize.getWidth(); // 210mm
+            const pageHeight = pdf.internal.pageSize.getHeight(); // 297mm
+            const marginX = 8;
+            const marginY = 8;
+            const maxUsableW = pageWidth - (marginX * 2); // 194mm
+            const maxUsableH = pageHeight - (marginY * 2); // 281mm
 
-            let heightLeft = imgHeight;
-            let position = 0;
+            // 2. Select logical pages (only visible ones)
+            let pages = Array.from(reportElem.querySelectorAll(".print-dossier-page")).filter(p => {
+                return p.offsetHeight > 40 && window.getComputedStyle(p).display !== "none";
+            });
 
-            pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
-            heightLeft -= pageHeight;
+            if (pages.length === 0) {
+                pages = [reportElem];
+            }
 
-            while (heightLeft > 0) {
-                position = -(imgHeight - heightLeft);
-                pdf.addPage();
-                pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
-                heightLeft -= pageHeight;
+            for (let i = 0; i < pages.length; i++) {
+                const pageContainer = pages[i];
+
+                const canvas = await window.html2canvas(pageContainer, {
+                    scale: 2, // Crisp 2x supersampling for text, icons and SVGs
+                    useCORS: true,
+                    logging: false,
+                    allowTaint: true,
+                    backgroundColor: "#ffffff",
+                    windowWidth: 1050
+                });
+
+                const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+                // Calculate aspect-ratio fit
+                let imgW = maxUsableW;
+                let imgH = (canvas.height * imgW) / canvas.width;
+
+                // Scale down slightly if content exceeds A4 height to prevent awkward clipping
+                if (imgH > maxUsableH) {
+                    const shrinkRatio = maxUsableH / imgH;
+                    imgH = maxUsableH;
+                    imgW = imgW * shrinkRatio;
+                }
+
+                // Center horizontally on page
+                const posX = marginX + (maxUsableW - imgW) / 2;
+                const posY = marginY;
+
+                pdf.addImage(imgData, "JPEG", posX, posY, imgW, imgH, undefined, "FAST");
+
+                // Add page break if there's an upcoming page
+                if (i < pages.length - 1) {
+                    pdf.addPage();
+                }
             }
 
             const nameA = (state.activeReportA?.owner_name || "Profile").replace(/[^\w\u0600-\u06FF]/gi, "_");
@@ -400,6 +429,9 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("PDF Export error:", err);
             window.print();
         } finally {
+            if (reportElem) {
+                reportElem.classList.remove("exporting-pdf");
+            }
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
@@ -1855,8 +1887,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = "";
 
-        const fA = traitsA.firo_b || { control_expressed: 50, control_wanted: 50, affection_expressed: 50, affection_wanted: 50 };
-        const fB = traitsB?.firo_b || { control_expressed: 50, control_wanted: 50, affection_expressed: 50, affection_wanted: 50 };
+        const getFiroScore = (traits, domain, mode) => {
+            if (!traits) return 50;
+            const firo = traits.firo_b || {};
+            // 1. Check nested object: firo.control.expressed (scale 1-9 or 10-100)
+            if (firo[domain] && typeof firo[domain][mode] === "number") {
+                const raw = firo[domain][mode];
+                return raw <= 10 ? Math.round((raw / 9) * 100) : Math.min(100, Math.round(raw));
+            }
+            // 2. Check flat property: firo.control_expressed
+            const flatKey = `${domain}_${mode}`;
+            if (typeof firo[flatKey] === "number") {
+                const raw = firo[flatKey];
+                return raw <= 10 ? Math.round((raw / 9) * 100) : Math.min(100, Math.round(raw));
+            }
+            return 50;
+        };
+
+        const ctrlExpA = getFiroScore(traitsA, "control", "expressed");
+        const ctrlWntA = getFiroScore(traitsA, "control", "wanted");
+        const affExpA = getFiroScore(traitsA, "affection", "expressed");
+        const affWntA = getFiroScore(traitsA, "affection", "wanted");
+
+        const ctrlExpB = getFiroScore(traitsB, "control", "expressed");
+        const ctrlWntB = getFiroScore(traitsB, "control", "wanted");
+        const affExpB = getFiroScore(traitsB, "affection", "expressed");
+        const affWntB = getFiroScore(traitsB, "affection", "wanted");
 
         const makeBar = (label, valA, valB, color) => `
             <div style="margin-bottom: 14px; width: 100%;">
@@ -1864,11 +1920,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span>${label}</span>
                     <span>${nameA}: <strong style="color: ${color};">${valA}%</strong> ${!isSingle ? `| ${nameB}: <strong style="color: #f59e0b;">${valB}%</strong>` : ''}</span>
                 </div>
-                <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; display: flex;">
+                <div style="width: 100%; height: 12px; background: rgba(148, 163, 184, 0.15); border-radius: 6px; overflow: hidden; display: flex;">
                     <div style="width: ${valA}%; background: ${color}; height: 100%; opacity: 0.95;"></div>
                 </div>
                 ${!isSingle ? `
-                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; margin-top: 4px;">
+                    <div style="width: 100%; height: 8px; background: rgba(148, 163, 184, 0.1); border-radius: 4px; overflow: hidden; margin-top: 4px;">
                         <div style="width: ${valB}%; background: #f59e0b; height: 100%;"></div>
                     </div>
                 ` : ''}
@@ -1883,10 +1939,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="font-size: 0.88rem; font-weight: 700; color: var(--accent-color); margin-bottom: 14px; text-align: center;">
                 ${isAr ? "موازين المبادرة والاحتياج في العلاقة" : "Expressed Initiation vs. Wanted Reciprocity"}
             </div>
-            ${makeBar(isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", fA.control_expressed, fB.control_expressed, "#3b82f6")}
-            ${makeBar(isAr ? "الحاجة لتوجيه الشريك (Control Wanted)" : "Receptivity to Guidance (Wanted)", fA.control_wanted, fB.control_wanted, "#8b5cf6")}
-            ${makeBar(isAr ? "المبادرة العاطفية والتعبير (Affection Expressed)" : "Affection Expression", fA.affection_expressed, fB.affection_expressed, "#ec4899")}
-            ${makeBar(isAr ? "الاحتياج للتعبير العاطفي (Affection Wanted)" : "Affection Craved", fA.affection_wanted, fB.affection_wanted, "#10b981")}
+            ${makeBar(isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", ctrlExpA, ctrlExpB, "#3b82f6")}
+            ${makeBar(isAr ? "الحاجة لتوجيه الشريك (Control Wanted)" : "Receptivity to Guidance (Wanted)", ctrlWntA, ctrlWntB, "#8b5cf6")}
+            ${makeBar(isAr ? "المبادرة العاطفية والتعبير (Affection Expressed)" : "Affection Expression", affExpA, affExpB, "#ec4899")}
+            ${makeBar(isAr ? "الاحتياج للتعبير العاطفي (Affection Wanted)" : "Affection Craved", affWntA, affWntB, "#10b981")}
         `;
         container.appendChild(wrapper);
     }
