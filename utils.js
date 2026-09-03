@@ -153,7 +153,10 @@ const TRANSLATIONS = {
         btn_view_selected: "View Selected Profile",
         btn_compare_two: "Compare Selected (2)",
         core_fuel_label: "Core Emotional Fuel:",
-        avoid_label: "Avoid:"
+        avoid_label: "Avoid:",
+        drag_rank_desc: "Reorder options by priority (1 = Highest priority)",
+        move_up: "Move up",
+        move_down: "Move down"
     },
     ar: {
         app_title: "ماتش وايز لايت",
@@ -299,7 +302,10 @@ const TRANSLATIONS = {
         btn_view_selected: "عرض الملف المحدد",
         btn_compare_two: "مقارنة الملفين المحددين (2)",
         core_fuel_label: "الوقود العاطفي الأساسي:",
-        avoid_label: "تجنب معه:"
+        avoid_label: "تجنب معه:",
+        drag_rank_desc: "قم بإعادة ترتيب الخيارات حسب الأولوية (1 = الأولوية القصوى)",
+        move_up: "تحريك لأعلى",
+        move_down: "تحريك لأسفل"
     }
 };
 

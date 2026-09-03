@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v1.0
+ * MatchWise Lite v2.5
  * script.js - Core SPA Coordinator & Adaptive Question Engine
  */
 
@@ -550,8 +550,23 @@ document.addEventListener("DOMContentLoaded", () => {
         isAutoAdvancing = false;
     }
 
+    function hasNextQuestion() {
+        const history = state.assessmentSession.history;
+        const currentQId = history[history.length - 1];
+        if (!currentQId) return false;
+        if (state.isAiMode && state.aiService) {
+            const askedCount = Object.keys(state.sessionAnswers).length;
+            if (askedCount >= 45) return false;
+            return true;
+        }
+        return getNextQuestionId(currentQId) !== null;
+    }
+
     function triggerAutoAdvance(delay = 300) {
         clearAutoAdvance();
+        // Do not auto-advance on the last question; allow the user to review and click Finish intentionally
+        if (!hasNextQuestion()) return;
+
         isAutoAdvancing = true;
         autoAdvanceTimer = setTimeout(async () => {
             try {
@@ -607,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         dom.btnNextQuestion.disabled = false;
-        if (nextSpan && oldText) nextSpan.textContent = oldText;
+        if (nextSpan && oldText !== undefined && oldText !== null) nextSpan.textContent = oldText;
 
         if (nextQId) {
             state.assessmentSession.history.push(nextQId);
@@ -1162,6 +1177,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } catch (err) {
                 alert(state.localization.get("invalid_file"));
+            } finally {
+                dom.profileFileInput.value = "";
             }
         };
         reader.readAsText(file);
