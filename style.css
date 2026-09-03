@@ -1572,6 +1572,20 @@ body.rtl .bridge-script-card {
 .interactive-svg {
     max-width: 100%;
     height: auto;
+    direction: ltr !important;
+}
+
+body.rtl .interactive-svg,
+html[dir="rtl"] .interactive-svg,
+[dir="rtl"] .interactive-svg {
+    direction: ltr !important;
+}
+
+body.rtl .interactive-svg text,
+html[dir="rtl"] .interactive-svg text,
+[dir="rtl"] .interactive-svg text {
+    direction: ltr !important;
+    unicode-bidi: plaintext !important;
 }
 
 .chart-node {

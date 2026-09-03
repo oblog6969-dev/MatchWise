@@ -1672,17 +1672,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = "";
 
-        const width = 300, height = 300;
-        const cx = 150, cy = 150;
+        const width = 320, height = 320;
+        const cx = 160, cy = 160;
 
         const getCoords = (disc) => {
             if (!disc) return { x: cx, y: cy };
             const b = disc.breakdown || { D: 25, I: 25, S: 25, C: 25 };
             const taskPeople = ((b.I + b.S) - (b.D + b.C)) / 100;
             const fastSteady = ((b.D + b.I) - (b.S + b.C)) / 100;
-            const x = cx + taskPeople * 80;
-            const y = cy - fastSteady * 80;
-            return { x: Math.max(40, Math.min(260, x)), y: Math.max(40, Math.min(260, y)) };
+            const x = cx + taskPeople * 95;
+            const y = cy - fastSteady * 95;
+            return { x: Math.max(50, Math.min(270, x)), y: Math.max(50, Math.min(270, y)) };
         };
 
         const ptA = getCoords(discA);
@@ -1693,43 +1693,46 @@ document.addEventListener("DOMContentLoaded", () => {
             connectingLine = `<line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2.5" stroke-dasharray="4 4" />`;
         }
 
+        const labelXA = Math.max(50, Math.min(270, ptA.x));
+        const labelXB = ptB ? Math.max(50, Math.min(270, ptB.x)) : 0;
+
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 290px; height: auto; aspect-ratio: 1 / 1;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 295px; height: auto; aspect-ratio: 1 / 1; direction: ltr;">
                     <!-- Quadrant backgrounds -->
-                    <rect x="25" y="25" width="125" height="125" fill="rgba(239, 68, 68, 0.09)" rx="10" />
-                    <rect x="150" y="25" width="125" height="125" fill="rgba(234, 179, 8, 0.09)" rx="10" />
-                    <rect x="150" y="150" width="125" height="125" fill="rgba(16, 185, 129, 0.09)" rx="10" />
-                    <rect x="25" y="150" width="125" height="125" fill="rgba(59, 130, 246, 0.09)" rx="10" />
+                    <rect x="35" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.09)" rx="10" />
+                    <rect x="160" y="35" width="125" height="125" fill="rgba(234, 179, 8, 0.09)" rx="10" />
+                    <rect x="160" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.09)" rx="10" />
+                    <rect x="35" y="160" width="125" height="125" fill="rgba(59, 130, 246, 0.09)" rx="10" />
 
                     <!-- Axes -->
-                    <line x1="25" y1="${cy}" x2="275" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
-                    <line x1="${cx}" y1="25" x2="${cx}" y2="275" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="35" y1="${cy}" x2="285" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="${cx}" y1="35" x2="${cx}" y2="285" stroke="var(--border-color)" stroke-width="1.8" />
 
-                    <!-- Quadrant labels -->
-                    <text x="38" y="50" fill="#ef4444" font-size="16" font-weight="800">D</text>
-                    <text x="262" y="50" fill="#eab308" font-size="16" font-weight="800" text-anchor="end">I</text>
-                    <text x="262" y="265" fill="#10b981" font-size="16" font-weight="800" text-anchor="end">S</text>
-                    <text x="38" y="265" fill="#3b82f6" font-size="16" font-weight="800">C</text>
+                    <!-- Quadrant letters -->
+                    <text x="55" y="65" fill="#ef4444" font-size="16" font-weight="800" text-anchor="middle">D</text>
+                    <text x="265" y="65" fill="#eab308" font-size="16" font-weight="800" text-anchor="middle">I</text>
+                    <text x="265" y="275" fill="#10b981" font-size="16" font-weight="800" text-anchor="middle">S</text>
+                    <text x="55" y="275" fill="#3b82f6" font-size="16" font-weight="800" text-anchor="middle">C</text>
 
                     <!-- Axis descriptors -->
-                    <text x="${cx}" y="18" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر (Fast-Paced)" : "Fast-Paced & Assertive"}</text>
-                    <text x="${cx}" y="292" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / رصين (Reflective)" : "Deliberate & Reflective"}</text>
-                    <text x="14" y="${cy + 4}" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="end">${isAr ? "المهام" : "Task"}</text>
-                    <text x="286" y="${cy + 4}" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="start">${isAr ? "الناس" : "People"}</text>
+                    <text x="${cx}" y="20" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر (Fast-Paced)" : "Fast-Paced & Assertive"}</text>
+                    <text x="${cx}" y="308" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / رصين (Reflective)" : "Deliberate & Reflective"}</text>
+                    <text x="20" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "المهام" : "Task"}</text>
+                    <text x="300" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "الناس" : "People"}</text>
 
                     ${connectingLine}
 
                     <!-- Point A -->
                     <g class="chart-node">
                         <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" />
-                        <text x="${ptA.x}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA || "A"}</text>
+                        <text x="${labelXA}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA || "A"}</text>
                     </g>
 
                     ${ptB ? `
                         <g class="chart-node">
                             <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" />
-                            <text x="${ptB.x}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB || "B"}</text>
+                            <text x="${labelXB}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB || "B"}</text>
                         </g>
                     ` : ''}
                 </svg>
@@ -1750,9 +1753,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const bA = traitsA.birkman || {};
         const bB = traitsB?.birkman || {};
 
+        const bTrans = {
+            assertive: isAr ? "حازم ومباشر" : "Assertive",
+            structured: isAr ? "منهجي ومنظم" : "Structured",
+            supportive: isAr ? "ودود وداعم" : "Supportive",
+            social: isAr ? "اجتماعي وتعبيري" : "Social",
+            structure: isAr ? "وضوح واستقرار" : "Structure",
+            empathy: isAr ? "تعاطف وتفهم" : "Empathy",
+            freedom: isAr ? "مرونة واستقلالية" : "Freedom",
+            esteem: isAr ? "تقدير وطمأنة" : "Esteem",
+            withdrawing: isAr ? "الانعزال والانسحاب" : "Withdrawing",
+            demanding: isAr ? "التشدد والحدة" : "Demanding",
+            impatient: isAr ? "نفاد الصبر" : "Impatient",
+            defensive: isAr ? "التحسس والدفاعية" : "Defensive"
+        };
+        const getBirkmanLabel = (val) => {
+            if (!val) return "--";
+            const k = String(val).toLowerCase();
+            return bTrans[k] || val;
+        };
+
         const svg = `
             <div style="width: 100%; max-width: 660px; margin: 0 auto;">
-                <svg class="interactive-svg" viewBox="0 0 600 270" style="width: 100%; height: auto;">
+                <svg class="interactive-svg" viewBox="0 0 600 270" style="width: 100%; height: auto; direction: ltr;">
                     <defs>
                         <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#f0f9ff" stop-opacity="0.85"/>
@@ -1787,32 +1810,32 @@ document.addEventListener("DOMContentLoaded", () => {
                     <!-- Iceberg Submerged Base -->
                     <polygon points="240,75 190,160 220,250 380,250 410,160 360,75" fill="url(#iceDeep)" opacity="0.88" stroke="#0ea5e9" stroke-width="1.8" />
 
-                    <!-- Level Labels for Person A -->
-                    <rect x="15" y="20" width="185" height="38" rx="8" fill="rgba(255,255,255,0.95)" stroke="#94a3b8" stroke-width="1.2" />
-                    <text x="25" y="36" font-size="10" font-weight="800" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
-                    <text x="25" y="50" font-size="9.5" font-weight="700" fill="#0284c7">${nameA}: ${bA.usual_style || "Assertive"}</text>
+                    <!-- Level Labels for Person A (Left side: centered at x=107) -->
+                    <rect x="12" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#94a3b8" stroke-width="1.2" />
+                    <text x="107" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
+                    <text x="107" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#0284c7">${nameA}: ${getBirkmanLabel(bA.usual_style)}</text>
 
-                    <rect x="15" y="110" width="185" height="38" rx="8" fill="rgba(15,23,42,0.88)" stroke="#38bdf8" stroke-width="1.2" />
-                    <text x="25" y="126" font-size="10" font-weight="800" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
-                    <text x="25" y="140" font-size="9.5" font-weight="700" fill="#e2e8f0">${nameA}: ${bA.underlying_need || "Empathy"}</text>
+                    <rect x="12" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#38bdf8" stroke-width="1.2" />
+                    <text x="107" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
+                    <text x="107" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${nameA}: ${getBirkmanLabel(bA.underlying_need)}</text>
 
-                    <rect x="15" y="200" width="185" height="38" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
-                    <text x="25" y="216" font-size="10" font-weight="800" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Derailer"}</text>
-                    <text x="25" y="230" font-size="9.5" font-weight="700" fill="#fca5a5">${nameA}: ${bA.stress_trigger || "Withdrawal"}</text>
+                    <rect x="12" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                    <text x="107" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Reaction"}</text>
+                    <text x="107" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${nameA}: ${getBirkmanLabel(bA.stress_trigger)}</text>
 
                     ${!isSingle ? `
-                        <!-- Person B Callouts -->
-                        <rect x="400" y="20" width="185" height="38" rx="8" fill="rgba(255,255,255,0.95)" stroke="#f59e0b" stroke-width="1.2" />
-                        <text x="410" y="36" font-size="10" font-weight="800" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
-                        <text x="410" y="50" font-size="9.5" font-weight="700" fill="#334155">${bB.usual_style || "Reflective"}</text>
+                        <!-- Person B Callouts (Right side: centered at x=493) -->
+                        <rect x="398" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#f59e0b" stroke-width="1.2" />
+                        <text x="493" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
+                        <text x="493" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#334155">${getBirkmanLabel(bB.usual_style)}</text>
 
-                        <rect x="400" y="110" width="185" height="38" rx="8" fill="rgba(15,23,42,0.88)" stroke="#f59e0b" stroke-width="1.2" />
-                        <text x="410" y="126" font-size="10" font-weight="800" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
-                        <text x="410" y="140" font-size="9.5" font-weight="700" fill="#e2e8f0">${bB.underlying_need || "Freedom"}</text>
+                        <rect x="398" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#f59e0b" stroke-width="1.2" />
+                        <text x="493" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
+                        <text x="493" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${getBirkmanLabel(bB.underlying_need)}</text>
 
-                        <rect x="400" y="200" width="185" height="38" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
-                        <text x="410" y="216" font-size="10" font-weight="800" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
-                        <text x="410" y="230" font-size="9.5" font-weight="700" fill="#fca5a5">${bB.stress_trigger || "Demanding"}</text>
+                        <rect x="398" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                        <text x="493" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
+                        <text x="493" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${getBirkmanLabel(bB.stress_trigger)}</text>
                     ` : ''}
                 </svg>
             </div>
@@ -1825,57 +1848,74 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = "";
 
-        const width = 300, height = 300;
-        const cx = 150, cy = 150;
+        const width = 320, height = 320;
+        const cx = 160, cy = 160;
 
         const getCoords = (traits) => {
             if (!traits) return { x: cx, y: cy };
             const ecr = traits.attachment || traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
             const anx = Math.max(5, Math.min(95, ecr.anxiety_score !== undefined ? ecr.anxiety_score : 30));
             const avoid = Math.max(5, Math.min(95, ecr.avoidance_score !== undefined ? ecr.avoidance_score : 30));
-            const x = 35 + (anx / 100) * 230;
-            const y = 265 - (avoid / 100) * 230;
+            const x = 45 + (anx / 100) * 230;
+            const y = 275 - (avoid / 100) * 230;
             return { x, y };
         };
 
         const ptA = getCoords(traitsA);
         const ptB = !isSingle ? getCoords(traitsB) : null;
 
+        const labelXA = Math.max(55, Math.min(265, ptA.x));
+        const labelXB = ptB ? Math.max(55, Math.min(265, ptB.x)) : 0;
+
+        const attTrans = {
+            secure: isAr ? "آمن" : "SECURE",
+            anxious: isAr ? "قلق" : "ANXIOUS",
+            avoidant: isAr ? "تجنبي" : "AVOIDANT",
+            dismissive: isAr ? "تجنبي" : "DISMISSIVE",
+            fearful: isAr ? "مضطرب" : "FEARFUL"
+        };
+        const getAttLabel = (style) => {
+            if (!style) return "--";
+            const k = String(style).toLowerCase();
+            return attTrans[k] || style.toUpperCase();
+        };
+
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 290px; height: auto; aspect-ratio: 1 / 1;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 295px; height: auto; aspect-ratio: 1 / 1; direction: ltr;">
                     <!-- 4 Quadrants -->
-                    <rect x="30" y="150" width="120" height="120" fill="rgba(16, 185, 129, 0.12)" rx="8" /> <!-- Secure -->
-                    <rect x="150" y="150" width="120" height="120" fill="rgba(245, 158, 11, 0.12)" rx="8" /> <!-- Anxious -->
-                    <rect x="30" y="30" width="120" height="120" fill="rgba(59, 130, 246, 0.12)" rx="8" /> <!-- Avoidant -->
-                    <rect x="150" y="30" width="120" height="120" fill="rgba(239, 68, 68, 0.12)" rx="8" /> <!-- Fearful -->
+                    <rect x="35" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.12)" rx="8" /> <!-- Secure -->
+                    <rect x="160" y="160" width="125" height="125" fill="rgba(245, 158, 11, 0.12)" rx="8" /> <!-- Anxious -->
+                    <rect x="35" y="35" width="125" height="125" fill="rgba(59, 130, 246, 0.12)" rx="8" /> <!-- Avoidant -->
+                    <rect x="160" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.12)" rx="8" /> <!-- Fearful -->
 
                     <!-- Axes -->
-                    <line x1="30" y1="${cy}" x2="270" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
-                    <line x1="${cx}" y1="30" x2="${cx}" y2="270" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="35" y1="${cy}" x2="285" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="${cx}" y1="35" x2="${cx}" y2="285" stroke="var(--border-color)" stroke-width="1.8" />
 
-                    <!-- Labels -->
-                    <text x="42" y="258" fill="#10b981" font-size="11" font-weight="800">${isAr ? "آمن (Secure)" : "SECURE"}</text>
-                    <text x="258" y="258" fill="#f59e0b" font-size="11" font-weight="800" text-anchor="end">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
-                    <text x="42" y="48" fill="#3b82f6" font-size="11" font-weight="800">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
-                    <text x="258" y="48" fill="#ef4444" font-size="11" font-weight="800" text-anchor="end">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
+                    <!-- Centered Quadrant Labels -->
+                    <text x="97" y="275" fill="#059669" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "آمن (Secure)" : "SECURE"}</text>
+                    <text x="223" y="275" fill="#d97706" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
+                    <text x="97" y="55" fill="#2563eb" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
+                    <text x="223" y="55" fill="#dc2626" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
 
-                    <text x="${cx}" y="18" fill="var(--text-secondary)" font-size="9" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
-                    <text x="282" y="${cy + 4}" fill="var(--text-secondary)" font-size="9" font-weight="700" text-anchor="start">${isAr ? "قلق" : "Anxiety"}</text>
+                    <!-- Axis Descriptors -->
+                    <text x="${cx}" y="20" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
+                    <text x="${cx}" y="308" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "انخفاض التجنب (Low Avoidance)" : "Low Avoidance"}</text>
 
                     <!-- Point A -->
                     <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" class="chart-node" />
-                    <text x="${ptA.x}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA}</text>
+                    <text x="${labelXA}" y="${ptA.y - 13}" text-anchor="middle" fill="#059669" font-size="11" font-weight="800">${nameA}</text>
 
                     ${ptB ? `
                         <line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />
                         <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" class="chart-node" />
-                        <text x="${ptB.x}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB}</text>
+                        <text x="${labelXB}" y="${ptB.y - 13}" text-anchor="middle" fill="#d97706" font-size="11" font-weight="800">${nameB}</text>
                     ` : ''}
                 </svg>
                 <div style="font-size: 0.88rem; margin-top: 10px; color: var(--text-secondary); text-align: center;">
-                    ${nameA}: <strong>${traitsA.attachment?.primary?.toUpperCase()}</strong>
-                    ${!isSingle ? ` | ${nameB}: <strong>${traitsB.attachment?.primary?.toUpperCase()}</strong>` : ''}
+                    ${nameA}: <strong>${getAttLabel(traitsA.attachment?.primary)}</strong>
+                    ${!isSingle ? ` | ${nameB}: <strong>${getAttLabel(traitsB.attachment?.primary)}</strong>` : ''}
                 </div>
             </div>
         `;
