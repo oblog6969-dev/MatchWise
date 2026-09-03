@@ -100,9 +100,9 @@
         <section id="panelAssessment" class="spa-panel">
             <div class="assessment-container">
                 <div class="assessment-meta-header">
-                    <div>
-                        <h2 data-i18n="question_header">Assessment</h2>
+                    <div class="header-cat-group">
                         <span id="questionCategory" class="category-badge">Category</span>
+                        <span id="questionCountBadge" class="question-count-badge">Question 1 of 45</span>
                     </div>
                     <div class="meta-progress">
                         <span data-i18n="progress">Progress</span>: <span id="progressPercent">0%</span>
@@ -114,10 +114,17 @@
                     <div id="progressBarFill" class="progress-bar-fill"></div>
                 </div>
 
-                <p data-i18n="required_questions_info" class="meta-desc">Note: Adaptive engine selects the most relevant questions based on your responses (Minimum 45, Maximum 70).</p>
+                <!-- Auto-advance & hint strip -->
+                <div class="assessment-hints-row">
+                    <span class="auto-advance-badge" id="autoAdvanceBadge">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+                        <span data-i18n="auto_advance_hint">Auto-advances on selection</span>
+                    </span>
+                    <span class="adaptive-note-mini" data-i18n="required_questions_info">Adaptive Assessment Engine</span>
+                </div>
 
                 <!-- Dynamic Question Display Card -->
-                <div class="question-card">
+                <div class="question-card" id="questionCard">
                     <p id="questionText" class="question-text">Loading question text...</p>
                     
                     <!-- Container for interactive answer inputs -->
@@ -128,11 +135,17 @@
 
                 <!-- Navigation Controls -->
                 <div class="assessment-nav-row">
-                    <button id="btnBackQuestion" class="secondary-btn">
+                    <button id="btnBackQuestion" class="secondary-btn btn-nav-back" aria-label="Previous Question">
+                        <svg class="nav-back-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
                         <span data-i18n="back">Back</span>
                     </button>
-                    <button id="btnNextQuestion" class="primary-btn">
+                    <button id="btnNextQuestion" class="primary-btn btn-nav-next">
                         <span data-i18n="next">Next</span>
+                        <svg class="nav-next-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
                     </button>
                 </div>
             </div>

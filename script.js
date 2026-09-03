@@ -43,6 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Assessment elements
         questionCategory: document.getElementById("questionCategory"),
+        questionCountBadge: document.getElementById("questionCountBadge"),
+        autoAdvanceBadge: document.getElementById("autoAdvanceBadge"),
+        questionCard: document.getElementById("questionCard"),
         progressPercent: document.getElementById("progressPercent"),
         progressBarFill: document.getElementById("progressBarFill"),
         questionText: document.getElementById("questionText"),
@@ -535,7 +538,89 @@ document.addEventListener("DOMContentLoaded", () => {
         return null;
     }
 
+    // Auto-advance controller for single-select questions
+    let isAutoAdvancing = false;
+    let autoAdvanceTimer = null;
+
+    function clearAutoAdvance() {
+        if (autoAdvanceTimer) {
+            clearTimeout(autoAdvanceTimer);
+            autoAdvanceTimer = null;
+        }
+        isAutoAdvancing = false;
+    }
+
+    function triggerAutoAdvance(delay = 300) {
+        clearAutoAdvance();
+        isAutoAdvancing = true;
+        autoAdvanceTimer = setTimeout(async () => {
+            try {
+                await advanceToNextQuestion();
+            } finally {
+                isAutoAdvancing = false;
+                autoAdvanceTimer = null;
+            }
+        }, delay);
+    }
+
+    async function advanceToNextQuestion() {
+        const history = state.assessmentSession.history;
+        const currentQId = history[history.length - 1];
+        
+        // Ensure user answered before going forward
+        if (state.sessionAnswers[currentQId] === undefined) {
+            const isAr = state.localization.currentLang === "ar";
+            alert(isAr ? "يرجى الإجابة على السؤال الحالي للمتابعة." : "Please answer the current question to proceed.");
+            return;
+        }
+
+        // Show loading state
+        const nextSpan = dom.btnNextQuestion.querySelector("span");
+        const oldText = nextSpan ? nextSpan.textContent : "";
+        if (nextSpan) nextSpan.textContent = "...";
+        dom.btnNextQuestion.disabled = true;
+
+        let nextQId = null;
+
+        try {
+            if (state.isAiMode && state.aiService) {
+                const askedCount = Object.keys(state.sessionAnswers).length;
+                if (askedCount >= 45) {
+                     nextQId = null; // AI test completion threshold (can be adjusted)
+                } else {
+                     const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
+                     if (aiResponse.next_id === "NEW" && aiResponse.new_question) {
+                         questions.push(aiResponse.new_question);
+                         nextQId = aiResponse.new_question.id;
+                     } else if (aiResponse.next_id === "STANDARD" || !aiResponse.next_id) {
+                         nextQId = getNextQuestionId(currentQId);
+                     } else {
+                         nextQId = aiResponse.next_id;
+                     }
+                }
+            } else {
+                nextQId = getNextQuestionId(currentQId);
+            }
+        } catch (e) {
+            console.error(e);
+            nextQId = getNextQuestionId(currentQId); // fallback
+        }
+
+        dom.btnNextQuestion.disabled = false;
+        if (nextSpan && oldText) nextSpan.textContent = oldText;
+
+        if (nextQId) {
+            state.assessmentSession.history.push(nextQId);
+            renderCurrentQuestion();
+        } else {
+            // Assessment is complete! Save and Export Profile
+            completeAndExportSession();
+        }
+    }
+
     function renderCurrentQuestion() {
+        clearAutoAdvance();
+
         const history = state.assessmentSession.history;
         const currentQId = history[history.length - 1];
         const q = questions.find(qu => qu.id === currentQId);
@@ -543,6 +628,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!q) return;
 
         const isAr = state.localization.currentLang === "ar";
+
+        // Card entrance animation
+        if (dom.questionCard) {
+            dom.questionCard.classList.remove("q-fade-in");
+            void dom.questionCard.offsetWidth; // trigger reflow
+            dom.questionCard.classList.add("q-fade-in");
+        }
 
         // Update translations & metadata
         dom.questionCategory.textContent = isAr
@@ -563,12 +655,24 @@ document.addEventListener("DOMContentLoaded", () => {
         dom.progressPercent.textContent = `${progressPercentage}%`;
         dom.progressBarFill.style.width = `${progressPercentage}%`;
 
+        // Question count badge update
+        if (dom.questionCountBadge) {
+            dom.questionCountBadge.textContent = isAr
+                ? `السؤال ${currentLength} من ${matchingQuestionsCount}`
+                : `Question ${currentLength} of ${matchingQuestionsCount}`;
+        }
+
         // Bilingual Text Support
         const localizedText = isAr ? q.arabic.text : q.english.text;
         dom.questionText.textContent = localizedText;
 
         // Clear previous options
         dom.answerOptionsContainer.innerHTML = "";
+
+        // Toggle auto-advance hint badge for non-ranking questions
+        if (dom.autoAdvanceBadge) {
+            dom.autoAdvanceBadge.style.display = (q.type === "rank") ? "none" : "inline-flex";
+        }
 
         // Render Inputs by type
         if (q.type === "likert") {
@@ -581,17 +685,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Adjust Next Button text dynamically at end of test
         const hasNext = getNextQuestionId(currentQId);
-        if (!hasNext) {
-            dom.btnNextQuestion.querySelector("span").textContent = state.localization.get("finish");
-        } else {
-            dom.btnNextQuestion.querySelector("span").textContent = state.localization.get("next");
+        const nextSpan = dom.btnNextQuestion.querySelector("span");
+        if (nextSpan) {
+            if (!hasNext) {
+                nextSpan.textContent = state.localization.get("finish");
+                dom.btnNextQuestion.classList.add("btn-finish-pulse");
+            } else {
+                nextSpan.textContent = state.localization.get("next");
+                dom.btnNextQuestion.classList.remove("btn-finish-pulse");
+            }
         }
 
         // Disable back button on first question
         dom.btnBackQuestion.disabled = history.length <= 1;
     }
 
-    // Input renderer: Likert Scale (-3 to +3)
+    // Input renderer: Modernized Likert Scale (1 to 7) with sentiment badge & auto-advance
     function renderLikertOptions(question) {
         const scaleContainer = document.createElement("div");
         scaleContainer.className = "likert-scale-container";
@@ -599,37 +708,89 @@ document.addEventListener("DOMContentLoaded", () => {
         const labelsRow = document.createElement("div");
         labelsRow.className = "likert-labels-row";
         labelsRow.innerHTML = `
-            <span>${state.localization.get("likert_sd")}</span>
-            <span>${state.localization.get("likert_n")}</span>
-            <span>${state.localization.get("likert_sa")}</span>
+            <span class="likert-label-end">${state.localization.get("likert_sd")}</span>
+            <span class="likert-label-mid">${state.localization.get("likert_n")}</span>
+            <span class="likert-label-end">${state.localization.get("likert_sa")}</span>
         `;
 
         const optionsRow = document.createElement("div");
         optionsRow.className = "likert-options-row";
 
-        // 7 Options
+        const LIKERT_INFO = [
+            { key: "likert_sd", color: "#ef4444", bg: "rgba(239, 68, 68, 0.12)" },
+            { key: "likert_d",  color: "#f87171", bg: "rgba(248, 113, 113, 0.12)" },
+            { key: "likert_sld",color: "#fb923c", bg: "rgba(251, 146, 60, 0.12)" },
+            { key: "likert_n",  color: "#64748b", bg: "rgba(100, 116, 139, 0.12)" },
+            { key: "likert_sla",color: "#0284c7", bg: "rgba(2, 132, 199, 0.12)" },
+            { key: "likert_a",  color: "#2563eb", bg: "rgba(37, 99, 235, 0.12)" },
+            { key: "likert_sa", color: "#16a34a", bg: "rgba(22, 163, 74, 0.12)" }
+        ];
+
+        // Dynamic sentiment feedback indicator
+        const sentimentBadge = document.createElement("div");
+        sentimentBadge.className = "likert-sentiment-badge";
+
+        function updateSentiment(val) {
+            if (!val || val < 1 || val > 7) {
+                sentimentBadge.innerHTML = `<span class="sentiment-placeholder">${state.localization.currentLang === "ar" ? "اضغط على رقم لتحديد مستوى الموافقة" : "Tap a number to rate your agreement"}</span>`;
+                return;
+            }
+            const info = LIKERT_INFO[val - 1];
+            const label = state.localization.get(info.key);
+            sentimentBadge.innerHTML = `
+                <span class="sentiment-pill" style="border-color: ${info.color}; color: ${info.color}; background: ${info.bg};">
+                    <span class="sentiment-val">${val}</span>
+                    <span class="sentiment-bullet">•</span>
+                    <span class="sentiment-text">${label}</span>
+                </span>
+            `;
+        }
+
+        // Show initial sentiment if answer already exists
+        const initialVal = state.sessionAnswers[question.id];
+        updateSentiment(initialVal);
+
+        // 7 Touch-Friendly Circles (1 to 7)
         for (let i = 1; i <= 7; i++) {
             const circle = document.createElement("div");
             circle.className = "likert-option-circle";
+            circle.setAttribute("role", "button");
+            circle.setAttribute("tabindex", "0");
+            circle.setAttribute("aria-label", `${i}: ${state.localization.get(LIKERT_INFO[i - 1].key)}`);
             circle.textContent = i;
+
             if (state.sessionAnswers[question.id] == i) {
                 circle.classList.add("selected-likert");
             }
-            circle.addEventListener("click", () => {
+
+            const selectLikert = () => {
+                if (isAutoAdvancing) return;
                 const elements = optionsRow.querySelectorAll(".likert-option-circle");
                 elements.forEach(el => el.classList.remove("selected-likert"));
                 circle.classList.add("selected-likert");
                 state.sessionAnswers[question.id] = i;
+                updateSentiment(i);
+                triggerAutoAdvance(300);
+            };
+
+            circle.addEventListener("click", selectLikert);
+            circle.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    selectLikert();
+                }
             });
+
             optionsRow.appendChild(circle);
         }
 
         scaleContainer.appendChild(labelsRow);
         scaleContainer.appendChild(optionsRow);
+        scaleContainer.appendChild(sentimentBadge);
         dom.answerOptionsContainer.appendChild(scaleContainer);
     }
 
-    // Input renderer: Multiple Choice & Scenario Questions
+    // Input renderer: Modernized Multiple Choice & Scenario Questions with card tiles & auto-advance
     function renderMultipleChoiceOptions(question) {
         const list = document.createElement("div");
         list.className = "choice-list";
@@ -637,18 +798,39 @@ document.addEventListener("DOMContentLoaded", () => {
         question.options.forEach(opt => {
             const row = document.createElement("div");
             row.className = "choice-option-row";
+            row.setAttribute("role", "button");
+            row.setAttribute("tabindex", "0");
+
             if (state.sessionAnswers[question.id] === opt.id) {
                 row.classList.add("selected-choice");
             }
 
-            const text = state.localization.currentLang === "ar" ? opt.arabic : opt.english;
-            row.textContent = text;
+            const radio = document.createElement("div");
+            radio.className = "choice-radio-indicator";
+            radio.innerHTML = `<span class="radio-inner-dot"></span>`;
 
-            row.addEventListener("click", () => {
+            const textDiv = document.createElement("div");
+            textDiv.className = "choice-text";
+            textDiv.textContent = state.localization.currentLang === "ar" ? opt.arabic : opt.english;
+
+            row.appendChild(radio);
+            row.appendChild(textDiv);
+
+            const selectChoice = () => {
+                if (isAutoAdvancing) return;
                 const siblings = list.querySelectorAll(".choice-option-row");
                 siblings.forEach(s => s.classList.remove("selected-choice"));
                 row.classList.add("selected-choice");
                 state.sessionAnswers[question.id] = opt.id;
+                triggerAutoAdvance(300);
+            };
+
+            row.addEventListener("click", selectChoice);
+            row.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    selectChoice();
+                }
             });
 
             list.appendChild(row);
@@ -751,64 +933,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navigation Controls handling
     dom.btnBackQuestion.addEventListener("click", () => {
+        clearAutoAdvance();
         if (state.assessmentSession.history.length > 1) {
             state.assessmentSession.history.pop();
             renderCurrentQuestion();
         }
     });
 
-    dom.btnNextQuestion.addEventListener("click", async () => {
-        const history = state.assessmentSession.history;
-        const currentQId = history[history.length - 1];
-        
-        // Ensure user answered before going forward
-        if (state.sessionAnswers[currentQId] === undefined) {
-            const isAr = state.localization.currentLang === "ar";
-            alert(isAr ? "يرجى الإجابة على السؤال الحالي للمتابعة." : "Please answer the current question to proceed.");
-            return;
-        }
-
-        // Show loading state
-        const oldText = dom.btnNextQuestion.querySelector("span").textContent;
-        dom.btnNextQuestion.querySelector("span").textContent = "...";
-        dom.btnNextQuestion.disabled = true;
-
-        let nextQId = null;
-
-        try {
-            if (state.isAiMode && state.aiService) {
-                const askedCount = Object.keys(state.sessionAnswers).length;
-                if (askedCount >= 45) {
-                     nextQId = null; // AI test completion threshold (can be adjusted)
-                } else {
-                     const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
-                     if (aiResponse.next_id === "NEW" && aiResponse.new_question) {
-                         questions.push(aiResponse.new_question);
-                         nextQId = aiResponse.new_question.id;
-                     } else if (aiResponse.next_id === "STANDARD" || !aiResponse.next_id) {
-                         nextQId = getNextQuestionId(currentQId);
-                     } else {
-                         nextQId = aiResponse.next_id;
-                     }
-                }
-            } else {
-                nextQId = getNextQuestionId(currentQId);
-            }
-        } catch (e) {
-            console.error(e);
-            nextQId = getNextQuestionId(currentQId); // fallback
-        }
-
-        dom.btnNextQuestion.disabled = false;
-        dom.btnNextQuestion.querySelector("span").textContent = oldText;
-
-        if (nextQId) {
-            state.assessmentSession.history.push(nextQId);
-            renderCurrentQuestion();
-        } else {
-            // Assessment is complete! Save and Export Profile
-            completeAndExportSession();
-        }
+    dom.btnNextQuestion.addEventListener("click", () => {
+        clearAutoAdvance();
+        advanceToNextQuestion();
     });
 
     // --- 7. COMPLETE & PROFILE EXPORT ---

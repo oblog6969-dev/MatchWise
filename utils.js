@@ -94,6 +94,8 @@ const TRANSLATIONS = {
         code_copied_desc: "Shareable result code has been copied to your clipboard.",
         submit: "Submit",
         please_answer: "Please select an answer to proceed.",
+        question_count: "Question {current} of {total}",
+        auto_advance_hint: "Auto-advances on selection",
 
         // Storytelling & Print Mode Keys
         print_preview_mode: "Toggle Print View",
@@ -238,6 +240,8 @@ const TRANSLATIONS = {
         code_copied_desc: "تم نسخ رمز مشاركة النتيجة بنجاح إلى الحافظة.",
         submit: "تأكيد",
         please_answer: "يرجى اختيار إجابة للمتابعة.",
+        question_count: "السؤال {current} من {total}",
+        auto_advance_hint: "انتقال تلقائي فور الاختيار",
 
         // Storytelling & Print Mode Keys (Arabic)
         print_preview_mode: "معاينة الطباعة",
