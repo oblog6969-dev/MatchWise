@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnGoToDashboard: document.getElementById("btnGoToDashboard"),
         btnHomeFromDashboard: document.getElementById("btnHomeFromDashboard"),
         btnDashboardFromReport: document.getElementById("btnDashboardFromReport"),
+        btnExportPDF: document.getElementById("btnExportPDF"),
         btnPrintReport: document.getElementById("btnPrintReport"),
         
         // Assessment elements
@@ -172,6 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 4. LANGUAGE & THEME EVENTS ---
     dom.languageSelector.value = state.localization.currentLang;
+    state.localization.translateDOM();
+
     dom.languageSelector.addEventListener("change", (e) => {
         state.localization.setLanguage(e.target.value);
         if (state.currentPanel === "panelAssessment") {
@@ -181,10 +184,28 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (state.currentPanel === "panelReport" && state.activeReportA) {
             generateAndRenderReport(state.activeReportA, state.activeReportB);
         }
+
+        // Keep compare button text in sync with new language
+        if (dom.btnCompareText) {
+            const selectedCount = dom.profilesListContainer ? dom.profilesListContainer.querySelectorAll(".premium-checkbox:checked").length : 0;
+            if (selectedCount === 2) {
+                dom.btnCompareText.textContent = state.localization.get("btn_compare_two");
+            } else if (selectedCount === 1) {
+                dom.btnCompareText.textContent = state.localization.get("btn_view_selected");
+            } else {
+                dom.btnCompareText.textContent = state.localization.get("btn_compare_selected");
+            }
+        }
     });
 
     dom.themeToggleBtn.addEventListener("click", () => {
         state.themeManager.toggleTheme();
+    });
+
+    window.addEventListener("matchwise_theme_changed", () => {
+        if (state.currentPanel === "panelReport" && state.activeReportA) {
+            generateAndRenderReport(state.activeReportA, state.activeReportB);
+        }
     });
 
     // --- 5. PANEL SPA COORDINATOR ---
@@ -306,9 +327,85 @@ document.addEventListener("DOMContentLoaded", () => {
     dom.btnHomeFromDashboard.addEventListener("click", () => navigateTo("panelHome"));
     dom.btnDashboardFromReport.addEventListener("click", () => navigateTo("panelDashboard"));
     
+    // PDF Export & Native Print
+    if (dom.btnExportPDF) {
+        dom.btnExportPDF.addEventListener("click", exportReportToPDF);
+    }
+
     dom.btnPrintReport.addEventListener("click", () => {
         window.print();
     });
+
+    async function exportReportToPDF() {
+        const reportElem = document.getElementById("printableReportDocument");
+        if (!reportElem) return;
+        const btn = dom.btnExportPDF;
+        const originalContent = btn ? btn.innerHTML : "";
+        const isAr = state.localization.currentLang === "ar";
+        
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<span style="display:inline-block; animation: pulse 1s infinite;">⏳</span> <span>${state.localization.get("export_pdf_loading")}</span>`;
+        }
+
+        try {
+            window.scrollTo({ top: 0, behavior: "instant" });
+
+            if (!window.html2canvas || !(window.jspdf || window.jsPDF)) {
+                window.print();
+                return;
+            }
+
+            const isDark = state.themeManager.isDark();
+            const canvas = await window.html2canvas(reportElem, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                allowTaint: true,
+                backgroundColor: isDark ? "#161617" : "#ffffff",
+                windowWidth: 1200
+            });
+
+            const imgData = canvas.toDataURL("image/jpeg", 0.96);
+            const { jsPDF } = window.jspdf || window;
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth;
+            const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = -(imgHeight - heightLeft);
+                pdf.addPage();
+                pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, "FAST");
+                heightLeft -= pageHeight;
+            }
+
+            const nameA = (state.activeReportA?.owner_name || "Profile").replace(/[^\w\u0600-\u06FF]/gi, "_");
+            const nameB = state.activeReportB ? `-${state.activeReportB.owner_name.replace(/[^\w\u0600-\u06FF]/gi, "_")}` : "";
+            const filename = `MatchWise_${isAr ? "تقرير_التوافق" : "Compatibility_Report"}_${nameA}${nameB}.pdf`;
+            pdf.save(filename);
+        } catch (err) {
+            console.error("PDF Export error:", err);
+            window.print();
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+    }
 
     // --- 6. ADAPTIVE QUESTION ENGINE ---
     const CATEGORY_TRANSLATIONS = {
@@ -1230,8 +1327,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Render Dyadic Conflict & De-escalation Protocol
             renderFairFightingBox(report, profileA, isAr);
 
-            // Render Custom SVG Radar Chart
-            renderSVGRadarChart(report.category_scores);
+            // Render Interactive Multi-Variable Radar Chart (Chart.js or responsive SVG)
+            renderRadarChart(report.category_scores);
 
             // Render Custom SVG Bar Charts (Big Five OCEAN differences)
             renderBigFiveBarCharts(
@@ -1486,8 +1583,8 @@ document.addEventListener("DOMContentLoaded", () => {
             yellow: { hex: "#eab308", label: isAr ? "أصفر (حماس وبهجة)" : "Yellow (Fun & Passion)" }
         };
 
-        const width = 240, height = 240;
-        const cx = 120, cy = 120, r = 80, strokeW = 26;
+        const width = 280, height = 280;
+        const cx = 140, cy = 140, r = 95, strokeW = 30;
         const circ = 2 * Math.PI * r;
 
         let offset = 0;
@@ -1514,22 +1611,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 190px; height: 190px;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 270px; height: auto; aspect-ratio: 1 / 1;">
                     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${strokeW}" />
                     ${pathsSvg}
-                    <text x="${cx}" y="${cy - 6}" text-anchor="middle" fill="${primaryHex}" font-size="14" font-weight="800">${primaryColor.toUpperCase()}</text>
-                    <text x="${cx}" y="${cy + 12}" text-anchor="middle" fill="var(--text-secondary)" font-size="9" font-weight="600">${motiveName}</text>
+                    <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="${primaryHex}" font-size="18" font-weight="800">${primaryColor.toUpperCase()}</text>
+                    <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600">${motiveName}</text>
                 </svg>
-                <div class="visual-legend">
+                <div class="visual-legend" style="margin-top: 16px; font-size: 0.85rem;">
                     ${colorKeys.map(k => `
-                        <div class="legend-item" title="${colors[k].label}">
-                            <span class="legend-color-dot" style="background-color: ${colors[k].hex};"></span>
-                            <span>${isAr ? k.toUpperCase() : k.charAt(0).toUpperCase() + k.slice(1)}: ${Math.round(bA[k] || 0)}%</span>
+                        <div class="legend-item" title="${colors[k].label}" style="display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px;">
+                            <span class="legend-color-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: ${colors[k].hex};"></span>
+                            <span>${isAr ? k.toUpperCase() : k.charAt(0).toUpperCase() + k.slice(1)}: <strong>${Math.round(bA[k] || 0)}%</strong></span>
                         </div>
                     `).join('')}
                 </div>
                 ${hA.metadata ? `
-                    <div style="font-size: 0.8rem; margin-top: 10px; color: var(--text-secondary); line-height: 1.4; text-align: center; max-width: 280px;">
+                    <div style="font-size: 0.88rem; margin-top: 12px; color: var(--text-secondary); line-height: 1.5; text-align: center; max-width: 320px; background: rgba(0, 113, 227, 0.05); padding: 8px 14px; border-radius: 8px;">
                         <strong>${isAr ? "الوقود العاطفي:" : "Core Fuel:"}</strong> ${isAr ? hA.metadata.fuel_ar : hA.metadata.fuel_en}
                     </div>
                 ` : ''}
@@ -1543,17 +1640,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = "";
 
-        const width = 260, height = 260;
-        const cx = 130, cy = 130;
+        const width = 300, height = 300;
+        const cx = 150, cy = 150;
 
         const getCoords = (disc) => {
             if (!disc) return { x: cx, y: cy };
             const b = disc.breakdown || { D: 25, I: 25, S: 25, C: 25 };
             const taskPeople = ((b.I + b.S) - (b.D + b.C)) / 100;
             const fastSteady = ((b.D + b.I) - (b.S + b.C)) / 100;
-            const x = cx + taskPeople * 68;
-            const y = cy - fastSteady * 68;
-            return { x: Math.max(35, Math.min(225, x)), y: Math.max(35, Math.min(225, y)) };
+            const x = cx + taskPeople * 80;
+            const y = cy - fastSteady * 80;
+            return { x: Math.max(40, Math.min(260, x)), y: Math.max(40, Math.min(260, y)) };
         };
 
         const ptA = getCoords(discA);
@@ -1561,50 +1658,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let connectingLine = "";
         if (ptB) {
-            connectingLine = `<line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />`;
+            connectingLine = `<line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2.5" stroke-dasharray="4 4" />`;
         }
 
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 210px; height: 210px;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 290px; height: auto; aspect-ratio: 1 / 1;">
                     <!-- Quadrant backgrounds -->
-                    <rect x="20" y="20" width="110" height="110" fill="rgba(239, 68, 68, 0.08)" rx="8" />
-                    <rect x="130" y="20" width="110" height="110" fill="rgba(234, 179, 8, 0.08)" rx="8" />
-                    <rect x="130" y="130" width="110" height="110" fill="rgba(16, 185, 129, 0.08)" rx="8" />
-                    <rect x="20" y="130" width="110" height="110" fill="rgba(59, 130, 246, 0.08)" rx="8" />
+                    <rect x="25" y="25" width="125" height="125" fill="rgba(239, 68, 68, 0.09)" rx="10" />
+                    <rect x="150" y="25" width="125" height="125" fill="rgba(234, 179, 8, 0.09)" rx="10" />
+                    <rect x="150" y="150" width="125" height="125" fill="rgba(16, 185, 129, 0.09)" rx="10" />
+                    <rect x="25" y="150" width="125" height="125" fill="rgba(59, 130, 246, 0.09)" rx="10" />
 
                     <!-- Axes -->
-                    <line x1="20" y1="${cy}" x2="240" y2="${cy}" stroke="var(--border-color)" stroke-width="1.5" />
-                    <line x1="${cx}" y1="20" x2="${cx}" y2="240" stroke="var(--border-color)" stroke-width="1.5" />
+                    <line x1="25" y1="${cy}" x2="275" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="${cx}" y1="25" x2="${cx}" y2="275" stroke="var(--border-color)" stroke-width="1.8" />
 
                     <!-- Quadrant labels -->
-                    <text x="32" y="42" fill="#ef4444" font-size="12" font-weight="800">D</text>
-                    <text x="228" y="42" fill="#eab308" font-size="12" font-weight="800" text-anchor="end">I</text>
-                    <text x="228" y="230" fill="#10b981" font-size="12" font-weight="800" text-anchor="end">S</text>
-                    <text x="32" y="230" fill="#3b82f6" font-size="12" font-weight="800">C</text>
+                    <text x="38" y="50" fill="#ef4444" font-size="16" font-weight="800">D</text>
+                    <text x="262" y="50" fill="#eab308" font-size="16" font-weight="800" text-anchor="end">I</text>
+                    <text x="262" y="265" fill="#10b981" font-size="16" font-weight="800" text-anchor="end">S</text>
+                    <text x="38" y="265" fill="#3b82f6" font-size="16" font-weight="800">C</text>
 
                     <!-- Axis descriptors -->
-                    <text x="${cx}" y="14" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر" : "Fast-Paced"}</text>
-                    <text x="${cx}" y="254" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / ثابت" : "Reflective"}</text>
-                    <text x="12" y="${cy + 3}" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="end">${isAr ? "المهام" : "Task"}</text>
-                    <text x="248" y="${cy + 3}" fill="var(--text-secondary)" font-size="8" font-weight="700" text-anchor="start">${isAr ? "الناس" : "People"}</text>
+                    <text x="${cx}" y="18" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر (Fast-Paced)" : "Fast-Paced & Assertive"}</text>
+                    <text x="${cx}" y="292" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / رصين (Reflective)" : "Deliberate & Reflective"}</text>
+                    <text x="14" y="${cy + 4}" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="end">${isAr ? "المهام" : "Task"}</text>
+                    <text x="286" y="${cy + 4}" fill="var(--text-secondary)" font-size="10" font-weight="700" text-anchor="start">${isAr ? "الناس" : "People"}</text>
 
                     ${connectingLine}
 
                     <!-- Point A -->
                     <g class="chart-node">
-                        <circle cx="${ptA.x}" cy="${ptA.y}" r="8" fill="#10b981" stroke="#fff" stroke-width="2" />
-                        <text x="${ptA.x}" y="${ptA.y - 12}" text-anchor="middle" fill="#10b981" font-size="9" font-weight="800">${nameA || "A"}</text>
+                        <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" />
+                        <text x="${ptA.x}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA || "A"}</text>
                     </g>
 
                     ${ptB ? `
                         <g class="chart-node">
-                            <circle cx="${ptB.x}" cy="${ptB.y}" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2" />
-                            <text x="${ptB.x}" y="${ptB.y - 12}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="800">${nameB || "B"}</text>
+                            <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" />
+                            <text x="${ptB.x}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB || "B"}</text>
                         </g>
                     ` : ''}
                 </svg>
-                <div style="font-size: 0.82rem; margin-top: 8px; color: var(--text-secondary); text-align: center;">
+                <div style="font-size: 0.88rem; margin-top: 10px; color: var(--text-secondary); text-align: center;">
                     <strong>${nameA}:</strong> ${discA?.type || "D"} (${isAr ? (discA?.pace_ar || "") : (discA?.pace || "")})
                     ${!isSingle ? `<br><strong>${nameB}:</strong> ${discB?.type || "S"} (${isAr ? (discB?.pace_ar || "") : (discB?.pace || "")})` : ''}
                 </div>
@@ -1622,17 +1719,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const bB = traitsB?.birkman || {};
 
         const svg = `
-            <div style="width: 100%; max-width: 520px; margin: 0 auto;">
-                <svg class="interactive-svg" viewBox="0 0 500 240" style="width: 100%; height: auto;">
+            <div style="width: 100%; max-width: 660px; margin: 0 auto;">
+                <svg class="interactive-svg" viewBox="0 0 600 270" style="width: 100%; height: auto;">
                     <defs>
                         <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#f0f9ff" stop-opacity="0.8"/>
-                            <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.5"/>
+                            <stop offset="0%" stop-color="#f0f9ff" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.55"/>
                         </linearGradient>
                         <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
-                            <stop offset="50%" stop-color="#0369a1" stop-opacity="0.6"/>
-                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.3"/>
+                            <stop offset="50%" stop-color="#0369a1" stop-opacity="0.65"/>
+                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95"/>
                         </linearGradient>
                         <linearGradient id="iceTip" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#ffffff"/>
@@ -1646,44 +1743,44 @@ document.addEventListener("DOMContentLoaded", () => {
                     </defs>
 
                     <!-- Sky & Sea Backgrounds -->
-                    <rect x="0" y="0" width="500" height="70" fill="url(#skyGrad)" rx="8" />
-                    <rect x="0" y="70" width="500" height="170" fill="url(#seaGrad)" rx="8" />
+                    <rect x="0" y="0" width="600" height="75" fill="url(#skyGrad)" rx="10" />
+                    <rect x="0" y="75" width="600" height="195" fill="url(#seaGrad)" rx="10" />
 
                     <!-- Iceberg Tip (Visible) -->
-                    <polygon points="250,15 200,70 300,70" fill="url(#iceTip)" stroke="#cbd5e1" stroke-width="1.5" />
+                    <polygon points="300,16 240,75 360,75" fill="url(#iceTip)" stroke="#cbd5e1" stroke-width="1.8" />
 
                     <!-- Waterline Wave -->
-                    <path d="M0,70 Q62,66 125,70 T250,70 T375,70 T500,70" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4 2" />
+                    <path d="M0,75 Q75,70 150,75 T300,75 T450,75 T600,75" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="5 3" />
 
                     <!-- Iceberg Submerged Base -->
-                    <polygon points="200,70 155,145 185,225 315,225 345,145 300,70" fill="url(#iceDeep)" opacity="0.85" stroke="#0ea5e9" stroke-width="1.5" />
+                    <polygon points="240,75 190,160 220,250 380,250 410,160 360,75" fill="url(#iceDeep)" opacity="0.88" stroke="#0ea5e9" stroke-width="1.8" />
 
                     <!-- Level Labels for Person A -->
-                    <rect x="15" y="20" width="155" height="32" rx="6" fill="rgba(255,255,255,0.92)" stroke="#94a3b8" stroke-width="1" />
-                    <text x="23" y="34" font-size="8.5" font-weight="800" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
-                    <text x="23" y="46" font-size="8" font-weight="600" fill="#0284c7">${nameA}: ${bA.usual_style || "Assertive"}</text>
+                    <rect x="15" y="20" width="185" height="38" rx="8" fill="rgba(255,255,255,0.95)" stroke="#94a3b8" stroke-width="1.2" />
+                    <text x="25" y="36" font-size="10" font-weight="800" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
+                    <text x="25" y="50" font-size="9.5" font-weight="700" fill="#0284c7">${nameA}: ${bA.usual_style || "Assertive"}</text>
 
-                    <rect x="15" y="105" width="155" height="32" rx="6" fill="rgba(15,23,42,0.85)" stroke="#38bdf8" stroke-width="1" />
-                    <text x="23" y="119" font-size="8.5" font-weight="800" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
-                    <text x="23" y="131" font-size="8" font-weight="600" fill="#e2e8f0">${nameA}: ${bA.underlying_need || "Empathy"}</text>
+                    <rect x="15" y="110" width="185" height="38" rx="8" fill="rgba(15,23,42,0.88)" stroke="#38bdf8" stroke-width="1.2" />
+                    <text x="25" y="126" font-size="10" font-weight="800" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
+                    <text x="25" y="140" font-size="9.5" font-weight="700" fill="#e2e8f0">${nameA}: ${bA.underlying_need || "Empathy"}</text>
 
-                    <rect x="15" y="180" width="155" height="32" rx="6" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1" />
-                    <text x="23" y="194" font-size="8.5" font-weight="800" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Derailer"}</text>
-                    <text x="23" y="206" font-size="8" font-weight="600" fill="#fca5a5">${nameA}: ${bA.stress_trigger || "Withdrawal"}</text>
+                    <rect x="15" y="200" width="185" height="38" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                    <text x="25" y="216" font-size="10" font-weight="800" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Derailer"}</text>
+                    <text x="25" y="230" font-size="9.5" font-weight="700" fill="#fca5a5">${nameA}: ${bA.stress_trigger || "Withdrawal"}</text>
 
                     ${!isSingle ? `
                         <!-- Person B Callouts -->
-                        <rect x="330" y="20" width="155" height="32" rx="6" fill="rgba(255,255,255,0.92)" stroke="#f59e0b" stroke-width="1" />
-                        <text x="338" y="34" font-size="8.5" font-weight="800" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
-                        <text x="338" y="46" font-size="8" font-weight="600" fill="#334155">${bB.usual_style || "Reflective"}</text>
+                        <rect x="400" y="20" width="185" height="38" rx="8" fill="rgba(255,255,255,0.95)" stroke="#f59e0b" stroke-width="1.2" />
+                        <text x="410" y="36" font-size="10" font-weight="800" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
+                        <text x="410" y="50" font-size="9.5" font-weight="700" fill="#334155">${bB.usual_style || "Reflective"}</text>
 
-                        <rect x="330" y="105" width="155" height="32" rx="6" fill="rgba(15,23,42,0.85)" stroke="#f59e0b" stroke-width="1" />
-                        <text x="338" y="119" font-size="8.5" font-weight="800" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
-                        <text x="338" y="131" font-size="8" font-weight="600" fill="#e2e8f0">${bB.underlying_need || "Freedom"}</text>
+                        <rect x="400" y="110" width="185" height="38" rx="8" fill="rgba(15,23,42,0.88)" stroke="#f59e0b" stroke-width="1.2" />
+                        <text x="410" y="126" font-size="10" font-weight="800" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
+                        <text x="410" y="140" font-size="9.5" font-weight="700" fill="#e2e8f0">${bB.underlying_need || "Freedom"}</text>
 
-                        <rect x="330" y="180" width="155" height="32" rx="6" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1" />
-                        <text x="338" y="194" font-size="8.5" font-weight="800" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
-                        <text x="338" y="206" font-size="8" font-weight="600" fill="#fca5a5">${bB.stress_trigger || "Demanding"}</text>
+                        <rect x="400" y="200" width="185" height="38" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                        <text x="410" y="216" font-size="10" font-weight="800" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
+                        <text x="410" y="230" font-size="9.5" font-weight="700" fill="#fca5a5">${bB.stress_trigger || "Demanding"}</text>
                     ` : ''}
                 </svg>
             </div>
@@ -1696,17 +1793,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = "";
 
-        const width = 260, height = 260;
-        const cx = 130, cy = 130;
+        const width = 300, height = 300;
+        const cx = 150, cy = 150;
 
         const getCoords = (traits) => {
             if (!traits) return { x: cx, y: cy };
             const ecr = traits.attachment || traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
             const anx = Math.max(5, Math.min(95, ecr.anxiety_score !== undefined ? ecr.anxiety_score : 30));
             const avoid = Math.max(5, Math.min(95, ecr.avoidance_score !== undefined ? ecr.avoidance_score : 30));
-            // x: anxiety (0 left to 100 right), y: avoidance (0 bottom to 100 top)
-            const x = 30 + (anx / 100) * 200;
-            const y = 230 - (avoid / 100) * 200;
+            const x = 35 + (anx / 100) * 230;
+            const y = 265 - (avoid / 100) * 230;
             return { x, y };
         };
 
@@ -1715,37 +1811,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 210px; height: 210px;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 290px; height: auto; aspect-ratio: 1 / 1;">
                     <!-- 4 Quadrants -->
-                    <rect x="25" y="130" width="105" height="105" fill="rgba(16, 185, 129, 0.1)" rx="6" /> <!-- Secure -->
-                    <rect x="130" y="130" width="105" height="105" fill="rgba(245, 158, 11, 0.1)" rx="6" /> <!-- Anxious -->
-                    <rect x="25" y="25" width="105" height="105" fill="rgba(59, 130, 246, 0.1)" rx="6" /> <!-- Avoidant -->
-                    <rect x="130" y="25" width="105" height="105" fill="rgba(239, 68, 68, 0.1)" rx="6" /> <!-- Fearful -->
+                    <rect x="30" y="150" width="120" height="120" fill="rgba(16, 185, 129, 0.12)" rx="8" /> <!-- Secure -->
+                    <rect x="150" y="150" width="120" height="120" fill="rgba(245, 158, 11, 0.12)" rx="8" /> <!-- Anxious -->
+                    <rect x="30" y="30" width="120" height="120" fill="rgba(59, 130, 246, 0.12)" rx="8" /> <!-- Avoidant -->
+                    <rect x="150" y="30" width="120" height="120" fill="rgba(239, 68, 68, 0.12)" rx="8" /> <!-- Fearful -->
 
                     <!-- Axes -->
-                    <line x1="25" y1="${cy}" x2="235" y2="${cy}" stroke="var(--border-color)" stroke-width="1.5" />
-                    <line x1="${cx}" y1="25" x2="${cx}" y2="235" stroke="var(--border-color)" stroke-width="1.5" />
+                    <line x1="30" y1="${cy}" x2="270" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
+                    <line x1="${cx}" y1="30" x2="${cx}" y2="270" stroke="var(--border-color)" stroke-width="1.8" />
 
                     <!-- Labels -->
-                    <text x="35" y="225" fill="#10b981" font-size="9" font-weight="800">${isAr ? "آمن (Secure)" : "SECURE"}</text>
-                    <text x="225" y="225" fill="#f59e0b" font-size="9" font-weight="800" text-anchor="end">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
-                    <text x="35" y="42" fill="#3b82f6" font-size="9" font-weight="800">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
-                    <text x="225" y="42" fill="#ef4444" font-size="9" font-weight="800" text-anchor="end">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
+                    <text x="42" y="258" fill="#10b981" font-size="11" font-weight="800">${isAr ? "آمن (Secure)" : "SECURE"}</text>
+                    <text x="258" y="258" fill="#f59e0b" font-size="11" font-weight="800" text-anchor="end">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
+                    <text x="42" y="48" fill="#3b82f6" font-size="11" font-weight="800">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
+                    <text x="258" y="48" fill="#ef4444" font-size="11" font-weight="800" text-anchor="end">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
 
-                    <text x="${cx}" y="16" fill="var(--text-secondary)" font-size="7.5" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
-                    <text x="245" y="${cy + 3}" fill="var(--text-secondary)" font-size="7.5" font-weight="700" text-anchor="start">${isAr ? "قلق" : "Anxiety"}</text>
+                    <text x="${cx}" y="18" fill="var(--text-secondary)" font-size="9" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
+                    <text x="282" y="${cy + 4}" fill="var(--text-secondary)" font-size="9" font-weight="700" text-anchor="start">${isAr ? "قلق" : "Anxiety"}</text>
 
                     <!-- Point A -->
-                    <circle cx="${ptA.x}" cy="${ptA.y}" r="8" fill="#10b981" stroke="#fff" stroke-width="2" class="chart-node" />
-                    <text x="${ptA.x}" y="${ptA.y - 12}" text-anchor="middle" fill="#10b981" font-size="9" font-weight="800">${nameA}</text>
+                    <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" class="chart-node" />
+                    <text x="${ptA.x}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA}</text>
 
                     ${ptB ? `
-                        <line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="1.5" stroke-dasharray="3 3" />
-                        <circle cx="${ptB.x}" cy="${ptB.y}" r="8" fill="#f59e0b" stroke="#fff" stroke-width="2" class="chart-node" />
-                        <text x="${ptB.x}" y="${ptB.y - 12}" text-anchor="middle" fill="#f59e0b" font-size="9" font-weight="800">${nameB}</text>
+                        <line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />
+                        <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" class="chart-node" />
+                        <text x="${ptB.x}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB}</text>
                     ` : ''}
                 </svg>
-                <div style="font-size: 0.8rem; margin-top: 8px; color: var(--text-secondary); text-align: center;">
+                <div style="font-size: 0.88rem; margin-top: 10px; color: var(--text-secondary); text-align: center;">
                     ${nameA}: <strong>${traitsA.attachment?.primary?.toUpperCase()}</strong>
                     ${!isSingle ? ` | ${nameB}: <strong>${traitsB.attachment?.primary?.toUpperCase()}</strong>` : ''}
                 </div>
@@ -1763,16 +1859,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const fB = traitsB?.firo_b || { control_expressed: 50, control_wanted: 50, affection_expressed: 50, affection_wanted: 50 };
 
         const makeBar = (label, valA, valB, color) => `
-            <div style="margin-bottom: 12px; width: 100%;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px;">
+            <div style="margin-bottom: 14px; width: 100%;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px;">
                     <span>${label}</span>
-                    <span>${nameA}: ${valA}% ${!isSingle ? `| ${nameB}: ${valB}%` : ''}</span>
+                    <span>${nameA}: <strong style="color: ${color};">${valA}%</strong> ${!isSingle ? `| ${nameB}: <strong style="color: #f59e0b;">${valB}%</strong>` : ''}</span>
                 </div>
-                <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; display: flex;">
-                    <div style="width: ${valA}%; background: ${color}; height: 100%; opacity: 0.9;"></div>
+                <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; display: flex;">
+                    <div style="width: ${valA}%; background: ${color}; height: 100%; opacity: 0.95;"></div>
                 </div>
                 ${!isSingle ? `
-                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 3px; overflow: hidden; margin-top: 3px;">
+                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; margin-top: 4px;">
                         <div style="width: ${valB}%; background: #f59e0b; height: 100%;"></div>
                     </div>
                 ` : ''}
@@ -1780,11 +1876,11 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         const wrapper = document.createElement("div");
-        wrapper.style.cssText = "width: 100%; max-width: 280px; text-align: left;";
+        wrapper.style.cssText = "width: 100%; max-width: 380px; text-align: left;";
         if (isAr) wrapper.style.textAlign = "right";
 
         wrapper.innerHTML = `
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-color); margin-bottom: 12px; text-align: center;">
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--accent-color); margin-bottom: 14px; text-align: center;">
                 ${isAr ? "موازين المبادرة والاحتياج في العلاقة" : "Expressed Initiation vs. Wanted Reciprocity"}
             </div>
             ${makeBar(isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", fA.control_expressed, fB.control_expressed, "#3b82f6")}
@@ -1809,12 +1905,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const makeRiskRow = (label, val, max = 100) => {
             const color = val > 40 ? "#ef4444" : (val > 25 ? "#f59e0b" : "#10b981");
             return `
-                <div style="margin-bottom: 6px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; margin-bottom: 2px;">
+                <div style="margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 3px;">
                         <span>${label}</span>
-                        <span style="color: ${color};">${val}%</span>
+                        <span style="color: ${color}; font-weight: 700;">${val}%</span>
                     </div>
-                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
+                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
                         <div style="width: ${val}%; background: ${color}; height: 100%;"></div>
                     </div>
                 </div>
@@ -1822,21 +1918,21 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const wrapper = document.createElement("div");
-        wrapper.style.cssText = "width: 100%; max-width: 280px; text-align: center;";
+        wrapper.style.cssText = "width: 100%; max-width: 380px; text-align: center;";
         wrapper.innerHTML = `
-            <div style="display: inline-block; position: relative; margin-bottom: 12px;">
-                <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" />
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="${safetyScore > 75 ? "#10b981" : "#f59e0b"}" stroke-width="8"
-                        stroke-dasharray="${(safetyScore / 100) * 264} 264" stroke-dashoffset="0" transform="rotate(-90 50 50)" />
-                    <text x="50" y="55" font-size="18" font-weight="800" text-anchor="middle" fill="var(--text-primary)">${safetyScore}%</text>
+            <div style="display: inline-block; position: relative; margin-bottom: 14px;">
+                <svg viewBox="0 0 140 140" style="width: 140px; height: 140px;">
+                    <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="11" />
+                    <circle cx="70" cy="70" r="56" fill="none" stroke="${safetyScore > 75 ? "#10b981" : "#f59e0b"}" stroke-width="11"
+                        stroke-dasharray="${(safetyScore / 100) * 351.86} 351.86" stroke-dashoffset="0" transform="rotate(-90 70 70)" />
+                    <text x="70" y="77" font-size="24" font-weight="800" text-anchor="middle" fill="var(--text-primary)">${safetyScore}%</text>
                 </svg>
-                <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-top: 2px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary); margin-top: 4px;">
                     ${isAr ? "مؤشر الأمان العاطفي" : "Emotional Safety Index"}
                 </div>
             </div>
-            <div style="text-align: start; margin-top: 8px;">
-                <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-align: center;">
+            <div style="text-align: start; margin-top: 10px;">
+                <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-align: center;">
                     ${isAr ? "رادار فرسان الهلاك الأربعة (Gottman)" : "Four Horsemen Risk Monitors"}
                 </div>
                 ${makeRiskRow(isAr ? "النقد واللوم (Criticism)" : "Criticism Tendency", risks.criticism || 15)}
@@ -1918,36 +2014,139 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(loopWrapper);
     }
 
-    // --- 10. LIGHTWEIGHT CUSTOM SVG GRAPHICS ---
+    // --- 10. MULTI-VARIABLE RADAR CHART (CHART.JS & RESPONSIVE SVG) ---
+    function renderRadarChart(categoryScores) {
+        if (!dom.radarChartContainer) return;
+        dom.radarChartContainer.innerHTML = "";
+        const isAr = state.localization.currentLang === "ar";
+        const isDark = state.themeManager.isDark();
+        const categories = Object.keys(categoryScores);
+        const labels = categories.map(cat => isAr ? (RADAR_CATEGORY_TRANSLATIONS[cat] || cat) : cat);
+        const dataValues = categories.map(cat => categoryScores[cat] || 70);
+
+        if (window.Chart) {
+            if (state.radarChartInstance) {
+                try {
+                    state.radarChartInstance.destroy();
+                } catch (e) {}
+                state.radarChartInstance = null;
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.id = "radarChartCanvas";
+            canvas.style.width = "100%";
+            canvas.style.maxWidth = "460px";
+            canvas.style.maxHeight = "460px";
+            canvas.style.margin = "0 auto";
+            dom.radarChartContainer.appendChild(canvas);
+
+            const textColor = isDark ? "#f5f5f7" : "#1d1d1f";
+            const gridColor = isDark ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.08)";
+            const pointLabelColor = isDark ? "#a1a1a6" : "#424245";
+
+            state.radarChartInstance = new window.Chart(canvas, {
+                type: "radar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: isAr ? "مؤشر التوافق" : "Compatibility Index",
+                        data: dataValues,
+                        fill: true,
+                        backgroundColor: isDark ? "rgba(41, 151, 255, 0.25)" : "rgba(0, 113, 227, 0.2)",
+                        borderColor: isDark ? "#2997ff" : "#0071e3",
+                        borderWidth: 2.5,
+                        pointBackgroundColor: isDark ? "#2997ff" : "#0071e3",
+                        pointBorderColor: "#ffffff",
+                        pointBorderWidth: 1.5,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 1,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: isDark ? "rgba(30, 30, 32, 0.95)" : "rgba(15, 23, 42, 0.92)",
+                            titleFont: { size: 12, weight: "bold", family: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" },
+                            bodyFont: { size: 12, family: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" },
+                            padding: 10,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 25,
+                                color: isDark ? "#86868b" : "#a1a1a6",
+                                backdropColor: "transparent",
+                                font: { size: 10, weight: "600" }
+                            },
+                            grid: {
+                                color: gridColor,
+                                circular: false
+                            },
+                            angleLines: {
+                                color: gridColor
+                            },
+                            pointLabels: {
+                                color: pointLabelColor,
+                                font: {
+                                    size: 11,
+                                    weight: "bold",
+                                    family: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif"
+                                },
+                                padding: 8
+                            }
+                        }
+                    }
+                }
+            });
+            return;
+        }
+
+        // High-definition responsive SVG fallback if Chart.js is unavailable
+        renderSVGRadarChart(categoryScores);
+    }
+
     function renderSVGRadarChart(categoryScores) {
         dom.radarChartContainer.innerHTML = "";
         const isAr = state.localization.currentLang === "ar";
 
-        const width = 360;
-        const height = 360;
-        const center = 180;
-        const maxRadius = 115;
+        const width = 460;
+        const height = 460;
+        const center = 230;
+        const maxRadius = 155;
 
         const categories = Object.keys(categoryScores);
         const numAxes = categories.length;
 
-        // Create root SVG element
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("width", "100%");
         svg.setAttribute("height", "100%");
         svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svg.style.maxWidth = "460px";
 
-        // Defs for gradients & glowing effects
         const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
         defs.innerHTML = `
             <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0.5"/>
+                <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0.45"/>
                 <stop offset="100%" stop-color="var(--accent-hover)" stop-opacity="0.15"/>
             </linearGradient>
         `;
         svg.appendChild(defs);
 
-        // Draw background Concentric Polygons (Grid levels of 25%, 50%, 75%, 100%)
         const gridLevels = [0.25, 0.5, 0.75, 1.0];
         gridLevels.forEach(lvl => {
             const points = [];
@@ -1963,17 +2162,14 @@ document.addEventListener("DOMContentLoaded", () => {
             polygon.setAttribute("class", "radar-grid");
             polygon.setAttribute("fill", "none");
             polygon.setAttribute("stroke", "var(--border-color)");
-            polygon.setAttribute("stroke-width", lvl === 1.0 ? "1.5" : "1");
+            polygon.setAttribute("stroke-width", lvl === 1.0 ? "1.8" : "1");
             polygon.setAttribute("stroke-dasharray", lvl < 1.0 ? "2 3" : "none");
             svg.appendChild(polygon);
         });
 
-        // Draw Axes & Labels
         const dataPoints = [];
         categories.forEach((cat, idx) => {
             const angle = (idx * 2 * Math.PI) / numAxes - Math.PI / 2;
-            
-            // Axis line
             const axX = center + maxRadius * Math.cos(angle);
             const axY = center + maxRadius * Math.sin(angle);
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -1986,8 +2182,7 @@ document.addEventListener("DOMContentLoaded", () => {
             line.setAttribute("stroke-width", "1");
             svg.appendChild(line);
 
-            // Label text
-            const labelDist = maxRadius + 22;
+            const labelDist = maxRadius + 28;
             const textX = center + labelDist * Math.cos(angle);
             const textY = center + labelDist * Math.sin(angle) + 4;
             const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -1996,12 +2191,11 @@ document.addEventListener("DOMContentLoaded", () => {
             text.setAttribute("text-anchor", "middle");
             text.setAttribute("class", "radar-label");
             text.setAttribute("fill", "var(--text-secondary)");
-            text.setAttribute("font-size", "10px");
-            text.setAttribute("font-weight", "600");
+            text.setAttribute("font-size", "11px");
+            text.setAttribute("font-weight", "700");
             text.textContent = isAr ? (RADAR_CATEGORY_TRANSLATIONS[cat] || cat) : cat;
             svg.appendChild(text);
 
-            // Compute data point position
             const valueRatio = (categoryScores[cat] || 75) / 100;
             const dataR = maxRadius * valueRatio;
             const dataX = center + dataR * Math.cos(angle);
@@ -2009,7 +2203,6 @@ document.addEventListener("DOMContentLoaded", () => {
             dataPoints.push({ x: dataX, y: dataY });
         });
 
-        // Draw shaded data area polygon
         const pointsStr = dataPoints.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
         const areaPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         areaPoly.setAttribute("points", pointsStr);
@@ -2019,15 +2212,14 @@ document.addEventListener("DOMContentLoaded", () => {
         areaPoly.setAttribute("stroke-width", "2.5");
         svg.appendChild(areaPoly);
 
-        // Draw vertex dots
         dataPoints.forEach(p => {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             circle.setAttribute("cx", p.x.toFixed(1));
             circle.setAttribute("cy", p.y.toFixed(1));
-            circle.setAttribute("r", "4");
+            circle.setAttribute("r", "4.5");
             circle.setAttribute("fill", "var(--accent-color)");
             circle.setAttribute("stroke", "#ffffff");
-            circle.setAttribute("stroke-width", "1.5");
+            circle.setAttribute("stroke-width", "1.8");
             svg.appendChild(circle);
         });
 
@@ -2040,16 +2232,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const traits = Object.keys(oceanA);
 
         if (!isSingle) {
-            // Render Legend
             const legend = document.createElement("div");
-            legend.style.cssText = "display: flex; gap: 16px; margin-bottom: 16px; font-size: 0.85rem; font-weight: 600;";
+            legend.style.cssText = "display: flex; gap: 20px; margin-bottom: 18px; font-size: 0.88rem; font-weight: 700; flex-wrap: wrap;";
             legend.innerHTML = `
-                <span style="display: flex; align-items: center; gap: 6px;">
-                    <span style="width: 12px; height: 12px; border-radius: 3px; background-color: var(--success); display: inline-block;"></span>
+                <span style="display: flex; align-items: center; gap: 8px;">
+                    <span style="width: 14px; height: 14px; border-radius: 4px; background-color: var(--success); display: inline-block;"></span>
                     ${nameA || (isAr ? "الطرف الأول" : "Partner A")}
                 </span>
-                <span style="display: flex; align-items: center; gap: 6px;">
-                    <span style="width: 12px; height: 12px; border-radius: 3px; background-color: var(--warning); display: inline-block;"></span>
+                <span style="display: flex; align-items: center; gap: 8px;">
+                    <span style="width: 14px; height: 14px; border-radius: 4px; background-color: var(--warning); display: inline-block;"></span>
                     ${nameB || (isAr ? "الطرف الثاني" : "Partner B")}
                 </span>
             `;
@@ -2066,35 +2257,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const row = document.createElement("div");
             row.className = "bar-chart-row";
-            row.style.marginBottom = "14px";
+            row.style.marginBottom = "16px";
 
             const labelInfo = document.createElement("div");
             labelInfo.className = "bar-label-info";
-            labelInfo.style.cssText = "display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;";
+            labelInfo.style.cssText = "display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;";
             if (isSingle) {
                 labelInfo.innerHTML = `
                     <span>${traitLabel}</span>
-                    <span>${scoreA}%</span>
+                    <span style="color: var(--success); font-weight: 800;">${scoreA}%</span>
                 `;
             } else {
                 labelInfo.innerHTML = `
                     <span>${traitLabel}</span>
-                    <span>${scoreA}% vs ${scoreB}%</span>
+                    <span>
+                        <span style="color: var(--success); font-weight: 800;">${scoreA}%</span>
+                        <span style="color: var(--text-tertiary); margin: 0 4px;">vs</span>
+                        <span style="color: var(--warning); font-weight: 800;">${scoreB}%</span>
+                    </span>
                 `;
             }
 
             const track = document.createElement("div");
             track.className = "bar-track";
-            track.style.cssText = "width: 100%; height: 16px; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; position: relative; display: flex; flex-direction: column;";
+            track.style.cssText = "width: 100%; height: 20px; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; position: relative; display: flex; flex-direction: column;";
 
-            // Person A colored line
             const fillA = document.createElement("div");
             fillA.className = "bar-fill";
             fillA.style.cssText = `width: ${scoreA}%; background-color: var(--success); height: ${isSingle ? "100%" : "50%"}; transition: width 0.6s ease;`;
             track.appendChild(fillA);
 
             if (!isSingle) {
-                // Person B colored line
                 const fillB = document.createElement("div");
                 fillB.className = "bar-fill";
                 fillB.style.cssText = `width: ${scoreB}%; background-color: var(--warning); height: 50%; transition: width 0.6s ease;`;

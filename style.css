@@ -810,6 +810,9 @@ body.rtl .report-table th, body.rtl .report-table td {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 380px;
+    width: 100%;
+    position: relative;
 }
 
 /* Custom Radar SVG structure styling */
@@ -824,8 +827,8 @@ body.rtl .report-table th, body.rtl .report-table td {
 }
 
 .radar-label {
-    font-size: 8px;
-    fill: var(--text-primary);
+    font-size: 11px;
+    fill: var(--text-secondary);
     font-weight: 600;
 }
 
@@ -1076,9 +1079,11 @@ body.rtl .report-bullet-list li::before {
         color: #000000 !important;
     }
 
-    .chart-card, .gauge-card, .type-card {
+    .chart-card, .gauge-card, .type-card, .interactive-chart-card, .score-overview-grid, .parameter-table-wrapper, .matrix-section, .conflict-step-card {
         background-color: #f5f5f7 !important;
         border: 1px solid #d2d2d7 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
     }
 }
 
@@ -1350,7 +1355,8 @@ body.rtl .bridge-script-card {
     justify-content: center;
     align-items: center;
     position: relative;
-    min-height: 240px;
+    min-height: 280px;
+    width: 100%;
 }
 
 /* SVG Elements & Interactive Nodes */

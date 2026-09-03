@@ -65,7 +65,7 @@
             <div class="premium-hero">
                 <h2 data-i18n="app_title">MatchWise Lite</h2>
                 <p data-i18n="app_subtitle" class="hero-desc">AI-Powered Relationship Compatibility Assessment</p>
-                <div class="hero-badge">v2.0 • AI-Powered Insights</div>
+                <div class="hero-badge" data-i18n="hero_badge">v2.5 • AI-Powered Insights</div>
             </div>
 
             <div class="menu-cards-grid">
@@ -78,7 +78,7 @@
                         </svg>
                     </div>
                     <h3 data-i18n="start_new">Start New Assessment</h3>
-                    <p class="card-text">Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.</p>
+                    <p class="card-text" data-i18n="start_desc">Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.</p>
                 </div>
 
 
@@ -91,7 +91,7 @@
                         </svg>
                     </div>
                     <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
-                    <p class="card-text">Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.</p>
+                    <p class="card-text" data-i18n="compare_desc">Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.</p>
                 </div>
             </div>
         </section>
@@ -172,7 +172,7 @@
                     <h3 data-i18n="compare_profiles">Compare Saved Profiles</h3>
                     <p data-i18n="compare_instructions" class="action-desc">Select one or two checkboxed profiles below and click 'Compare / View Selected' to generate a report.</p>
                     <button id="btnCompareSelected" class="primary-btn" style="width: 100%;">
-                        <span id="btnCompareText">Compare / View Selected</span>
+                        <span id="btnCompareText" data-i18n="btn_compare_selected">Compare / View Selected</span>
                     </button>
                 </div>
             </div>
@@ -198,7 +198,7 @@
                 <button id="btnDashboardFromReport" class="secondary-btn">
                     <span data-i18n="back">Back</span>
                 </button>
-                <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button id="btnTogglePrintPreview" class="btn-print-preview" aria-label="Toggle Print View">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -206,13 +206,21 @@
                         </svg>
                         <span data-i18n="print_preview_mode">Toggle Print View</span>
                     </button>
-                    <button id="btnPrintReport" class="primary-btn">
+                    <button id="btnExportPDF" class="primary-btn" style="background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%);">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span data-i18n="save_pdf">Export PDF</span>
+                    </button>
+                    <button id="btnPrintReport" class="secondary-btn">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;">
                             <polyline points="6 9 6 2 18 2 18 9"></polyline>
                             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                             <rect x="6" y="14" width="12" height="8"></rect>
                         </svg>
-                        <span data-i18n="save_pdf">Print Report / Export PDF</span>
+                        <span data-i18n="print_page">Print Report</span>
                     </button>
                 </div>
             </div>
@@ -261,7 +269,7 @@
                         <table class="report-table">
                             <thead>
                                 <tr>
-                                    <th>Parameter</th>
+                                    <th data-i18n="parameter_label">Parameter</th>
                                     <th id="reportHeaderPersonA">Person A</th>
                                     <th id="reportHeaderPersonB" class="person-b-col">Person B</th>
                                 </tr>
@@ -459,11 +467,11 @@
 
                     <div class="personality-visuals-grid">
                         <div class="chart-card" id="radarChartCard">
-                            <h4 id="radarChartTitle">Multivariable Compatibility Index</h4>
+                            <h4 id="radarChartTitle" data-i18n="radar_title">Multivariable Compatibility Index</h4>
                             <div id="radarChartContainer" class="chart-container"></div>
                         </div>
                         <div class="chart-card">
-                            <h4 id="barChartTitle">Big Five / Temperament Alignment</h4>
+                            <h4 id="barChartTitle" data-i18n="bar_title">Big Five / Temperament Alignment</h4>
                             <div id="bigFiveBarChartContainer" class="bars-container"></div>
                         </div>
                     </div>
@@ -509,7 +517,7 @@
                                 <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
                                 <circle cx="12" cy="12" r="4"></circle>
                             </svg>
-                            Deep Psychological Consultation & Bridge Scripts
+                            <span data-i18n="ai_consultation_title">Deep Psychological Consultation & Bridge Scripts</span>
                         </h3>
                     </div>
                     <div id="reportAIInsightsContainer" class="p-container">
@@ -540,7 +548,7 @@
                 <div id="modalStartForm" class="modal-form-container" style="display: none; text-align: start;">
                     <div class="form-group" style="margin-bottom: 16px;">
                         <label for="modalInputName" data-i18n="enter_name" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Enter Profile Owner's Name:</label>
-                        <input type="text" id="modalInputName" class="premium-text-input" placeholder="Owner Name" required style="width: 100%;">
+                        <input type="text" id="modalInputName" class="premium-text-input" placeholder="Owner Name" data-i18n-placeholder="enter_name_placeholder" required style="width: 100%;">
                     </div>
                     <div class="form-group" style="margin-bottom: 16px;">
                         <label for="modalInputGender" data-i18n="gender" class="premium-label" style="display: block; margin-bottom: 8px; font-weight: 600;">Gender:</label>

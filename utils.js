@@ -131,8 +131,27 @@ const TRANSLATIONS = {
         ai_key_help: "MatchWise Autonomous AI works 100% free with unlimited requests and zero setup. External API keys are optional.",
         mbti_type: "Cognitive Style (MBTI)",
         attachment_style: "Attachment Dynamic",
-        save_pdf: "Print Report / Export PDF",
-        ai_settings_btn: "MatchWise AI"
+        save_pdf: "Export PDF",
+        print_page: "Print Report",
+        export_pdf_loading: "Generating PDF Report...",
+        export_pdf_success: "PDF generated and downloaded successfully!",
+        ai_settings_btn: "MatchWise AI",
+        start_desc: "Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.",
+        compare_desc: "Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.",
+        hero_badge: "v2.5 • AI-Powered Insights",
+        parameter_label: "Parameter",
+        radar_title: "Multivariable Compatibility Index (12 Axes)",
+        bar_title: "Big Five / Temperament Alignment",
+        ai_consultation_title: "Deep Psychological Consultation & Bridge Scripts",
+        ai_generating: "Generating AI analysis...",
+        ai_failed: "Could not generate deep analysis at this time.",
+        ai_dyadic_failed: "Could not generate dyadic consultation at this time.",
+        enter_name_placeholder: "e.g. Tariq / Sarah",
+        btn_compare_selected: "Compare / View Selected",
+        btn_view_selected: "View Selected Profile",
+        btn_compare_two: "Compare Selected (2)",
+        core_fuel_label: "Core Emotional Fuel:",
+        avoid_label: "Avoid:"
     },
     ar: {
         app_title: "ماتش وايز لايت",
@@ -173,6 +192,8 @@ const TRANSLATIONS = {
         no_profiles: "لم يتم العثور على ملفات شخصية محفوظة. ابدأ تقييماً أو استورد ملفاً للبدء.",
         invalid_file: "بيانات الملف غير صحيحة أو صيغة الملف غير مدعومة.",
         success_import: "تم استيراد الملف الشخصي بنجاح!",
+        likert_sd: "معارض بشدة",
+        likert_d: "معارض",
         likert_sld: "معارض قليلاً",
         likert_n: "محايد",
         likert_sla: "موافق قليلاً",
@@ -182,6 +203,12 @@ const TRANSLATIONS = {
         attachment_label: "أسلوب الارتباط العاطفي",
         communication_label: "أسلوب التواصل",
         conflict_label: "أسلوب فض النزاعات",
+        hartman_label: "الدافع الجوهري (Hartman)",
+        disc_label: "الإيقاع والتركيز (DISC)",
+        birkman_label: "الاحتياج الخفي (Birkman)",
+        gottman_label: "الأمان العاطفي (Gottman)",
+        operating_manual_title: "دليل إدارة العلاقة ومحفزات التوتر",
+        conflict_protocol_title: "بروتوكول التهدئة وقواعد الحوار العادل",
         decision_label: "أسلوب اتخاذ القرار",
         love_lang_label: "لغة الحب الأساسية",
         executive_summary: "الملخص التنفيذي",
@@ -248,8 +275,27 @@ const TRANSLATIONS = {
         ai_key_help: "الذكاء الاصطناعي المدمج في ماتش وايز مجاني 100% بلا حدود وبلا حاجة لأي إعدادات أو مفاتيح خارجية.",
         mbti_type: "النمط المعرفي (MBTI)",
         attachment_style: "ديناميكية الارتباط العاطفي",
-        save_pdf: "طباعة التقرير / تصدير PDF",
-        ai_settings_btn: "ذكاء ماتش وايز"
+        save_pdf: "تصدير تقرير PDF",
+        print_page: "طباعة التقرير",
+        export_pdf_loading: "جارٍ تجهيز ملف الـ PDF عالي الجودة...",
+        export_pdf_success: "تم تحميل تقرير الـ PDF بنجاح!",
+        ai_settings_btn: "ذكاء ماتش وايز",
+        start_desc: "ابدأ جلسة تقييم متقدمة من 45 إلى 70 سؤالاً تفاعلياً لفهم أنماط التواصل، وديناميكية الارتباط العاطفي، والأولويات الحياتية.",
+        compare_desc: "حمّل أو استورد ملفات التقييم المكتملة لإنشاء تقرير توافق شامل ومفصل متعدد الأبعاد وقابل للطباعة والتصدير.",
+        hero_badge: "v2.5 • رؤى مدعومة بالذكاء الاصطناعي",
+        parameter_label: "المؤشر / المعيار",
+        radar_title: "مؤشر التوافق متعدد الأبعاد (12 محوراً)",
+        bar_title: "محاذاة السمات الخمس الكبرى",
+        ai_consultation_title: "الاستشارة النفسية المعمقة وجسور التفاهم",
+        ai_generating: "جارٍ توليد الاستشارة والتحليل المعمق عبر الذكاء الاصطناعي...",
+        ai_failed: "تعذر إنشاء التحليل المعمق حالياً.",
+        ai_dyadic_failed: "تعذر إنشاء استشارة التوافق الثنائي حالياً.",
+        enter_name_placeholder: "مثال: طارق / نور",
+        btn_compare_selected: "مقارنة / عرض المحدد",
+        btn_view_selected: "عرض الملف المحدد",
+        btn_compare_two: "مقارنة الملفين المحددين (2)",
+        core_fuel_label: "الوقود العاطفي الأساسي:",
+        avoid_label: "تجنب معه:"
     }
 };
 
@@ -257,6 +303,13 @@ class Localization {
     constructor() {
         this.currentLang = localStorage.getItem("matchwise_lang") || "en";
         this.applyDirection();
+        if (typeof document !== "undefined") {
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", () => this.translateDOM());
+            } else {
+                this.translateDOM();
+            }
+        }
     }
 
     setLanguage(lang) {
@@ -269,6 +322,7 @@ class Localization {
     }
 
     applyDirection() {
+        if (typeof document === "undefined") return;
         const html = document.documentElement;
         html.setAttribute("lang", this.currentLang);
         html.setAttribute("dir", this.currentLang === "ar" ? "rtl" : "ltr");
@@ -280,6 +334,7 @@ class Localization {
     }
 
     translateDOM() {
+        if (typeof document === "undefined") return;
         const elements = document.querySelectorAll("[data-i18n]");
         elements.forEach(el => {
             const key = el.getAttribute("data-i18n");
@@ -290,6 +345,24 @@ class Localization {
                 } else {
                     el.textContent = translation;
                 }
+            }
+        });
+
+        const placeholderElements = document.querySelectorAll("[data-i18n-placeholder]");
+        placeholderElements.forEach(el => {
+            const key = el.getAttribute("data-i18n-placeholder");
+            const translation = this.get(key);
+            if (translation) {
+                el.placeholder = translation;
+            }
+        });
+
+        const titleElements = document.querySelectorAll("[data-i18n-title]");
+        titleElements.forEach(el => {
+            const key = el.getAttribute("data-i18n-title");
+            const translation = this.get(key);
+            if (translation) {
+                el.setAttribute("title", translation);
             }
         });
     }
@@ -336,6 +409,11 @@ class ThemeManager {
         this.theme = this.theme === "light" ? "dark" : "light";
         localStorage.setItem("matchwise_theme", this.theme);
         this.applyTheme();
+        window.dispatchEvent(new CustomEvent("matchwise_theme_changed", { detail: { theme: this.theme } }));
+    }
+
+    isDark() {
+        return this.theme === "dark";
     }
 
     applyTheme() {
