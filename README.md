@@ -1,10 +1,16 @@
-# MatchWise Lite v2.5
+# MatchWise Lite v2.5.2
 
-**MatchWise Lite v2.5** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with optional AI consultation powered by **DeepSeek Pro** and **NVIDIA NIM**.
+**MatchWise Lite v2.5.2** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, and Autonomous AI.
 
 ---
 
-## 🌟 What's New in v2.5
+## 🌟 What's New in v2.5.2
+
+### 0. Global Reach Google Website Translator (100+ Languages)
+- **Top Bar Language Switcher**: Fast one-click translation into 18 world languages plus Google's full 100+ language library.
+- **Zero-Crash SPA Protection**: Custom defensive `Node.prototype` patch preventing Google Translate text-wrapping from breaking single-page app DOM mutations.
+- **Psychometrics & Code Shield**: Complete `notranslate` protection for personality acronyms (MBTI, DISC, Hartman colors), score formulas, and encrypted result-sharing codes.
+
 
 ### 1. Unified 10-Framework Psychometric Engine
 Maps responses polytomously across 10 validated behavioral and psychological frameworks:

@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5
+ * MatchWise Lite v2.5.2
  * utils.js - Core Utilities
  * Contains: Localization/Translations, LocalStorage wrapper, Theme Controller,
  * and robust UTF-8 byte-level profile encryption & result-sharing code utilities.
@@ -145,7 +145,7 @@ const TRANSLATIONS = {
         act_4_title: "Act 4: The Lifelong Playbook & Bridge Scripts",
         act_4_desc: "Tailored couple rules, growth opportunities, and verbatim bridge scripts for difficult moments.",
         load_demo_profiles: "Load Live Demo Profiles (Tariq & Nour)",
-        report_dossier_title: "MatchWise Lite v2.5",
+        report_dossier_title: "MatchWise Lite v2.5.2",
         report_dossier_subtitle: "Executive Multi-Framework Behavioral & Relationship Dossier",
         executive_overview: "Executive Overview",
         hartman_card_title: "Hartman Motive Spectrum (Fuel & Motives)",
@@ -167,7 +167,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "MatchWise AI",
         start_desc: "Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.",
         compare_desc: "Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.",
-        hero_badge: "v2.5 • AI-Powered Insights",
+        hero_badge: "v2.5.2 • AI-Powered Insights",
         parameter_label: "Parameter",
         radar_title: "Multivariable Compatibility Index (12 Axes)",
         bar_title: "Big Five / Temperament Alignment",
@@ -294,7 +294,7 @@ const TRANSLATIONS = {
         act_4_title: "المحور الرابع: دليل الحوار المشترك وجسور التفاهم",
         act_4_desc: "القواعد الذهبية للزوجين، وفرص النمو، ونصوص الحوار الحرفية لنقاش المسائل الحساسة بودية.",
         load_demo_profiles: "تحميل الملفات التجريبية الحية (طارق ونور)",
-        report_dossier_title: "ماتش وايز لايت v2.5",
+        report_dossier_title: "ماتش وايز لايت v2.5.2",
         report_dossier_subtitle: "الملف التحليلي التنفيذي للتوافق النفسي والسلوكي والعاطفي",
         executive_overview: "نظرة عامة تنفيذية",
         hartman_card_title: "طيف دوافع هارتمان (الوقود النفسي والاحتياجات)",
@@ -316,7 +316,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "ذكاء ماتش وايز",
         start_desc: "ابدأ جلسة تقييم متقدمة من 45 إلى 70 سؤالاً تفاعلياً لفهم أنماط التواصل، وديناميكية الارتباط العاطفي، والأولويات الحياتية.",
         compare_desc: "حمّل أو استورد ملفات التقييم المكتملة لإنشاء تقرير توافق شامل ومفصل متعدد الأبعاد وقابل للطباعة والتصدير.",
-        hero_badge: "v2.5 • رؤى مدعومة بالذكاء الاصطناعي",
+        hero_badge: "v2.5.2 • رؤى مدعومة بالذكاء الاصطناعي",
         parameter_label: "المؤشر / المعيار",
         radar_title: "مؤشر التوافق متعدد الأبعاد (12 محوراً)",
         bar_title: "محاذاة السمات الخمس الكبرى",
@@ -565,7 +565,7 @@ const Cryptography = {
                     created_at: new Date().toLocaleDateString("en-US", {
                         year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                     }),
-                    app_version: "v2.5",
+                    app_version: "v2.5.2",
                     calculated_personality: null,
                     assessment_confidence: 85
                 };

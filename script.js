@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5
+ * MatchWise Lite v2.5.2
  * script.js - Core SPA Coordinator & Adaptive Question Engine
  */
 
@@ -1008,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", () => {
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v2.5",
+            app_version: "v2.5.2",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence

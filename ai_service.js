@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5 AI Service
+ * MatchWise Lite v2.5.2 AI Service
  * Multi-Provider Clinical & Psychometric Orchestration:
  * 1. MatchWise Autonomous AI (Built-in Free / No Key Required / Unlimited Requests)
  * 2. Google Gemini 1.5 Flash (Free Tier via aistudio.google.com)

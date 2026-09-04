@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5 - Clinical Live Test Archetypes
+ * MatchWise Lite v2.5.2 - Clinical Live Test Archetypes
  * Tariq Al-Mansoor (Executive Leader) & Nour Al-Sabah (Empathetic Harmonizer)
  */
 const DEMO_PROFILES = [
@@ -9,7 +9,7 @@ const DEMO_PROFILES = [
     "gender": "M",
     "marital_status": "single",
     "created_at": "September 3, 2026",
-    "app_version": "v2.5",
+    "app_version": "v2.5.2",
     "answers": {
       "q1": "opt1",
       "q2": "opt1",
@@ -323,7 +323,7 @@ const DEMO_PROFILES = [
     "gender": "F",
     "marital_status": "single",
     "created_at": "September 3, 2026",
-    "app_version": "v2.5",
+    "app_version": "v2.5.2",
     "answers": {
       "q1": "opt3",
       "q2": "opt2",

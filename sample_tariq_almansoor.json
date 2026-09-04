@@ -4,7 +4,7 @@
   "gender": "M",
   "marital_status": "single",
   "created_at": "September 3, 2026",
-  "app_version": "v2.5",
+  "app_version": "v2.5.2",
   "answers": {
     "q1": "opt1",
     "q2": "opt1",
