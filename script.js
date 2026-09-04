@@ -657,11 +657,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const history = state.assessmentSession.history;
         const currentQId = history[history.length - 1];
         if (!currentQId) return false;
-        if (state.isAiMode && state.aiService) {
-            const askedCount = Object.keys(state.sessionAnswers).length;
-            if (askedCount >= 45) return false;
-            return true;
-        }
         return getNextQuestionId(currentQId) !== null;
     }
 
@@ -702,19 +697,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             if (state.isAiMode && state.aiService) {
-                const askedCount = Object.keys(state.sessionAnswers).length;
-                if (askedCount >= 45) {
-                     nextQId = null; // AI test completion threshold (can be adjusted)
+                const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
+                if (aiResponse && aiResponse.next_id === "NEW" && aiResponse.new_question) {
+                    questions.push(aiResponse.new_question);
+                    nextQId = aiResponse.new_question.id;
+                } else if (aiResponse && aiResponse.nextQuestionId && questions.some(q => q.id === aiResponse.nextQuestionId && !state.sessionAnswers[q.id])) {
+                    nextQId = aiResponse.nextQuestionId;
                 } else {
-                     const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
-                     if (aiResponse.next_id === "NEW" && aiResponse.new_question) {
-                         questions.push(aiResponse.new_question);
-                         nextQId = aiResponse.new_question.id;
-                     } else if (aiResponse.next_id === "STANDARD" || !aiResponse.next_id) {
-                         nextQId = getNextQuestionId(currentQId);
-                     } else {
-                         nextQId = aiResponse.next_id;
-                     }
+                    nextQId = getNextQuestionId(currentQId);
                 }
             } else {
                 nextQId = getNextQuestionId(currentQId);
