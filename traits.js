@@ -740,7 +740,7 @@ const PersonalityEngine = {
                 view_of_life_ar: hawkinsViewAr,
                 is_above_200: finalHawkinsScore >= 200,
                 domain: finalHawkinsScore >= 200 ? "Power" : "Force",
-                domain_ar: finalHawkinsScore >= 200 ? "القوة الروحية البنّاءة (Power)" : "القوة القسرية الضاغطة (Force)",
+                domain_ar: finalHawkinsScore >= 200 ? "القوة الروحية البنّاءة" : "القوة القسرية الضاغطة",
                 power_ratio: powerRatio
             },
             hicks: {

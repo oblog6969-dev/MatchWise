@@ -6,6 +6,7 @@ const DEMO_PROFILES = [
   {
     "id": "MW_TARIQ_ALMANSOOR",
     "owner_name": "Tariq Al-Mansoor",
+    "owner_name_ar": "طارق المنصور",
     "gender": "M",
     "marital_status": "single",
     "created_at": "September 3, 2026",
@@ -333,7 +334,7 @@ const DEMO_PROFILES = [
           "view_of_life_ar": "مُرضٍ ومريح",
           "is_above_200": true,
           "domain": "Power",
-          "domain_ar": "القوة الروحية البنّاءة (Power)",
+          "domain_ar": "القوة الروحية البنّاءة",
           "power_ratio": 70
         },
         "hicks": {
@@ -359,6 +360,7 @@ const DEMO_PROFILES = [
   {
     "id": "MW_NOUR_ALSABAH",
     "owner_name": "Nour Al-Sabah",
+    "owner_name_ar": "نور الصباح",
     "gender": "F",
     "marital_status": "single",
     "created_at": "September 3, 2026",
@@ -686,7 +688,7 @@ const DEMO_PROFILES = [
           "view_of_life_ar": "حكيم وذو مغزى",
           "is_above_200": true,
           "domain": "Power",
-          "domain_ar": "القوة الروحية البنّاءة (Power)",
+          "domain_ar": "القوة الروحية البنّاءة",
           "power_ratio": 100
         },
         "hicks": {

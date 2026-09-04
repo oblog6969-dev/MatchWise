@@ -1,6 +1,7 @@
 {
   "id": "MW_NOUR_ALSABAH",
   "owner_name": "Nour Al-Sabah",
+  "owner_name_ar": "نور الصباح",
   "gender": "F",
   "marital_status": "single",
   "created_at": "September 3, 2026",
@@ -328,7 +329,7 @@
         "view_of_life_ar": "حكيم وذو مغزى",
         "is_above_200": true,
         "domain": "Power",
-        "domain_ar": "القوة الروحية البنّاءة (Power)",
+        "domain_ar": "القوة الروحية البنّاءة",
         "power_ratio": 100
       },
       "hicks": {

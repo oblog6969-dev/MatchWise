@@ -289,12 +289,27 @@ const CompatibilityEngine = {
         const schB = traitsB.schwartz_values?.top_values || [];
         const sharedValues = schA.filter(v => schB.includes(v));
 
+        const SCHWARTZ_TRANSLATIONS = {
+            security: { ar: "الأمان والاستقرار", en: "Security" },
+            tradition: { ar: "الأصالة والتقاليد", en: "Tradition" },
+            self_direction: { ar: "الاستقلالية وحرية الاختيار", en: "Self-Direction" },
+            benevolence: { ar: "الخير والإيثار", en: "Benevolence" },
+            hedonism: { ar: "المتعة وجودة الحياة", en: "Hedonism" },
+            achievement: { ar: "الإنجاز والنجاح", en: "Achievement" },
+            conformity: { ar: "الامتثال والانسجام", en: "Conformity" },
+            universalism: { ar: "الإنسانية والعدالة", en: "Universalism" },
+            power: { ar: "المكانة والتأثير", en: "Power" },
+            stimulation: { ar: "التجديد والمغامرة", en: "Stimulation" }
+        };
+
         let valueScore = 75;
         if (sharedValues.length >= 2) {
             valueScore = 95;
+            const sharedEn = sharedValues.map(v => SCHWARTZ_TRANSLATIONS[v]?.en || v).join(" & ");
+            const sharedAr = sharedValues.map(v => SCHWARTZ_TRANSLATIONS[v]?.ar || v).join(" و ");
             strengths.push({
-                en: `Deep Worldview Consensus (Schwartz Values): Shared core life priorities in ${sharedValues.join(" & ")}, ensuring long-term existential alignment.`,
-                ar: `توافق وجودي عميق في القيم: تشارك قيم الحياة الأساسية في (${sharedValues.join(" و ")} مما يضمن وحدة المسار والهدف المستقبلي.`
+                en: `Deep Worldview Consensus (Schwartz Values): Shared core life priorities in (${sharedEn}), ensuring long-term existential alignment.`,
+                ar: `توافق وجودي عميق في القيم: تشارك قيم الحياة الأساسية في (${sharedAr}) مما يضمن وحدة المسار والهدف المستقبلي.`
             });
         } else if (schA.includes("tradition") && schB.includes("self_direction")) {
             valueScore = 65;

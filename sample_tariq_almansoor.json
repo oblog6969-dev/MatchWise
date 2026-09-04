@@ -1,6 +1,7 @@
 {
   "id": "MW_TARIQ_ALMANSOOR",
   "owner_name": "Tariq Al-Mansoor",
+  "owner_name_ar": "طارق المنصور",
   "gender": "M",
   "marital_status": "single",
   "created_at": "September 3, 2026",
@@ -328,7 +329,7 @@
         "view_of_life_ar": "مُرضٍ ومريح",
         "is_above_200": true,
         "domain": "Power",
-        "domain_ar": "القوة الروحية البنّاءة (Power)",
+        "domain_ar": "القوة الروحية البنّاءة",
         "power_ratio": 70
       },
       "hicks": {

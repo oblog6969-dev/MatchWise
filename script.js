@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         conflictBadgeA: document.getElementById("conflictBadgeA"),
         conflictBadgeB: document.getElementById("conflictBadgeB"),
 
-        // Multi-Framework Badges
+        // Multi-Framework Badges (Executive Overview Table)
         hartmanBadgeA: document.getElementById("hartmanBadgeA"),
         hartmanBadgeB: document.getElementById("hartmanBadgeB"),
         discBadgeA: document.getElementById("discBadgeA"),
@@ -106,6 +106,16 @@ document.addEventListener("DOMContentLoaded", () => {
         birkmanBadgeB: document.getElementById("birkmanBadgeB"),
         gottmanBadgeA: document.getElementById("gottmanBadgeA"),
         gottmanBadgeB: document.getElementById("gottmanBadgeB"),
+
+        // Chapter 1 Overview Badges
+        mbtiOverviewA: document.getElementById("mbtiOverviewA"),
+        mbtiOverviewB: document.getElementById("mbtiOverviewB"),
+        hartmanOverviewA: document.getElementById("hartmanOverviewA"),
+        hartmanOverviewB: document.getElementById("hartmanOverviewB"),
+        discOverviewA: document.getElementById("discOverviewA"),
+        discOverviewB: document.getElementById("discOverviewB"),
+        attachmentOverviewA: document.getElementById("attachmentOverviewA"),
+        attachmentOverviewB: document.getElementById("attachmentOverviewB"),
 
         // Multi-Framework Sections
         operatingManualContainer: document.getElementById("operatingManualContainer"),
@@ -524,11 +534,65 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const BIG_FIVE_TRANSLATIONS = {
-        "openness": { ar: "الانفتاح على التجارب (Openness)", en: "Openness to Experience" },
-        "conscientiousness": { ar: "الانضباط والتنظيم (Conscientiousness)", en: "Conscientiousness" },
-        "extroversion": { ar: "الانبساطية والاجتماعية (Extraversion)", en: "Extraversion" },
-        "agreeableness": { ar: "الوفاق والتعاطف (Agreeableness)", en: "Agreeableness" },
-        "neuroticism": { ar: "الحساسية للضغوط (Neuroticism)", en: "Emotional Reactivity (Neuroticism)" }
+        "openness": { ar: "الانفتاح على التجارب", en: "Openness to Experience" },
+        "conscientiousness": { ar: "الانضباط والتنظيم", en: "Conscientiousness" },
+        "extroversion": { ar: "الانبساطية والاجتماعية", en: "Extraversion" },
+        "agreeableness": { ar: "الوفاق والتعاطف", en: "Agreeableness" },
+        "neuroticism": { ar: "الحساسية للضغوط", en: "Emotional Reactivity (Neuroticism)" }
+    };
+
+    const ATTACHMENT_MAP = {
+        secure: { ar: "آمن ومتزن", en: "SECURE" },
+        anxious: { ar: "قلق وباحث عن الاطمئنان", en: "ANXIOUS" },
+        avoidant: { ar: "تجنبي ومستقل", en: "AVOIDANT" },
+        fearful: { ar: "متردد وحذر", en: "FEARFUL" }
+    };
+
+    const COMMUNICATION_MAP = {
+        assertive: { ar: "حازم ومباشر", en: "ASSERTIVE" },
+        passive: { ar: "هادئ ومساير", en: "PASSIVE" },
+        passive_aggressive: { ar: "غير مباشر", en: "PASSIVE-AGGRESSIVE" },
+        reserved: { ar: "متحفظ ومتأنٍ", en: "RESERVED" }
+    };
+
+    const CONFLICT_MAP = {
+        collaborating: { ar: "تعاوني بنّاء", en: "COLLABORATING" },
+        competing: { ar: "حازم وتنافسي", en: "COMPETING" },
+        avoiding: { ar: "تجنبي وهادئ", en: "AVOIDING" },
+        compromising: { ar: "توافقي ومرن", en: "COMPROMISING" },
+        accommodating: { ar: "مبادر بالإرضاء", en: "ACCOMMODATING" }
+    };
+
+    const HARTMAN_MAP = {
+        red: { ar: "الأحمر (القيادة والإنجاز)", en: "RED" },
+        blue: { ar: "الأزرق (العمق والوفاء)", en: "BLUE" },
+        white: { ar: "الأبيض (السلام والسكينة)", en: "WHITE" },
+        yellow: { ar: "الأصفر (المرح والبهجة)", en: "YELLOW" }
+    };
+
+    const BIRKMAN_NEED_MAP = {
+        empathy: { ar: "التعاطف والتفهم الصادق", en: "EMPATHY" },
+        freedom: { ar: "المساحة والاستقلالية", en: "FREEDOM" },
+        structure: { ar: "الوضوح والنظام المحدد", en: "STRUCTURE" },
+        respect: { ar: "الاحترام والتقدير", en: "RESPECT" },
+        affirmation: { ar: "التشجيع والاطمئنان", en: "AFFIRMATION" },
+        directness: { ar: "الصراحة والوضوح", en: "DIRECTNESS" },
+        patience: { ar: "التأني والرفق", en: "PATIENCE" }
+    };
+
+    const BIRKMAN_STYLE_MAP = {
+        assertive: { ar: "الحزم والمبادرة المباشرة", en: "Assertive" },
+        supportive: { ar: "الدعم والتعاطف الوجداني", en: "Supportive" },
+        reflective: { ar: "التأمل والتروي الهادئ", en: "Reflective" },
+        organized: { ar: "التنظيم والمنهجية الواضحة", en: "Organized" }
+    };
+
+    const BIRKMAN_STRESS_MAP = {
+        withdrawing: { ar: "الانعزال والصمت الدفاعي", en: "withdrawing" },
+        demanding: { ar: "الإلحاح والمطالبة المباشرة", en: "demanding" },
+        impatient: { ar: "الاستعجال ونفاد الصبر", en: "impatient" },
+        resisting: { ar: "المقاومة السلبية", en: "resisting" },
+        compliant: { ar: "المسايرة مع كتمان الضيق", en: "compliant" }
     };
 
     /**
@@ -1281,6 +1345,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!state.aiService) state.aiService = new window.AIService();
         navigateTo("panelReport");
         const isAr = state.localization.currentLang === "ar";
+        const getDisplayName = (p, ar) => (ar && p?.owner_name_ar ? p.owner_name_ar : p?.owner_name || "");
+        const nameA = getDisplayName(profileA, isAr);
 
         // Show/hide comparison elements dynamically using css class .hidden
         const bCols = document.querySelectorAll(".person-b-col");
@@ -1310,32 +1376,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Render Legacy & Multi-Framework Badges for Person A
             if (dom.mbtiBadgeA) dom.mbtiBadgeA.textContent = traitsA.mbti?.type || "--";
-            if (dom.attachmentBadgeA) dom.attachmentBadgeA.textContent = (traitsA.attachment?.primary || "--").toUpperCase();
-            if (dom.commBadgeA) dom.commBadgeA.textContent = (traitsA.communication?.primary || "--").toUpperCase();
-            if (dom.conflictBadgeA) dom.conflictBadgeA.textContent = (traitsA.conflict?.primary || "collaborating").toUpperCase();
+            if (dom.attachmentBadgeA) {
+                const attA = (traitsA.attachment?.primary || "").toLowerCase();
+                dom.attachmentBadgeA.textContent = isAr ? (ATTACHMENT_MAP[attA]?.ar || attA) : attA.toUpperCase();
+            }
+            if (dom.commBadgeA) {
+                const commA = (traitsA.communication?.primary || "").toLowerCase();
+                dom.commBadgeA.textContent = isAr ? (COMMUNICATION_MAP[commA]?.ar || commA) : commA.toUpperCase();
+            }
+            if (dom.conflictBadgeA) {
+                const confA = (traitsA.conflict?.primary || "collaborating").toLowerCase();
+                dom.conflictBadgeA.textContent = isAr ? (CONFLICT_MAP[confA]?.ar || confA) : confA.toUpperCase();
+            }
 
             // Hartman Badge
+            const hColorA = (traitsA.hartman?.primary || "blue").toLowerCase();
             if (dom.hartmanBadgeA) {
-                const hColorA = traitsA.hartman?.primary || "blue";
-                dom.hartmanBadgeA.textContent = `${hColorA.toUpperCase()} (${isAr ? (traitsA.hartman?.metadata?.motive_ar || "") : (traitsA.hartman?.metadata?.motive_en || "")})`;
+                dom.hartmanBadgeA.textContent = isAr
+                    ? (HARTMAN_MAP[hColorA]?.ar || hColorA)
+                    : `${hColorA.toUpperCase()} (${traitsA.hartman?.metadata?.motive_en || ""})`;
                 dom.hartmanBadgeA.className = `person-type-badge type-a hartman-badge-${hColorA}`;
             }
 
             // DISC Badge
+            const discStyleA = traitsA.disc?.primary || "D";
             if (dom.discBadgeA) {
-                const discStyleA = traitsA.disc?.primary || "D";
-                dom.discBadgeA.textContent = `${discStyleA} (${isAr ? (traitsA.disc?.pace_ar || "") : (traitsA.disc?.pace || "")})`;
+                dom.discBadgeA.textContent = `${discStyleA} (${isAr ? (traitsA.disc?.pace_ar || "متوازن") : (traitsA.disc?.pace || "Balanced")})`;
             }
 
             // Birkman Badge
+            const needA = (traitsA.birkman?.underlying_need || "empathy").toLowerCase();
             if (dom.birkmanBadgeA) {
-                dom.birkmanBadgeA.textContent = (traitsA.birkman?.underlying_need || "empathy").toUpperCase();
+                dom.birkmanBadgeA.textContent = isAr ? (BIRKMAN_NEED_MAP[needA]?.ar || needA) : needA.toUpperCase();
             }
 
             // Gottman Safety Badge
             if (dom.gottmanBadgeA) {
                 dom.gottmanBadgeA.textContent = `${traitsA.gottman_safety?.emotional_safety_index || 85}% ${isAr ? "أمان" : "Safety"}`;
             }
+
+            // Chapter 1 Overview Badges
+            if (dom.mbtiOverviewA) dom.mbtiOverviewA.textContent = traitsA.mbti?.type || "--";
+            if (dom.attachmentOverviewA) {
+                const attA = (traitsA.attachment?.primary || "").toLowerCase();
+                dom.attachmentOverviewA.textContent = isAr ? (ATTACHMENT_MAP[attA]?.ar || attA) : attA.toUpperCase();
+            }
+            if (dom.hartmanOverviewA) {
+                dom.hartmanOverviewA.textContent = isAr ? (HARTMAN_MAP[hColorA]?.ar || hColorA) : hColorA.toUpperCase();
+                dom.hartmanOverviewA.className = `person-type-badge type-a hartman-badge-${hColorA}`;
+            }
+            if (dom.discOverviewA) {
+                dom.discOverviewA.textContent = `${discStyleA} (${isAr ? (traitsA.disc?.pace_ar || "متوازن") : (traitsA.disc?.pace || "Balanced")})`;
+            }
+            if (dom.mbtiOverviewB) dom.mbtiOverviewB.textContent = "--";
+            if (dom.attachmentOverviewB) dom.attachmentOverviewB.textContent = "--";
+            if (dom.hartmanOverviewB) dom.hartmanOverviewB.textContent = "--";
+            if (dom.discOverviewB) dom.discOverviewB.textContent = "--";
 
             // Update Narrative Chapter Headers for SINGLE VIEW
             if (dom.chapter1Badge) dom.chapter1Badge.textContent = isAr ? "الفصل الأول" : "Chapter 1";
@@ -1361,12 +1457,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (dom.dyadicConflictCard) dom.dyadicConflictCard.style.display = "none";
 
             // Render Interactive Multi-Framework SVG Visualizers for Single View
-            renderHartmanDonut(dom.hartmanChartContainer, traitsA, null, true, profileA.owner_name, null, isAr);
-            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsA.disc, null, true, profileA.owner_name, null, isAr);
-            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsA, null, true, profileA.owner_name, null, isAr);
-            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsA, null, true, profileA.owner_name, null, isAr);
-            renderFiroExchange(dom.firoExchangeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
-            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderHartmanDonut(dom.hartmanChartContainer, traitsA, null, true, nameA, null, isAr);
+            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsA.disc, null, true, nameA, null, isAr);
+            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsA, null, true, nameA, null, isAr);
+            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsA, null, true, nameA, null, isAr);
+            renderFiroExchange(dom.firoExchangeContainer, traitsA, null, true, nameA, null, isAr);
+            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsA, null, true, nameA, null, isAr);
 
             // Populate Awareness Badges & Spectrum
             if (dom.hawkinsBadgeA) {
@@ -1377,7 +1473,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dom.hicksBadgeA.textContent = isAr ? (traitsA.consciousness?.hicks?.state_ar || "التوقع الإيجابي") : (traitsA.consciousness?.hicks?.state || "Positive Expectation");
             }
             if (dom.hicksBadgeB) dom.hicksBadgeB.textContent = "--";
-            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsA, null, true, nameA, null, isAr);
 
             // Render Relationship Operating Manual for Person A
             renderOperatingManual(profileA, null, isAr);
@@ -1386,7 +1482,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderFairFightingBox(null, profileA, isAr);
 
             // Big Five rendering (just pass A for both to render single)
-            renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true, profileA.owner_name, null);
+            renderBigFiveBarCharts(traitsA.big_five, traitsA.big_five, true, nameA, null);
 
             // Lists
             dom.reportStrengthsList.innerHTML = "";
@@ -1477,26 +1573,30 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.circleProgressFill.setAttribute("stroke-dasharray", `${report.overall_index}, 100`);
             dom.reportConfidence.textContent = `${report.report_confidence}%`;
 
+            const getDisplayName = (p, ar) => (ar && p?.owner_name_ar ? p.owner_name_ar : p?.owner_name || "");
+            const nameA = getDisplayName(profileA, isAr);
+            const nameB = getDisplayName(profileB, isAr);
+
             // Bilingual Dynamic Summary Builder
             let summaryText = "";
             if (report.overall_index >= 85) {
                 summaryText = isAr 
-                    ? `تناغم استثنائي وتوافق فكري وعاطفي عميق تم رصده بين ${profileA.owner_name} و ${profileB.owner_name}. تتلاقى الأهداف الحياتية والرؤى المستقبلية لإنشاء علاقة مستدامة للغاية.`
-                    : `Outstanding structural synergy and deep emotional alignment detected between ${profileA.owner_name} and ${profileB.owner_name}. Core life visions and communication patterns are beautifully synchronized.`;
+                    ? `تناغم استثنائي وتوافق فكري وعاطفي عميق تم رصده بين ${nameA} و ${nameB}. تتلاقى الأهداف الحياتية والرؤى المستقبلية لإنشاء علاقة مستدامة للغاية.`
+                    : `Outstanding structural synergy and deep emotional alignment detected between ${nameA} and ${nameB}. Core life visions and communication patterns are beautifully synchronized.`;
             } else if (report.overall_index >= 70) {
                 summaryText = isAr
-                    ? `توافق أساسي قوي للغاية بين ${profileA.owner_name} و ${profileB.owner_name}. هناك بعض النقاط الحوارية الهامة حول إدارة الشؤون المالية والحدود العائلية التي تتطلب تفاهمات واعية.`
-                    : `Solid foundational compatibility with minor functional frictions between ${profileA.owner_name} and ${profileB.owner_name}. Minor discrepancies in household management and boundaries represent opportunities for proactive communication.`;
+                    ? `توافق أساسي قوي للغاية بين ${nameA} و ${nameB}. هناك بعض النقاط الحوارية الهامة حول إدارة الشؤون المالية والحدود العائلية التي تتطلب تفاهمات واعية.`
+                    : `Solid foundational compatibility with minor functional frictions between ${nameA} and ${nameB}. Minor discrepancies in household management and boundaries represent opportunities for proactive communication.`;
             } else {
                 summaryText = isAr
-                    ? `تم اكتشاف اختلافات فكرية واجتماعية واضحة في رؤية العلاقة بين ${profileA.owner_name} و ${profileB.owner_name}. يتطلب البناء السليم صياغة التزامات تفصيلية حول أسلوب المعيشة والاتفاق المالي.`
-                    : `Significant thematic contrasts and personality divergence observed between ${profileA.owner_name} and ${profileB.owner_name}. Bridging these boundaries will require high intentionality, empathetic listening, and structural compromises.`;
+                    ? `تم اكتشاف اختلافات فكرية واجتماعية واضحة في رؤية العلاقة بين ${nameA} و ${nameB}. يتطلب البناء السليم صياغة التزامات تفصيلية حول أسلوب المعيشة والاتفاق المالي.`
+                    : `Significant thematic contrasts and personality divergence observed between ${nameA} and ${nameB}. Bridging these boundaries will require high intentionality, empathetic listening, and structural compromises.`;
             }
             dom.reportExecutiveSummaryText.textContent = summaryText;
 
             // Meta parameters
-            dom.reportHeaderPersonA.textContent = profileA.owner_name;
-            dom.reportHeaderPersonB.textContent = profileB.owner_name;
+            dom.reportHeaderPersonA.textContent = nameA;
+            dom.reportHeaderPersonB.textContent = nameB;
             
             dom.reportIdA.textContent = profileA.id;
             dom.reportIdB.textContent = profileB.id;
@@ -1510,35 +1610,62 @@ document.addEventListener("DOMContentLoaded", () => {
             // Render Legacy Badges
             if (dom.mbtiBadgeA) dom.mbtiBadgeA.textContent = profileA.calculated_personality.mbti?.type || "--";
             if (dom.mbtiBadgeB) dom.mbtiBadgeB.textContent = profileB.calculated_personality.mbti?.type || "--";
-            if (dom.attachmentBadgeA) dom.attachmentBadgeA.textContent = (profileA.calculated_personality.attachment?.primary || "--").toUpperCase();
-            if (dom.attachmentBadgeB) dom.attachmentBadgeB.textContent = (profileB.calculated_personality.attachment?.primary || "--").toUpperCase();
-            if (dom.commBadgeA) dom.commBadgeA.textContent = (profileA.calculated_personality.communication?.primary || "--").toUpperCase();
-            if (dom.commBadgeB) dom.commBadgeB.textContent = (profileB.calculated_personality.communication?.primary || "--").toUpperCase();
-            if (dom.conflictBadgeA) dom.conflictBadgeA.textContent = (profileA.calculated_personality.conflict?.primary || "collaborating").toUpperCase();
-            if (dom.conflictBadgeB) dom.conflictBadgeB.textContent = (profileB.calculated_personality.conflict?.primary || "collaborating").toUpperCase();
+            
+            const attA_raw = (profileA.calculated_personality.attachment?.primary || "").toLowerCase();
+            const attB_raw = (profileB.calculated_personality.attachment?.primary || "").toLowerCase();
+            if (dom.attachmentBadgeA) dom.attachmentBadgeA.textContent = isAr ? (ATTACHMENT_MAP[attA_raw]?.ar || attA_raw) : attA_raw.toUpperCase();
+            if (dom.attachmentBadgeB) dom.attachmentBadgeB.textContent = isAr ? (ATTACHMENT_MAP[attB_raw]?.ar || attB_raw) : attB_raw.toUpperCase();
+
+            const commA_raw = (profileA.calculated_personality.communication?.primary || "").toLowerCase();
+            const commB_raw = (profileB.calculated_personality.communication?.primary || "").toLowerCase();
+            if (dom.commBadgeA) dom.commBadgeA.textContent = isAr ? (COMMUNICATION_MAP[commA_raw]?.ar || commA_raw) : commA_raw.toUpperCase();
+            if (dom.commBadgeB) dom.commBadgeB.textContent = isAr ? (COMMUNICATION_MAP[commB_raw]?.ar || commB_raw) : commB_raw.toUpperCase();
+
+            const confA_raw = (profileA.calculated_personality.conflict?.primary || "collaborating").toLowerCase();
+            const confB_raw = (profileB.calculated_personality.conflict?.primary || "collaborating").toLowerCase();
+            if (dom.conflictBadgeA) dom.conflictBadgeA.textContent = isAr ? (CONFLICT_MAP[confA_raw]?.ar || confA_raw) : confA_raw.toUpperCase();
+            if (dom.conflictBadgeB) dom.conflictBadgeB.textContent = isAr ? (CONFLICT_MAP[confB_raw]?.ar || confB_raw) : confB_raw.toUpperCase();
 
             // Render Multi-Framework Badges for A & B
             const traitsCompA = profileA.calculated_personality;
             const traitsCompB = profileB.calculated_personality;
 
+            const colA_raw = (traitsCompA.hartman?.primary || "blue").toLowerCase();
+            const colB_raw = (traitsCompB.hartman?.primary || "white").toLowerCase();
             if (dom.hartmanBadgeA && dom.hartmanBadgeB) {
-                const colA = traitsCompA.hartman?.primary || "blue";
-                const colB = traitsCompB.hartman?.primary || "white";
-                dom.hartmanBadgeA.textContent = colA.toUpperCase();
-                dom.hartmanBadgeA.className = `person-type-badge type-a hartman-badge-${colA}`;
-                dom.hartmanBadgeB.textContent = colB.toUpperCase();
-                dom.hartmanBadgeB.className = `person-type-badge type-b hartman-badge-${colB}`;
+                dom.hartmanBadgeA.textContent = isAr ? (HARTMAN_MAP[colA_raw]?.ar || colA_raw) : colA_raw.toUpperCase();
+                dom.hartmanBadgeA.className = `person-type-badge type-a hartman-badge-${colA_raw}`;
+                dom.hartmanBadgeB.textContent = isAr ? (HARTMAN_MAP[colB_raw]?.ar || colB_raw) : colB_raw.toUpperCase();
+                dom.hartmanBadgeB.className = `person-type-badge type-b hartman-badge-${colB_raw}`;
             }
 
             if (dom.discBadgeA && dom.discBadgeB) {
-                dom.discBadgeA.textContent = `${traitsCompA.disc?.primary || "D"}`;
-                dom.discBadgeB.textContent = `${traitsCompB.disc?.primary || "S"}`;
+                dom.discBadgeA.textContent = `${traitsCompA.disc?.primary || "D"} (${isAr ? (traitsCompA.disc?.pace_ar || "متوازن") : (traitsCompA.disc?.pace || "Balanced")})`;
+                dom.discBadgeB.textContent = `${traitsCompB.disc?.primary || "S"} (${isAr ? (traitsCompB.disc?.pace_ar || "متوازن") : (traitsCompB.disc?.pace || "Balanced")})`;
             }
 
+            const needA_raw = (traitsCompA.birkman?.underlying_need || "empathy").toLowerCase();
+            const needB_raw = (traitsCompB.birkman?.underlying_need || "freedom").toLowerCase();
             if (dom.birkmanBadgeA && dom.birkmanBadgeB) {
-                dom.birkmanBadgeA.textContent = (traitsCompA.birkman?.underlying_need || "empathy").toUpperCase();
-                dom.birkmanBadgeB.textContent = (traitsCompB.birkman?.underlying_need || "freedom").toUpperCase();
+                dom.birkmanBadgeA.textContent = isAr ? (BIRKMAN_NEED_MAP[needA_raw]?.ar || needA_raw) : needA_raw.toUpperCase();
+                dom.birkmanBadgeB.textContent = isAr ? (BIRKMAN_NEED_MAP[needB_raw]?.ar || needB_raw) : needB_raw.toUpperCase();
             }
+
+            // Also update Chapter 1 Overview Badges for Comparison View
+            if (dom.mbtiOverviewA) dom.mbtiOverviewA.textContent = profileA.calculated_personality.mbti?.type || "--";
+            if (dom.mbtiOverviewB) dom.mbtiOverviewB.textContent = profileB.calculated_personality.mbti?.type || "--";
+            if (dom.attachmentOverviewA) dom.attachmentOverviewA.textContent = isAr ? (ATTACHMENT_MAP[attA_raw]?.ar || attA_raw) : attA_raw.toUpperCase();
+            if (dom.attachmentOverviewB) dom.attachmentOverviewB.textContent = isAr ? (ATTACHMENT_MAP[attB_raw]?.ar || attB_raw) : attB_raw.toUpperCase();
+            if (dom.hartmanOverviewA) {
+                dom.hartmanOverviewA.textContent = isAr ? (HARTMAN_MAP[colA_raw]?.ar || colA_raw) : colA_raw.toUpperCase();
+                dom.hartmanOverviewA.className = `person-type-badge type-a hartman-badge-${colA_raw}`;
+            }
+            if (dom.hartmanOverviewB) {
+                dom.hartmanOverviewB.textContent = isAr ? (HARTMAN_MAP[colB_raw]?.ar || colB_raw) : colB_raw.toUpperCase();
+                dom.hartmanOverviewB.className = `person-type-badge type-b hartman-badge-${colB_raw}`;
+            }
+            if (dom.discOverviewA) dom.discOverviewA.textContent = `${traitsCompA.disc?.primary || "D"} (${isAr ? (traitsCompA.disc?.pace_ar || "متوازن") : (traitsCompA.disc?.pace || "Balanced")})`;
+            if (dom.discOverviewB) dom.discOverviewB.textContent = `${traitsCompB.disc?.primary || "S"} (${isAr ? (traitsCompB.disc?.pace_ar || "متوازن") : (traitsCompB.disc?.pace || "Balanced")})`;
 
             if (dom.gottmanBadgeA && dom.gottmanBadgeB) {
                 dom.gottmanBadgeA.textContent = `${traitsCompA.gottman_safety?.emotional_safety_index || 85}%`;
@@ -1555,14 +1682,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Render Interactive Multi-Framework SVG Visualizers for Comparison View
-            renderHartmanDonut(dom.hartmanChartContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
-            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsCompA.disc, traitsCompB.disc, false, profileA.owner_name, profileB.owner_name, isAr);
-            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
-            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
-            renderFiroExchange(dom.firoExchangeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
-            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderHartmanDonut(dom.hartmanChartContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
+            renderDiscQuadrantMap(dom.discQuadrantContainer, traitsCompA.disc, traitsCompB.disc, false, nameA, nameB, isAr);
+            renderBirkmanIceberg(dom.birkmanIcebergContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
+            renderAttachmentCoordinateMap(dom.attachmentGridContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
+            renderFiroExchange(dom.firoExchangeContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
+            renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
             renderDyadicConflictLoop(dom.dyadicConflictLoopContainer, report, profileA, profileB, isAr);
-            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
+            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
 
             // Render Relationship Operating Manual for BOTH
             renderOperatingManual(profileA, profileB, isAr);
@@ -1578,8 +1705,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 profileA.calculated_personality.big_five,
                 profileB.calculated_personality.big_five,
                 false,
-                profileA.owner_name,
-                profileB.owner_name
+                nameA,
+                nameB
             );
 
             // Bullets rendering helper
@@ -1641,9 +1768,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         aiContainer.appendChild(card);
                     };
 
-                    appendBlock(isAr ? "تحليل الدافع الجوهري (Hartman Core Motive)" : "Core Motive Analysis (Hartman)", aiData.coreMotiveAnalysis, "var(--accent-color)");
-                    appendBlock(isAr ? "بروفايل الأمان العاطفي وإدارة الخلاف (TKI & Gottman)" : "Conflict & Emotional Safety Profile (TKI & Gottman)", aiData.conflictAndSafety, "#8b5cf6");
-                    appendBlock(isAr ? "نمط التعلق والاحتواء (Attachment Theory)" : "Attachment & Intimacy Dynamic", aiData.attachmentProfile, "#10b981");
+                    appendBlock(isAr ? "تحليل الدافع الجوهري والمحرك النفسي" : "Core Motive Analysis (Hartman)", aiData.coreMotiveAnalysis, "var(--accent-color)");
+                    appendBlock(isAr ? "بروفايل الأمان العاطفي وإدارة الخلافات" : "Conflict & Emotional Safety Profile (TKI & Gottman)", aiData.conflictAndSafety, "#8b5cf6");
+                    appendBlock(isAr ? "نمط الارتباط العاطفي والاحتواء" : "Attachment & Intimacy Dynamic", aiData.attachmentProfile, "#10b981");
 
                     if (aiData.watchouts && aiData.watchouts.length > 0) {
                         const warnDiv = document.createElement("div");
@@ -1682,10 +1809,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         aiContainer.appendChild(card);
                     };
 
-                    appendBlock(isAr ? "الملخص التنفيذي للتوافق الزوجي (DeepSeek Pro)" : "Executive Dyadic Consultation (DeepSeek Pro)", aiData.executiveSummary, "#8b5cf6");
-                    appendBlock(isAr ? "تفاعل الدافع والإيقاع اليومي (Hartman & DISC)" : "Motive & Pace Dynamic (Hartman & DISC)", aiData.motiveAndPaceDynamic, "var(--accent-color)");
-                    appendBlock(isAr ? "توافق الاحتياجات الخفية وحساسية التوتر (Birkman)" : "Cross-Need Satisfaction & Stress Triggers (Birkman)", aiData.crossNeedCollision, "#f59e0b");
-                    appendBlock(isAr ? "دورة الخلاف التفاعلية وكيفية كسرها (Gottman & Attachment)" : "The Reactive Conflict Dance & Cycle Breaker", aiData.reactiveConflictDance, "#ef4444");
+                    appendBlock(isAr ? "الملخص التنفيذي للاستشارة والتوافق الزوجي" : "Executive Dyadic Consultation (DeepSeek Pro)", aiData.executiveSummary, "#8b5cf6");
+                    appendBlock(isAr ? "تفاعل الدوافع النفسية والإيقاع اليومي" : "Motive & Pace Dynamic (Hartman & DISC)", aiData.motiveAndPaceDynamic, "var(--accent-color)");
+                    appendBlock(isAr ? "توافق الاحتياجات الوجدانية ومحفزات التوتر" : "Cross-Need Satisfaction & Stress Triggers (Birkman)", aiData.crossNeedCollision, "#f59e0b");
+                    appendBlock(isAr ? "دورة الخلاف التفاعلية وقواعد كسرها" : "The Reactive Conflict Dance & Cycle Breaker", aiData.reactiveConflictDance, "#ef4444");
 
                     // Conversational Bridge Scripts
                     if (aiData.conversationalBridgeScripts && aiData.conversationalBridgeScripts.length > 0) {
@@ -1698,8 +1825,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             sc.className = "bridge-script-card";
                             sc.innerHTML = `
                                 <div class="bridge-script-scenario">${bs.scenario}</div>
-                                <div class="bridge-quote"><strong>${profileA.owner_name}:</strong> "${bs.scriptA}"</div>
-                                <div class="bridge-quote"><strong>${profileB.owner_name}:</strong> "${bs.scriptB}"</div>
+                                <div class="bridge-quote"><strong>${nameA}:</strong> "${bs.scriptA}"</div>
+                                <div class="bridge-quote"><strong>${nameB}:</strong> "${bs.scriptB}"</div>
                             `;
                             scriptWrapper.appendChild(sc);
                         });
@@ -1733,36 +1860,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const card = document.createElement("div");
             card.className = "manual-profile-card";
+            const ownerName = (isAr && profile.owner_name_ar) ? profile.owner_name_ar : profile.owner_name;
+            const hTitle = isAr ? (HARTMAN_MAP[(h.primary || "blue").toLowerCase()]?.ar || h.primary) : (h.primary || "Blue").toUpperCase();
             card.innerHTML = `
                 <div class="manual-profile-header">
-                    <div class="manual-owner-title">${profile.owner_name}</div>
-                    <span class="person-type-badge ${typeClass}">${(h.primary || "Blue").toUpperCase()} • ${(traits.disc?.primary || "D")}</span>
+                    <div class="manual-owner-title">${ownerName}</div>
+                    <span class="person-type-badge ${typeClass}">${hTitle} • ${(traits.disc?.primary || "D")}</span>
                 </div>
                 <div class="manual-point">
                     <div class="manual-point-label">
                         <span>🌟</span>
-                        <span>${isAr ? "الأسلوب المعتاد في الحياة اليومية (Birkman Usual)" : "Natural Everyday Style (Birkman Usual)"}</span>
+                        <span>${isAr ? "الأسلوب المعتاد في الحياة اليومية" : "Natural Everyday Style (Birkman Usual)"}</span>
                     </div>
                     <div class="manual-point-content">${usualDesc}</div>
                 </div>
                 <div class="manual-point">
                     <div class="manual-point-label">
                         <span>🛡️</span>
-                        <span>${isAr ? "الاحتياج العاطفي الخفي (Underlying Needs)" : "Hidden Emotional Needs (Birkman Needs)"}</span>
+                        <span>${isAr ? "الاحتياج العاطفي والوجداني الخفي" : "Hidden Emotional Needs (Birkman Needs)"}</span>
                     </div>
                     <div class="manual-point-content">${needDesc}</div>
                 </div>
                 <div class="manual-point">
                     <div class="manual-point-label">
                         <span>⚠️</span>
-                        <span>${isAr ? "ردة الفعل عند الضغط والإنهاك (Stress Derailer)" : "Reaction Under Pressure (Stress Derailer)"}</span>
+                        <span>${isAr ? "ردة الفعل الانفعالية عند الضغط والإنهاك" : "Reaction Under Pressure (Stress Derailer)"}</span>
                     </div>
                     <div class="manual-point-content">${stressDesc}</div>
                 </div>
                 <div class="manual-point">
                     <div class="manual-point-label">
                         <span>🔋</span>
-                        <span>${isAr ? "الوقود العاطفي ومصدر التهدئة (Core Fuel)" : "Core Emotional Fuel & Soothing"}</span>
+                        <span>${isAr ? "الوقود العاطفي ومصدر التهدئة" : "Core Emotional Fuel & Soothing"}</span>
                     </div>
                     <div class="manual-point-content">${fuelDesc} • ${isAr ? "تجنب معه: " : "Avoid: "} ${hazardDesc}</div>
                 </div>
@@ -2240,12 +2369,12 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div style="text-align: start; margin-top: 10px;">
                 <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-align: center;">
-                    ${isAr ? "رادار فرسان الهلاك الأربعة (Gottman)" : "Four Horsemen Risk Monitors"}
+                    ${isAr ? "رادار فرسان الهلاك الأربعة في العلاقة" : "Four Horsemen Risk Monitors"}
                 </div>
-                ${makeRiskRow(isAr ? "النقد واللوم (Criticism)" : "Criticism Tendency", risks.criticism || 15)}
-                ${makeRiskRow(isAr ? "الدفاعية والتبرير (Defensiveness)" : "Defensiveness", risks.defensiveness || 20)}
-                ${makeRiskRow(isAr ? "الانعزال والجدار الصامت (Stonewalling)" : "Stonewalling", risks.stonewalling || 15)}
-                ${makeRiskRow(isAr ? "الازدراء والتقليل (Contempt)" : "Contempt (Toxic)", risks.contempt || 5)}
+                ${makeRiskRow(isAr ? "النقد واللوم الشخصي" : "Criticism Tendency", risks.criticism || 15)}
+                ${makeRiskRow(isAr ? "الدفاعية والتبرير المفرط" : "Defensiveness", risks.defensiveness || 20)}
+                ${makeRiskRow(isAr ? "الانعزال وبناء الجدار الصامت" : "Stonewalling", risks.stonewalling || 15)}
+                ${makeRiskRow(isAr ? "الازدراء والتقليل من المشاعر" : "Contempt (Toxic)", risks.contempt || 5)}
             </div>
         `;
         container.appendChild(wrapper);
@@ -2263,39 +2392,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const traitsA = profileA.calculated_personality;
         const traitsB = profileB.calculated_personality;
+        const nameA = (isAr && profileA.owner_name_ar) ? profileA.owner_name_ar : profileA.owner_name;
+        const nameB = (isAr && profileB.owner_name_ar) ? profileB.owner_name_ar : profileB.owner_name;
+        const rawNeedB = (traitsB.birkman?.underlying_need || "empathy").toLowerCase();
+        const bNeedText = isAr ? (BIRKMAN_NEED_MAP[rawNeedB]?.ar || rawNeedB) : (traitsB.birkman?.underlying_need || "freedom and empathy");
+
+        const rawStressB = (traitsB.birkman?.stress_trigger || "withdrawing").toLowerCase();
+        const bStressText = isAr ? (BIRKMAN_STRESS_MAP[rawStressB]?.ar || rawStressB) : (traitsB.birkman?.stress_trigger || "withdrawal / quiet defiance");
 
         const loopSteps = [
             {
                 type: "trigger",
                 title: isAr ? `1. شرارة الخلاف: التباين في أسلوب الحوار` : `1. The Spark: Pace & Delivery Discrepancy`,
                 desc: isAr 
-                    ? `عندما يبادر ${profileA.owner_name} بأسلوب مباشر أو نبرة سريعة في لحظة انشغال أو إرهاق.`
-                    : `When ${profileA.owner_name} uses a direct, urgent tone while discussing plans or concerns.`
+                    ? `عندما يبادر ${nameA} بأسلوب مباشر أو نبرة سريعة في لحظة انشغال أو إرهاق.`
+                    : `When ${nameA} uses a direct, urgent tone while discussing plans or concerns.`
             },
             {
                 type: "need",
                 title: isAr ? `2. جرس الإنذار الخفي: جرح الاحتياج` : `2. The Unspoken Alarm: Threatened Need`,
                 desc: isAr
-                    ? `يشعر ${profileB.owner_name} بأن احتياجه لـ (${traitsB.birkman?.underlying_need || "الهدوء والتقدير"}) مهدد، مما يولد توتراً داخلياً صامتاً.`
-                    : `${profileB.owner_name}'s underlying need for (${traitsB.birkman?.underlying_need || "freedom and empathy"}) feels cornered or invalidated.`
+                    ? `يشعر ${nameB} بأن احتياجه لـ (${bNeedText}) مهدد، مما يولد توتراً داخلياً صامتاً.`
+                    : `${nameB}'s underlying need for (${bNeedText}) feels cornered or invalidated.`
             },
             {
                 type: "reaction",
                 title: isAr ? `3. ردة الفعل الدفاعية: التراجع أو الاحتداد` : `3. The Defensive Reflex`,
                 desc: isAr
-                    ? `يفعل ${profileB.owner_name} نمط التوتر (${traitsB.birkman?.stress_trigger || "الانعزال أو المقاومة"})، مما يربك الطرف الآخر.`
-                    : `${profileB.owner_name} activates the stress derailer (${traitsB.birkman?.stress_trigger || "withdrawal / quiet defiance"}).`
+                    ? `يفعل ${nameB} نمط التوتر (${bStressText})، مما يربك الطرف الآخر.`
+                    : `${nameB} activates the stress derailer (${bStressText}).`
             },
             {
                 type: "reaction",
                 title: isAr ? `4. دورة التصعيد التفاعلي` : `4. The Escalation Loop`,
                 desc: isAr
-                    ? `يشعر ${profileA.owner_name} بعدم الاستجابة، فيرفع وتيرة الحزم، مما يعزز انغلاق الطرف الثاني.`
-                    : `${profileA.owner_name} perceives the silence as disinterest and pushes harder, deepening the withdrawal.`
+                    ? `يشعر ${nameA} بعدم الاستجابة، فيرفع وتيرة الحزم، مما يعزز انغلاق الطرف الثاني.`
+                    : `${nameA} perceives the silence as disinterest and pushes harder, deepening the withdrawal.`
             },
             {
                 type: "breaker",
-                title: isAr ? `5. قاطع الدائرة وقاعدة التهدئة (Circuit Breaker)` : `5. The Circuit Breaker & Antidote`,
+                title: isAr ? `5. قاطع الدائرة وقاعدة التهدئة الفورية` : `5. The Circuit Breaker & Antidote`,
                 desc: isAr
                     ? `التوقف فوراً لمدة 20 دقيقة مع التأكيد بالقول: "أنا أحترمك وأحبك، لنأخذ استراحة ونكمل بهدوء".`
                     : `Execute the 20-minute de-escalation timeout with emotional reassurance: "I value us; let's pause and resume calmly."`
@@ -2358,9 +2494,9 @@ document.addEventListener("DOMContentLoaded", () => {
         wrapper.className = "consciousness-spectrum-wrapper";
         wrapper.style.cssText = "width: 100%; max-width: 650px; margin: 0 auto; padding: 12px 0;";
 
-        const titleHawkins = isAr ? "1. سلم مستويات الوعي (د. ديفيد هوكينز - Map of Consciousness)" : "1. Map of Consciousness Spectrum (Dr. David R. Hawkins)";
-        const titleHicks = isAr ? "2. السلم التوجيهي للمشاعر (إبراهام هيكس - Emotional Guidance Scale)" : "2. Emotional Guidance Scale (Abraham Hicks)";
-        const thresholdLabel = isAr ? "عتبة الشجاعة (200) • الفاصل بين القوة والقسر" : "200 Courage Threshold • Force vs. Power";
+        const titleHawkins = isAr ? "1. سلم مستويات الوعي (خريطة د. ديفيد هوكينز للوعي الإنساني)" : "1. Map of Consciousness Spectrum (Dr. David R. Hawkins)";
+        const titleHicks = isAr ? "2. السلم التوجيهي للمشاعر (مقياس إبراهام هيكس للإرشاد المشاعري)" : "2. Emotional Guidance Scale (Abraham Hicks)";
+        const thresholdLabel = isAr ? "عتبة الشجاعة (200) • الفاصل بين القوة الروحية والقسر" : "200 Courage Threshold • Force vs. Power";
 
         wrapper.innerHTML = `
             <!-- HAWKINS SCALE -->
@@ -2410,7 +2546,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-weight: 700; font-size: 0.88rem;">${titleHicks}</span>
-                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">1 (Joy) — 22 (Fear)</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">${isAr ? "١ (البهجة والامتنان) — ٢٢ (الخوف واليأس)" : "1 (Joy) — 22 (Fear)"}</span>
                 </div>
 
                 <!-- Hicks Vibrational Gradient Track -->
@@ -2434,11 +2570,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <!-- Hicks Detail Badges -->
                 <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
                     <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
-                        <strong>${nameA}</strong>: ${isAr ? cA.hicks.state_ar : cA.hicks.state} (Lv ${hicksA}) • ${isAr ? cA.pivot_agility.rating_ar : cA.pivot_agility.rating_en}
+                        <strong>${nameA}</strong>: ${isAr ? cA.hicks.state_ar : cA.hicks.state} (${isAr ? `المستوى ${hicksA}` : `Lv ${hicksA}`}) • ${isAr ? cA.pivot_agility.rating_ar : cA.pivot_agility.rating_en}
                     </div>
                     ${!isSingle && cB ? `
                         <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
-                            <strong>${nameB}</strong>: ${isAr ? cB.hicks.state_ar : cB.hicks.state} (Lv ${hicksB}) • ${isAr ? cB.pivot_agility.rating_ar : cB.pivot_agility.rating_en}
+                            <strong>${nameB}</strong>: ${isAr ? cB.hicks.state_ar : cB.hicks.state} (${isAr ? `المستوى ${hicksB}` : `Lv ${hicksB}`}) • ${isAr ? cB.pivot_agility.rating_ar : cB.pivot_agility.rating_en}
                         </div>
                     ` : ''}
                 </div>
@@ -2706,7 +2842,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span>${traitLabel}</span>
                     <span>
                         <span style="color: var(--success); font-weight: 800;">${scoreA}%</span>
-                        <span style="color: var(--text-tertiary); margin: 0 4px;">vs</span>
+                        <span style="color: var(--text-tertiary); margin: 0 4px;">${isAr ? "مقابل" : "vs"}</span>
                         <span style="color: var(--warning); font-weight: 800;">${scoreB}%</span>
                     </span>
                 `;

@@ -8,6 +8,44 @@
  * 5. OpenAI (GPT-4o Mini)
  */
 
+// Localized psychometric term dictionaries for AI consultation
+const AI_TRANSLATIONS = {
+    hartman: {
+        red: { ar: "الأحمر (القوة والقيادة)", en: "RED" },
+        blue: { ar: "الأزرق (العمق والوفاء)", en: "BLUE" },
+        white: { ar: "الأبيض (السلام والسكينة)", en: "WHITE" },
+        yellow: { ar: "الأصفر (المرح والبهجة)", en: "YELLOW" }
+    },
+    birkman_style: {
+        assertive: { ar: "الحزم والمبادرة المباشرة", en: "assertive" },
+        supportive: { ar: "الدعم والتعاطف الوجداني", en: "supportive" },
+        reflective: { ar: "التأمل والتروي الهادئ", en: "reflective" },
+        organized: { ar: "التنظيم والمنهجية الواضحة", en: "organized" }
+    },
+    birkman_need: {
+        empathy: { ar: "التعاطف والتفهم الصادق", en: "empathy" },
+        freedom: { ar: "المساحة الشخصية والاستقلالية", en: "freedom" },
+        structure: { ar: "الوضوح والنظام المحدد", en: "structure" },
+        respect: { ar: "الاحترام والتقدير المتبادل", en: "respect" },
+        affirmation: { ar: "التشجيع والتطمين الدائم", en: "affirmation" },
+        directness: { ar: "الصراحة والوضوح التام", en: "directness" },
+        patience: { ar: "التأني والرفق", en: "patience" }
+    },
+    birkman_stress: {
+        withdrawing: { ar: "الانعزال والصمت الدفاعي", en: "withdrawing" },
+        demanding: { ar: "الإلحاح والضغط المباشر", en: "demanding" },
+        impatient: { ar: "الاستعجال والتوتر", en: "impatient" },
+        resisting: { ar: "المقاومة السلبية", en: "resisting" },
+        compliant: { ar: "المسايرة الظاهرية مع كتمان الضيق", en: "compliant" }
+    },
+    attachment: {
+        secure: { ar: "الآمن والمتزن", en: "secure" },
+        anxious: { ar: "القلق والباحث عن التطمين", en: "anxious" },
+        avoidant: { ar: "التجنبي والباحث عن المساحة", en: "avoidant" },
+        fearful: { ar: "المضطرب والحذر", en: "fearful" }
+    }
+};
+
 class AIService {
     constructor() {
         const getStored = (k) => (typeof localStorage !== "undefined" ? localStorage.getItem(k) : null);
@@ -224,21 +262,29 @@ Output raw JSON only matching schema:
         return {
             coreMotiveAnalysis: motiveAnalysis,
             operatingManual: {
-                naturalStyle: isAr ? `سلوك يومي يتسم بـ (${b.usual_style})، مع إيقاع (${d.pace_ar || d.pace}).` : `Outwardly manifests as ${b.usual_style} with a ${d.pace} tempo.`,
-                hiddenNeeds: isAr ? `حاجة عميقة لـ (${b.underlying_need}) والاعتراف الصادق بالمشاعر.` : `Crucial underlying need for ${b.underlying_need} and consistent reassurance.`,
-                stressReaction: isAr ? `عند التعب أو الإجهاد، قد يلجأ إلى (${b.stress_trigger}).` : `Under prolonged stress, derailer reflex manifests as ${b.stress_trigger}.`,
-                howToDeescalate: isAr ? `التحدث بنبرة هادئة ومنح مساحة للتعبير دون مقاطعة أو دفاعية.` : `Lower vocal volume, offer clear emotional reassurance, and avoid defensive counter-attacks.`
+                naturalStyle: isAr
+                    ? `سلوك يومي يتسم بـ (${AI_TRANSLATIONS.birkman_style[b.usual_style]?.ar || b.usual_style})، مع إيقاع (${d.pace_ar || d.pace}).`
+                    : `Outwardly manifests as ${b.usual_style} with a ${d.pace} tempo.`,
+                hiddenNeeds: isAr
+                    ? `حاجة عميقة لـ (${AI_TRANSLATIONS.birkman_need[b.underlying_need]?.ar || b.underlying_need}) والاعتراف الصادق بالمشاعر.`
+                    : `Crucial underlying need for ${b.underlying_need} and consistent reassurance.`,
+                stressReaction: isAr
+                    ? `عند التعب أو الإجهاد، قد يلجأ إلى (${AI_TRANSLATIONS.birkman_stress[b.stress_trigger]?.ar || b.stress_trigger}).`
+                    : `Under prolonged stress, derailer reflex manifests as ${b.stress_trigger}.`,
+                howToDeescalate: isAr
+                    ? `التحدث بنبرة هادئة ومنح مساحة للتعبير دون مقاطعة أو دفاعية.`
+                    : `Lower vocal volume, offer clear emotional reassurance, and avoid defensive counter-attacks.`
             },
             conflictAndSafety: isAr
                 ? `مؤشر الأمان العاطفي لديك يبلغ (${g.emotional_safety_index}%)، مما يمنحك ركيزة متوازنة لاحتواء الأزمات بشرط مراقبة ردود الفعل الارتدادية.`
                 : `Your Emotional Safety Index sits at ${g.emotional_safety_index}%, indicating a solid foundation for cooperative dispute resolution when emotional flooding is managed.`,
             attachmentProfile: isAr
-                ? `نمط الارتباط الغالب هو (${ecr.primary}) بدرجة قلق (${ecr.anxiety_score || 25}%) وتجنب (${ecr.avoidance_score || 30}%). تبحث عن ملاذ آمن يجمع بين القرب والاستقرار.`
+                ? `نمط الارتباط الغالب هو (${AI_TRANSLATIONS.attachment[ecr.primary]?.ar || ecr.primary}) بدرجة قلق (${ecr.anxiety_score || 25}%) وتجنب (${ecr.avoidance_score || 30}%). تبحث عن ملاذ آمن يجمع بين القرب والاستقرار.`
                 : `Attachment orientation reflects a ${ecr.primary} baseline (Anxiety: ${ecr.anxiety_score || 25}%, Avoidance: ${ecr.avoidance_score || 30}%), prioritizing secure intimacy and mutual dependability.`,
             positiveTraits: posTraits,
             growthAreas: grwAreas,
             watchouts: isAr ? [
-                `الحذر من ردة فعل التوتر (${b.stress_trigger}) أثناء المشاحنات الساخنة`,
+                `الحذر من ردة فعل التوتر (${AI_TRANSLATIONS.birkman_stress[b.stress_trigger]?.ar || b.stress_trigger}) أثناء المشاحنات الساخنة`,
                 "تجنب افتراض ما يدور في ذهن الشريك دون سؤال مباشر"
             ] : [
                 `Be mindful of the stress reflex (${b.stress_trigger}) during heated moments`,
@@ -294,15 +340,23 @@ Output raw JSON only matching schema:
         const isAr = currentLanguage === "ar";
         const tA = profileA.calculated_personality || {};
         const tB = profileB.calculated_personality || {};
-        const nameA = profileA.owner_name;
-        const nameB = profileB.owner_name;
+        const nameA = (isAr && profileA.owner_name_ar) ? profileA.owner_name_ar : profileA.owner_name;
+        const nameB = (isAr && profileB.owner_name_ar) ? profileB.owner_name_ar : profileB.owner_name;
 
-        const hA = (tA.hartman?.primary || "blue").toUpperCase();
-        const hB = (tB.hartman?.primary || "white").toUpperCase();
-        const needA = tA.birkman?.underlying_need || "empathy";
-        const needB = tB.birkman?.underlying_need || "freedom";
-        const stressA = tA.birkman?.stress_trigger || "demanding";
-        const stressB = tB.birkman?.stress_trigger || "withdrawing";
+        const hA_val = (tA.hartman?.primary || "blue").toLowerCase();
+        const hB_val = (tB.hartman?.primary || "white").toLowerCase();
+        const hA = isAr ? (AI_TRANSLATIONS.hartman[hA_val]?.ar || hA_val) : hA_val.toUpperCase();
+        const hB = isAr ? (AI_TRANSLATIONS.hartman[hB_val]?.ar || hB_val) : hB_val.toUpperCase();
+
+        const rawNeedA = tA.birkman?.underlying_need || "empathy";
+        const rawNeedB = tB.birkman?.underlying_need || "freedom";
+        const needA = isAr ? (AI_TRANSLATIONS.birkman_need[rawNeedA]?.ar || rawNeedA) : rawNeedA;
+        const needB = isAr ? (AI_TRANSLATIONS.birkman_need[rawNeedB]?.ar || rawNeedB) : rawNeedB;
+
+        const rawStressA = tA.birkman?.stress_trigger || "demanding";
+        const rawStressB = tB.birkman?.stress_trigger || "withdrawing";
+        const stressA = isAr ? (AI_TRANSLATIONS.birkman_stress[rawStressA]?.ar || rawStressA) : rawStressA;
+        const stressB = isAr ? (AI_TRANSLATIONS.birkman_stress[rawStressB]?.ar || rawStressB) : rawStressB;
 
         const cA = tA.consciousness;
         const cB = tB.consciousness;
@@ -311,7 +365,7 @@ Output raw JSON only matching schema:
             const delta = Math.abs(cA.hawkins.score - cB.hawkins.score);
             if (cA.hawkins.is_power && cB.hawkins.is_power && delta <= 120) {
                 consciousnessNote = isAr
-                    ? ` كلاهما يعمل في فضاء الوعي البناء (القوة/Power > 200) مع رنين ترددي متناغم يسهل التسامي السريع فوق صغائر الخلافات.`
+                    ? ` كلاهما يعمل في فضاء الوعي البنّاء (فضاء القوة الروحية البنّاءة > 200) مع رنين ترددي متناغم يسهل التسامي السريع فوق صغائر الخلافات.`
                     : ` Both partners operate within the constructive Power realm (>200) with synergistic vibrational resonance, facilitating swift mutual elevation.`;
             } else if (delta > 100) {
                 consciousnessNote = isAr

@@ -75,3 +75,18 @@
 - Corrected ECR attachment coordinate calculation to inspect `traits.attachment` properly.
 - Audited 100% of HTML `data-i18n` tags, resolving all missing keys in English and Arabic.
 - Added dedicated `.fair-fighting-box` and `.fair-fighting-num` styles with complete RTL support.
+
+---
+
+## 📝 Changelog (v2.6.1) - Unified Arabic Report & Zero English Remnants
+- **`utils.js`**: Added missing qualitative section keys to `TRANSLATIONS.ar` and `TRANSLATIONS.en` (`strengths`, `challenges`, `deal_breakers`, `discussion_topics`, `growth_opps`, `recommendations`, `import_code_title`, `import_code_btn`), resolving fallback to English headers in Arabic mode.
+- **`compatibility.js`**: Added `SCHWARTZ_TRANSLATIONS` dictionary; translated Schwartz values interpolated into strength bullets (`(الأمان والاستقرار و الأصالة والتقاليد و الاستقلالية وحرية الاختيار)`) with proper closing parenthesis.
+- **`index.html`**: Renamed duplicate overview DOM IDs in Chapter 1 grid to `mbtiOverviewA/B`, `hartmanOverviewA/B`, `discOverviewA/B`, `attachmentOverviewA/B`, ensuring full dynamic synchronization.
+- **`traits.js`, `demo_profiles.js`, `sample_*.json`**: Removed English parentheticals `(Power)` and `(Force)` from Hawkins domain names in Arabic (`"القوة الروحية البنّاءة"` and `"القوة القسرية الضاغطة"`).
+- **`script.js`**:
+  - Added localized dictionaries: `ATTACHMENT_MAP`, `COMMUNICATION_MAP`, `CONFLICT_MAP`, `HARTMAN_MAP`, `BIRKMAN_NEED_MAP`, `BIRKMAN_STYLE_MAP`, `BIRKMAN_STRESS_MAP`.
+  - Localized executive badges and Chapter 1 cards to render pure Arabic terms instead of uppercase English strings.
+  - Stripped English model labels from Operating Manual (`(Birkman Usual)`, `(Underlying Needs)`, etc.) and localized Gottman Four Horsemen risk labels.
+  - Localized Big Five "vs" separator to `"مقابل"`.
+  - Added localized profile display names (`owner_name_ar`) for demo archetypes (طارق المنصور and نور الصباح).
+- **`ai_service.js`**: Added comprehensive `AI_TRANSLATIONS` psychometric dictionary, localizing all autonomous single and dyadic AI consultation outputs into pure Arabic.
