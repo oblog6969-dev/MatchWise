@@ -143,7 +143,19 @@ body.rtl {
 .nav-controls {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+}
+
+.nav-lang-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-action-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* --- 4. BUTTONS & INPUT ELEMENTS --- */
@@ -1676,40 +1688,163 @@ body.rtl .report-bullet-list li::before {
     display: none !important;
 }
 
-/* Mobile responsive scaling & ergonomics */
-@media (max-width: 600px) {
-    /* Header optimization */
+/* Mobile Responsive Scaling & Header Optimization (Theme Toggle Always On-Screen) */
+@media (max-width: 768px) {
+    /* Header layout: 2-tier ergonomic bar ensuring Theme Toggle is 100% visible */
     .header-container {
-        padding: 10px 14px;
-        gap: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 14px;
+        gap: 8px 10px;
     }
+
     .logo-area {
         gap: 8px;
+        flex: 0 0 auto;
     }
+
     .logo-text p {
         display: none;
     }
+
     .logo-text h1 {
         font-size: 1rem;
+        letter-spacing: -0.01em;
     }
+
+    .heart-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Flatten nav-controls into header-container flex flow */
     .nav-controls {
+        display: contents;
+    }
+
+    /* Top Row Action Buttons: AI Settings + Theme Toggle (Always 100% On-Screen) */
+    .nav-action-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        order: 2;
+        margin-left: auto;
+    }
+
+    body.rtl .nav-action-group {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        flex-shrink: 0;
+        background-color: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+    }
+
+    .icon-btn:active {
+        transform: scale(0.92);
+    }
+
+    .ai-settings-btn {
+        padding: 6px 12px;
+        font-size: 0.78rem;
         gap: 6px;
     }
-    .premium-select {
-        padding: 5px 8px;
-        font-size: 0.78rem;
+
+    /* Bottom Row: Language & Google Translation Bar */
+    .nav-lang-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        order: 3;
+        padding-top: 6px;
+        border-top: 1px solid var(--border-color);
     }
-    .ai-settings-btn {
-        padding: 5px 8px;
-        font-size: 0.74rem;
+
+    .nav-lang-group .control-group:first-child {
+        flex: 1 1 42%;
+        min-width: 0;
     }
-    .ai-settings-btn svg {
+
+    .nav-lang-group .google-translate-wrapper {
+        flex: 1 1 58%;
+        min-width: 0;
+    }
+
+    .nav-lang-group .google-translate-bar {
+        width: 100%;
+    }
+
+    #languageSelector, #googleTranslateQuickSelector {
+        width: 100%;
+        max-width: 100%;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #googleTranslateQuickSelector {
+        padding-left: 30px;
+        padding-right: 14px;
+    }
+
+    body.rtl #googleTranslateQuickSelector {
+        padding-left: 14px;
+        padding-right: 30px;
+    }
+
+    .google-translate-bar .translate-icon {
+        left: 10px;
+        width: 14px;
+        height: 14px;
+    }
+
+    body.rtl .google-translate-bar .translate-icon {
+        left: auto;
+        right: 10px;
+    }
+
+    .google-translate-gadget-box {
+        top: calc(100% + 4px);
+        width: 100%;
+        min-width: unset;
+        max-width: 100%;
+    }
+}
+
+/* Extra small mobile adjustments (< 380px) */
+@media (max-width: 380px) {
+    .header-container {
+        padding: 6px 10px;
+        gap: 6px;
+    }
+
+    .logo-text h1 {
+        font-size: 0.92rem;
+    }
+
+    .ai-settings-btn span {
         display: none;
     }
-    .icon-btn {
-        width: 32px;
-        height: 32px;
+
+    .ai-settings-btn {
+        padding: 6px 8px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
     }
+}
 
     /* Input zoom prevention on iOS */
     input[type="text"], input[type="password"], select {
