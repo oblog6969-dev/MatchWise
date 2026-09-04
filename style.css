@@ -2203,26 +2203,146 @@ html[dir="rtl"] .interactive-svg text,
     filter: drop-shadow(0 0 8px rgba(0, 113, 227, 0.4));
 }
 
-.chart-tooltip-bubble {
-    position: absolute;
-    background: rgba(15, 23, 42, 0.92);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    pointer-events: none;
-    z-index: 100;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(8px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    opacity: 0;
-    transform: translateY(6px);
+.chart-interactive-element,
+.chart-node {
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease, opacity 0.25s ease;
+    transform-origin: center;
 }
 
-.chart-tooltip-bubble.active {
+.chart-interactive-element:hover,
+.chart-node:hover {
+    filter: drop-shadow(0 0 10px rgba(0, 113, 227, 0.55));
+    opacity: 1 !important;
+}
+
+.interactive-svg:hover .chart-interactive-element:not(:hover):not(.active-touch),
+.interactive-svg:hover .chart-node:not(:hover):not(.active-touch) {
+    opacity: 0.72;
+    transition: opacity 0.25s ease;
+}
+
+@keyframes mwPulseRing {
+    0% { r: 9px; opacity: 0.85; }
+    50% { r: 16px; opacity: 0.2; }
+    100% { r: 9px; opacity: 0.85; }
+}
+
+.pin-pulse-ring {
+    animation: mwPulseRing 2.4s infinite ease-in-out;
+    transform-origin: center;
+    pointer-events: none;
+}
+
+/* Modern Glassmorphic Interactive Chart Popup */
+.mw-chart-popup {
+    position: fixed;
+    max-width: 320px;
+    min-width: 240px;
+    background: rgba(15, 23, 42, 0.94);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    z-index: 9999;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38), 0 0 1px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.96);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mw-chart-popup.active {
     opacity: 1;
-    transform: translateY(0);
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.mw-chart-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mw-chart-popup-title {
+    font-weight: 800;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.mw-chart-popup-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.mw-chart-popup-close {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.mw-chart-popup-close:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mw-chart-popup.is-touch .mw-chart-popup-close {
+    display: block;
+}
+
+.mw-chart-popup-subtitle {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 6px;
+}
+
+.mw-chart-popup-body {
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+}
+
+.mw-chart-popup-metric {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.mw-chart-touch-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: transparent;
+}
+
+.mw-chart-touch-backdrop.active {
+    display: block;
 }
 
 /* Donut & Wheel Legend */
@@ -2437,6 +2557,14 @@ body.print-preview-active .conflict-step-card {
     box-shadow: none !important;
 }
 
+body.print-preview-active .mw-chart-popup,
+body.print-preview-active .mw-chart-touch-backdrop,
+body.print-preview-active .pin-pulse-ring {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
 /* Pure @media print Engine */
 @media print {
     @page {
@@ -2473,7 +2601,10 @@ body.print-preview-active .conflict-step-card {
     #google_translate_element,
     .skiptranslate,
     .goog-te-banner-frame,
-    .modal-backdrop {
+    .modal-backdrop,
+    .mw-chart-popup,
+    .mw-chart-touch-backdrop,
+    .pin-pulse-ring {
         display: none !important;
     }
 

@@ -1,7 +1,7 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.6.0
-**Release Name:** Consciousness & Vibrational Alignment (David Hawkins LoC & Abraham Hicks Emotional Guidance)  
+## Current Version: v2.7.0
+**Release Name:** Interactive Visualizers & Touch Tooltips with Vector SVG Print Fidelity  
 **Date:** September 4, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
@@ -21,6 +21,7 @@
 | **M8: Zero-Key AI & Bilingual Polish** | MatchWise Autonomous AI default (zero key required, unlimited requests) & seamless instant report language switching. | ✅ Complete | Browser & Node Tested |
 | **M9: Global Google Translate** | Seamless 100+ language translation, defensive Node DOM crash prevention, notranslate badges, Apple-grade UI dropdown. | ✅ Complete | End-to-End Browser Tested |
 | **M10: Consciousness & Resonance** | Hawkins Map of Consciousness (20-600+, 200 Courage threshold), Hicks 22-level Emotional Guidance, 10 polytomous questions (q76-q85), dual-ladder SVG visualizer, dyadic resonance. | ✅ Complete | Node & Browser Subagent Tested |
+| **M11: Interactive Popovers & Print Fidelity** | Interactive JS visualizers with bilingual hover/touch popovers explaining every framework component; vector SVG print fidelity with zero popover artifacts. | ✅ Complete | Browser Subagent & Multi-Device Tested |
 
 ---
 
@@ -90,3 +91,17 @@
   - Localized Big Five "vs" separator to `"مقابل"`.
   - Added localized profile display names (`owner_name_ar`) for demo archetypes (طارق المنصور and نور الصباح).
 - **`ai_service.js`**: Added comprehensive `AI_TRANSLATIONS` psychometric dictionary, localizing all autonomous single and dyadic AI consultation outputs into pure Arabic.
+
+---
+
+## 📝 Changelog (v2.7.0) - Interactive Visualizers & Touch Popovers with Vector Print Fidelity
+- **`style.css`**:
+  - Added `.chart-node`, `.chart-interactive-element`, hover scaling (`scale(1.04)`), and focus dimming (`opacity: 0.35` on siblings).
+  - Implemented glassmorphic popover card (`.mw-chart-popup`) with dynamic colored badge, title, subtitle, descriptive body, metric, and close button (`.mw-popup-close`).
+  - Added mobile tap backdrop (`.mw-chart-touch-backdrop`) for backdrop tap dismissal.
+  - Added `@keyframes mwPulseRing` for pulsing coordinate indicators (`.pin-pulse-ring`).
+  - Enforced strict `@media print` and `body.print-preview-active` rules hiding all popovers, backdrops, and pulse rings with `display: none !important; opacity: 0 !important; visibility: hidden !important;`, keeping 100% clean vector SVG graphics.
+- **`script.js`**:
+  - Implemented `CHART_EXPLANATION_DICTIONARY` containing rich clinical explanations for every segment across Hartman, DISC, Birkman, Attachment, FIRO-B, Gottman, Hawkins/Hicks, and Big Five in both Arabic and English.
+  - Implemented `ChartTooltipManager` with real-time viewport boundary detection and collision clamping for both desktop hover and mobile/tablet touch.
+  - Attached interactive tooltips to Hartman donut slices & hub, DISC quadrants & coordinate pins, Birkman iceberg tip & base cards, Attachment quadrants & partner points, FIRO-B reciprocity bars, Gottman emotional safety gauge & Four Horsemen bars, Dyadic Conflict Loop cards, Consciousness dual spectrum ladders, SVG Radar vertices, and Big Five rows.

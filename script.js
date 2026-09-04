@@ -1938,9 +1938,567 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+// --- 9A. UNIVERSAL INTERACTIVE CHART TOOLTIP & EXPLANATION ENGINE ---
+    const CHART_EXPLANATION_DICTIONARY = {
+        hartman: {
+            red: {
+                icon: "🔴",
+                color: "#ef4444",
+                title_ar: "الأحمر: دافع القوة والقيادة",
+                title_en: "RED: Power & Progress Motive",
+                subtitle_ar: "الدافع الجوهري: الكفاءة، الحسم، الإنتاجية، والمباشرة",
+                subtitle_en: "Core Motive: Decisive leadership, results, efficiency, and directness",
+                body_ar: "يمثل الطاقة القيادية التي تحرك الحياة الزوجية للأمام. يفضل الصراحة التامة وحل المشكلات دون تسويف. في الزواج يقدم الأمان التنفيذي والوضوح، لكنه يحتاج لتدريب النفس على اللين والصبر والاستماع الوجداني للشريك.",
+                body_en: "Represents forward drive, goal clarity, and strategic resolution. Red provides strong structural security in marriage, while benefiting from cultivating emotional gentleness and patience with softer feelings."
+            },
+            blue: {
+                icon: "🔵",
+                color: "#3b82f6",
+                title_ar: "الأزرق: دافع الحميمية والعمق",
+                title_en: "BLUE: Intimacy & Connection Motive",
+                subtitle_ar: "الدافع الجوهري: الوفاء، الصدق، المشاعر، والتواصل الإنساني",
+                subtitle_en: "Core Motive: Deep intimacy, moral loyalty, empathy, and sincere devotion",
+                body_ar: "يمثل قلب العلاقة الدافئ وأصالة المشاعر. يضع الأسرة والروابط في قمة أولوياته ويهتم بأدق تفاصيل راحة الشريك. يقدم وفاءً استثنائياً، لكنه حساس للنقد ويحتاج للشعور الدائم بالتقدير والأمان الصادق.",
+                body_en: "The emotional heartbeat of partnership. Blue values profound relational authenticity, thoughtful care, and dedicated loyalty, thriving when affirmed with sincere appreciation."
+            },
+            white: {
+                icon: "⚪",
+                color: "#94a3b8",
+                title_ar: "الأبيض: دافع السلام والسكينة",
+                title_en: "WHITE: Peace & Clarity Motive",
+                subtitle_ar: "الدافع الجوهري: الهدوء الداخلي، تجنب الصدام، والدبلوماسية",
+                subtitle_en: "Core Motive: Inner tranquility, harmony, rational diplomacy, and quiet space",
+                body_ar: "يمثل واحة الهدوء والاتزان في المنزل. مستمع صبور، يتجنب المشاحنات المفتعلة، ويتعامل بمرونة ودبلوماسية. يحتاج لمساحته المستقلة ولا يستجيب للإلحاح أو الضغط الانفعالي السريع.",
+                body_en: "The oasis of calm and rational balance. White avoids petty conflict, offering patient acceptance and quiet resilience, needing respectful autonomy and low-pressure processing time."
+            },
+            yellow: {
+                icon: "🟡",
+                color: "#eab308",
+                title_ar: "الأصفر: دافع المرح والبهجة",
+                title_en: "YELLOW: Fun & Passion Motive",
+                subtitle_ar: "الدافع الجوهري: التفاؤل، الحيوية، الاحتفال بالحياة، والتجديد",
+                subtitle_en: "Core Motive: Joyful celebration, spontaneous enthusiasm, social warmth, and play",
+                body_ar: "يمثل بهجة البيت وطاقة التفاؤل الإيجابي. يكسر رتابة الروتين بالمفاجآت والمرح ويخفف من وطأة الأزمات. يحتاج للشريك الذي يحتفي بروحه الحيوية ويشاركه لحظات الاستمتاع بالحياة.",
+                body_en: "Infuses radiant optimism, humor, and spontaneity into partnership. Yellow turns everyday routines into joyful celebrations, flourishing when affection and playful connection are shared."
+            },
+            hub: {
+                icon: "🎯",
+                color: "#0284c7",
+                title_ar: "مركز الدافع الجوهري (Primary Motive)",
+                title_en: "Core Motive Hub",
+                subtitle_ar: "البوصلة العاطفية المحركة للقرارات وردود الفعل",
+                subtitle_en: "Subconscious psychological compass shaping relationship needs",
+                body_ar: "اللون المهيمن يحدد ما يحتاجه قلبك لكي يشعر بالاكتمال، بينما توفر الألوان الأخرى دعائم تكميلية لشخصيتك المتزنة.",
+                body_en: "Your dominant Hartman color reveals your primary psychological craving, integrated with secondary color strengths."
+            }
+        },
+        disc: {
+            D: {
+                icon: "⚡",
+                color: "#ef4444",
+                title_ar: "نمط القيادة والحسم (Dominance - D)",
+                title_en: "Dominance (D) Behavioral Style",
+                subtitle_ar: "إيقاع سريع + تركيز مباشر على المهام والنتائج",
+                subtitle_en: "Fast-paced tempo + high task & outcome orientation",
+                body_ar: "مبادر وجريء، يعالج التحديات بسرعة ويفضل الإيجاز. في العلاقة يقود الخطط اللوجستية ويحسم التردد، ويقدر الصراحة والشفافية التامة دون التفاف.",
+                body_en: "Decisive and action-oriented. D cuts through hesitation, drives joint plans forward, and values transparent, direct communication without beating around the bush."
+            },
+            I: {
+                icon: "✨",
+                color: "#eab308",
+                title_ar: "نمط التأثير والتفاعل (Influence - I)",
+                title_en: "Influence (I) Behavioral Style",
+                subtitle_ar: "إيقاع سريع + تركيز عاطفي على الناس والعلاقات",
+                subtitle_en: "Fast-paced tempo + high people & emotional orientation",
+                body_ar: "معبر ومتفائل، يمتلك طاقة اجتماعية عالية ويحب مشاركة المشاعر والتشجيع المتبادل. يضفي على العلاقة حيوية عاطفية وتواصلاً دافئاً محفزاً.",
+                body_en: "Charismatic, expressive, and optimistic. I brings romantic enthusiasm and verbal warmth, thriving when mutual appreciation and social vitality are high."
+            },
+            S: {
+                icon: "🌱",
+                color: "#10b981",
+                title_ar: "نمط الاستقرار والدعم (Steadiness - S)",
+                title_en: "Steadiness (S) Behavioral Style",
+                subtitle_ar: "إيقاع متأنٍ وهادئ + تركيز عميق على الناس والوفاء",
+                subtitle_en: "Steady tempo + deep people orientation & loyalty",
+                body_ar: "صبور ومخلص، ركيزة أمان واستقرار للمنزل. مستمع ممتاز يتجنب التسرع ويدعم الشريك بعطاء هادئ مستمر. يفضل التدرج والوضوح عند أي تغيير.",
+                body_en: "Patient, reliable, and deeply empathetic. S provides domestic continuity, emotional safety, and peaceful support, preferring predictable, thoughtful transitions."
+            },
+            C: {
+                icon: "📐",
+                color: "#3b82f6",
+                title_ar: "نمط الدقة والتحليل (Conscientiousness - C)",
+                title_en: "Conscientiousness (C) Behavioral Style",
+                subtitle_ar: "إيقاع متأنٍ وهادئ + تركيز تحليلي على المهام والأنظمة",
+                subtitle_en: "Steady tempo + meticulous task & logic orientation",
+                body_ar: "منهجي ومنظم، يزن القرارات بالعقل ويدرس التفاصيل والميزانيات بعناية. يحمي الأسرة من القرارات المتسرعة ويحب الالتزام بالوعود والخطط المحددة.",
+                body_en: "Systematic, analytical, and thorough. C safeguards household plans and finances through careful foresight, valuing precision, logic, and consistent reliability."
+            },
+            tempo_fast: {
+                icon: "⏩",
+                color: "#f59e0b",
+                title_ar: "محور الإيقاع السريع (Fast-Paced)",
+                title_en: "Fast-Paced Tempo",
+                subtitle_ar: "استجابة فورية ومبادرة عاجلة نحو الحسم",
+                subtitle_en: "Quick processing, rapid execution, immediate closure",
+                body_ar: "الميل لمعالجة المواضيع فوراً والتفاعل مع المتغيرات بسرعة دون تردد مطول.",
+                body_en: "Tendency to resolve matters promptly with brisk energy and decisive forward motion."
+            },
+            tempo_steady: {
+                icon: "🧘",
+                color: "#06b6d4",
+                title_ar: "محور الإيقاع المتأني (Deliberate Tempo)",
+                title_en: "Deliberate Tempo",
+                subtitle_ar: "تفكير هادئ، دراسة متأنية، استقرار قبل القرار",
+                subtitle_en: "Reflective contemplation, thorough evaluation, steady pace",
+                body_ar: "تفضيل أخذ الوقت الكافي للتأمل ووزن الخيارات بهدوء وتجنب القرارات العشوائية.",
+                body_en: "Prefers adequate breathing room to synthesize information calmly before committing."
+            },
+            focus_task: {
+                icon: "🎯",
+                color: "#ef4444",
+                title_ar: "محور التركيز على المهام (Task Focus)",
+                title_en: "Task Focus Axis",
+                subtitle_ar: "الأولوية للحقائق والنتائج والحلول المنطقية",
+                subtitle_en: "Priority on objective facts, efficiency, and solutions",
+                body_ar: "التركيز على حل الإشكالية وتفكيك المسائل العملية بالمنطق المجرد.",
+                body_en: "Focuses primarily on pragmatic resolution, structural clarity, and concrete outcomes."
+            },
+            focus_people: {
+                icon: "🤝",
+                color: "#10b981",
+                title_ar: "محور التركيز على العلاقات (People Focus)",
+                title_en: "People Focus Axis",
+                subtitle_ar: "الأولوية للمشاعر والتناغم والأثر الوجداني",
+                subtitle_en: "Priority on relational harmony, validation, and warmth",
+                body_ar: "التركيز على طريقة التواصل والحفاظ على مشاعر الشريك ودفء العلاقة.",
+                body_en: "Focuses on interpersonal warmth, psychological safety, and reciprocal care."
+            }
+        },
+        birkman: {
+            usual: {
+                icon: "🌟",
+                color: "#0284c7",
+                title_ar: "المستوى 1: السلوك الاجتماعي المعتاد (Usual Style)",
+                title_en: "Level 1: Outward Everyday Style (Usual)",
+                subtitle_ar: "السلوك الظاهري الملاحظ في التعامل اليومي العفوي",
+                subtitle_en: "Natural day-to-day behavior observable under normal conditions",
+                body_ar: "يمثل قمة الجبل الجليدي الظاهرة فوق الماء. يعكس كفاءتك الاجتماعية وطاقتك الطبيعية في قيادة الحوار أو الاستماع أو التنظيم عندما تكون مستقراً ومرتاحاً.",
+                body_en: "The visible 20% of your psychological iceberg. Reflects your natural operational baseline in everyday domestic and social routines."
+            },
+            needs: {
+                icon: "🛡️",
+                color: "#38bdf8",
+                title_ar: "المستوى 2: الاحتياج الوجداني الخفي (Underlying Needs)",
+                title_en: "Level 2: Underlying Emotional Needs",
+                subtitle_ar: "الأكسجين النفسي الخفي الذي تحتاجه لتزدهر وتطمئن",
+                subtitle_en: "Submerged relational oxygen required to feel secure",
+                body_ar: "يمثل عمق الجبل الجليدي تحت سطح الماء. يحدد كيف تحتاج أن يعاملك شريكك (منحك المساحة، أو التعبير الصريح عن التقدير، أو الوضوح). عند إشباع هذا الاحتياج، تشعر بأقصى درجات الرضا.",
+                body_en: "The invisible foundation of emotional security. How you require your partner to treat you (autonomy, empathy, reassurance) to perform at your relational best."
+            },
+            stress: {
+                icon: "⚠️",
+                color: "#ef4444",
+                title_ar: "المستوى 3: ردة فعل التوتر الارتدادي (Stress Derailer)",
+                title_en: "Level 3: Stress Derailer Reaction",
+                subtitle_ar: "السلوك الدفاعي التلقائي عند استنزاف الطاقة أو إهمال الاحتياج",
+                subtitle_en: "Automated defensive reflex under prolonged fatigue",
+                body_ar: "هو رد الفعل غير الواعي (كالانعزال، الإلحاح، أو نفاد الصبر) الذي يظهر لحماية النفس عند الإنهاك الشديد. فهم هذا النمط يساعد الشريك على احتوائه كإشارة تعب وليس كجفاء شخصي.",
+                body_en: "The reactive defense mechanism triggered when reserves are depleted. Recognizing it allows partners to offer de-escalation rather than taking it personally."
+            },
+            iceberg_tip: {
+                icon: "🏔️",
+                color: "#ffffff",
+                title_ar: "قمة الجبل الجليدي: السلوك الواعي",
+                title_en: "Iceberg Tip: Conscious Expression",
+                subtitle_ar: "ما يراه الناس في ضوء النهار (20% فقط من شخصيتك)",
+                subtitle_en: "Visible interactions (only ~20% of psychological makeup)",
+                body_ar: "التعاملات الاجتماعية واللغة والأسلوب المعتاد الملاحظ في العمل والزيارات العائلية.",
+                body_en: "Social style, everyday cadence, and outward communication observable by others."
+            },
+            iceberg_base: {
+                icon: "🌊",
+                color: "#0369a1",
+                title_ar: "عمق الجبل الجليدي: الدوافع غير المرئية",
+                title_en: "Submerged Mass: Invisible Drivers",
+                subtitle_ar: "80% من الطاقة النفسية المؤثرة في الزواج تقبع تحت السطح",
+                subtitle_en: "~80% of marital dynamics reside beneath awareness",
+                body_ar: "الاحتياجات الدفينة ومخاوف التوتر التي تحدد متانة التوافق الزوجي واستقراره طويل المدى.",
+                body_en: "The profound emotional needs and stress triggers that govern lifelong marital flourishing."
+            }
+        },
+        attachment: {
+            secure: {
+                icon: "🛡️",
+                color: "#059669",
+                title_ar: "نمط الارتباط الآمن (Secure Attachment)",
+                title_en: "Secure Attachment Style",
+                subtitle_ar: "انخفاض القلق + انخفاض التجنب (أمان وجداني متوازن)",
+                subtitle_en: "Low Anxiety + Low Avoidance (Grounded intimacy & autonomy)",
+                body_ar: "ثقة متبادلة وتوازن بين القرب العاطفي والمساحة الفردية. يتعامل مع الخلافات بتواصل ناضج ومباشر ويشكل ملاذاً آمناً للشريك في لحظات الضعف.",
+                body_en: "Comfortable with both emotional closeness and personal independence. Manages conflict cooperatively and provides a steady anchor for the relationship."
+            },
+            anxious: {
+                icon: "💛",
+                color: "#d97706",
+                title_ar: "نمط الارتباط القلق (Anxious Attachment)",
+                title_en: "Anxious Attachment Style",
+                subtitle_ar: "ارتفاع القلق + انخفاض التجنب (حساسية عالية للجفاء)",
+                subtitle_en: "High Anxiety + Low Avoidance (Craves proximity & constant reassurance)",
+                body_ar: "شديد الحرص على الوصل ويبحث عن التطمين الدائم. قد يفسر الصمت المؤقت للشريك على أنه فتور، ويزدهر عندما يُغدق عليه الشريك بالدفء والاهتمام المنتظم.",
+                body_en: "Highly attuned to emotional cues with an intense desire for closeness. Flourishes when provided with consistent verbal affirmation and proactive reassurance."
+            },
+            avoidant: {
+                icon: "💙",
+                color: "#2563eb",
+                title_ar: "نمط الارتباط التجنبي (Dismissive-Avoidant)",
+                title_en: "Dismissive-Avoidant Style",
+                subtitle_ar: "انخفاض القلق + ارتفاع التجنب (اعتماد كامل على الذات)",
+                subtitle_en: "Low Anxiety + High Avoidance (Self-reliant, retreats under emotional pressure)",
+                body_ar: "شديد الاستقلالية ويجد صعوبة في التعبير عن الضعف. عند احتدام المشاعر يميل للانسحاب واستعادة هدوئه بمفرده، ويحتاج لاحترام مساحته دون ملاحقة خانقة.",
+                body_en: "Values extreme self-reliance and retreats when relational intensity peaks. Recharges in quiet autonomy and benefits from low-pressure emotional invitations."
+            },
+            fearful: {
+                icon: "❤️",
+                color: "#dc2626",
+                title_ar: "نمط الارتباط المضطرب (Fearful-Avoidant)",
+                title_en: "Fearful-Avoidant Style",
+                subtitle_ar: "ارتفاع القلق + ارتفاع التجنب (شوق للقرب مقرون بالحذر)",
+                subtitle_en: "High Anxiety + High Avoidance (Longing for closeness yet fearing hurt)",
+                body_ar: "يشتاق للحب والعمق بشدة لكنه يخشى التعرض للخذلان. تتنازعه الرغبة في الاقتراب والخوف من الصدمة، ويحتاج إلى بيئة فائقة الأمان والصبر المتدرج لبناء الثقة.",
+                body_en: "Longs for deep romantic intimacy yet anticipates rejection or betrayal. Requires patient consistency, high transparency, and a deeply safe environment."
+            }
+        },
+        firo: {
+            ctrl_exp: {
+                icon: "👑",
+                color: "#3b82f6",
+                title_ar: "ممارسة القيادة والقرار (Control Expressed)",
+                title_en: "Decision Leadership (Control Expressed)",
+                subtitle_ar: "مدى رغبتك في إدارة الخطط واتخاذ القرارات الأسرية",
+                subtitle_en: "Initiative in managing strategy, budgets, and plans",
+                body_ar: "تحديد مدى مبادرتك بمسك زمام التوجيه الأسري. التناغم يحدث عندما تتطابق رغبة أحد الطرفين في المبادرة مع ترحيب الطرف الآخر بمشاركته.",
+                body_en: "Measures appetite for directing household strategy and major decisions, harmonizing when matched with partner receptivity."
+            },
+            ctrl_wnt: {
+                icon: "🧭",
+                color: "#8b5cf6",
+                title_ar: "قبول التوجيه والمشورة (Control Wanted)",
+                title_en: "Receptivity to Guidance (Control Wanted)",
+                subtitle_ar: "مدى ترحيبك بوضوح التوجيه ومشاركة الشريك في القيادة",
+                subtitle_en: "Comfort with structure, direction, and partner leadership",
+                body_ar: "الرغبة في الاعتماد على حسم الشريك وتفويضه لقيادة بعض الملفات دون الشعور بالتضييق أو التحكم السلبي.",
+                body_en: "Comfort with relying on partner's decisive leadership and structure without feeling restricted."
+            },
+            aff_exp: {
+                icon: "💖",
+                color: "#ec4899",
+                title_ar: "المبادرة بالدفء والتعبير (Affection Expressed)",
+                title_en: "Affection Expression",
+                subtitle_ar: "مدى إظهارك لمشاعر الود والاهتمام والكلمات الطيبة",
+                subtitle_en: "Proactive display of warmth, praise, and emotional fondness",
+                body_ar: "المبادرة اللفظية والوجدانية بالتعبير عن الحب والامتنان دون انتظار الطرف الآخر.",
+                body_en: "Proactive verbal, emotional, and physical expressions of admiration and tender connection."
+            },
+            aff_wnt: {
+                icon: "🌿",
+                color: "#10b981",
+                title_ar: "الاحتياج للتعبير العاطفي (Affection Wanted)",
+                title_en: "Affection Craved",
+                subtitle_ar: "مدى رغبتك في سماع كلمات المودة وتلقي الاهتمام الصادق",
+                subtitle_en: "Need for verbal and emotional affirmation from partner",
+                body_ar: "حجم خزانك العاطفي ومدى حاجتك للشعور بأنك محبوب ومميز في نظر شريك حياتك بانتظام.",
+                body_en: "Depth of emotional need for explicit validation, attentive listening, and regular partner appreciation."
+            }
+        },
+        gottman: {
+            safety_gauge: {
+                icon: "🏰",
+                color: "#10b981",
+                title_ar: "مؤشر الأمان العاطفي (Emotional Safety Index)",
+                title_en: "Gottman Emotional Safety Index",
+                subtitle_ar: "الركيزة الأساسية لبيت العلاقة السليم (Sound Relationship House)",
+                subtitle_en: "Foundational bedrock protecting couples from emotional flooding",
+                body_ar: "يقيس مدى شعور الشريكين بالأمان النفسي عند التعبير عن الضعف أو الاختلاف دون خوف من التجريح أو الاستهزاء. نسبة 75%+ تعني مناعة ممتازة واستقراراً طويلاً.",
+                body_en: "Measures mutual psychological safety. Scores above 75% insulate couples from chronic flooding and sustain lifelong trust."
+            },
+            criticism: {
+                icon: "⚡",
+                color: "#ef4444",
+                title_ar: "النقد واللوم الشخصي (Criticism)",
+                title_en: "Criticism (1st Horseman)",
+                subtitle_ar: "مهاجمة شخصية الشريك بدلاً من نقد الفعل المحدد",
+                subtitle_en: "Attacking partner's personality rather than a specific issue",
+                body_ar: "الترياق العلاجي: (البدء اللطيف) بالتعبير عن شعورك الخاص بصيغة 'أنا أشعر بـ...' مع صياغة طلب محدد وإيجابي دون استخدام 'أنت دائماً/أنت لا'.",
+                body_en: "Clinical Antidote: (Gentle Start-up). Express internal feelings with 'I feel...' and state a concrete positive need, avoiding character blame."
+            },
+            defensiveness: {
+                icon: "🛡️",
+                color: "#f59e0b",
+                title_ar: "الدفاعية والتبرير المفرط (Defensiveness)",
+                title_en: "Defensiveness (2nd Horseman)",
+                subtitle_ar: "لعب دور الضحية وتبرير الأخطاء أو رد الاتهام بالمثل",
+                subtitle_en: "Self-defense through counter-attacking or perceived victimhood",
+                body_ar: "الترياق العلاجي: (تحمل المسؤولية) بالاعتراف بجزء من المشكلة ولو كان بنسبة 10% لكسر دائرة التصعيد وتهدئة الشريك.",
+                body_en: "Clinical Antidote: (Taking Responsibility). Validate even 10% of your partner's grievance to instantly disarm defensive escalation."
+            },
+            stonewalling: {
+                icon: "🧱",
+                color: "#64748b",
+                title_ar: "الانعزال وبناء الجدار الصامت (Stonewalling)",
+                title_en: "Stonewalling (3rd Horseman)",
+                subtitle_ar: "الانغلاق التام وتجاهل الشريك عند ارتفاع التوتر",
+                subtitle_en: "Total emotional shut-down and silent retreat",
+                body_ar: "الترياق العلاجي: (التهدئة الذاتية الفسيولوجية) بطلب استراحة واعية لمدة 20 دقيقة لتهدئة نبضات القلب قبل إكمال الحديث الهادئ.",
+                body_en: "Clinical Antidote: (Physiological Self-Soothing). Enforce a 20-minute de-escalation timeout to lower elevated heart rate before talking."
+            },
+            contempt: {
+                icon: "☣️",
+                color: "#991b1b",
+                title_ar: "الازدراء والتقليل من المشاعر (Contempt)",
+                title_en: "Contempt (4th & Most Toxic Horseman)",
+                subtitle_ar: "السخرية أو النظرة الدونية (المؤشر الأول للانهيار إذا أهمل)",
+                subtitle_en: "Sarcasm, mockery, or condescension (#1 divorce predictor)",
+                body_ar: "الترياق العلاجي: (بناء ثقافة التقدير والامتنان) بالتركيز اليومي على محاسن الشريك والتعبير الصادق عن شكره على أبسط أفعاله الإيجابية.",
+                body_en: "Clinical Antidote: (Culture of Appreciation). Actively scan for and verbally express daily gratitude for positive partner contributions."
+            }
+        },
+        consciousness: {
+            hawkins_track: {
+                icon: "⚡",
+                color: "#a855f7",
+                title_ar: "خريطة مستويات الوعي (د. ديفيد هوكينز)",
+                title_en: "Map of Consciousness (Dr. David R. Hawkins)",
+                subtitle_ar: "مقياس لوغاريتمي من 20 (العار) إلى 600+ (السلام والاستنارة)",
+                subtitle_en: "Calibrated logarithmic scale from 20 to 600+",
+                body_ar: "يقيس التردد الشعوري الغالب على نظرة الإنسان للحياة. عتبة الشجاعة (200) هي الفاصل الحرج بين طاقة القسر التفاعلية وفضاء القوة الروحية البنّاءة.",
+                body_en: "Measures habitual awareness baseline. The 200 Courage threshold separates reactive Force from creative constructive Power."
+            },
+            hawkins_200: {
+                icon: "⚖️",
+                color: "#ffffff",
+                title_ar: "عتبة الشجاعة الحيوية (المستوى 200)",
+                title_en: "200 Courage Pivotal Threshold",
+                subtitle_ar: "الفاصل الوجودي بين ردود أفعال الضغط والقوة البنّاءة",
+                subtitle_en: "The boundary between Force (Reaction) and Power (Creation)",
+                body_ar: "تحت 200 (الخوف، الغضب، الكبرياء): لوم الشريك والتمترس خلف الأنا. فوق 200 (الشجاعة، القبول، المحبة): تحمل المسؤولية وسرعة التسامي والارتقاء بالعلاقة.",
+                body_en: "Below 200 (Fear, Anger, Pride): contraction and blame. Above 200 (Courage, Acceptance, Love): personal ownership, empathy, and mutual flourishing."
+            },
+            hicks_track: {
+                icon: "🌈",
+                color: "#10b981",
+                title_ar: "السلم التوجيهي للمشاعر (إبراهام هيكس)",
+                title_en: "Emotional Guidance Scale (Abraham Hicks)",
+                subtitle_ar: "22 درجة مشاعرية تحدد بوصلة التدفق الوجداني",
+                subtitle_en: "22-tier vibrational emotional continuum",
+                body_ar: "المستويات 1-7 (محاذاة عليا وبهجة)، المستويات 8-14 (احتكاك وتردد يتطلب انتباهاً)، المستويات 15-22 (مقاومة حادة تتطلب تهدئة عاجلة قبل النقاش).",
+                body_en: "Levels 1-7 (Joy & Contentment), Levels 8-14 (Friction & Doubt), Levels 15-22 (Contraction & Fear requiring grounding before discussing issues)."
+            }
+        },
+        big_five: {
+            openness: {
+                icon: "🎨",
+                color: "#8b5cf6",
+                title_ar: "الانفتاح على التجارب (Openness)",
+                title_en: "Openness to Experience",
+                subtitle_ar: "الفضول الفكري وتجربة أفكار ومناشط جديدة",
+                subtitle_en: "Intellectual curiosity, imagination, and novelty appetite",
+                body_ar: "ارتفاع السمة يعني حباً للتجديد ومناقشة الأفكار الفلسفية والمغامرات، بينما انخفاضها يعني تفضيل الاستقرار والروتين المألوف والواقعية المجربة.",
+                body_en: "High scores crave novelty, philosophical depth, and creative exploration; lower scores prize predictable routines, grounded pragmatism, and tradition."
+            },
+            conscientiousness: {
+                icon: "📋",
+                color: "#06b6d4",
+                title_ar: "يقظة الضمير والتنظيم (Conscientiousness)",
+                title_en: "Conscientiousness & Orderliness",
+                subtitle_ar: "الانضباط الذاتي، المنهجية، والوفاء بالالتزامات",
+                subtitle_en: "Disciplined execution, orderliness, and reliability",
+                body_ar: "ارتفاع السمة يعني عناية فائقة بالمواعيد، الميزانية، والتنظيم المنزلي، بينما انخفاضها يعكس مرونة وعفوية عالية وتفضيلاً للبساطة دون قيود.",
+                body_en: "High scores bring rigorous punctuality, structured budgeting, and thorough planning; lower scores bring spontaneous adaptability and easygoing ease."
+            },
+            extraversion: {
+                icon: "🗣️",
+                color: "#f59e0b",
+                title_ar: "الانبساطية والاجتماعية (Extraversion)",
+                title_en: "Extraversion & Relational Vitality",
+                subtitle_ar: "استمداد الطاقة من التجمعات والحديث والتعبير الخارجي",
+                subtitle_en: "Drawing energy from social connection and verbal engagement",
+                body_ar: "ارتفاع السمة يعني حيوية اجتماعية ورغبة في مشاركة الأنشطة والحديث، بينما انخفاضها (الانطوائية) يعني استمداد الطاقة من الهدوء والخلوة لاستعادة النشاط.",
+                body_en: "High scores thrive on outward activities and conversational connection; lower scores (introversion) recharge through restorative, quiet personal space."
+            },
+            agreeableness: {
+                icon: "🤝",
+                color: "#10b981",
+                title_ar: "الوفاق والتعاطف (Agreeableness)",
+                title_en: "Agreeableness & Warmth",
+                subtitle_ar: "مراعاة مشاعر الشريك، التعاون، والرغبة في الصلح",
+                subtitle_en: "Interpersonal warmth, empathy, and harmony seeking",
+                body_ar: "ارتفاع السمة يعني رقة قلب وميلاً طبيعياً للصلح ومراعاة خواطر الطرف الآخر، بينما انخفاضها يعني تمسكاً صارماً بالرأي وميلاً للصراحة النقدية الحازمة.",
+                body_en: "High scores bring compassionate cooperativeness and peaceful accommodation; lower scores bring candid scrutiny and uncompromising assertiveness."
+            },
+            neuroticism: {
+                icon: "🌊",
+                color: "#ef4444",
+                title_ar: "الاستقرار النفسي (Emotional Stability)",
+                title_en: "Emotional Stability vs. Reactivity",
+                subtitle_ar: "القدرة على الثبات في الأزمات وتجاوز المنغصات بهدوء",
+                subtitle_en: "Grounded calmness during stress vs. emotional vulnerability",
+                body_ar: "الاتزان العالي يعني قدرة على امتصاص ضغوط الحياة دون قلق مزمن أو تقلب مزاج، بينما الحساسية المرتفعة تعني حاجة للشعور بالأمان والتطمين الدائم.",
+                body_en: "High stability fosters calm resilience during crises; higher reactivity brings deep sensitivity that flourishes with regular safety and soothing reassurance."
+            }
+        }
+    };
+
+    // Universal Chart Tooltip Manager (Mouse Hover + Mobile Touch Popover)
+    const ChartTooltipManager = {
+        popupEl: null,
+        backdropEl: null,
+        activeTarget: null,
+        isTouchDevice: false,
+
+        init() {
+            if (this.popupEl) return;
+            if (typeof document === "undefined") return;
+
+            this.popupEl = document.createElement("div");
+            this.popupEl.id = "mwChartPopup";
+            this.popupEl.className = "mw-chart-popup";
+            this.popupEl.setAttribute("role", "tooltip");
+            this.popupEl.setAttribute("aria-hidden", "true");
+
+            this.backdropEl = document.createElement("div");
+            this.backdropEl.className = "mw-chart-touch-backdrop";
+            this.backdropEl.addEventListener("click", () => this.hide());
+            this.backdropEl.addEventListener("touchstart", () => this.hide(), { passive: true });
+
+            document.body.appendChild(this.backdropEl);
+            document.body.appendChild(this.popupEl);
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") this.hide();
+            });
+
+            window.addEventListener("touchstart", () => {
+                this.isTouchDevice = true;
+            }, { once: true, passive: true });
+        },
+
+        show(target, data, options = {}) {
+            this.init();
+            if (!target || !data || !this.popupEl) return;
+
+            const isAr = typeof state !== "undefined" ? state.localization.currentLang === "ar" : true;
+            this.activeTarget = target;
+            const isTouch = options.isTouch || this.isTouchDevice;
+
+            const icon = data.icon || "💡";
+            const color = data.color || "var(--accent-color)";
+            const title = isAr ? (data.title_ar || data.title) : (data.title_en || data.title);
+            const subtitle = isAr ? (data.subtitle_ar || data.subtitle) : (data.subtitle_en || data.subtitle);
+            const body = isAr ? (data.body_ar || data.body) : (data.body_en || data.body);
+            const metric = isAr ? (data.metric_ar || data.metric) : (data.metric_en || data.metric);
+
+            this.popupEl.innerHTML = `
+                <div class="mw-chart-popup-header">
+                    <div class="mw-chart-popup-title" style="color: ${color};">
+                        <span class="mw-chart-popup-dot" style="background-color: ${color}; color: ${color};"></span>
+                        <span>${icon} ${title || ""}</span>
+                    </div>
+                    <button class="mw-chart-popup-close" aria-label="Close" type="button">✕</button>
+                </div>
+                ${subtitle ? `<div class="mw-chart-popup-subtitle">${subtitle}</div>` : ""}
+                ${body ? `<div class="mw-chart-popup-body">${body}</div>` : ""}
+                ${metric ? `<div class="mw-chart-popup-metric"><span>📊</span><span>${metric}</span></div>` : ""}
+            `;
+
+            const closeBtn = this.popupEl.querySelector(".mw-chart-popup-close");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    this.hide();
+                });
+            }
+
+            if (isTouch) {
+                this.popupEl.classList.add("is-touch");
+                if (this.backdropEl) this.backdropEl.classList.add("active");
+                target.classList.add("active-touch");
+            } else {
+                this.popupEl.classList.remove("is-touch");
+                if (this.backdropEl) this.backdropEl.classList.remove("active");
+            }
+
+            this.popupEl.setAttribute("dir", isAr ? "rtl" : "ltr");
+            this.popupEl.classList.add("active");
+            this.popupEl.setAttribute("aria-hidden", "false");
+
+            this.position(target);
+        },
+
+        position(target) {
+            if (!this.popupEl || !target) return;
+            const rect = target.getBoundingClientRect();
+            const popRect = this.popupEl.getBoundingClientRect();
+            const padding = 12;
+
+            let left = rect.left + rect.width / 2 - popRect.width / 2;
+            if (left < padding) left = padding;
+            if (left + popRect.width > window.innerWidth - padding) {
+                left = window.innerWidth - popRect.width - padding;
+            }
+
+            let top = rect.top - popRect.height - 10;
+            if (top < padding) {
+                top = rect.bottom + 10;
+            }
+            if (top + popRect.height > window.innerHeight - padding) {
+                top = window.innerHeight - popRect.height - padding;
+            }
+
+            this.popupEl.style.left = `${Math.round(left)}px`;
+            this.popupEl.style.top = `${Math.round(top)}px`;
+        },
+
+        hide() {
+            if (!this.popupEl) return;
+            this.popupEl.classList.remove("active");
+            this.popupEl.setAttribute("aria-hidden", "true");
+            if (this.backdropEl) this.backdropEl.classList.remove("active");
+            if (this.activeTarget) {
+                this.activeTarget.classList.remove("active-touch");
+                this.activeTarget = null;
+            }
+        }
+    };
+
+    function attachChartTooltip(element, dataGetter) {
+        if (!element) return;
+        element.classList.add("chart-interactive-element");
+
+        element.addEventListener("mouseenter", (e) => {
+            const data = typeof dataGetter === "function" ? dataGetter() : dataGetter;
+            ChartTooltipManager.show(element, data, { isTouch: false });
+        });
+
+        element.addEventListener("mouseleave", () => {
+            if (!ChartTooltipManager.isTouchDevice) {
+                ChartTooltipManager.hide();
+            }
+        });
+
+        element.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const data = typeof dataGetter === "function" ? dataGetter() : dataGetter;
+            ChartTooltipManager.show(element, data, { isTouch: true });
+        });
+
+        element.addEventListener("touchstart", (e) => {
+            ChartTooltipManager.isTouchDevice = true;
+        }, { passive: true });
+    }
+
     // --- 9B. MULTI-FRAMEWORK INTERACTIVE SVG VISUALIZERS ---
 
-    // 1. Hartman Motive Spectrum Donut
+// 1. Hartman Motive Spectrum Donut
     function renderHartmanDonut(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
         if (!container) return;
         container.innerHTML = "";
@@ -1969,31 +2527,33 @@ document.addEventListener("DOMContentLoaded", () => {
             const dashOffset = -offset;
             offset += dashLen;
             pathsSvg += `
-                <circle class="chart-node" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[k].hex}" stroke-width="${strokeW}"
+                <circle class="chart-node chart-interactive-element" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[k].hex}" stroke-width="${strokeW}"
                     stroke-dasharray="${dashLen} ${circ - dashLen}" stroke-dashoffset="${dashOffset}"
-                    transform="rotate(-90 ${cx} ${cy})">
-                    <title>${colors[k].label}: ${Math.round(val)}%</title>
+                    transform="rotate(-90 ${cx} ${cy})" data-color-key="${k}">
                 </circle>
             `;
         });
 
         const primaryColor = (hA.primary || "blue").toLowerCase();
         const primaryHex = colors[primaryColor]?.hex || "#3b82f6";
-        const motiveName = hA.metadata ? (isAr ? hA.metadata.motive_ar : hA.metadata.motive_en) : primaryColor.toUpperCase();
+        const motiveName = hA.metadata ? (isAr ? hA.metadata.motive_ar : hA.metadata.motive_en) : (isAr ? (HARTMAN_MAP[primaryColor]?.ar || primaryColor) : primaryColor.toUpperCase());
 
         const svg = `
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 270px; height: auto; aspect-ratio: 1 / 1;">
                     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${strokeW}" />
                     ${pathsSvg}
-                    <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="${primaryHex}" font-size="18" font-weight="800">${primaryColor.toUpperCase()}</text>
-                    <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600">${motiveName}</text>
+                    <g class="chart-node chart-interactive-element" data-hub="true" style="cursor: pointer;">
+                        <circle cx="${cx}" cy="${cy}" r="55" fill="var(--bg-secondary)" opacity="0.85" />
+                        <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="${primaryHex}" font-size="16" font-weight="800">${primaryColor.toUpperCase()}</text>
+                        <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="var(--text-secondary)" font-size="10.5" font-weight="600">${motiveName}</text>
+                    </g>
                 </svg>
                 <div class="visual-legend" style="margin-top: 16px; font-size: 0.85rem;">
                     ${colorKeys.map(k => `
-                        <div class="legend-item" title="${colors[k].label}" style="display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px;">
+                        <div class="legend-item chart-interactive-element" data-color-key="${k}" style="display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px; cursor: pointer;">
                             <span class="legend-color-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: ${colors[k].hex};"></span>
-                            <span>${isAr ? k.toUpperCase() : k.charAt(0).toUpperCase() + k.slice(1)}: <strong>${Math.round(bA[k] || 0)}%</strong></span>
+                            <span>${isAr ? (HARTMAN_MAP[k]?.ar || k.toUpperCase()) : k.charAt(0).toUpperCase() + k.slice(1)}: <strong>${Math.round(bA[k] || 0)}%</strong></span>
                         </div>
                     `).join('')}
                 </div>
@@ -2005,6 +2565,28 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
         container.innerHTML = svg;
+
+        // Attach Interactive Tooltips & Touch Popovers
+        container.querySelectorAll("[data-color-key]").forEach(el => {
+            const k = el.getAttribute("data-color-key");
+            const val = Math.round(bA[k] || 0);
+            attachChartTooltip(el, () => ({
+                ...CHART_EXPLANATION_DICTIONARY.hartman[k],
+                metric_ar: `${isAr ? "النسبة المحسوبة" : "Calculated Share"}: ${val}%`,
+                metric_en: `Calculated Share: ${val}%`
+            }));
+        });
+
+        const hubEl = container.querySelector("[data-hub='true']");
+        if (hubEl) {
+            attachChartTooltip(hubEl, () => ({
+                ...CHART_EXPLANATION_DICTIONARY.hartman.hub,
+                title_ar: `${isAr ? "الدافع المهيمن" : "Primary Motive"}: ${motiveName}`,
+                title_en: `Primary Motive: ${motiveName}`,
+                metric_ar: `${isAr ? "الوقود العاطفي" : "Core Fuel"}: ${hA.metadata ? (isAr ? hA.metadata.fuel_ar : hA.metadata.fuel_en) : primaryColor.toUpperCase()}`,
+                metric_en: `Core Fuel: ${hA.metadata ? hA.metadata.fuel_en : primaryColor.toUpperCase()}`
+            }));
+        }
     }
 
     // 2. DISC Behavioral Rhythm & Tempo (2x2 Matrix)
@@ -2040,37 +2622,39 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 295px; height: auto; aspect-ratio: 1 / 1; direction: ltr;">
                     <!-- Quadrant backgrounds -->
-                    <rect x="35" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.09)" rx="10" />
-                    <rect x="160" y="35" width="125" height="125" fill="rgba(234, 179, 8, 0.09)" rx="10" />
-                    <rect x="160" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.09)" rx="10" />
-                    <rect x="35" y="160" width="125" height="125" fill="rgba(59, 130, 246, 0.09)" rx="10" />
+                    <rect class="chart-node chart-interactive-element" data-disc-quadrant="D" x="35" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.11)" rx="10" />
+                    <rect class="chart-node chart-interactive-element" data-disc-quadrant="I" x="160" y="35" width="125" height="125" fill="rgba(234, 179, 8, 0.11)" rx="10" />
+                    <rect class="chart-node chart-interactive-element" data-disc-quadrant="S" x="160" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.11)" rx="10" />
+                    <rect class="chart-node chart-interactive-element" data-disc-quadrant="C" x="35" y="160" width="125" height="125" fill="rgba(59, 130, 246, 0.11)" rx="10" />
 
                     <!-- Axes -->
                     <line x1="35" y1="${cy}" x2="285" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
                     <line x1="${cx}" y1="35" x2="${cx}" y2="285" stroke="var(--border-color)" stroke-width="1.8" />
 
                     <!-- Quadrant letters -->
-                    <text x="55" y="65" fill="#ef4444" font-size="16" font-weight="800" text-anchor="middle">D</text>
-                    <text x="265" y="65" fill="#eab308" font-size="16" font-weight="800" text-anchor="middle">I</text>
-                    <text x="265" y="275" fill="#10b981" font-size="16" font-weight="800" text-anchor="middle">S</text>
-                    <text x="55" y="275" fill="#3b82f6" font-size="16" font-weight="800" text-anchor="middle">C</text>
+                    <text class="chart-interactive-element" data-disc-quadrant="D" x="55" y="65" fill="#ef4444" font-size="16" font-weight="800" text-anchor="middle">D</text>
+                    <text class="chart-interactive-element" data-disc-quadrant="I" x="265" y="65" fill="#eab308" font-size="16" font-weight="800" text-anchor="middle">I</text>
+                    <text class="chart-interactive-element" data-disc-quadrant="S" x="265" y="275" fill="#10b981" font-size="16" font-weight="800" text-anchor="middle">S</text>
+                    <text class="chart-interactive-element" data-disc-quadrant="C" x="55" y="275" fill="#3b82f6" font-size="16" font-weight="800" text-anchor="middle">C</text>
 
                     <!-- Axis descriptors -->
-                    <text x="${cx}" y="20" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر (Fast-Paced)" : "Fast-Paced & Assertive"}</text>
-                    <text x="${cx}" y="308" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / رصين (Reflective)" : "Deliberate & Reflective"}</text>
-                    <text x="20" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "المهام" : "Task"}</text>
-                    <text x="300" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "الناس" : "People"}</text>
+                    <text class="chart-interactive-element" data-disc-axis="fast" x="${cx}" y="20" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "سريع / مبادر (Fast-Paced)" : "Fast-Paced & Assertive"}</text>
+                    <text class="chart-interactive-element" data-disc-axis="steady" x="${cx}" y="308" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "متأنٍ / رصين (Reflective)" : "Deliberate & Reflective"}</text>
+                    <text class="chart-interactive-element" data-disc-axis="task" x="20" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "المهام" : "Task"}</text>
+                    <text class="chart-interactive-element" data-disc-axis="people" x="300" y="${cy + 4}" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "الناس" : "People"}</text>
 
                     ${connectingLine}
 
                     <!-- Point A -->
-                    <g class="chart-node">
+                    <g class="chart-node chart-interactive-element" data-disc-node="A">
+                        <circle class="pin-pulse-ring" cx="${ptA.x}" cy="${ptA.y}" fill="none" stroke="#10b981" stroke-width="1.5" />
                         <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" />
                         <text x="${labelXA}" y="${ptA.y - 13}" text-anchor="middle" fill="#10b981" font-size="11" font-weight="800">${nameA || "A"}</text>
                     </g>
 
                     ${ptB ? `
-                        <g class="chart-node">
+                        <g class="chart-node chart-interactive-element" data-disc-node="B">
+                            <circle class="pin-pulse-ring" cx="${ptB.x}" cy="${ptB.y}" fill="none" stroke="#f59e0b" stroke-width="1.5" />
                             <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" />
                             <text x="${labelXB}" y="${ptB.y - 13}" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="800">${nameB || "B"}</text>
                         </g>
@@ -2083,6 +2667,57 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
         container.innerHTML = svg;
+
+        // Attach Tooltips
+        container.querySelectorAll("[data-disc-quadrant]").forEach(el => {
+            const q = el.getAttribute("data-disc-quadrant");
+            const item = CHART_EXPLANATION_DICTIONARY.disc[q];
+            if (item) attachChartTooltip(el, () => item);
+        });
+
+        const axisMap = {
+            fast: CHART_EXPLANATION_DICTIONARY.disc.tempo_fast,
+            steady: CHART_EXPLANATION_DICTIONARY.disc.tempo_steady,
+            task: CHART_EXPLANATION_DICTIONARY.disc.focus_task,
+            people: CHART_EXPLANATION_DICTIONARY.disc.focus_people
+        };
+        container.querySelectorAll("[data-disc-axis]").forEach(el => {
+            const ax = el.getAttribute("data-disc-axis");
+            const item = axisMap[ax];
+            if (item) attachChartTooltip(el, () => item);
+        });
+
+        const nodeA = container.querySelector("[data-disc-node='A']");
+        if (nodeA) {
+            attachChartTooltip(nodeA, () => ({
+                icon: "🟢",
+                color: "#10b981",
+                title_ar: `${nameA} (${discA?.type || "D"})`,
+                title_en: `${nameA} (${discA?.type || "D"})`,
+                subtitle_ar: `إيقاع ${isAr ? (discA?.pace_ar || "سريع") : (discA?.pace || "Fast")}`,
+                subtitle_en: `${discA?.pace || "Fast"} Pace Behavioral Rhythm`,
+                body_ar: `يعكس موقع ${nameA} في مخطط ديسك التوازن الخاص بين سرعة الإنجاز والاهتمام بالعلاقات.`,
+                body_en: `Represents ${nameA}'s operational position balancing behavioral pace with interpersonal focus.`,
+                metric_ar: `النمط الأساسي: ${discA?.type || "D"}`,
+                metric_en: `Primary Style: ${discA?.type || "D"}`
+            }));
+        }
+
+        const nodeB = container.querySelector("[data-disc-node='B']");
+        if (nodeB && discB) {
+            attachChartTooltip(nodeB, () => ({
+                icon: "🟡",
+                color: "#f59e0b",
+                title_ar: `${nameB} (${discB?.type || "S"})`,
+                title_en: `${nameB} (${discB?.type || "S"})`,
+                subtitle_ar: `إيقاع ${isAr ? (discB?.pace_ar || "متأنٍ") : (discB?.pace || "Steady")}`,
+                subtitle_en: `${discB?.pace || "Steady"} Pace Behavioral Rhythm`,
+                body_ar: `يعكس موقع ${nameB} في مخطط ديسك التوازن الخاص بين سرعة الإنجاز والاهتمام بالعلاقات.`,
+                body_en: `Represents ${nameB}'s operational position balancing behavioral pace with interpersonal focus.`,
+                metric_ar: `النمط الأساسي: ${discB?.type || "S"}`,
+                metric_en: `Primary Style: ${discB?.type || "S"}`
+            }));
+        }
     }
 
     // 3. Birkman Tri-Layer Iceberg Cross-Section
@@ -2142,45 +2777,80 @@ document.addEventListener("DOMContentLoaded", () => {
                     <rect x="0" y="75" width="600" height="195" fill="url(#seaGrad)" rx="10" />
 
                     <!-- Iceberg Tip (Visible) -->
-                    <polygon points="300,16 240,75 360,75" fill="url(#iceTip)" stroke="#cbd5e1" stroke-width="1.8" />
+                    <polygon class="chart-node chart-interactive-element" data-iceberg="tip" points="300,16 240,75 360,75" fill="url(#iceTip)" stroke="#cbd5e1" stroke-width="1.8" />
 
                     <!-- Waterline Wave -->
                     <path d="M0,75 Q75,70 150,75 T300,75 T450,75 T600,75" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="5 3" />
 
                     <!-- Iceberg Submerged Base -->
-                    <polygon points="240,75 190,160 220,250 380,250 410,160 360,75" fill="url(#iceDeep)" opacity="0.88" stroke="#0ea5e9" stroke-width="1.8" />
+                    <polygon class="chart-node chart-interactive-element" data-iceberg="base" points="240,75 190,160 220,250 380,250 410,160 360,75" fill="url(#iceDeep)" opacity="0.88" stroke="#0ea5e9" stroke-width="1.8" />
 
                     <!-- Level Labels for Person A (Left side: centered at x=107) -->
-                    <rect x="12" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#94a3b8" stroke-width="1.2" />
-                    <text x="107" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
-                    <text x="107" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#0284c7">${nameA}: ${getBirkmanLabel(bA.usual_style)}</text>
+                    <g class="chart-node chart-interactive-element" data-birkman-level="usual" data-person="A">
+                        <rect x="12" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#94a3b8" stroke-width="1.2" />
+                        <text x="107" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#0f172a">${isAr ? "المستوى 1: السلوك الظاهر" : "Level 1: Outward Style"}</text>
+                        <text x="107" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#0284c7">${nameA}: ${getBirkmanLabel(bA.usual_style)}</text>
+                    </g>
 
-                    <rect x="12" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#38bdf8" stroke-width="1.2" />
-                    <text x="107" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
-                    <text x="107" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${nameA}: ${getBirkmanLabel(bA.underlying_need)}</text>
+                    <g class="chart-node chart-interactive-element" data-birkman-level="needs" data-person="A">
+                        <rect x="12" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#38bdf8" stroke-width="1.2" />
+                        <text x="107" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#38bdf8">${isAr ? "المستوى 2: الاحتياج الخفي" : "Level 2: Hidden Needs"}</text>
+                        <text x="107" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${nameA}: ${getBirkmanLabel(bA.underlying_need)}</text>
+                    </g>
 
-                    <rect x="12" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
-                    <text x="107" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Reaction"}</text>
-                    <text x="107" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${nameA}: ${getBirkmanLabel(bA.stress_trigger)}</text>
+                    <g class="chart-node chart-interactive-element" data-birkman-level="stress" data-person="A">
+                        <rect x="12" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                        <text x="107" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${isAr ? "المستوى 3: ردة فعل التوتر" : "Level 3: Stress Reaction"}</text>
+                        <text x="107" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${nameA}: ${getBirkmanLabel(bA.stress_trigger)}</text>
+                    </g>
 
                     ${!isSingle ? `
                         <!-- Person B Callouts (Right side: centered at x=493) -->
-                        <rect x="398" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#f59e0b" stroke-width="1.2" />
-                        <text x="493" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
-                        <text x="493" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#334155">${getBirkmanLabel(bB.usual_style)}</text>
+                        <g class="chart-node chart-interactive-element" data-birkman-level="usual" data-person="B">
+                            <rect x="398" y="18" width="190" height="40" rx="8" fill="rgba(255,255,255,0.95)" stroke="#f59e0b" stroke-width="1.2" />
+                            <text x="493" y="34" font-size="10" font-weight="800" text-anchor="middle" fill="#b45309">${nameB} (${isAr ? "الظاهر" : "Usual"})</text>
+                            <text x="493" y="49" font-size="9.5" font-weight="700" text-anchor="middle" fill="#334155">${getBirkmanLabel(bB.usual_style)}</text>
+                        </g>
 
-                        <rect x="398" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#f59e0b" stroke-width="1.2" />
-                        <text x="493" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
-                        <text x="493" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${getBirkmanLabel(bB.underlying_need)}</text>
+                        <g class="chart-node chart-interactive-element" data-birkman-level="needs" data-person="B">
+                            <rect x="398" y="108" width="190" height="40" rx="8" fill="rgba(15,23,42,0.88)" stroke="#f59e0b" stroke-width="1.2" />
+                            <text x="493" y="124" font-size="10" font-weight="800" text-anchor="middle" fill="#f59e0b">${nameB} (${isAr ? "الاحتياج" : "Needs"})</text>
+                            <text x="493" y="139" font-size="9.5" font-weight="700" text-anchor="middle" fill="#e2e8f0">${getBirkmanLabel(bB.underlying_need)}</text>
+                        </g>
 
-                        <rect x="398" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
-                        <text x="493" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
-                        <text x="493" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${getBirkmanLabel(bB.stress_trigger)}</text>
+                        <g class="chart-node chart-interactive-element" data-birkman-level="stress" data-person="B">
+                            <rect x="398" y="198" width="190" height="40" rx="8" fill="rgba(15,23,42,0.95)" stroke="#ef4444" stroke-width="1.2" />
+                            <text x="493" y="214" font-size="10" font-weight="800" text-anchor="middle" fill="#ef4444">${nameB} (${isAr ? "التوتر" : "Stress"})</text>
+                            <text x="493" y="229" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fca5a5">${getBirkmanLabel(bB.stress_trigger)}</text>
+                        </g>
                     ` : ''}
                 </svg>
             </div>
         `;
         container.innerHTML = svg;
+
+        // Attach tooltips
+        const tipEl = container.querySelector("[data-iceberg='tip']");
+        if (tipEl) attachChartTooltip(tipEl, () => CHART_EXPLANATION_DICTIONARY.birkman.iceberg_tip);
+
+        const baseEl = container.querySelector("[data-iceberg='base']");
+        if (baseEl) attachChartTooltip(baseEl, () => CHART_EXPLANATION_DICTIONARY.birkman.iceberg_base);
+
+        container.querySelectorAll("[data-birkman-level]").forEach(el => {
+            const lvl = el.getAttribute("data-birkman-level");
+            const person = el.getAttribute("data-person");
+            const b = person === "A" ? bA : bB;
+            const pName = person === "A" ? nameA : nameB;
+            const dictItem = CHART_EXPLANATION_DICTIONARY.birkman[lvl];
+            if (dictItem) {
+                const label = lvl === "usual" ? getBirkmanLabel(b.usual_style) : (lvl === "needs" ? getBirkmanLabel(b.underlying_need) : getBirkmanLabel(b.stress_trigger));
+                attachChartTooltip(el, () => ({
+                    ...dictItem,
+                    metric_ar: `${pName}: ${label}`,
+                    metric_en: `${pName}: ${label}`
+                }));
+            }
+        });
     }
 
     // 4. Attachment Security 2D Coordinate Field (ECR)
@@ -2192,13 +2862,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const cx = 160, cy = 160;
 
         const getCoords = (traits) => {
-            if (!traits) return { x: cx, y: cy };
+            if (!traits) return { x: cx, y: cy, anx: 30, avoid: 30 };
             const ecr = traits.attachment || traits.attachment_ecr || { anxiety_score: 30, avoidance_score: 30 };
             const anx = Math.max(5, Math.min(95, ecr.anxiety_score !== undefined ? ecr.anxiety_score : 30));
             const avoid = Math.max(5, Math.min(95, ecr.avoidance_score !== undefined ? ecr.avoidance_score : 30));
             const x = 45 + (anx / 100) * 230;
             const y = 275 - (avoid / 100) * 230;
-            return { x, y };
+            return { x, y, anx, avoid };
         };
 
         const ptA = getCoords(traitsA);
@@ -2208,11 +2878,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const labelXB = ptB ? Math.max(55, Math.min(265, ptB.x)) : 0;
 
         const attTrans = {
-            secure: isAr ? "آمن" : "SECURE",
-            anxious: isAr ? "قلق" : "ANXIOUS",
-            avoidant: isAr ? "تجنبي" : "AVOIDANT",
-            dismissive: isAr ? "تجنبي" : "DISMISSIVE",
-            fearful: isAr ? "مضطرب" : "FEARFUL"
+            secure: isAr ? "الآمن والمتزن" : "Secure",
+            anxious: isAr ? "القلق" : "Anxious",
+            avoidant: isAr ? "التجنبي" : "Avoidant",
+            dismissive: isAr ? "التجنبي" : "Dismissive",
+            fearful: isAr ? "المضطرب" : "Fearful"
         };
         const getAttLabel = (style) => {
             if (!style) return "--";
@@ -2224,33 +2894,39 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 295px; height: auto; aspect-ratio: 1 / 1; direction: ltr;">
                     <!-- 4 Quadrants -->
-                    <rect x="35" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.12)" rx="8" /> <!-- Secure -->
-                    <rect x="160" y="160" width="125" height="125" fill="rgba(245, 158, 11, 0.12)" rx="8" /> <!-- Anxious -->
-                    <rect x="35" y="35" width="125" height="125" fill="rgba(59, 130, 246, 0.12)" rx="8" /> <!-- Avoidant -->
-                    <rect x="160" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.12)" rx="8" /> <!-- Fearful -->
+                    <rect class="chart-node chart-interactive-element" data-attachment-quadrant="secure" x="35" y="160" width="125" height="125" fill="rgba(16, 185, 129, 0.12)" rx="8" />
+                    <rect class="chart-node chart-interactive-element" data-attachment-quadrant="anxious" x="160" y="160" width="125" height="125" fill="rgba(245, 158, 11, 0.12)" rx="8" />
+                    <rect class="chart-node chart-interactive-element" data-attachment-quadrant="avoidant" x="35" y="35" width="125" height="125" fill="rgba(59, 130, 246, 0.12)" rx="8" />
+                    <rect class="chart-node chart-interactive-element" data-attachment-quadrant="fearful" x="160" y="35" width="125" height="125" fill="rgba(239, 68, 68, 0.12)" rx="8" />
 
                     <!-- Axes -->
                     <line x1="35" y1="${cy}" x2="285" y2="${cy}" stroke="var(--border-color)" stroke-width="1.8" />
                     <line x1="${cx}" y1="35" x2="${cx}" y2="285" stroke="var(--border-color)" stroke-width="1.8" />
 
                     <!-- Centered Quadrant Labels -->
-                    <text x="97" y="275" fill="#059669" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "آمن (Secure)" : "SECURE"}</text>
-                    <text x="223" y="275" fill="#d97706" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "قلق (Anxious)" : "ANXIOUS"}</text>
-                    <text x="97" y="55" fill="#2563eb" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "تجنبي (Dismissive)" : "DISMISSIVE"}</text>
-                    <text x="223" y="55" fill="#dc2626" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "مضطرب (Fearful)" : "FEARFUL"}</text>
+                    <text class="chart-interactive-element" data-attachment-quadrant="secure" x="97" y="275" fill="#059669" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "الآمن (Secure)" : "SECURE"}</text>
+                    <text class="chart-interactive-element" data-attachment-quadrant="anxious" x="223" y="275" fill="#d97706" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "القلق (Anxious)" : "ANXIOUS"}</text>
+                    <text class="chart-interactive-element" data-attachment-quadrant="avoidant" x="97" y="55" fill="#2563eb" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "التجنبي (Dismissive)" : "DISMISSIVE"}</text>
+                    <text class="chart-interactive-element" data-attachment-quadrant="fearful" x="223" y="55" fill="#dc2626" font-size="11" font-weight="800" text-anchor="middle">${isAr ? "المضطرب (Fearful)" : "FEARFUL"}</text>
 
                     <!-- Axis Descriptors -->
                     <text x="${cx}" y="20" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "ارتفاع التجنب (Avoidance)" : "High Avoidance"}</text>
                     <text x="${cx}" y="308" fill="var(--text-secondary)" font-size="9.5" font-weight="700" text-anchor="middle">${isAr ? "انخفاض التجنب (Low Avoidance)" : "Low Avoidance"}</text>
 
                     <!-- Point A -->
-                    <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" class="chart-node" />
-                    <text x="${labelXA}" y="${ptA.y - 13}" text-anchor="middle" fill="#059669" font-size="11" font-weight="800">${nameA}</text>
+                    <g class="chart-node chart-interactive-element" data-attachment-node="A">
+                        <circle class="pin-pulse-ring" cx="${ptA.x}" cy="${ptA.y}" fill="none" stroke="#10b981" stroke-width="1.5" />
+                        <circle cx="${ptA.x}" cy="${ptA.y}" r="9" fill="#10b981" stroke="#fff" stroke-width="2.5" />
+                        <text x="${labelXA}" y="${ptA.y - 13}" text-anchor="middle" fill="#059669" font-size="11" font-weight="800">${nameA}</text>
+                    </g>
 
                     ${ptB ? `
                         <line x1="${ptA.x}" y1="${ptA.y}" x2="${ptB.x}" y2="${ptB.y}" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="4 4" />
-                        <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" class="chart-node" />
-                        <text x="${labelXB}" y="${ptB.y - 13}" text-anchor="middle" fill="#d97706" font-size="11" font-weight="800">${nameB}</text>
+                        <g class="chart-node chart-interactive-element" data-attachment-node="B">
+                            <circle class="pin-pulse-ring" cx="${ptB.x}" cy="${ptB.y}" fill="none" stroke="#f59e0b" stroke-width="1.5" />
+                            <circle cx="${ptB.x}" cy="${ptB.y}" r="9" fill="#f59e0b" stroke="#fff" stroke-width="2.5" />
+                            <text x="${labelXB}" y="${ptB.y - 13}" text-anchor="middle" fill="#d97706" font-size="11" font-weight="800">${nameB}</text>
+                        </g>
                     ` : ''}
                 </svg>
                 <div style="font-size: 0.88rem; margin-top: 10px; color: var(--text-secondary); text-align: center;">
@@ -2260,6 +2936,45 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
         container.innerHTML = svg;
+
+        // Attach tooltips
+        container.querySelectorAll("[data-attachment-quadrant]").forEach(el => {
+            const q = el.getAttribute("data-attachment-quadrant");
+            const item = CHART_EXPLANATION_DICTIONARY.attachment[q];
+            if (item) attachChartTooltip(el, () => item);
+        });
+
+        const nodeA = container.querySelector("[data-attachment-node='A']");
+        if (nodeA) {
+            attachChartTooltip(nodeA, () => ({
+                icon: "🟢",
+                color: "#10b981",
+                title_ar: `${nameA}: ${getAttLabel(traitsA.attachment?.primary)}`,
+                title_en: `${nameA}: ${getAttLabel(traitsA.attachment?.primary)}`,
+                subtitle_ar: "إحداثيات نمط الارتباط العاطفي",
+                subtitle_en: "Attachment Security Coordinates",
+                body_ar: `يقع ${nameA} في نطاق (${getAttLabel(traitsA.attachment?.primary)}) بدرجة قلق (${Math.round(ptA.anx)}%) وتجنب (${Math.round(ptA.avoid)}%).`,
+                body_en: `${nameA} is situated at ${getAttLabel(traitsA.attachment?.primary)} baseline (Anxiety: ${Math.round(ptA.anx)}%, Avoidance: ${Math.round(ptA.avoid)}%).`,
+                metric_ar: `القلق: ${Math.round(ptA.anx)}% • التجنب: ${Math.round(ptA.avoid)}%`,
+                metric_en: `Anxiety: ${Math.round(ptA.anx)}% • Avoidance: ${Math.round(ptA.avoid)}%`
+            }));
+        }
+
+        const nodeB = container.querySelector("[data-attachment-node='B']");
+        if (nodeB && traitsB) {
+            attachChartTooltip(nodeB, () => ({
+                icon: "🟡",
+                color: "#f59e0b",
+                title_ar: `${nameB}: ${getAttLabel(traitsB.attachment?.primary)}`,
+                title_en: `${nameB}: ${getAttLabel(traitsB.attachment?.primary)}`,
+                subtitle_ar: "إحداثيات نمط الارتباط العاطفي",
+                subtitle_en: "Attachment Security Coordinates",
+                body_ar: `يقع ${nameB} في نطاق (${getAttLabel(traitsB.attachment?.primary)}) بدرجة قلق (${Math.round(ptB.anx)}%) وتجنب (${Math.round(ptB.avoid)}%).`,
+                body_en: `${nameB} is situated at ${getAttLabel(traitsB.attachment?.primary)} baseline (Anxiety: ${Math.round(ptB.anx)}%, Avoidance: ${Math.round(ptB.avoid)}%).`,
+                metric_ar: `القلق: ${Math.round(ptB.anx)}% • التجنب: ${Math.round(ptB.avoid)}%`,
+                metric_en: `Anxiety: ${Math.round(ptB.anx)}% • Avoidance: ${Math.round(ptB.avoid)}%`
+            }));
+        }
     }
 
     // 5. FIRO-B Interpersonal Exchange (Control & Affection)
@@ -2270,12 +2985,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const getFiroScore = (traits, domain, mode) => {
             if (!traits) return 50;
             const firo = traits.firo_b || {};
-            // 1. Check nested object: firo.control.expressed (scale 1-9 or 10-100)
             if (firo[domain] && typeof firo[domain][mode] === "number") {
                 const raw = firo[domain][mode];
                 return raw <= 10 ? Math.round((raw / 9) * 100) : Math.min(100, Math.round(raw));
             }
-            // 2. Check flat property: firo.control_expressed
             const flatKey = `${domain}_${mode}`;
             if (typeof firo[flatKey] === "number") {
                 const raw = firo[flatKey];
@@ -2294,8 +3007,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const affExpB = getFiroScore(traitsB, "affection", "expressed");
         const affWntB = getFiroScore(traitsB, "affection", "wanted");
 
-        const makeBar = (label, valA, valB, color) => `
-            <div style="margin-bottom: 14px; width: 100%;">
+        const makeBar = (key, label, valA, valB, color) => `
+            <div class="chart-node chart-interactive-element" data-firo-row="${key}" style="margin-bottom: 14px; width: 100%; cursor: pointer;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px;">
                     <span>${label}</span>
                     <span>${nameA}: <strong style="color: ${color};">${valA}%</strong> ${!isSingle ? `| ${nameB}: <strong style="color: #f59e0b;">${valB}%</strong>` : ''}</span>
@@ -2319,12 +3032,27 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="font-size: 0.88rem; font-weight: 700; color: var(--accent-color); margin-bottom: 14px; text-align: center;">
                 ${isAr ? "موازين المبادرة والاحتياج في العلاقة" : "Expressed Initiation vs. Wanted Reciprocity"}
             </div>
-            ${makeBar(isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", ctrlExpA, ctrlExpB, "#3b82f6")}
-            ${makeBar(isAr ? "الحاجة لتوجيه الشريك (Control Wanted)" : "Receptivity to Guidance (Wanted)", ctrlWntA, ctrlWntB, "#8b5cf6")}
-            ${makeBar(isAr ? "المبادرة العاطفية والتعبير (Affection Expressed)" : "Affection Expression", affExpA, affExpB, "#ec4899")}
-            ${makeBar(isAr ? "الاحتياج للتعبير العاطفي (Affection Wanted)" : "Affection Craved", affWntA, affWntB, "#10b981")}
+            ${makeBar("ctrl_exp", isAr ? "القيادة واتخاذ القرار (Control Expressed)" : "Decision Leadership (Control)", ctrlExpA, ctrlExpB, "#3b82f6")}
+            ${makeBar("ctrl_wnt", isAr ? "الحاجة لتوجيه الشريك (Control Wanted)" : "Receptivity to Guidance (Wanted)", ctrlWntA, ctrlWntB, "#8b5cf6")}
+            ${makeBar("aff_exp", isAr ? "المبادرة العاطفية والتعبير (Affection Expressed)" : "Affection Expression", affExpA, affExpB, "#ec4899")}
+            ${makeBar("aff_wnt", isAr ? "الاحتياج للتعبير العاطفي (Affection Wanted)" : "Affection Craved", affWntA, affWntB, "#10b981")}
         `;
         container.appendChild(wrapper);
+
+        // Attach tooltips
+        const scores = { ctrl_exp: [ctrlExpA, ctrlExpB], ctrl_wnt: [ctrlWntA, ctrlWntB], aff_exp: [affExpA, affExpB], aff_wnt: [affWntA, affWntB] };
+        wrapper.querySelectorAll("[data-firo-row]").forEach(el => {
+            const rowKey = el.getAttribute("data-firo-row");
+            const item = CHART_EXPLANATION_DICTIONARY.firo[rowKey];
+            if (item) {
+                const [vA, vB] = scores[rowKey];
+                attachChartTooltip(el, () => ({
+                    ...item,
+                    metric_ar: isSingle ? `${nameA}: ${vA}%` : `${nameA}: ${vA}% • ${nameB}: ${vB}%`,
+                    metric_en: isSingle ? `${nameA}: ${vA}%` : `${nameA}: ${vA}% • ${nameB}: ${vB}%`
+                }));
+            }
+        });
     }
 
     // 6. Gottman Emotional Safety & Four Horsemen Risk Gauge
@@ -2338,10 +3066,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const safetyScore = isSingle ? gA.emotional_safety_index : Math.round((gA.emotional_safety_index + gB.emotional_safety_index) / 2);
         const risks = gA.four_horsemen_risk || {};
 
-        const makeRiskRow = (label, val, max = 100) => {
+        const makeRiskRow = (key, label, val, max = 100) => {
             const color = val > 40 ? "#ef4444" : (val > 25 ? "#f59e0b" : "#10b981");
             return `
-                <div style="margin-bottom: 8px;">
+                <div class="chart-node chart-interactive-element" data-gottman-risk="${key}" style="margin-bottom: 8px; cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 3px;">
                         <span>${label}</span>
                         <span style="color: ${color}; font-weight: 700;">${val}%</span>
@@ -2356,7 +3084,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const wrapper = document.createElement("div");
         wrapper.style.cssText = "width: 100%; max-width: 380px; text-align: center;";
         wrapper.innerHTML = `
-            <div style="display: inline-block; position: relative; margin-bottom: 14px;">
+            <div class="chart-node chart-interactive-element" data-gottman="safety" style="display: inline-block; position: relative; margin-bottom: 14px; cursor: pointer;">
                 <svg viewBox="0 0 140 140" style="width: 140px; height: 140px;">
                     <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="11" />
                     <circle cx="70" cy="70" r="56" fill="none" stroke="${safetyScore > 75 ? "#10b981" : "#f59e0b"}" stroke-width="11"
@@ -2371,13 +3099,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-align: center;">
                     ${isAr ? "رادار فرسان الهلاك الأربعة في العلاقة" : "Four Horsemen Risk Monitors"}
                 </div>
-                ${makeRiskRow(isAr ? "النقد واللوم الشخصي" : "Criticism Tendency", risks.criticism || 15)}
-                ${makeRiskRow(isAr ? "الدفاعية والتبرير المفرط" : "Defensiveness", risks.defensiveness || 20)}
-                ${makeRiskRow(isAr ? "الانعزال وبناء الجدار الصامت" : "Stonewalling", risks.stonewalling || 15)}
-                ${makeRiskRow(isAr ? "الازدراء والتقليل من المشاعر" : "Contempt (Toxic)", risks.contempt || 5)}
+                ${makeRiskRow("criticism", isAr ? "النقد واللوم الشخصي" : "Criticism Tendency", risks.criticism || 15)}
+                ${makeRiskRow("defensiveness", isAr ? "الدفاعية والتبرير المفرط" : "Defensiveness", risks.defensiveness || 20)}
+                ${makeRiskRow("stonewalling", isAr ? "الانعزال وبناء الجدار الصامت" : "Stonewalling", risks.stonewalling || 15)}
+                ${makeRiskRow("contempt", isAr ? "الازدراء والتقليل من المشاعر" : "Contempt (Toxic)", risks.contempt || 5)}
             </div>
         `;
         container.appendChild(wrapper);
+
+        // Attach tooltips
+        const safetyCircle = wrapper.querySelector("[data-gottman='safety']");
+        if (safetyCircle) {
+            attachChartTooltip(safetyCircle, () => ({
+                ...CHART_EXPLANATION_DICTIONARY.gottman.safety_gauge,
+                metric_ar: `${isAr ? "المؤشر العام" : "Safety Index"}: ${safetyScore}%`,
+                metric_en: `Safety Index: ${safetyScore}%`
+            }));
+        }
+
+        wrapper.querySelectorAll("[data-gottman-risk]").forEach(el => {
+            const riskKey = el.getAttribute("data-gottman-risk");
+            const val = risks[riskKey] || 10;
+            const dictItem = CHART_EXPLANATION_DICTIONARY.gottman[riskKey];
+            if (dictItem) {
+                attachChartTooltip(el, () => ({
+                    ...dictItem,
+                    metric_ar: `${isAr ? "مستوى الخطر" : "Risk Level"}: ${val}%`,
+                    metric_en: `Risk Level: ${val}%`
+                }));
+            }
+        });
     }
 
     // 7. Interactive Dyadic Conflict Loop Flowchart
@@ -2403,35 +3154,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const loopSteps = [
             {
                 type: "trigger",
-                title: isAr ? `1. شرارة الخلاف: التباين في أسلوب الحوار` : `1. The Spark: Pace & Delivery Discrepancy`,
+                title: isAr ? "1. شرارة الخلاف: التباين في أسلوب الحوار" : "1. The Spark: Pace & Delivery Discrepancy",
                 desc: isAr 
                     ? `عندما يبادر ${nameA} بأسلوب مباشر أو نبرة سريعة في لحظة انشغال أو إرهاق.`
                     : `When ${nameA} uses a direct, urgent tone while discussing plans or concerns.`
             },
             {
                 type: "need",
-                title: isAr ? `2. جرس الإنذار الخفي: جرح الاحتياج` : `2. The Unspoken Alarm: Threatened Need`,
+                title: isAr ? "2. جرس الإنذار الخفي: جرح الاحتياج" : "2. The Unspoken Alarm: Threatened Need",
                 desc: isAr
                     ? `يشعر ${nameB} بأن احتياجه لـ (${bNeedText}) مهدد، مما يولد توتراً داخلياً صامتاً.`
                     : `${nameB}'s underlying need for (${bNeedText}) feels cornered or invalidated.`
             },
             {
                 type: "reaction",
-                title: isAr ? `3. ردة الفعل الدفاعية: التراجع أو الاحتداد` : `3. The Defensive Reflex`,
+                title: isAr ? "3. ردة الفعل الدفاعية: التراجع أو الاحتداد" : "3. The Defensive Reflex",
                 desc: isAr
                     ? `يفعل ${nameB} نمط التوتر (${bStressText})، مما يربك الطرف الآخر.`
                     : `${nameB} activates the stress derailer (${bStressText}).`
             },
             {
                 type: "reaction",
-                title: isAr ? `4. دورة التصعيد التفاعلي` : `4. The Escalation Loop`,
+                title: isAr ? "4. دورة التصعيد التفاعلي" : "4. The Escalation Loop",
                 desc: isAr
                     ? `يشعر ${nameA} بعدم الاستجابة، فيرفع وتيرة الحزم، مما يعزز انغلاق الطرف الثاني.`
                     : `${nameA} perceives the silence as disinterest and pushes harder, deepening the withdrawal.`
             },
             {
                 type: "breaker",
-                title: isAr ? `5. قاطع الدائرة وقاعدة التهدئة الفورية` : `5. The Circuit Breaker & Antidote`,
+                title: isAr ? "5. قاطع الدائرة وقاعدة التهدئة الفورية" : "5. The Circuit Breaker & Antidote",
                 desc: isAr
                     ? `التوقف فوراً لمدة 20 دقيقة مع التأكيد بالقول: "أنا أحترمك وأحبك، لنأخذ استراحة ونكمل بهدوء".`
                     : `Execute the 20-minute de-escalation timeout with emotional reassurance: "I value us; let's pause and resume calmly."`
@@ -2443,15 +3194,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         loopSteps.forEach((step, idx) => {
             const card = document.createElement("div");
-            card.className = "conflict-step-card";
+            card.className = `conflict-step-card ${step.type} chart-node chart-interactive-element`;
+            card.setAttribute("data-loop-step", step.type);
+            card.style.cursor = "pointer";
             card.innerHTML = `
-                <div class="conflict-step-num ${step.type}">${idx + 1}</div>
+                <div class="conflict-step-num">${idx + 1}</div>
                 <div class="conflict-step-body">
-                    <h5>${step.title}</h5>
-                    <p>${step.desc}</p>
+                    <div class="conflict-step-title">${step.title}</div>
+                    <div class="conflict-step-desc">${step.desc}</div>
                 </div>
             `;
             loopWrapper.appendChild(card);
+
+            attachChartTooltip(card, () => ({
+                icon: step.type === "trigger" ? "⚡" : (step.type === "need" ? "🛡️" : (step.type === "breaker" ? "🛑" : "⚠️")),
+                color: step.type === "breaker" ? "#10b981" : (step.type === "trigger" ? "#f59e0b" : "#ef4444"),
+                title_ar: step.title,
+                title_en: step.title,
+                subtitle_ar: isAr ? "تحليل سلوكي لدورة النزاع" : "Conflict Cycle Behavioral Dynamics",
+                subtitle_en: "Conflict Cycle Behavioral Dynamics",
+                body_ar: step.desc,
+                body_en: step.desc
+            }));
+
+            if (idx < loopSteps.length - 1) {
+                const connector = document.createElement("div");
+                connector.className = "conflict-step-connector";
+                connector.innerHTML = "↓";
+                loopWrapper.appendChild(connector);
+            }
         });
 
         container.appendChild(loopWrapper);
@@ -2480,12 +3251,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const hicksA = cA.hicks.level;
         const hicksB = cB ? cB.hicks.level : hicksA;
 
-        // Calculate horizontal positions (Scale 20 to 600 -> 4% to 96%)
         const getLocPct = (score) => Math.max(4, Math.min(96, Math.round(((score - 20) / 580) * 100)));
         const pctA = getLocPct(locA);
         const pctB = cB ? getLocPct(locB) : 0;
 
-        // Hicks percentage (Level 1 is 96%, Level 22 is 4%)
         const getHicksPct = (lvl) => Math.max(4, Math.min(96, Math.round(100 - ((lvl - 1) / 21) * 92)));
         const hicksPctA = getHicksPct(hicksA);
         const hicksPctB = cB ? getHicksPct(hicksB) : 0;
@@ -2502,40 +3271,40 @@ document.addEventListener("DOMContentLoaded", () => {
             <!-- HAWKINS SCALE -->
             <div style="margin-bottom: 24px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-weight: 700; font-size: 0.88rem;">${titleHawkins}</span>
+                    <span class="chart-node chart-interactive-element" data-spectrum="hawkins" style="font-weight: 700; font-size: 0.88rem; cursor: pointer;">${titleHawkins}</span>
                     <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">20 — 600+</span>
                 </div>
                 
                 <!-- Calibrated Spectrum Track -->
-                <div style="position: relative; height: 26px; border-radius: 13px; background: linear-gradient(to right, #64748b 0%, #ef4444 20%, #f97316 32%, #22c55e 40%, #06b6d4 65%, #a855f7 90%, #eab308 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);">
+                <div class="chart-node chart-interactive-element" data-spectrum="hawkins" style="position: relative; height: 26px; border-radius: 13px; background: linear-gradient(to right, #64748b 0%, #ef4444 20%, #f97316 32%, #22c55e 40%, #06b6d4 65%, #a855f7 90%, #eab308 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); cursor: pointer;">
                     <!-- 200 Courage Marker -->
-                    <div style="position: absolute; left: ${getLocPct(200)}%; top: -6px; bottom: -6px; width: 3px; background: #ffffff; box-shadow: 0 0 6px rgba(0,0,0,0.5); z-index: 5;">
+                    <div class="chart-node chart-interactive-element" data-spectrum="courage200" style="position: absolute; left: ${getLocPct(200)}%; top: -6px; bottom: -6px; width: 3px; background: #ffffff; box-shadow: 0 0 6px rgba(0,0,0,0.5); z-index: 5; cursor: pointer;">
                         <span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 800; background: var(--bg-secondary); padding: 1px 4px; border-radius: 4px; border: 1px solid var(--border-color); white-space: nowrap;">200</span>
                     </div>
 
                     <!-- Marker A -->
-                    <div style="position: absolute; left: ${pctA}%; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800;" title="${nameA}: ${locA}">A</div>
+                    <div class="chart-node chart-interactive-element" data-hawkins-node="A" style="position: absolute; left: ${pctA}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameA}: ${locA}">A</div>
 
                     <!-- Marker B (if comparison) -->
                     ${!isSingle && cB ? `
-                        <div style="position: absolute; left: ${pctB}%; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800;" title="${nameB}: ${locB}">B</div>
+                        <div class="chart-node chart-interactive-element" data-hawkins-node="B" style="position: absolute; left: ${pctB}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameB}: ${locB}">B</div>
                     ` : ''}
                 </div>
 
                 <!-- Labels below Hawkins Track -->
                 <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px;">
                     <span>${isAr ? "الخوف والذنب (<100)" : "Force: Fear / Guilt (<100)"}</span>
-                    <span style="font-weight: 700; color: var(--accent-color);">${thresholdLabel}</span>
+                    <span class="chart-node chart-interactive-element" data-spectrum="courage200" style="font-weight: 700; color: var(--accent-color); cursor: pointer;">${thresholdLabel}</span>
                     <span>${isAr ? "المحبة والسلام (500+)" : "Power: Love / Peace (500+)"}</span>
                 </div>
 
                 <!-- Hawkins Numerical Badges -->
                 <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
-                    <div style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; border-radius: 8px; padding: 4px 10px;">
+                    <div class="chart-node chart-interactive-element" data-hawkins-node="A" style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; border-radius: 8px; padding: 4px 10px; cursor: pointer;">
                         <strong>${nameA}</strong>: ${locA} • ${isAr ? cA.hawkins.level_ar : cA.hawkins.level} (${isAr ? cA.hawkins.domain_ar : cA.hawkins.domain})
                     </div>
                     ${!isSingle && cB ? `
-                        <div style="background: rgba(245,158,11,0.1); border: 1px solid #f59e0b; border-radius: 8px; padding: 4px 10px;">
+                        <div class="chart-node chart-interactive-element" data-hawkins-node="B" style="background: rgba(245,158,11,0.1); border: 1px solid #f59e0b; border-radius: 8px; padding: 4px 10px; cursor: pointer;">
                             <strong>${nameB}</strong>: ${locB} • ${isAr ? cB.hawkins.level_ar : cB.hawkins.level} (${isAr ? cB.hawkins.domain_ar : cB.hawkins.domain})
                         </div>
                     ` : ''}
@@ -2545,18 +3314,18 @@ document.addEventListener("DOMContentLoaded", () => {
             <!-- HICKS EMOTIONAL GUIDANCE SCALE -->
             <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-weight: 700; font-size: 0.88rem;">${titleHicks}</span>
+                    <span class="chart-node chart-interactive-element" data-spectrum="hicks" style="font-weight: 700; font-size: 0.88rem; cursor: pointer;">${titleHicks}</span>
                     <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">${isAr ? "١ (البهجة والامتنان) — ٢٢ (الخوف واليأس)" : "1 (Joy) — 22 (Fear)"}</span>
                 </div>
 
                 <!-- Hicks Vibrational Gradient Track -->
-                <div style="position: relative; height: 18px; border-radius: 9px; background: linear-gradient(to right, #475569 0%, #dc2626 25%, #d97706 45%, #65a30d 70%, #10b981 85%, #f59e0b 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);">
+                <div class="chart-node chart-interactive-element" data-spectrum="hicks" style="position: relative; height: 18px; border-radius: 9px; background: linear-gradient(to right, #475569 0%, #dc2626 25%, #d97706 45%, #65a30d 70%, #10b981 85%, #f59e0b 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); cursor: pointer;">
                     <!-- Marker A -->
-                    <div style="position: absolute; left: ${hicksPctA}%; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: #10b981; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800;">A</div>
+                    <div class="chart-node chart-interactive-element" data-hicks-node="A" style="position: absolute; left: ${hicksPctA}%; top: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; background: #10b981; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800; cursor: pointer;">A</div>
 
                     <!-- Marker B (if comparison) -->
                     ${!isSingle && cB ? `
-                        <div style="position: absolute; left: ${hicksPctB}%; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: #f59e0b; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800;">B</div>
+                        <div class="chart-node chart-interactive-element" data-hicks-node="B" style="position: absolute; left: ${hicksPctB}%; top: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; background: #f59e0b; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800; cursor: pointer;">B</div>
                     ` : ''}
                 </div>
 
@@ -2569,11 +3338,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <!-- Hicks Detail Badges -->
                 <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
-                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
+                    <div class="chart-node chart-interactive-element" data-hicks-node="A" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px; cursor: pointer;">
                         <strong>${nameA}</strong>: ${isAr ? cA.hicks.state_ar : cA.hicks.state} (${isAr ? `المستوى ${hicksA}` : `Lv ${hicksA}`}) • ${isAr ? cA.pivot_agility.rating_ar : cA.pivot_agility.rating_en}
                     </div>
                     ${!isSingle && cB ? `
-                        <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
+                        <div class="chart-node chart-interactive-element" data-hicks-node="B" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px; cursor: pointer;">
                             <strong>${nameB}</strong>: ${isAr ? cB.hicks.state_ar : cB.hicks.state} (${isAr ? `المستوى ${hicksB}` : `Lv ${hicksB}`}) • ${isAr ? cB.pivot_agility.rating_ar : cB.pivot_agility.rating_en}
                         </div>
                     ` : ''}
@@ -2582,6 +3351,80 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         container.appendChild(wrapper);
+
+        // Attach tooltips
+        const hawkinsTrack = wrapper.querySelector("[data-spectrum='hawkins']");
+        if (hawkinsTrack) attachChartTooltip(hawkinsTrack, () => CHART_EXPLANATION_DICTIONARY.consciousness.hawkins_track);
+
+        const courage200 = wrapper.querySelector("[data-spectrum='courage200']");
+        if (courage200) attachChartTooltip(courage200, () => CHART_EXPLANATION_DICTIONARY.consciousness.hawkins_200);
+
+        const hicksTrack = wrapper.querySelector("[data-spectrum='hicks']");
+        if (hicksTrack) attachChartTooltip(hicksTrack, () => CHART_EXPLANATION_DICTIONARY.consciousness.hicks_track);
+
+        const nodeHawkinsA = wrapper.querySelectorAll("[data-hawkins-node='A']");
+        nodeHawkinsA.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟢",
+                color: "#10b981",
+                title_ar: `${nameA}: مستوى هوكينز (${locA})`,
+                title_en: `${nameA}: Hawkins LoC (${locA})`,
+                subtitle_ar: `${isAr ? cA.hawkins.level_ar : cA.hawkins.level} • ${isAr ? cA.hawkins.domain_ar : cA.hawkins.domain}`,
+                subtitle_en: `${cA.hawkins.level} • ${cA.hawkins.domain}`,
+                body_ar: `يعكس خط الأساس الواعي لـ ${nameA} العمل في نطاق (${isAr ? cA.hawkins.domain_ar : cA.hawkins.domain}) مع استقرار عاطفي وقدرة على احتواء المشاعر.`,
+                body_en: `Reflects ${nameA}'s operational baseline operating in the ${cA.hawkins.domain} realm with emotional grounding.`,
+                metric_ar: `درجة الوعي: ${locA}`,
+                metric_en: `Consciousness Score: ${locA}`
+            }));
+        });
+
+        const nodeHawkinsB = wrapper.querySelectorAll("[data-hawkins-node='B']");
+        nodeHawkinsB.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟡",
+                color: "#f59e0b",
+                title_ar: `${nameB}: مستوى هوكينز (${locB})`,
+                title_en: `${nameB}: Hawkins LoC (${locB})`,
+                subtitle_ar: `${isAr ? cB.hawkins.level_ar : cB.hawkins.level} • ${isAr ? cB.hawkins.domain_ar : cB.hawkins.domain}`,
+                subtitle_en: `${cB.hawkins.level} • ${cB.hawkins.domain}`,
+                body_ar: `يعكس خط الأساس الواعي لـ ${nameB} العمل في نطاق (${isAr ? cB.hawkins.domain_ar : cB.hawkins.domain}) مع استقرار عاطفي وقدرة على احتواء المشاعر.`,
+                body_en: `Reflects ${nameB}'s operational baseline operating in the ${cB.hawkins.domain} realm with emotional grounding.`,
+                metric_ar: `درجة الوعي: ${locB}`,
+                metric_en: `Consciousness Score: ${locB}`
+            }));
+        });
+
+        const nodeHicksA = wrapper.querySelectorAll("[data-hicks-node='A']");
+        nodeHicksA.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟢",
+                color: "#10b981",
+                title_ar: `${nameA}: سلم هيكس للمشاعر (${isAr ? `المستوى ${hicksA}` : `Lv ${hicksA}`})`,
+                title_en: `${nameA}: Hicks Emotional Scale (Lv ${hicksA})`,
+                subtitle_ar: `${isAr ? cA.hicks.state_ar : cA.hicks.state} • ${isAr ? cA.hicks.tier_ar : cA.hicks.tier}`,
+                subtitle_en: `${cA.hicks.state} • ${cA.hicks.tier}`,
+                body_ar: `الحالة المشاعرية الغالبة لـ ${nameA} تتسم بـ (${isAr ? cA.hicks.state_ar : cA.hicks.state}) مع مرونة ارتداد (${isAr ? cA.pivot_agility.rating_ar : cA.pivot_agility.rating_en}).`,
+                body_en: `${nameA}'s habitual emotional set-point centers around ${cA.hicks.state} with resilient agility.`,
+                metric_ar: `المستوى: ${hicksA} / 22`,
+                metric_en: `Level: ${hicksA} / 22`
+            }));
+        });
+
+        const nodeHicksB = wrapper.querySelectorAll("[data-hicks-node='B']");
+        nodeHicksB.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟡",
+                color: "#f59e0b",
+                title_ar: `${nameB}: سلم هيكس للمشاعر (${isAr ? `المستوى ${hicksA}` : `Lv ${hicksB}`})`,
+                title_en: `${nameB}: Hicks Emotional Scale (Lv ${hicksB})`,
+                subtitle_ar: `${isAr ? cB.hicks.state_ar : cB.hicks.state} • ${isAr ? cB.hicks.tier_ar : cB.hicks.tier}`,
+                subtitle_en: `${cB.hicks.state} • ${cB.hicks.tier}`,
+                body_ar: `الحالة المشاعرية الغالبة لـ ${nameB} تتسم بـ (${isAr ? cB.hicks.state_ar : cB.hicks.state}) مع مرونة ارتداد (${isAr ? cB.pivot_agility.rating_ar : cB.pivot_agility.rating_en}).`,
+                body_en: `${nameB}'s habitual emotional set-point centers around ${cB.hicks.state} with resilient agility.`,
+                metric_ar: `المستوى: ${hicksB} / 22`,
+                metric_en: `Level: ${hicksB} / 22`
+            }));
+        });
     }
 
     // --- 10. MULTI-VARIABLE RADAR CHART (CHART.JS & RESPONSIVE SVG) ---
@@ -2782,15 +3625,31 @@ document.addEventListener("DOMContentLoaded", () => {
         areaPoly.setAttribute("stroke-width", "2.5");
         svg.appendChild(areaPoly);
 
-        dataPoints.forEach(p => {
+dataPoints.forEach((p, idx) => {
+            const cat = categories[idx];
+            const score = categoryScores[cat] || 75;
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             circle.setAttribute("cx", p.x.toFixed(1));
             circle.setAttribute("cy", p.y.toFixed(1));
-            circle.setAttribute("r", "4.5");
+            circle.setAttribute("r", "5.5");
             circle.setAttribute("fill", "var(--accent-color)");
             circle.setAttribute("stroke", "#ffffff");
-            circle.setAttribute("stroke-width", "1.8");
+            circle.setAttribute("stroke-width", "2");
+            circle.setAttribute("class", "chart-node chart-interactive-element");
             svg.appendChild(circle);
+
+            attachChartTooltip(circle, () => ({
+                icon: "📊",
+                color: "var(--accent-color)",
+                title_ar: `محور: ${RADAR_CATEGORY_TRANSLATIONS[cat] || cat}`,
+                title_en: `Category: ${cat}`,
+                subtitle_ar: "نسبة التوافق في هذا البعد",
+                subtitle_en: "Compatibility score in this dimension",
+                body_ar: `يقيس هذا المحور درجة الانسجام والتوافق العملي بين الشريكين في ملف (${RADAR_CATEGORY_TRANSLATIONS[cat] || cat}).`,
+                body_en: `Evaluates dyadic alignment, mutual expectations, and compatibility for ${cat}.`,
+                metric_ar: `درجة التوافق: ${score}%`,
+                metric_en: `Compatibility: ${score}%`
+            }));
         });
 
         dom.radarChartContainer.appendChild(svg);
@@ -2864,8 +3723,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 track.appendChild(fillB);
             }
 
-            row.appendChild(labelInfo);
+row.appendChild(labelInfo);
             row.appendChild(track);
+
+            attachChartTooltip(row, () => {
+                const traitInfo = CHART_EXPLANATION_DICTIONARY.big_five[trait] || {};
+                return {
+                    icon: traitInfo.icon || "📊",
+                    color: traitInfo.color || "var(--success)",
+                    title_ar: traitInfo.title_ar || traitLabel,
+                    title_en: traitInfo.title_en || traitLabel,
+                    subtitle_ar: traitInfo.subtitle_ar || "سمة الشخصية في نموذج العوامل الخمسة الكبرى",
+                    subtitle_en: traitInfo.subtitle_en || "Big Five OCEAN Factor Dimension",
+                    body_ar: traitInfo.body_ar || "",
+                    body_en: traitInfo.body_en || "",
+                    metric_ar: isSingle ? `${nameA}: ${scoreA}%` : `${nameA}: ${scoreA}% • ${nameB}: ${scoreB}%`,
+                    metric_en: isSingle ? `${nameA}: ${scoreA}%` : `${nameA}: ${scoreA}% • ${nameB}: ${scoreB}%`
+                };
+            });
 
             dom.bigFiveBarChartContainer.appendChild(row);
         });
