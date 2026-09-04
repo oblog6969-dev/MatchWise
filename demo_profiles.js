@@ -85,7 +85,17 @@ const DEMO_PROFILES = [
       "q72": "opt2",
       "q73": "opt1",
       "q74": "opt1",
-      "q75": "opt3"
+      "q75": "opt3",
+      "q76": "opt2",
+      "q77": "opt2",
+      "q78": "opt2",
+      "q79": "opt1",
+      "q80": "opt1",
+      "q81": "opt1",
+      "q82": "opt2",
+      "q83": "opt1",
+      "q84": "opt2",
+      "q85": "opt2"
     },
     "calculated_personality": {
       "big_five": {
@@ -313,6 +323,35 @@ const DEMO_PROFILES = [
           "hedonism": 6,
           "achievement": 17
         }
+      },
+      "consciousness": {
+        "hawkins": {
+          "score": 305,
+          "level": "Neutrality & Trust (250)",
+          "level_ar": "الحياد والثقة (250)",
+          "view_of_life": "Satisfactory / Feasible",
+          "view_of_life_ar": "مُرضٍ ومريح",
+          "is_above_200": true,
+          "domain": "Power",
+          "domain_ar": "القوة الروحية البنّاءة (Power)",
+          "power_ratio": 70
+        },
+        "hicks": {
+          "level": 6,
+          "state": "Hopefulness",
+          "state_ar": "الرجاء والأمل",
+          "tier": "Constructive Harmony",
+          "tier_ar": "تناغم بنّاء"
+        },
+        "stress_floor": {
+          "loc": 100,
+          "is_above_200": false
+        },
+        "pivot_agility": {
+          "score": 79,
+          "rating_en": "Rapid & Resilient",
+          "rating_ar": "سريع ومرن"
+        }
       }
     },
     "assessment_confidence": 96
@@ -399,7 +438,17 @@ const DEMO_PROFILES = [
       "q72": "opt1",
       "q73": "opt2",
       "q74": "opt1",
-      "q75": "opt4"
+      "q75": "opt4",
+      "q76": "opt1",
+      "q77": "opt1",
+      "q78": "opt1",
+      "q79": "opt1",
+      "q80": "opt1",
+      "q81": "opt1",
+      "q82": "opt1",
+      "q83": "opt1",
+      "q84": "opt1",
+      "q85": "opt1"
     },
     "calculated_personality": {
       "big_five": {
@@ -626,6 +675,35 @@ const DEMO_PROFILES = [
           "benevolence": 13,
           "hedonism": 8,
           "achievement": 4
+        }
+      },
+      "consciousness": {
+        "hawkins": {
+          "score": 441,
+          "level": "Reason & Understanding (400)",
+          "level_ar": "المنطق والاستبصار (400)",
+          "view_of_life": "Wise / Meaningful",
+          "view_of_life_ar": "حكيم وذو مغزى",
+          "is_above_200": true,
+          "domain": "Power",
+          "domain_ar": "القوة الروحية البنّاءة (Power)",
+          "power_ratio": 100
+        },
+        "hicks": {
+          "level": 2,
+          "state": "Passion & Creative Flow",
+          "state_ar": "الشغف والتدفق الإبداعي",
+          "tier": "High Alignment",
+          "tier_ar": "محاذاة اهتزازية عليا"
+        },
+        "stress_floor": {
+          "loc": 350,
+          "is_above_200": true
+        },
+        "pivot_agility": {
+          "score": 93,
+          "rating_en": "Rapid & Resilient",
+          "rating_ar": "سريع ومرن"
         }
       }
     },

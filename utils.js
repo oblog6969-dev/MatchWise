@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2
+ * MatchWise Lite v2.6.0
  * utils.js - Core Utilities
  * Contains: Localization/Translations, LocalStorage wrapper, Theme Controller,
  * and robust UTF-8 byte-level profile encryption & result-sharing code utilities.
@@ -136,6 +136,8 @@ const TRANSLATIONS = {
         chapter_4_desc: "TKI Conflict Modes & Gottman Emotional Safety: Your argument reflexes and fair-fighting rules.",
         chapter_5_title: "Chapter 5: Worldview & The Shared Horizon",
         chapter_5_desc: "Schwartz Human Values & Life Domain Priorities: Financial, familial, and lifestyle compatibility.",
+        chapter_6_title: "Chapter 6: Consciousness & Vibrational Alignment",
+        chapter_6_desc: "Hawkins Map of Consciousness & Abraham Hicks Emotional Guidance Scale: Awareness tier, emotional guidance, and vibrational elevation.",
         act_1_title: "Act 1: The Chemistry & Energy Flow",
         act_1_desc: "How your core motives and daily tempos meet, energize, or challenge one another.",
         act_2_title: "Act 2: The Invisible Tripwires",
@@ -144,8 +146,10 @@ const TRANSLATIONS = {
         act_3_desc: "Tracing your interactive conflict cycle: Trigger, defensive reflex, and the exact steps to de-escalate.",
         act_4_title: "Act 4: The Lifelong Playbook & Bridge Scripts",
         act_4_desc: "Tailored couple rules, growth opportunities, and verbatim bridge scripts for difficult moments.",
+        act_5_title: "Act 5: Vibrational Resonance & Spiritual Orbit",
+        act_5_desc: "Dyadic consciousness spectrum: Hawkins Power vs. Force dynamics, mutual vibrational elevation, and spiritual harmony.",
         load_demo_profiles: "Load Live Demo Profiles (Tariq & Nour)",
-        report_dossier_title: "MatchWise Lite v2.5.2",
+        report_dossier_title: "MatchWise Lite v2.6.0",
         report_dossier_subtitle: "Executive Multi-Framework Behavioral & Relationship Dossier",
         executive_overview: "Executive Overview",
         hartman_card_title: "Hartman Motive Spectrum (Fuel & Motives)",
@@ -155,6 +159,9 @@ const TRANSLATIONS = {
         firo_card_title: "FIRO-B Interpersonal Exchange (Control & Affection)",
         gottman_card_title: "Gottman Emotional Safety & Four Horsemen Risk Radar",
         conflict_card_title: "Interactive Dyadic Conflict Cycle & Circuit Breaker",
+        consciousness_card_title: "Consciousness & Vibrational Resonance Spectrum (Hawkins & Hicks)",
+        hawkins_label: "Consciousness (Hawkins)",
+        hicks_label: "Emotional Set-Point (Hicks)",
         ai_provider_label: "AI Provider:",
         ai_key_label: "API Key (Optional for Built-in AI):",
         ai_key_help: "MatchWise Autonomous AI works 100% free with unlimited requests and zero setup. External API keys are optional.",
@@ -167,7 +174,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "MatchWise AI",
         start_desc: "Begin a structured 45-70 question session. Understand your individual communication patterns, attachment dynamics, and life priorities.",
         compare_desc: "Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.",
-        hero_badge: "v2.5.2 • AI-Powered Insights",
+        hero_badge: "v2.6.0 • Consciousness & AI Insights",
         parameter_label: "Parameter",
         radar_title: "Multivariable Compatibility Index (12 Axes)",
         bar_title: "Big Five / Temperament Alignment",
@@ -285,6 +292,8 @@ const TRANSLATIONS = {
         chapter_4_desc: "أنماط توماس-كيلمان ومؤشر غوتمان للأمان: كيف تتصرف في الأزمات وقواعد الحوار العادل.",
         chapter_5_title: "الفصل الخامس: منظومة القيم وبناء المستقبل",
         chapter_5_desc: "منظومة شوارتز للقيم والأولويات الحياتية: التوافق المالي، والأسري، ومسار الحياة المشترك.",
+        chapter_6_title: "الفصل السادس: طيف الوعي والرنين المشاعري",
+        chapter_6_desc: "خريطة هوكينز للوعي وسلم إبراهام هيكس الإرشادي: مستويات الوعي الروحي، والتردد المشاعري، ومرونة الارتقاء النفسي.",
         act_1_title: "المحور الأول: كيمياء اللقاء وتناغم الطاقة",
         act_1_desc: "كيف تتلاقى دوافعكما الأساسية وإيقاعكما اليومي لإنشاء طاقة مشتركة نابضة بالحياة.",
         act_2_title: "المحور الثاني: حساسية الاحتياجات الخفية",
@@ -293,8 +302,10 @@ const TRANSLATIONS = {
         act_3_desc: "تتبع مسار الخلاف التفاعلي: الشرارة، وردة الفعل الدفاعية، والخطوات الدقيقة لإعادة الهدوء.",
         act_4_title: "المحور الرابع: دليل الحوار المشترك وجسور التفاهم",
         act_4_desc: "القواعد الذهبية للزوجين، وفرص النمو، ونصوص الحوار الحرفية لنقاش المسائل الحساسة بودية.",
+        act_5_title: "المحور الخامس: الرنين المشاعري والمدار الروحي",
+        act_5_desc: "حقل الوعي الثنائي: ديناميكيات القوة مقابل القسر (هوكينز)، والارتقاء المشاعري المتبادل، والجاذبية الروحية.",
         load_demo_profiles: "تحميل الملفات التجريبية الحية (طارق ونور)",
-        report_dossier_title: "ماتش وايز لايت v2.5.2",
+        report_dossier_title: "ماتش وايز لايت v2.6.0",
         report_dossier_subtitle: "الملف التحليلي التنفيذي للتوافق النفسي والسلوكي والعاطفي",
         executive_overview: "نظرة عامة تنفيذية",
         hartman_card_title: "طيف دوافع هارتمان (الوقود النفسي والاحتياجات)",
@@ -304,6 +315,9 @@ const TRANSLATIONS = {
         firo_card_title: "تبادل العلاقات والقيادة والمودة (FIRO-B)",
         gottman_card_title: "مؤشر الأمان العاطفي ورادار فرسان الهلاك الأربعة",
         conflict_card_title: "دورة الخلاف التفاعلية وقاطع الدائرة لإعادة الهدوء",
+        consciousness_card_title: "طيف الوعي والرنين الترددي (هوكينز وهيكس)",
+        hawkins_label: "مستوى الوعي (هوكينز)",
+        hicks_label: "المحاذاة المشاعرية (هيكس)",
         ai_provider_label: "مزود الذكاء الاصطناعي:",
         ai_key_label: "مفتاح الربط (اختياري للذكاء المدمج المجاني):",
         ai_key_help: "الذكاء الاصطناعي المدمج في ماتش وايز مجاني 100% بلا حدود وبلا حاجة لأي إعدادات أو مفاتيح خارجية.",
@@ -316,7 +330,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "ذكاء ماتش وايز",
         start_desc: "ابدأ جلسة تقييم متقدمة من 45 إلى 70 سؤالاً تفاعلياً لفهم أنماط التواصل، وديناميكية الارتباط العاطفي، والأولويات الحياتية.",
         compare_desc: "حمّل أو استورد ملفات التقييم المكتملة لإنشاء تقرير توافق شامل ومفصل متعدد الأبعاد وقابل للطباعة والتصدير.",
-        hero_badge: "v2.5.2 • رؤى مدعومة بالذكاء الاصطناعي",
+        hero_badge: "v2.6.0 • رؤى الوعي والذكاء الاصطناعي",
         parameter_label: "المؤشر / المعيار",
         radar_title: "مؤشر التوافق متعدد الأبعاد (12 محوراً)",
         bar_title: "محاذاة السمات الخمس الكبرى",
@@ -565,7 +579,7 @@ const Cryptography = {
                     created_at: new Date().toLocaleDateString("en-US", {
                         year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                     }),
-                    app_version: "v2.5.2",
+                    app_version: "v2.6.0",
                     calculated_personality: null,
                     assessment_confidence: 85
                 };

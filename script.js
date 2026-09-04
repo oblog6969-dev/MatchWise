@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2
+ * MatchWise Lite v2.6.0
  * script.js - Core SPA Coordinator & Adaptive Question Engine
  */
 
@@ -123,6 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
         gottmanGaugeContainer: document.getElementById("gottmanGaugeContainer"),
         dyadicConflictLoopContainer: document.getElementById("dyadicConflictLoopContainer"),
         dyadicConflictCard: document.getElementById("dyadicConflictCard"),
+        consciousnessSpectrumContainer: document.getElementById("consciousnessSpectrumContainer"),
+        hawkinsBadgeA: document.getElementById("hawkinsBadgeA"),
+        hawkinsBadgeB: document.getElementById("hawkinsBadgeB"),
+        hicksBadgeA: document.getElementById("hicksBadgeA"),
+        hicksBadgeB: document.getElementById("hicksBadgeB"),
         
         chapter1Badge: document.getElementById("chapter1Badge"),
         chapter1Title: document.getElementById("chapter1Title"),
@@ -505,6 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Children & Parenting": "الأطفال والتربية",
         "Cultural & Spiritual": "القيم الروحية والثقافية",
         "Aesthetic Alignment": "التناغم الشكلي والجمالي",
+        "Awareness & Consciousness": "طيف الوعي والرنين الترددي",
         "Communication": "أسلوب التواصل",
         "Conflict": "إدارة الخلافات",
         "Money": "التوافق المالي",
@@ -1008,7 +1014,7 @@ document.addEventListener("DOMContentLoaded", () => {
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v2.5.2",
+            app_version: "v2.6.0",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence
@@ -1362,6 +1368,17 @@ document.addEventListener("DOMContentLoaded", () => {
             renderFiroExchange(dom.firoExchangeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
             renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsA, null, true, profileA.owner_name, null, isAr);
 
+            // Populate Awareness Badges & Spectrum
+            if (dom.hawkinsBadgeA) {
+                dom.hawkinsBadgeA.textContent = isAr ? (traitsA.consciousness?.hawkins?.level_ar || "المنطق (400)") : (traitsA.consciousness?.hawkins?.level || "Reason (400)");
+            }
+            if (dom.hawkinsBadgeB) dom.hawkinsBadgeB.textContent = "--";
+            if (dom.hicksBadgeA) {
+                dom.hicksBadgeA.textContent = isAr ? (traitsA.consciousness?.hicks?.state_ar || "التوقع الإيجابي") : (traitsA.consciousness?.hicks?.state || "Positive Expectation");
+            }
+            if (dom.hicksBadgeB) dom.hicksBadgeB.textContent = "--";
+            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsA, null, true, profileA.owner_name, null, isAr);
+
             // Render Relationship Operating Manual for Person A
             renderOperatingManual(profileA, null, isAr);
 
@@ -1528,6 +1545,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 dom.gottmanBadgeB.textContent = `${traitsCompB.gottman_safety?.emotional_safety_index || 80}%`;
             }
 
+            if (dom.hawkinsBadgeA && dom.hawkinsBadgeB) {
+                dom.hawkinsBadgeA.textContent = isAr ? (traitsCompA.consciousness?.hawkins?.level_ar || "القبول (350)") : (traitsCompA.consciousness?.hawkins?.level || "Acceptance (350)");
+                dom.hawkinsBadgeB.textContent = isAr ? (traitsCompB.consciousness?.hawkins?.level_ar || "المنطق (400)") : (traitsCompB.consciousness?.hawkins?.level || "Reason (400)");
+            }
+            if (dom.hicksBadgeA && dom.hicksBadgeB) {
+                dom.hicksBadgeA.textContent = isAr ? (traitsCompA.consciousness?.hicks?.state_ar || "التفاؤل") : (traitsCompA.consciousness?.hicks?.state || "Optimism");
+                dom.hicksBadgeB.textContent = isAr ? (traitsCompB.consciousness?.hicks?.state_ar || "التوقع الإيجابي") : (traitsCompB.consciousness?.hicks?.state || "Positive Expectation");
+            }
+
             // Render Interactive Multi-Framework SVG Visualizers for Comparison View
             renderHartmanDonut(dom.hartmanChartContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
             renderDiscQuadrantMap(dom.discQuadrantContainer, traitsCompA.disc, traitsCompB.disc, false, profileA.owner_name, profileB.owner_name, isAr);
@@ -1536,6 +1562,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderFiroExchange(dom.firoExchangeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
             renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
             renderDyadicConflictLoop(dom.dyadicConflictLoopContainer, report, profileA, profileB, isAr);
+            renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsCompA, traitsCompB, false, profileA.owner_name, profileB.owner_name, isAr);
 
             // Render Relationship Operating Manual for BOTH
             renderOperatingManual(profileA, profileB, isAr);
@@ -2292,6 +2319,133 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         container.appendChild(loopWrapper);
+    }
+
+    // 8. Consciousness & Vibrational Guidance Spectrum (Hawkins & Hicks)
+    function renderConsciousnessSpectrum(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const cA = traitsA?.consciousness || {
+            hawkins: { score: 360, level: "Acceptance (350)", level_ar: "القبول (350)", is_above_200: true, domain: "Power", domain_ar: "القوة الروحية البنّاءة (Power)" },
+            hicks: { level: 4, state: "Positive Expectation", state_ar: "التوقع الإيجابي", tier: "High Alignment", tier_ar: "محاذاة عليا" },
+            stress_floor: { loc: 250 },
+            pivot_agility: { score: 85, rating_en: "Rapid & Resilient", rating_ar: "سريع ومرن" }
+        };
+        const cB = traitsB?.consciousness || (isSingle ? null : {
+            hawkins: { score: 310, level: "Willingness (310)", level_ar: "الاستعداد (310)", is_above_200: true, domain: "Power", domain_ar: "القوة الروحية البنّاءة (Power)" },
+            hicks: { level: 5, state: "Optimism", state_ar: "التفاؤل", tier: "Constructive Harmony", tier_ar: "تناغم بنّاء" },
+            stress_floor: { loc: 200 },
+            pivot_agility: { score: 80, rating_en: "Rapid & Resilient", rating_ar: "سريع ومرن" }
+        });
+
+        const locA = cA.hawkins.score;
+        const locB = cB ? cB.hawkins.score : locA;
+        const hicksA = cA.hicks.level;
+        const hicksB = cB ? cB.hicks.level : hicksA;
+
+        // Calculate horizontal positions (Scale 20 to 600 -> 4% to 96%)
+        const getLocPct = (score) => Math.max(4, Math.min(96, Math.round(((score - 20) / 580) * 100)));
+        const pctA = getLocPct(locA);
+        const pctB = cB ? getLocPct(locB) : 0;
+
+        // Hicks percentage (Level 1 is 96%, Level 22 is 4%)
+        const getHicksPct = (lvl) => Math.max(4, Math.min(96, Math.round(100 - ((lvl - 1) / 21) * 92)));
+        const hicksPctA = getHicksPct(hicksA);
+        const hicksPctB = cB ? getHicksPct(hicksB) : 0;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "consciousness-spectrum-wrapper";
+        wrapper.style.cssText = "width: 100%; max-width: 650px; margin: 0 auto; padding: 12px 0;";
+
+        const titleHawkins = isAr ? "1. سلم مستويات الوعي (د. ديفيد هوكينز - Map of Consciousness)" : "1. Map of Consciousness Spectrum (Dr. David R. Hawkins)";
+        const titleHicks = isAr ? "2. السلم التوجيهي للمشاعر (إبراهام هيكس - Emotional Guidance Scale)" : "2. Emotional Guidance Scale (Abraham Hicks)";
+        const thresholdLabel = isAr ? "عتبة الشجاعة (200) • الفاصل بين القوة والقسر" : "200 Courage Threshold • Force vs. Power";
+
+        wrapper.innerHTML = `
+            <!-- HAWKINS SCALE -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; font-size: 0.88rem;">${titleHawkins}</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">20 — 600+</span>
+                </div>
+                
+                <!-- Calibrated Spectrum Track -->
+                <div style="position: relative; height: 26px; border-radius: 13px; background: linear-gradient(to right, #64748b 0%, #ef4444 20%, #f97316 32%, #22c55e 40%, #06b6d4 65%, #a855f7 90%, #eab308 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);">
+                    <!-- 200 Courage Marker -->
+                    <div style="position: absolute; left: ${getLocPct(200)}%; top: -6px; bottom: -6px; width: 3px; background: #ffffff; box-shadow: 0 0 6px rgba(0,0,0,0.5); z-index: 5;">
+                        <span style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: 800; background: var(--bg-secondary); padding: 1px 4px; border-radius: 4px; border: 1px solid var(--border-color); white-space: nowrap;">200</span>
+                    </div>
+
+                    <!-- Marker A -->
+                    <div style="position: absolute; left: ${pctA}%; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800;" title="${nameA}: ${locA}">A</div>
+
+                    <!-- Marker B (if comparison) -->
+                    ${!isSingle && cB ? `
+                        <div style="position: absolute; left: ${pctB}%; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800;" title="${nameB}: ${locB}">B</div>
+                    ` : ''}
+                </div>
+
+                <!-- Labels below Hawkins Track -->
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px;">
+                    <span>${isAr ? "الخوف والذنب (<100)" : "Force: Fear / Guilt (<100)"}</span>
+                    <span style="font-weight: 700; color: var(--accent-color);">${thresholdLabel}</span>
+                    <span>${isAr ? "المحبة والسلام (500+)" : "Power: Love / Peace (500+)"}</span>
+                </div>
+
+                <!-- Hawkins Numerical Badges -->
+                <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
+                    <div style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; border-radius: 8px; padding: 4px 10px;">
+                        <strong>${nameA}</strong>: ${locA} • ${isAr ? cA.hawkins.level_ar : cA.hawkins.level} (${isAr ? cA.hawkins.domain_ar : cA.hawkins.domain})
+                    </div>
+                    ${!isSingle && cB ? `
+                        <div style="background: rgba(245,158,11,0.1); border: 1px solid #f59e0b; border-radius: 8px; padding: 4px 10px;">
+                            <strong>${nameB}</strong>: ${locB} • ${isAr ? cB.hawkins.level_ar : cB.hawkins.level} (${isAr ? cB.hawkins.domain_ar : cB.hawkins.domain})
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+
+            <!-- HICKS EMOTIONAL GUIDANCE SCALE -->
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; font-size: 0.88rem;">${titleHicks}</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">1 (Joy) — 22 (Fear)</span>
+                </div>
+
+                <!-- Hicks Vibrational Gradient Track -->
+                <div style="position: relative; height: 18px; border-radius: 9px; background: linear-gradient(to right, #475569 0%, #dc2626 25%, #d97706 45%, #65a30d 70%, #10b981 85%, #f59e0b 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);">
+                    <!-- Marker A -->
+                    <div style="position: absolute; left: ${hicksPctA}%; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: #10b981; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800;">A</div>
+
+                    <!-- Marker B (if comparison) -->
+                    ${!isSingle && cB ? `
+                        <div style="position: absolute; left: ${hicksPctB}%; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: #f59e0b; border: 2px solid #ffffff; box-shadow: 0 0 6px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.6rem; font-weight: 800;">B</div>
+                    ` : ''}
+                </div>
+
+                <!-- Labels below Hicks Track -->
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-top: 5px;">
+                    <span>${isAr ? "مقاومة حادة / عجز (15-22)" : "Heavy Resistance (15-22)"}</span>
+                    <span>${isAr ? "احتكاك / تردد (8-14)" : "Friction / Doubt (8-14)"}</span>
+                    <span>${isAr ? "تناغم وتدفق عالي (1-7)" : "High Alignment / Joy (1-7)"}</span>
+                </div>
+
+                <!-- Hicks Detail Badges -->
+                <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
+                    <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
+                        <strong>${nameA}</strong>: ${isAr ? cA.hicks.state_ar : cA.hicks.state} (Lv ${hicksA}) • ${isAr ? cA.pivot_agility.rating_ar : cA.pivot_agility.rating_en}
+                    </div>
+                    ${!isSingle && cB ? `
+                        <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
+                            <strong>${nameB}</strong>: ${isAr ? cB.hicks.state_ar : cB.hicks.state} (Lv ${hicksB}) • ${isAr ? cB.pivot_agility.rating_ar : cB.pivot_agility.rating_en}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(wrapper);
     }
 
     // --- 10. MULTI-VARIABLE RADAR CHART (CHART.JS & RESPONSIVE SVG) ---

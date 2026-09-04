@@ -1,5 +1,5 @@
 /* ==========================================
-   MatchWise Lite v2.5.2
+   MatchWise Lite v2.6.0
    Premium Apple-Like Responsive Design System
    ========================================== */
 
@@ -1160,18 +1160,25 @@ body.rtl .report-table th, body.rtl .report-table td {
     margin-bottom: 32px;
 }
 
-.chart-card {
+.chart-card, .interactive-chart-card {
     background-color: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 24px;
 }
 
-.chart-card h4 {
+.chart-card h4, .interactive-chart-card h4 {
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 16px;
     text-align: center;
+}
+
+.chart-center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .chart-container {

@@ -2416,5 +2416,563 @@
         }
       }
     ]
+  },
+  {
+    "id": "q76",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "awareness_trigger_reflex",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: During a tense disagreement, your partner says something uncharacteristically sharp that stings. Your immediate internal reaction is to:"
+    },
+    "arabic": {
+      "text": "سيناريو: أثناء نقاش متوتر، قال شريكك كلمة حادة وغير معتادة جرحت مشاعرك. ردة فعلك الداخلية التلقائية هي:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Pause, take a conscious breath, and realize their sharpness reflects their temporary inner distress rather than my worth.",
+        "arabic": "التوقف وأخذ نفس واعٍ، وإدراك أن حدته تعكس ضيقه الداخلي اللحظي وليس تقليلاً من قيمتي الشخصية.",
+        "trait_scores": {
+          "hawkins_loc": 400,
+          "hicks_level": 4,
+          "gottman_repair_receptivity": 3,
+          "attachment_secure": 3,
+          "emotional_regulation": 2.5,
+          "birkman_need_empathy": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Feel an immediate surge of irritation and counter-attack to defend myself and point out their unfairness.",
+        "arabic": "الشعور بانزعاج فوري والرد بهجوم مضاد للدفاع عن نفسي وإثبات خطئه وتجاوزه.",
+        "trait_scores": {
+          "hawkins_loc": 150,
+          "hicks_level": 10,
+          "gottman_defensiveness_risk": 3.5,
+          "tki_competing": 3,
+          "attachment_anxious": 2,
+          "birkman_stress_defensive": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Shut down completely, withdraw into cold silence, and mentally replay how unappreciated I feel.",
+        "arabic": "الانغلاق التام، والانسحاب في صمت بارد، واجترار الأفكار حول عدم تقديري وظلم الموقف لي.",
+        "trait_scores": {
+          "hawkins_loc": 75,
+          "hicks_level": 15,
+          "gottman_stonewalling_risk": 3.5,
+          "tki_avoiding": 3,
+          "attachment_avoidant": 3,
+          "birkman_stress_withdrawing": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q77",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "awareness_adversity_mindset",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: An unexpected financial or domestic crisis disrupts your joint plans. What is your dominant emotional set-point?"
+    },
+    "arabic": {
+      "text": "سيناريو: حدثت أزمة مالية أو ظرف منزلي مفاجئ أربك كل خططكم المستقبلية. ما هي حالتك الشعورية التلقائية المهيمنة؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Grounded confidence that solutions exist, viewing the crisis as a shared challenge that will strengthen our teamwork.",
+        "arabic": "ثقة راسخة بوجود الحلول، واعتبار الأزمة تحدياً مشتركاً سيعزز نضجنا وتكاتفنا وتكاملنا.",
+        "trait_scores": {
+          "hawkins_loc": 350,
+          "hicks_level": 5,
+          "conscientiousness": 2,
+          "hartman_red": 1.5,
+          "attachment_secure": 2.5,
+          "future_stability": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Anxiety, repetitive catastrophic thoughts, and a pressing urge to control every single detail rigidly.",
+        "arabic": "قلق مستمر، وتفكير في أسوأ السيناريوهات، ورغبة ملحة في السيطرة القهرية على كل التفاصيل.",
+        "trait_scores": {
+          "hawkins_loc": 100,
+          "hicks_level": 14,
+          "neuroticism": 3,
+          "firo_exp_ctrl": 2.5,
+          "attachment_anxious": 3,
+          "birkman_stress_demanding": 2.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "A feeling of defeat and resentment, wondering why bad luck and unfair burdens always follow us.",
+        "arabic": "شعور بالهزيمة والإحباط والتذمر، والتساؤل بحسرة لماذا تلاحقنا المتاعب دائماً.",
+        "trait_scores": {
+          "hawkins_loc": 50,
+          "hicks_level": 16,
+          "neuroticism": 3.5,
+          "tki_avoiding": 2,
+          "birkman_stress_withdrawing": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "q78",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "awareness_partner_flaws",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Your partner repeatedly struggles with an annoying personal habit (e.g., disorganization or tardiness). How do you genuinely perceive them?"
+    },
+    "arabic": {
+      "text": "سيناريو: يعاني شريكك بشكل متكرر من عادة شخصية تزعجك (مثل الفوضوية أو التأخر). ما هي نظرتك الحقيقية العميقة له؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "With compassionate acceptance: they are human, their strengths vastly outweigh this habit, and I embrace them as a whole.",
+        "arabic": "بصبر وقبول متفهم: هو إنسان لديه جوانب نقص كما لديّ، ومحاسنه تفوق هذا العيب، وأقبله ككل دون شروط.",
+        "trait_scores": {
+          "hawkins_loc": 500,
+          "hicks_level": 1,
+          "gottman_repair_receptivity": 3,
+          "agreeableness": 3,
+          "attachment_secure": 3,
+          "hartman_blue": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "With subtle superiority and exasperation: 'Why can't they just be disciplined and thoughtful like me?'",
+        "arabic": "بنوع من الاستعلاء ونفاد الصبر: 'لماذا لا يكون منظماً ومسؤولاً مثلي؟ الأمر ليس معقداً!'",
+        "trait_scores": {
+          "hawkins_loc": 175,
+          "hicks_level": 10,
+          "gottman_contempt_risk": 4,
+          "gottman_criticism_risk": 3.5,
+          "hartman_red": 2,
+          "birkman_stress_demanding": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "As an unfixable burden that makes me resentful and hopeless about our domestic future.",
+        "arabic": "كعبء دائم لا أمل في إصلاحه، مما يولد لدي استياءً مزمناً ويأساً من الراحة المشتركة.",
+        "trait_scores": {
+          "hawkins_loc": 75,
+          "hicks_level": 12,
+          "gottman_contempt_risk": 3,
+          "gottman_stonewalling_risk": 2.5,
+          "attachment_avoidant": 2.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q79",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "awareness_recovery_velocity",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: After a resolved disagreement, how long does the negative emotional residue linger inside you?"
+    },
+    "arabic": {
+      "text": "سيناريو: بعد انتهاء خلاف بينكما والاتفاق على حله، كم من الوقت يستمر الأثر العاطفي السلبي في داخلك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "It dissolves very quickly; once understood, I easily return to warm affection, appreciation, and lightheartedness.",
+        "arabic": "يتلاشى سريعاً جداً؛ بمجرد التفاهم أعود بسهولة إلى المودة والدفء والمرح الصادق دون ترسبات.",
+        "trait_scores": {
+          "hawkins_loc": 400,
+          "hicks_level": 2,
+          "emotional_regulation": 3.5,
+          "agreeableness": 2.5,
+          "gottman_repair_receptivity": 3,
+          "hartman_yellow": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I need several hours or a full day to cool down, remaining cautious and slightly guarded before fully warming up.",
+        "arabic": "أحتاج عدة ساعات أو يوماً كاملاً ليهدأ خاطري، وأبقى حذراً ومتحفظاً قبل أن أصفو تماماً.",
+        "trait_scores": {
+          "hawkins_loc": 250,
+          "hicks_level": 7,
+          "birkman_need_freedom": 2,
+          "communication_reserved": 2,
+          "attachment_avoidant": 1.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "It festers for days or weeks; I hold onto the grievance and mentally bring it up in subsequent disagreements.",
+        "arabic": "يستمر لأيام أو أسابيع؛ أحتفظ بالعتب في صدري، وأستحضره في الخلافات التالية مع شعور بالمرارة.",
+        "trait_scores": {
+          "hawkins_loc": 125,
+          "hicks_level": 18,
+          "neuroticism": 3.5,
+          "gottman_defensiveness_risk": 3.5,
+          "attachment_anxious": 3,
+          "birkman_stress_defensive": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q80",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "awareness_emotional_sovereignty",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Your partner comes home in an irritable, foul mood. How does this affect your own inner equilibrium?"
+    },
+    "arabic": {
+      "text": "سيناريو: عاد شريكك إلى المنزل وهو في مزاج عكر وسلبي ومنزعج. كيف يؤثر ذلك على توازنك النفسي الداخلي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I hold my calm space with quiet compassion; their bad mood does not dictate my peace, and I can be a loving anchor.",
+        "arabic": "أحافظ على هدوئي بتعاطف رحب؛ مزاجه السيئ لا يسلبني سلامي الداخلي، وأكون سنداً مطمئناً له.",
+        "trait_scores": {
+          "hawkins_loc": 500,
+          "hicks_level": 1,
+          "emotional_regulation": 4,
+          "attachment_secure": 3.5,
+          "hartman_white": 2,
+          "firo_exp_aff": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "My mood immediately drops or spikes into irritation; I feel annoyed that they ruined the atmosphere.",
+        "arabic": "يهبط مزاجي فوراً أو أنفعل؛ أشعر بالانزعاج لأنه أفسد أجواء المساء أو أشعر بتوتر وتأثر سريع.",
+        "trait_scores": {
+          "hawkins_loc": 150,
+          "hicks_level": 11,
+          "neuroticism": 3,
+          "attachment_anxious": 3,
+          "birkman_stress_demanding": 2.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I feel anxious and walk on eggshells, fearing their negativity might turn into criticism directed at me.",
+        "arabic": "أشعر بتهديد وقلق شديد، وأمشي بحذر مفرط خوفاً من أن ينقلب ضيقه إلى هجوم أو لوم ضدي.",
+        "trait_scores": {
+          "hawkins_loc": 100,
+          "hicks_level": 21,
+          "neuroticism": 3.5,
+          "attachment_anxious": 3.5,
+          "gottman_defensiveness_risk": 2
+        }
+      }
+    ]
+  },
+  {
+    "id": "q81",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "awareness_feedback_receptivity",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Your partner gently expresses that a specific habit of yours makes them feel neglected. Your instinct is to:"
+    },
+    "arabic": {
+      "text": "سيناريو: عبّر شريكك بلطف عن أن تصرفاً معيناً منك يجعله يشعر بالإهمال أو البعد. ما هو تصرفك التلقائي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Listen with genuine curiosity and empathy, validating their feelings and asking how we can grow closer.",
+        "arabic": "الاستماع بفضول وقلب مفتوح، وتفهم مشاعره بصدق وسؤاله بمحبة: 'كيف يمكنني أن أجعلك تشعر باهتمامي؟'",
+        "trait_scores": {
+          "hawkins_loc": 350,
+          "hicks_level": 3,
+          "gottman_repair_receptivity": 4,
+          "agreeableness": 3,
+          "attachment_secure": 3,
+          "communication_assertive": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Immediately recount all my sacrifices, accusing them of being ungrateful and demanding too much.",
+        "arabic": "سرد كل تضحياتي وما أقدمه فوراً، واتهامه بنكران الجميل أو المبالغة والطلبات المرهقة.",
+        "trait_scores": {
+          "hawkins_loc": 175,
+          "hicks_level": 15,
+          "gottman_defensiveness_risk": 4,
+          "tki_competing": 3,
+          "birkman_stress_defensive": 3.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Feel overwhelmed with self-blame or inadequacy, feeling like I can never satisfy their standards.",
+        "arabic": "الشعور بانسحاق وجلد ذات أو ذنب خانق، والإحساس بأنني شريك مقصر لا يمكنني إرضاؤه أبداً.",
+        "trait_scores": {
+          "hawkins_loc": 30,
+          "hicks_level": 21,
+          "neuroticism": 4,
+          "attachment_anxious": 3,
+          "birkman_stress_withdrawing": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q82",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.3,
+    "trait": "awareness_evolution_mindset",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Over years of marriage, individuals naturally evolve new interests and insights. How do you welcome this personal change?"
+    },
+    "arabic": {
+      "text": "سيناريو: عبر سنوات الزواج، يتغير الإنسان وتتطور اهتماماته ونظرته للأمور. كيف تنظر إلى هذا التطور في شريكك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "With excitement and wonder; a fulfilling relationship supports continuous mutual self-discovery and expansion.",
+        "arabic": "بشغف وترحيب؛ فالعلاقة الصحية هي التي تدعم نمو كل طرف وتجدد اكتشافنا المستمر لبعضنا البعض.",
+        "trait_scores": {
+          "hawkins_loc": 400,
+          "hicks_level": 2,
+          "openness": 3.5,
+          "schwartz_self_direction": 3,
+          "marriage_growth": 3,
+          "hartman_yellow": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "With caution; I prefer life to remain predictable and worry that new interests might dilute our shared rituals.",
+        "arabic": "بحذر وتحفظ؛ أفضّل بقاء الأمور كما عهدناها وأقلق من أن تؤثر اهتماماته الجديدة على استقرارنا.",
+        "trait_scores": {
+          "hawkins_loc": 200,
+          "hicks_level": 8,
+          "schwartz_security": 3,
+          "schwartz_tradition": 2.5,
+          "birkman_need_structure": 2.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "With resentment or suspicion, viewing personal shifts as a departure from our initial commitments.",
+        "arabic": "بريبة واستياء، واعتبار أي تغيير تمرداً أو ابتعاداً أو خروجاً عن العهد والاتفاق الأصلي.",
+        "trait_scores": {
+          "hawkins_loc": 125,
+          "hicks_level": 17,
+          "firo_exp_ctrl": 3.5,
+          "gottman_criticism_risk": 3,
+          "birkman_stress_demanding": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q83",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "awareness_transcendent_forgiveness",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When your partner makes a genuine mistake and sincerely apologizes, how does your heart process it?"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما يقع شريكك في خطأ غير مقصود ويعتذر عنه بصدق وحرقة، كيف يتعامل قلبك مع الأمر؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I forgive fully and cleanly; the mistake is completely dissolved and never weaponized in future arguments.",
+        "arabic": "أسامح بصفاء وتجاوز تام؛ يُمحى الخطأ ولا يُخزن كورقة ضغط أو تذكير مؤلم في الخلافات القادمة.",
+        "trait_scores": {
+          "hawkins_loc": 500,
+          "hicks_level": 1,
+          "gottman_repair_receptivity": 4,
+          "agreeableness": 3.5,
+          "attachment_secure": 3.5,
+          "hartman_white": 2
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I accept the apology verbally, but keep a cautious mental tally in my mind just in case it recurs.",
+        "arabic": "أقبل الاعتذار ظاهرياً، لكن أحتفظ بسجل داخلي في ذاكرتي ليكون جاهزاً إذا تكرر الموقف.",
+        "trait_scores": {
+          "hawkins_loc": 175,
+          "hicks_level": 13,
+          "gottman_defensiveness_risk": 2.5,
+          "firo_wnt_ctrl": 2.5,
+          "birkman_stress_defensive": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I withhold warmth and intimacy to ensure they feel the weight of their error before granting peace.",
+        "arabic": "أمنع عنه الود والمشاعر لفترة حتى يشعر بحجم خطئه وقسوة ما فعل قبل أن أرضى عنه.",
+        "trait_scores": {
+          "hawkins_loc": 150,
+          "hicks_level": 18,
+          "gottman_contempt_risk": 4,
+          "tki_competing": 3.5,
+          "firo_exp_ctrl": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q84",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "awareness_giving_vibration",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: In daily gestures of affection, care, and practical support, what is your underlying emotional energy?"
+    },
+    "arabic": {
+      "text": "سيناريو: في تصرفات المودة اليومية والاهتمام وتقديم الرعاية والهدايا، ما هي طاقتك النفسية الحقيقية؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Pure joy of giving: enriching my partner's life is inherently rewarding and requires zero score-keeping.",
+        "arabic": "بهجة العطاء الخالص: إدخال السرور على قلبه يغذيني ويسعدني تلقائياً دون انتظار مقابل أو تسجيل نقاط.",
+        "trait_scores": {
+          "hawkins_loc": 500,
+          "hicks_level": 1,
+          "schwartz_benevolence": 4,
+          "agreeableness": 3.5,
+          "hartman_blue": 3,
+          "attachment_secure": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "A balanced reciprocity: I give generously, but I consciously expect a comparable level of effort in return.",
+        "arabic": "توازن شراكة عادل: أعطي بصدق، لكنني أتوقع بشكل واعٍ مقابلاً ومبادلة مماثلة تحفظ توازن العلاقة.",
+        "trait_scores": {
+          "hawkins_loc": 250,
+          "hicks_level": 7,
+          "schwartz_achievement": 2,
+          "conscientiousness": 2,
+          "hartman_red": 1.5,
+          "firo_wnt_aff": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Anxious obligation or tactical leverage: I give so they won't leave or to establish a moral credit.",
+        "arabic": "قلق أو ورقة ضغط: أقدم الاهتمام خوفاً من أن يبتعد عني، أو ليكون لي فضل ورصيد عنده عند الحاجة.",
+        "trait_scores": {
+          "hawkins_loc": 125,
+          "hicks_level": 20,
+          "attachment_anxious": 4,
+          "neuroticism": 3,
+          "firo_exp_ctrl": 2.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q85",
+    "category": "Awareness & Consciousness",
+    "type": "scenario",
+    "weight": 1.6,
+    "trait": "awareness_transmuting_conflict",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When you realize in the heat of an argument that you are technically right, but pressing it will humiliate your partner, you:"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما تكتشف في خضم نقاش ساخن أنك على حق تماماً، لكن إثبات ذلك سيحرج شريكك ويكسر خاطره، فإنك:"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Gently pivot toward connection and reassurance; protecting our emotional intimacy is infinitely more important than being right.",
+        "arabic": "تحوّل دفة الحديث بهدوء نحو المودة والتفهم المشترك؛ فحماية الرابط العاطفي أثمن بكثير من نشوة الانتصار وإثبات الصواب.",
+        "trait_scores": {
+          "hawkins_loc": 500,
+          "hicks_level": 1,
+          "gottman_repair_receptivity": 4,
+          "agreeableness": 4,
+          "tki_collaborating": 3.5,
+          "hartman_white": 2.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "State the facts calmly and dispassionately, allowing objective truth to speak for itself without emotional gloating.",
+        "arabic": "توضح الحقائق بموضوعية وهدوء دون سخرية، مع التركيز على الدقة والمنطق المجرد.",
+        "trait_scores": {
+          "hawkins_loc": 400,
+          "hicks_level": 6,
+          "mbti_t": 3,
+          "disc_c": 2.5,
+          "tki_compromising": 2.5,
+          "birkman_usual_structured": 2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Press your logical advantage and demand they concede, ensuring they acknowledge their misjudgment fully.",
+        "arabic": "تضغط بقوة وتثبت خطأه بالحجة القاطعة، وتصر على اعترافه بالخطأ والتقصير قبل إغلاق الموضوع.",
+        "trait_scores": {
+          "hawkins_loc": 175,
+          "hicks_level": 10,
+          "gottman_contempt_risk": 3.5,
+          "tki_competing": 4,
+          "hartman_red": 3,
+          "birkman_stress_demanding": 3
+        }
+      }
+    ]
   }
 ]

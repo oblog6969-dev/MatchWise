@@ -1,7 +1,7 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.5.2
-**Release Name:** Global Reach Google Translate Integration & Zero-Crash Multi-Language Experience  
+## Current Version: v2.6.0
+**Release Name:** Consciousness & Vibrational Alignment (David Hawkins LoC & Abraham Hicks Emotional Guidance)  
 **Date:** September 4, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
@@ -20,7 +20,7 @@
 | **M7: Clinical Archetype Profiles** | Pre-seeded Tariq Al-Mansoor & Nour Al-Sabah profiles for immediate live testing without manual answering. | ✅ Complete | Full Dyadic Verification (67%) |
 | **M8: Zero-Key AI & Bilingual Polish** | MatchWise Autonomous AI default (zero key required, unlimited requests) & seamless instant report language switching. | ✅ Complete | Browser & Node Tested |
 | **M9: Global Google Translate** | Seamless 100+ language translation, defensive Node DOM crash prevention, notranslate badges, Apple-grade UI dropdown. | ✅ Complete | End-to-End Browser Tested |
-
+| **M10: Consciousness & Resonance** | Hawkins Map of Consciousness (20-600+, 200 Courage threshold), Hicks 22-level Emotional Guidance, 10 polytomous questions (q76-q85), dual-ladder SVG visualizer, dyadic resonance. | ✅ Complete | Node & Browser Subagent Tested |
 
 ---
 
@@ -28,6 +28,8 @@
 
 | Framework | Implementation File | Key Metric Plotted | Visualization Type |
 | :--- | :--- | :--- | :--- |
+| **Hawkins Map of Consciousness** | `traits.js` / `compatibility.js` | Logarithmic score (20-600+), 200 Courage pivot, Force vs. Power | Calibrated Scale Spectrum with 200 Threshold Pin |
+| **Hicks Emotional Guidance Scale** | `traits.js` / `compatibility.js` | 22 Emotional set-points (1 Joy to 22 Fear), Pivot Agility, Alignment | Vibrational Gradient Continuum Bar |
 | **Hartman Color Code** | `traits.js` / `compatibility.js` | Red, Blue, White, Yellow motive breakdown | Interactive Multi-Color SVG Donut |
 | **DISC Assessment** | `traits.js` / `compatibility.js` | Fast vs. Steady Pace, Task vs. People Focus | 2x2 Quadrant Cartesian Matrix with Tempo Bridge |
 | **The Birkman Method** | `traits.js` / `compatibility.js` | Level 1: Usual Style, Level 2: Needs, Level 3: Stress | Tri-Layer Submerged Iceberg Cross-Section |

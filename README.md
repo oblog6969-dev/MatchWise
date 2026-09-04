@@ -1,18 +1,24 @@
-# MatchWise Lite v2.5.2
+# MatchWise Lite v2.6.0
 
-**MatchWise Lite v2.5.2** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, and Autonomous AI.
+**MatchWise Lite v2.6.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, and Autonomous AI.
 
 ---
 
-## 🌟 What's New in v2.5.2
+## 🌟 What's New in v2.6.0: Awareness & Consciousness Frameworks
 
-### 0. Global Reach Google Website Translator (100+ Languages)
+### 1. Hawkins Map of Consciousness & Abraham Hicks Emotional Guidance
+- **David Hawkins Map of Consciousness**: Logarithmic scale (20 to 600+) measuring spiritual awareness, emotional ownership, and the critical **200 Courage threshold** separating reactive **Force** (Pride, Anger, Desire, Fear, Grief, Apathy, Guilt, Shame) from life-affirming **Power** (Neutrality, Willingness, Acceptance, Reason, Love, Peace).
+- **Abraham Hicks Emotional Guidance Scale**: 22 calibrated vibrational set-points from Joy/Appreciation (Level 1) down to Fear/Despair (Level 22), identifying emotional pivots and resistance tiers.
+- **10 Deep Polytomous Diagnostic Questions (`q76`–`q85`)**: Clinical scenarios evaluating emotional triggers, forgiveness agility, score-keeping, ego transmutation, and non-defensive presence in conflict.
+- **Dual-Ladder Calibrated Spectrum Visualizer**: High-precision SVG visualizer displaying Hawkins LoC (with 200 Courage threshold marker) and Hicks vibrational gradient with pins for Partner A and Partner B.
+- **Dyadic Consciousness Dynamics**: Automated dyadic archetypes (*Mutual Power Harmony*, *Gravitational Consciousness Asymmetry*, *Dual Force Contraction Trap*), awareness deltas, and relationship guidance.
+
+### 2. Global Reach Google Website Translator (100+ Languages)
 - **Top Bar Language Switcher**: Fast one-click translation into 18 world languages plus Google's full 100+ language library.
 - **Zero-Crash SPA Protection**: Custom defensive `Node.prototype` patch preventing Google Translate text-wrapping from breaking single-page app DOM mutations.
 - **Psychometrics & Code Shield**: Complete `notranslate` protection for personality acronyms (MBTI, DISC, Hartman colors), score formulas, and encrypted result-sharing codes.
 
-
-### 1. Unified 10-Framework Psychometric Engine
+### 3. Unified Multi-Framework Psychometric Engine
 Maps responses polytomously across 10 validated behavioral and psychological frameworks:
 1. **Big Five Personality Model (OCEAN)**: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.
 2. **MBTI / Jungian Cognitive Functions**: Extroversion vs. Introversion, Sensing vs. Intuition, Thinking vs. Feeling, Judging vs. Perceiving.

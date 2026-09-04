@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2
+ * MatchWise Lite v2.6.0
  * compatibility.js - Multi-Framework Dyadic Relationship Compatibility Engine
  * Compares two psychological profiles across 12 standard relationship dimensions
  * plus 6 deep multi-framework behavioral interaction dynamics:
@@ -364,6 +364,69 @@ const CompatibilityEngine = {
         if (aesB.self_presentation && aesA.expect_presentation && aesB.self_presentation !== aesA.expect_presentation) aesScore -= 20;
         categoryScores["Aesthetic Alignment"] = Math.max(40, aesScore);
 
+        // --- 11. CONSCIOUSNESS & VIBRATIONAL RESONANCE (Hawkins & Hicks) ---
+        const cA = traitsA.consciousness || { hawkins: { score: 310, is_above_200: true }, hicks: { level: 6 } };
+        const cB = traitsB.consciousness || { hawkins: { score: 310, is_above_200: true }, hicks: { level: 6 } };
+
+        const locA = cA.hawkins.score;
+        const locB = cB.hawkins.score;
+        const locDiff = Math.abs(locA - locB);
+
+        const hicksA = cA.hicks.level;
+        const hicksB = cB.hicks.level;
+        const hicksDiff = Math.abs(hicksA - hicksB);
+
+        // Calculate Resonance score
+        let resonanceScore = 100 - (locDiff * 0.15) - (hicksDiff * 2.5);
+        if (cA.hawkins.is_above_200 && cB.hawkins.is_above_200) {
+            resonanceScore += 10;
+        } else if (!cA.hawkins.is_above_200 && !cB.hawkins.is_above_200) {
+            resonanceScore -= 15;
+        }
+        resonanceScore = Math.max(35, Math.min(98, Math.round(resonanceScore)));
+        categoryScores["Awareness & Consciousness"] = resonanceScore;
+
+        // Dyadic interaction dynamics analysis
+        let consciousnessArchetype = "";
+        let consciousnessSummaryEn = "";
+        let consciousnessSummaryAr = "";
+
+        if (cA.hawkins.is_above_200 && cB.hawkins.is_above_200) {
+            consciousnessArchetype = "Mutual Power Harmony";
+            consciousnessSummaryEn = "Both partners operate predominantly above the critical 200 Courage threshold in the domain of Power. Disagreements are met with emotional ownership, non-defensive curiosity, and rapid de-escalation.";
+            consciousnessSummaryAr = "يعمل كلا الشريكين فوق عتبة الشجاعة (200) في نطاق القوة الروحية البنّاءة. تُقابل الخلافات بمسؤولية ذاتية، وفضول غير دفاعي، وقدرة سريعة على كسر حدة التوتر وإعادة الهدوء.";
+            strengths.push({
+                en: "Conscious Emotional Attunement: Shared high-vibrational baseline minimizes toxic resentment and fosters mutual psychological sovereignty.",
+                ar: "تناغم شعوري واعٍ: أرضية مشتركة فوق عتبة الشجاعة والمسؤولية تحمي العلاقة من تراكم الأحقاد وتعزز الاحترام والنضج."
+            });
+        } else if (cA.hawkins.is_above_200 !== cB.hawkins.is_above_200) {
+            consciousnessArchetype = "Gravitational Consciousness Asymmetry";
+            const higherPerson = locA > locB ? profileA.owner_name : profileB.owner_name;
+            const lowerPerson = locA > locB ? profileB.owner_name : profileA.owner_name;
+            consciousnessSummaryEn = `${higherPerson} operates from constructive acceptance, while ${lowerPerson} tends to react from contracted self-protection (Force). The higher-vibration partner risks emotional exhaustion if they slip into a savior/parental dynamic.`;
+            consciousnessSummaryAr = `يعمل (${higherPerson}) من منطلق القبول والمسؤولية، بينما يميل (${lowerPerson}) لردود أفعال دفاعية منكمشة. قد يشعر الشريك الأكثر وعياً بالإرهاق إذا تحول لدور المنقذ أو الموجه الدائم.`;
+            challenges.push({
+                en: "Vibrational Asymmetry: Bridging the gap between emotional ownership and defensive blame requires clear boundary preservation.",
+                ar: "تفاوت في مستوى الوعي الانفعالي: الموازنة بين تحمل المسؤولية وبين الدفاعية التلقائية تتطلب صبراً وحفظاً للحدود النفسية."
+            });
+            growthOpportunities.push({
+                en: "The higher-awareness partner must maintain loving detachment without patronizing, while the other practices the 'pause before reaction' protocol.",
+                ar: "تدرب الشريك الأكثر هدوءاً على الاحتواء دون استعلاء أو دور المنقذ، وتدرب الطرف الآخر على التوقف لثوانٍ قبل الرد الانفعالي."
+            });
+        } else {
+            consciousnessArchetype = "Dual Force Contraction Trap";
+            consciousnessSummaryEn = "Both partners frequently operate below the 200 threshold under stress (Pride, Anger, or Fear). Disagreements risk deteriorating into competing defensiveness or mutual emotional abandonment.";
+            consciousnessSummaryAr = "يميل كلا الشريكين إلى العمل تحت عتبة 200 أثناء الضغط (الكبرياء، الغضب، أو الخوف). هناك خطر تصاعد الخلافات إلى منافسة في الدفاعية أو انسحاب عاطفي متبادل.";
+            challenges.push({
+                en: "Defensive Escalation Risk: Both partners tend to project blame outward, turning minor domestic friction into ego-defense battles.",
+                ar: "احتمالية تصعيد الدفاعية: ميل الشريكين لإلقاء اللوم خارجياً يحول الخلافات البسيطة إلى معارك لإثبات الصواب والدفاع عن النفس."
+            });
+            growthOpportunities.push({
+                en: "Adopt the 'One-Voice Pause' agreement: the moment either feels defensive, both stop talking and state their vulnerability rather than their accusation.",
+                ar: "تبني اتفاقية 'وقف التصعيد الفوري': بمجرد شعور أي طرف بالدفاعية، يتوقف كلاهما للتعبير عن المشاعر بدلاً من توجيه الاتهامات."
+            });
+        }
+
         // --- OVERALL COMPATIBILITY INDEX CALCULATION ---
         const scoresArr = Object.values(categoryScores);
         let avg = scoresArr.reduce((a, b) => a + b, 0) / scoresArr.length;
@@ -456,6 +519,18 @@ const CompatibilityEngine = {
                     style_a: attA,
                     style_b: attB,
                     is_anxious_avoidant_trap: (attA === "anxious" && attB === "avoidant") || (attB === "anxious" && attA === "avoidant")
+                },
+                consciousness_spectrum: {
+                    score: resonanceScore,
+                    archetype: consciousnessArchetype,
+                    loc_a: locA,
+                    loc_b: locB,
+                    loc_diff: locDiff,
+                    hicks_a: hicksA,
+                    hicks_b: hicksB,
+                    hicks_diff: hicksDiff,
+                    summary_en: consciousnessSummaryEn,
+                    summary_ar: consciousnessSummaryAr
                 },
                 fair_fighting_rules: fairFightingRules
             }

@@ -80,7 +80,17 @@
     "q72": "opt2",
     "q73": "opt1",
     "q74": "opt1",
-    "q75": "opt3"
+    "q75": "opt3",
+    "q76": "opt2",
+    "q77": "opt2",
+    "q78": "opt2",
+    "q79": "opt1",
+    "q80": "opt1",
+    "q81": "opt1",
+    "q82": "opt2",
+    "q83": "opt1",
+    "q84": "opt2",
+    "q85": "opt2"
   },
   "calculated_personality": {
     "big_five": {
@@ -307,6 +317,35 @@
         "benevolence": 14,
         "hedonism": 6,
         "achievement": 17
+      }
+    },
+    "consciousness": {
+      "hawkins": {
+        "score": 305,
+        "level": "Neutrality & Trust (250)",
+        "level_ar": "الحياد والثقة (250)",
+        "view_of_life": "Satisfactory / Feasible",
+        "view_of_life_ar": "مُرضٍ ومريح",
+        "is_above_200": true,
+        "domain": "Power",
+        "domain_ar": "القوة الروحية البنّاءة (Power)",
+        "power_ratio": 70
+      },
+      "hicks": {
+        "level": 6,
+        "state": "Hopefulness",
+        "state_ar": "الرجاء والأمل",
+        "tier": "Constructive Harmony",
+        "tier_ar": "تناغم بنّاء"
+      },
+      "stress_floor": {
+        "loc": 100,
+        "is_above_200": false
+      },
+      "pivot_agility": {
+        "score": 79,
+        "rating_en": "Rapid & Resilient",
+        "rating_ar": "سريع ومرن"
       }
     }
   },

@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2 AI Service
+ * MatchWise Lite v2.6.0 AI Service
  * Multi-Provider Clinical & Psychometric Orchestration:
  * 1. MatchWise Autonomous AI (Built-in Free / No Key Required / Unlimited Requests)
  * 2. Google Gemini 1.5 Flash (Free Tier via aistudio.google.com)
@@ -113,7 +113,7 @@ Output valid JSON only: { "nextQuestionId": "string", "clinicalReason": "string 
             return this.generateBuiltinSingleAnalysis(userProfile, currentLanguage);
         }
 
-        const prompt = `You are a world-class relationship psychologist analyzing an individual 10-framework psychometric report.
+        const prompt = `You are a world-class relationship psychologist analyzing an individual multi-framework psychometric report including David Hawkins' Map of Consciousness and Abraham Hicks' Emotional Guidance Scale.
 Language: ${isAr ? 'Arabic' : 'English'}. WRITE ENTIRE ANALYSIS IN ${isAr ? 'ARABIC' : 'ENGLISH'}.
 Profile: ${JSON.stringify({
     name: userProfile.owner_name,
@@ -122,7 +122,8 @@ Profile: ${JSON.stringify({
     birkman: userProfile.calculated_personality?.birkman,
     firo_b: userProfile.calculated_personality?.firo_b,
     gottman_safety: userProfile.calculated_personality?.gottman_safety,
-    attachment: userProfile.calculated_personality?.attachment
+    attachment: userProfile.calculated_personality?.attachment,
+    consciousness: userProfile.calculated_personality?.consciousness
 }, null, 2)}
 Output raw JSON only matching schema:
 {
@@ -156,6 +157,7 @@ Output raw JSON only matching schema:
         const b = traits.birkman || { usual_style: "supportive", underlying_need: "empathy", stress_trigger: "withdrawing" };
         const ecr = traits.attachment || { primary: "secure", anxiety_score: 25, avoidance_score: 30 };
         const g = traits.gottman_safety || { emotional_safety_index: 85 };
+        const c = traits.consciousness || null;
 
         const motiveTexts = {
             red: {
@@ -179,6 +181,46 @@ Output raw JSON only matching schema:
         const primaryCol = (h.primary || "blue").toLowerCase();
         const motiveAnalysis = motiveTexts[primaryCol] ? (isAr ? motiveTexts[primaryCol].ar : motiveTexts[primaryCol].en) : (isAr ? motiveTexts.blue.ar : motiveTexts.blue.en);
 
+        const posTraits = isAr ? [
+            "وعي ذاتي مرتفع وقدرة على فهم الاحتياجات العاطفية",
+            "وفاء والتزام عميق في العلاقات القريبة",
+            "مرونة في التكيف عند وضوح التوقعات المشتركة",
+            "رغبة صادقة في بناء حياة أسرية مستقرة"
+        ] : [
+            "High introspective emotional self-awareness",
+            "Deep loyalty and investment in partner well-being",
+            "Adaptable problem-solving when boundaries are clear",
+            "Strong foundational commitment to a durable marriage"
+        ];
+
+        const grwAreas = isAr ? [
+            "التعبير الصريح عن الاحتياجات قبل أن تتحول إلى استياء صامت",
+            "التمييز بين النقد الموضوعي للرأي وبين الهجوم على الشخصية",
+            "منح النفس استراحة واعية عند الشعور بالإرهاق النفسي"
+        ] : [
+            "Vocalizing unspoken needs before they turn into silent resentment",
+            "Distinguishing between constructive feedback and personal rejection",
+            "Taking intentional timeouts when noticing stress derailing triggers"
+        ];
+
+        if (c && c.hawkins) {
+            const locName = isAr ? c.hawkins.level_ar : c.hawkins.level;
+            const hicksState = isAr ? c.hicks?.state_ar : c.hicks?.state;
+            if (c.hawkins.is_power) {
+                posTraits.push(
+                    isAr
+                        ? `وعي شعوري متزن في نطاق القوة الإيجابية (${c.hawkins.score} - ${locName}) ومحاذاة مشاعرية نحو (${hicksState || 'التفاؤل'}).`
+                        : `Constructive consciousness baseline in the Power realm (${c.hawkins.score} - ${locName}) with emotional alignment toward ${hicksState || 'Optimism'}.`
+                );
+            } else {
+                grwAreas.push(
+                    isAr
+                        ? `تدريب النفس على الانتقال من ردود فعل الضغط والقسر إلى عتبة الشجاعة وقبول المتغيرات (مستوى هوكينز 200+).`
+                        : `Practicing intentional pivots from reactive Force patterns toward the 200 Courage threshold and acceptance.`
+                );
+            }
+        }
+
         return {
             coreMotiveAnalysis: motiveAnalysis,
             operatingManual: {
@@ -193,26 +235,8 @@ Output raw JSON only matching schema:
             attachmentProfile: isAr
                 ? `نمط الارتباط الغالب هو (${ecr.primary}) بدرجة قلق (${ecr.anxiety_score || 25}%) وتجنب (${ecr.avoidance_score || 30}%). تبحث عن ملاذ آمن يجمع بين القرب والاستقرار.`
                 : `Attachment orientation reflects a ${ecr.primary} baseline (Anxiety: ${ecr.anxiety_score || 25}%, Avoidance: ${ecr.avoidance_score || 30}%), prioritizing secure intimacy and mutual dependability.`,
-            positiveTraits: isAr ? [
-                "وعي ذاتي مرتفع وقدرة على فهم الاحتياجات العاطفية",
-                "وفاء والتزام عميق في العلاقات القريبة",
-                "مرونة في التكيف عند وضوح التوقعات المشتركة",
-                "رغبة صادقة في بناء حياة أسرية مستقرة"
-            ] : [
-                "High introspective emotional self-awareness",
-                "Deep loyalty and investment in partner well-being",
-                "Adaptable problem-solving when boundaries are clear",
-                "Strong foundational commitment to a durable marriage"
-            ],
-            growthAreas: isAr ? [
-                "التعبير الصريح عن الاحتياجات قبل أن تتحول إلى استياء صامت",
-                "التمييز بين النقد الموضوعي للرأي وبين الهجوم على الشخصية",
-                "منح النفس استراحة واعية عند الشعور بالإرهاق النفسي"
-            ] : [
-                "Vocalizing unspoken needs before they turn into silent resentment",
-                "Distinguishing between constructive feedback and personal rejection",
-                "Taking intentional timeouts when noticing stress derailing triggers"
-            ],
+            positiveTraits: posTraits,
+            growthAreas: grwAreas,
             watchouts: isAr ? [
                 `الحذر من ردة فعل التوتر (${b.stress_trigger}) أثناء المشاحنات الساخنة`,
                 "تجنب افتراض ما يدور في ذهن الشريك دون سؤال مباشر"
@@ -234,10 +258,10 @@ Output raw JSON only matching schema:
             return this.generateBuiltinDyadicConsultation(profileA, profileB, currentLanguage);
         }
 
-        const prompt = `You are a clinical marital and relationship psychologist AI conducting a deep dyadic compatibility consultation.
+        const prompt = `You are a clinical marital and relationship psychologist AI conducting a deep dyadic compatibility consultation including Hawkins Map of Consciousness & Abraham Hicks Emotional Guidance Scale.
 Language: ${isAr ? 'Arabic' : 'English'}. WRITE ENTIRE ANALYSIS IN ${isAr ? 'ARABIC' : 'ENGLISH'}.
-Partner A: ${profileA.owner_name}, Hartman: ${profileA.calculated_personality?.hartman?.primary}, DISC: ${profileA.calculated_personality?.disc?.primary}, Need: ${profileA.calculated_personality?.birkman?.underlying_need}.
-Partner B: ${profileB.owner_name}, Hartman: ${profileB.calculated_personality?.hartman?.primary}, DISC: ${profileB.calculated_personality?.disc?.primary}, Need: ${profileB.calculated_personality?.birkman?.underlying_need}.
+Partner A: ${profileA.owner_name}, Hartman: ${profileA.calculated_personality?.hartman?.primary}, DISC: ${profileA.calculated_personality?.disc?.primary}, Need: ${profileA.calculated_personality?.birkman?.underlying_need}, Hawkins LoC: ${profileA.calculated_personality?.consciousness?.hawkins?.score || 350}, Hicks: Lv ${profileA.calculated_personality?.consciousness?.hicks?.level || 5}.
+Partner B: ${profileB.owner_name}, Hartman: ${profileB.calculated_personality?.hartman?.primary}, DISC: ${profileB.calculated_personality?.disc?.primary}, Need: ${profileB.calculated_personality?.birkman?.underlying_need}, Hawkins LoC: ${profileB.calculated_personality?.consciousness?.hawkins?.score || 350}, Hicks: Lv ${profileB.calculated_personality?.consciousness?.hicks?.level || 5}.
 Output raw JSON only matching schema:
 {
   "executiveSummary": "...",
@@ -280,10 +304,26 @@ Output raw JSON only matching schema:
         const stressA = tA.birkman?.stress_trigger || "demanding";
         const stressB = tB.birkman?.stress_trigger || "withdrawing";
 
+        const cA = tA.consciousness;
+        const cB = tB.consciousness;
+        let consciousnessNote = "";
+        if (cA?.hawkins && cB?.hawkins) {
+            const delta = Math.abs(cA.hawkins.score - cB.hawkins.score);
+            if (cA.hawkins.is_power && cB.hawkins.is_power && delta <= 120) {
+                consciousnessNote = isAr
+                    ? ` كلاهما يعمل في فضاء الوعي البناء (القوة/Power > 200) مع رنين ترددي متناغم يسهل التسامي السريع فوق صغائر الخلافات.`
+                    : ` Both partners operate within the constructive Power realm (>200) with synergistic vibrational resonance, facilitating swift mutual elevation.`;
+            } else if (delta > 100) {
+                consciousnessNote = isAr
+                    ? ` يشير فارق الوعي (${delta} نقطة هوكينز) إلى أهمية ألا يتقمص الشريك الأكثر هدوءاً دور الواعظ أو الوصي، بل ممارسة الاحتواء المتدرج.`
+                    : ` An awareness delta (${delta} Hawkins points) highlights the need for the more grounded partner to avoid preaching, relying instead on non-judgmental holding.`;
+            }
+        }
+
         return {
-            executiveSummary: isAr
+            executiveSummary: (isAr
                 ? `تحليل توافق استشاري معمق بين ${nameA} و ${nameB}. تكشف المقارنة النفسية عن تكامل بنيوي واعد يجمع بين دافع (${hA}) لدى ${nameA} ودافع (${hB}) لدى ${nameB}. نجاح هذا المسار يعتمد على احترام فوارق السرعة والإيقاع اليومي، وإشباع الاحتياجات الخفية قبل تصاعد الخلافات.`
-                : `In-depth dyadic consultation between ${nameA} and ${nameB}. Psychometric synthesis reveals a powerful complementary union bridging ${nameA}'s ${hA} motive with ${nameB}'s ${hB} energy. Long-term marital flourishing hinges on honoring tempo variations and satisfying unspoken emotional needs.`,
+                : `In-depth dyadic consultation between ${nameA} and ${nameB}. Psychometric synthesis reveals a powerful complementary union bridging ${nameA}'s ${hA} motive with ${nameB}'s ${hB} energy. Long-term marital flourishing hinges on honoring tempo variations and satisfying unspoken emotional needs.`) + consciousnessNote,
 
             motiveAndPaceDynamic: isAr
                 ? `يقدم ${nameA} طاقة المبادرة والوضوح العملي، بينما يضفي ${nameB} عمقاً إنسانياً وتوازناً مدروساً. عند اتخاذ القرارات، يتطلب تفاوت السرعة ألا يتعجل ${nameA} الشريك، وأن يبادر ${nameB} بمشاركة انطباعاته دون تردد.`

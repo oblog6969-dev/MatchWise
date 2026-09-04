@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2
+ * MatchWise Lite v2.6.0
  * traits.js - Multi-Framework Psychometric & Behavioral Scoring Engine
  * Unified Evaluator mapping single responses across 10 clinical & behavioral frameworks:
  * 1. Big Five (OCEAN)
@@ -109,6 +109,17 @@ const PersonalityEngine = {
         };
 
         const ideology = { traditionalism: 10, feminism: 10, liberalism: 10, capitalism: 10 };
+
+        // 11. David Hawkins Map of Consciousness & Abraham Hicks Emotional Guidance Scale
+        const consciousness_accum = {
+            hawkins_weighted_sum: 0,
+            hawkins_weight: 0,
+            hicks_weighted_sum: 0,
+            hicks_weight: 0,
+            stress_floor_loc: 600,
+            force_weight: 0,
+            power_weight: 0
+        };
 
         let totalWeight = 0;
         let answeredCount = 0;
@@ -311,6 +322,23 @@ const PersonalityEngine = {
                         else if (traitKey === "ideology_feminism") ideology.feminism += Math.max(0, scaled * 4);
                         else if (traitKey === "ideology_liberalism") ideology.liberalism += Math.max(0, scaled * 4);
                         else if (traitKey === "ideology_capitalism") ideology.capitalism += Math.max(0, scaled * 4);
+
+                        // Awareness & Consciousness (David Hawkins & Abraham Hicks)
+                        else if (traitKey === "hawkins_loc") {
+                            consciousness_accum.hawkins_weighted_sum += tScore * weight;
+                            consciousness_accum.hawkins_weight += weight;
+                            if (tScore < 200) {
+                                consciousness_accum.force_weight += weight;
+                            } else {
+                                consciousness_accum.power_weight += weight;
+                            }
+                            if (tScore < consciousness_accum.stress_floor_loc) {
+                                consciousness_accum.stress_floor_loc = tScore;
+                            }
+                        } else if (traitKey === "hicks_level") {
+                            consciousness_accum.hicks_weighted_sum += tScore * weight;
+                            consciousness_accum.hicks_weight += weight;
+                        }
 
                         // Other Traits
                         else if (traitKey === "children_desire") other_traits.children_desire += scaled * 15;
@@ -602,6 +630,137 @@ const PersonalityEngine = {
             };
         }
 
+        // 11. CONSCIOUSNESS & EMOTIONAL GUIDANCE SPECTRUM (Hawkins & Hicks)
+        let rawHawkins = 310; // Default Willingness/Optimism baseline
+        if (consciousness_accum.hawkins_weight > 0) {
+            rawHawkins = consciousness_accum.hawkins_weighted_sum / consciousness_accum.hawkins_weight;
+        } else {
+            // Anchor dynamically if awareness questions weren't answered directly
+            const safeScore = (finalGottman.repair_receptivity || 70);
+            const neuroPenalty = (finalOcean.neuroticism - 50) * 2;
+            const agreeBonus = (finalOcean.agreeableness - 50) * 1.5;
+            rawHawkins = 250 + (safeScore * 1.5) - neuroPenalty + agreeBonus;
+        }
+        const finalHawkinsScore = Math.max(30, Math.min(590, Math.round(rawHawkins)));
+
+        let rawHicks = 6; // Default Hopefulness/Contentment baseline
+        if (consciousness_accum.hicks_weight > 0) {
+            rawHicks = consciousness_accum.hicks_weighted_sum / consciousness_accum.hicks_weight;
+        } else {
+            rawHicks = Math.max(1, Math.min(22, Math.round(22 - ((finalHawkinsScore - 30) / 560) * 21)));
+        }
+        const finalHicksScore = Math.max(1, Math.min(22, Math.round(rawHicks)));
+
+        // Stress regression floor
+        let stressFloor = consciousness_accum.stress_floor_loc;
+        if (stressFloor === 600) {
+            stressFloor = Math.max(30, Math.min(finalHawkinsScore, Math.round(finalHawkinsScore * 0.65)));
+        }
+
+        // Force vs Power ratio
+        const totalConsciousResponses = consciousness_accum.force_weight + consciousness_accum.power_weight;
+        const powerRatio = totalConsciousResponses > 0
+            ? Math.round((consciousness_accum.power_weight / totalConsciousResponses) * 100)
+            : (finalHawkinsScore >= 200 ? 80 : 35);
+
+        // Hawkins metadata resolver
+        let hawkinsLevelEn = "Reason (400)", hawkinsLevelAr = "المنطق والتبصر (400)";
+        let hawkinsViewEn = "Wise / Meaningful", hawkinsViewAr = "حكيم وذو معنى عميق";
+        if (finalHawkinsScore >= 540) {
+            hawkinsLevelEn = "Joy & Serenity (540+)"; hawkinsLevelAr = "البهجة والسكينة (540+)";
+            hawkinsViewEn = "One / Complete"; hawkinsViewAr = "حالة وحدة واكتمال تام";
+        } else if (finalHawkinsScore >= 500) {
+            hawkinsLevelEn = "Love & Reverence (500)"; hawkinsLevelAr = "المحبة والتقدير (500)";
+            hawkinsViewEn = "Loving / Benign"; hawkinsViewAr = "محب ورحيم وكريم";
+        } else if (finalHawkinsScore >= 400) {
+            hawkinsLevelEn = "Reason & Understanding (400)"; hawkinsLevelAr = "المنطق والاستبصار (400)";
+            hawkinsViewEn = "Wise / Meaningful"; hawkinsViewAr = "حكيم وذو مغزى";
+        } else if (finalHawkinsScore >= 350) {
+            hawkinsLevelEn = "Acceptance & Forgiveness (350)"; hawkinsLevelAr = "القبول والتسامح (350)";
+            hawkinsViewEn = "Harmonious / Merciful"; hawkinsViewAr = "متناغم ومتسامح";
+        } else if (finalHawkinsScore >= 310) {
+            hawkinsLevelEn = "Willingness & Optimism (310)"; hawkinsLevelAr = "الاستعداد والتفاؤل (310)";
+            hawkinsViewEn = "Hopeful / Cooperative"; hawkinsViewAr = "مفعم بالأمل ومتعاون";
+        } else if (finalHawkinsScore >= 250) {
+            hawkinsLevelEn = "Neutrality & Trust (250)"; hawkinsLevelAr = "الحياد والثقة (250)";
+            hawkinsViewEn = "Satisfactory / Feasible"; hawkinsViewAr = "مُرضٍ ومريح";
+        } else if (finalHawkinsScore >= 200) {
+            hawkinsLevelEn = "Courage & Responsibility (200)"; hawkinsLevelAr = "الشجاعة والمسؤولية (200)";
+            hawkinsViewEn = "Empowering / Feasible"; hawkinsViewAr = "مُمكِّن ومتاح";
+        } else if (finalHawkinsScore >= 175) {
+            hawkinsLevelEn = "Pride & Inflation (175)"; hawkinsLevelAr = "الكبرياء والدفاعية (175)";
+            hawkinsViewEn = "Demanding / Righteous"; hawkinsViewAr = "استعلائي ومدعٍ للصواب";
+        } else if (finalHawkinsScore >= 150) {
+            hawkinsLevelEn = "Anger & Resentment (150)"; hawkinsLevelAr = "الغضب والاستياء (150)";
+            hawkinsViewEn = "Frustrating / Vengeful"; hawkinsViewAr = "محبط وانتقامي";
+        } else if (finalHawkinsScore >= 125) {
+            hawkinsLevelEn = "Desire & Craving (125)"; hawkinsLevelAr = "الرغبة والتعلق (125)";
+            hawkinsViewEn = "Insatiable / Dependent"; hawkinsViewAr = "شره وتعلّقي";
+        } else if (finalHawkinsScore >= 100) {
+            hawkinsLevelEn = "Fear & Anxiety (100)"; hawkinsLevelAr = "الخوف والقلق (100)";
+            hawkinsViewEn = "Threatening / Fragile"; hawkinsViewAr = "مهدد وقلق";
+        } else {
+            hawkinsLevelEn = "Guilt & Contraction (<100)"; hawkinsLevelAr = "الشعور بالذنب والانكماش (<100)";
+            hawkinsViewEn = "Tragic / Condemning"; hawkinsViewAr = "مأساوي وجالد للذات";
+        }
+
+        // Hicks 22-level scale metadata
+        const HICKS_MAP = {
+            1: { en: "Joy, Appreciation & Love", ar: "البهجة والامتنان والمحبة", tier_en: "High Alignment", tier_ar: "محاذاة اهتزازية عليا" },
+            2: { en: "Passion & Creative Flow", ar: "الشغف والتدفق الإبداعي", tier_en: "High Alignment", tier_ar: "محاذاة اهتزازية عليا" },
+            3: { en: "Enthusiasm & Eagerness", ar: "الحماس والبهجة", tier_en: "High Alignment", tier_ar: "محاذاة اهتزازية عليا" },
+            4: { en: "Positive Expectation & Belief", ar: "التوقع الإيجابي واليقين", tier_en: "High Alignment", tier_ar: "محاذاة اهتزازية عليا" },
+            5: { en: "Optimism", ar: "التفاؤل", tier_en: "Constructive Harmony", tier_ar: "تناغم بنّاء" },
+            6: { en: "Hopefulness", ar: "الرجاء والأمل", tier_en: "Constructive Harmony", tier_ar: "تناغم بنّاء" },
+            7: { en: "Contentment & Peace", ar: "الرضا والاطمئنان", tier_en: "Constructive Harmony", tier_ar: "تناغم بنّاء" },
+            8: { en: "Boredom & Stagnation", ar: "الملل والركود", tier_en: "Resistance Threshold", tier_ar: "عتبة المقاومة" },
+            9: { en: "Pessimism", ar: "التشاؤم", tier_en: "Resistance Threshold", tier_ar: "عتبة المقاومة" },
+            10: { en: "Frustration & Impatience", ar: "الإحباط ونفاد الصبر", tier_en: "Reactive Friction", tier_ar: "احتكاك تفاعلي" },
+            11: { en: "Overwhelment & Pressure", ar: "الاستثقال والضغط النفسي", tier_en: "Reactive Friction", tier_ar: "احتكاك تفاعلي" },
+            12: { en: "Disappointment", ar: "خيبة الأمل", tier_en: "Contracted Resistance", tier_ar: "مقاومة منكمشة" },
+            13: { en: "Doubt & Hesitation", ar: "الشك والتردد", tier_en: "Contracted Resistance", tier_ar: "مقاومة منكمشة" },
+            14: { en: "Worry & Apprehension", ar: "القلق والتوجس", tier_en: "Contracted Resistance", tier_ar: "مقاومة منكمشة" },
+            15: { en: "Blame & Resentment", ar: "اللوم والعتب", tier_en: "Severe Resistance", tier_ar: "مقاومة حادة" },
+            16: { en: "Discouragement", ar: "التثبيط وضعف الهمة", tier_en: "Severe Resistance", tier_ar: "مقاومة حادة" },
+            17: { en: "Anger", ar: "الغضب والاستثارة", tier_en: "Severe Resistance", tier_ar: "مقاومة حادة" },
+            18: { en: "Revenge & Retaliation", ar: "الرغبة في رد الإساءة", tier_en: "Destructive Contraction", tier_ar: "انكماش مدمر" },
+            19: { en: "Hatred & Rage", ar: "الحقد والغيظ", tier_en: "Destructive Contraction", tier_ar: "انكماش مدمر" },
+            20: { en: "Jealousy & Envy", ar: "الغيرة والحسد", tier_en: "Destructive Contraction", tier_ar: "انكماش مدمر" },
+            21: { en: "Insecurity & Guilt", ar: "انعدام الأمان والشعور بالذنب", tier_en: "Deep Powerlessness", tier_ar: "عجز عميق" },
+            22: { en: "Fear, Despair & Powerlessness", ar: "الخوف واليأس والعجز", tier_en: "Deep Powerlessness", tier_ar: "عجز عميق" }
+        };
+        const hicksMeta = HICKS_MAP[finalHicksScore] || HICKS_MAP[6];
+
+        const finalConsciousness = {
+            hawkins: {
+                score: finalHawkinsScore,
+                level: hawkinsLevelEn,
+                level_ar: hawkinsLevelAr,
+                view_of_life: hawkinsViewEn,
+                view_of_life_ar: hawkinsViewAr,
+                is_above_200: finalHawkinsScore >= 200,
+                domain: finalHawkinsScore >= 200 ? "Power" : "Force",
+                domain_ar: finalHawkinsScore >= 200 ? "القوة الروحية البنّاءة (Power)" : "القوة القسرية الضاغطة (Force)",
+                power_ratio: powerRatio
+            },
+            hicks: {
+                level: finalHicksScore,
+                state: hicksMeta.en,
+                state_ar: hicksMeta.ar,
+                tier: hicksMeta.tier_en,
+                tier_ar: hicksMeta.tier_ar
+            },
+            stress_floor: {
+                loc: stressFloor,
+                is_above_200: stressFloor >= 200
+            },
+            pivot_agility: {
+                score: Math.round(100 - (finalHicksScore * 3.5)),
+                rating_en: finalHicksScore <= 6 ? "Rapid & Resilient" : (finalHicksScore <= 12 ? "Moderate" : "Rigid & Lingering"),
+                rating_ar: finalHicksScore <= 6 ? "سريع ومرن" : (finalHicksScore <= 12 ? "متوسط" : "بطيء ومترسب")
+            }
+        };
+
         // Assessment Confidence Calculation
         const totalPossible = questionsList.length || 70;
         const completeness = Math.min(1.0, answeredCount / totalPossible);
@@ -656,7 +815,8 @@ const PersonalityEngine = {
             tki_conflict: finalTki,
             gottman_safety: finalGottman,
             attachment_ecr: finalAttachment,
-            schwartz_values: finalSchwartz
+            schwartz_values: finalSchwartz,
+            consciousness: finalConsciousness
         };
     }
 };
