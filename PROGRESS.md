@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.5.1
-**Release Name:** Zero-Key Autonomous Clinical AI & Seamless Bilingual Experience  
-**Date:** September 3, 2026  
+## Current Version: v2.5.2
+**Release Name:** Global Reach Google Translate Integration & Zero-Crash Multi-Language Experience  
+**Date:** September 4, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -19,6 +19,8 @@
 | **M6: Static Printing Engine** | On-screen print view toggle and clean `@media print` rules with chapter-based page breaks. | ✅ Complete | CSS Print Tested |
 | **M7: Clinical Archetype Profiles** | Pre-seeded Tariq Al-Mansoor & Nour Al-Sabah profiles for immediate live testing without manual answering. | ✅ Complete | Full Dyadic Verification (67%) |
 | **M8: Zero-Key AI & Bilingual Polish** | MatchWise Autonomous AI default (zero key required, unlimited requests) & seamless instant report language switching. | ✅ Complete | Browser & Node Tested |
+| **M9: Global Google Translate** | Seamless 100+ language translation, defensive Node DOM crash prevention, notranslate badges, Apple-grade UI dropdown. | ✅ Complete | End-to-End Browser Tested |
+
 
 ---
 

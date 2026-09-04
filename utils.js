@@ -5,6 +5,33 @@
  * and robust UTF-8 byte-level profile encryption & result-sharing code utilities.
  */
 
+// --- GOOGLE TRANSLATE SPA DOM CRASH PREVENTION PATCH ---
+// When Google Translate mutates DOM text nodes into <font> tags, standard
+// DOM removal/insertion in SPAs throws NotFoundError. This defensive polyfill ensures zero crashes.
+if (typeof Node === "function" && Node.prototype) {
+    const originalRemoveChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function(child) {
+        if (child.parentNode !== this) {
+            if (typeof console !== "undefined" && console.warn) {
+                console.warn("[GoogleTranslateSafety] Suppressed removeChild mismatch:", child);
+            }
+            return child;
+        }
+        return originalRemoveChild.apply(this, arguments);
+    };
+
+    const originalInsertBefore = Node.prototype.insertBefore;
+    Node.prototype.insertBefore = function(newNode, referenceNode) {
+        if (referenceNode && referenceNode.parentNode !== this) {
+            if (typeof console !== "undefined" && console.warn) {
+                console.warn("[GoogleTranslateSafety] Suppressed insertBefore mismatch:", referenceNode);
+            }
+            return newNode;
+        }
+        return originalInsertBefore.apply(this, arguments);
+    };
+}
+
 // --- 1. LOCALIZATION & TRANSLATIONS ---
 const TRANSLATIONS = {
     en: {
@@ -551,13 +578,150 @@ const Cryptography = {
     }
 };
 
+// --- 5. GOOGLE TRANSLATE HELPER ---
+const GoogleTranslateHelper = {
+    RTL_LANGS: ['ar', 'ur', 'he', 'fa', 'ps', 'sd', 'yi'],
+
+    init() {
+        // Observer for Google Translate HTML class additions (translated-rtl vs translated-ltr)
+        if (typeof MutationObserver !== "undefined" && document.documentElement) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === "class") {
+                        const htmlClass = document.documentElement.className;
+                        if (htmlClass.includes("translated-rtl")) {
+                            document.body.classList.add("rtl");
+                            document.documentElement.setAttribute("dir", "rtl");
+                        } else if (htmlClass.includes("translated-ltr")) {
+                            // Only remove if not natively set to Arabic
+                            const nativeLang = localStorage.getItem("matchwise_lang") || "en";
+                            if (nativeLang !== "ar") {
+                                document.body.classList.remove("rtl");
+                                document.documentElement.setAttribute("dir", "ltr");
+                            }
+                        }
+                    }
+                });
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+        }
+
+        // Sync dropdown with active cookie on load
+        this.syncQuickSelector();
+    },
+
+    initElement() {
+        if (typeof google !== "undefined" && google.translate && google.translate.TranslateElement) {
+            try {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'en',
+                    autoDisplay: false,
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+            } catch (err) {
+                console.warn("[GoogleTranslate] Widget initialization notice:", err);
+            }
+        }
+    },
+
+    setLanguage(langCode) {
+        if (!langCode || langCode === "reset") {
+            this.reset();
+            return;
+        }
+
+        // Set googtrans cookie across root and host domain
+        const cookieVal = `/auto/${langCode}`;
+        this.setCookie("googtrans", cookieVal);
+
+        // Adjust RTL / LTR dynamically based on language code
+        if (this.RTL_LANGS.includes(langCode)) {
+            document.body.classList.add("rtl");
+            document.documentElement.setAttribute("dir", "rtl");
+        } else {
+            const nativeLang = localStorage.getItem("matchwise_lang") || "en";
+            if (nativeLang !== "ar") {
+                document.body.classList.remove("rtl");
+                document.documentElement.setAttribute("dir", "ltr");
+            }
+        }
+
+        // If Google Translate combo dropdown is already rendered, trigger it directly
+        const combo = document.querySelector(".goog-te-combo");
+        if (combo) {
+            combo.value = langCode;
+            combo.dispatchEvent(new Event("change"));
+        } else {
+            // Reload page so Google Translate reads the newly saved cookie
+            window.location.reload();
+        }
+    },
+
+    reset() {
+        this.deleteCookie("googtrans");
+        const combo = document.querySelector(".goog-te-combo");
+        if (combo) {
+            combo.value = "";
+            combo.dispatchEvent(new Event("change"));
+        }
+        window.location.reload();
+    },
+
+    setCookie(name, value) {
+        const domain = window.location.hostname;
+        document.cookie = `${name}=${value};path=/;domain=${domain}`;
+        document.cookie = `${name}=${value};path=/;`;
+    },
+
+    deleteCookie(name) {
+        const domain = window.location.hostname;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${domain}`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    },
+
+    getSavedLanguage() {
+        const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]*)/);
+        if (match && match[1]) {
+            const parts = match[1].split("/");
+            return parts[parts.length - 1] || "";
+        }
+        return "";
+    },
+
+    syncQuickSelector() {
+        const selector = document.getElementById("googleTranslateQuickSelector");
+        if (!selector) return;
+        const current = this.getSavedLanguage();
+        if (current) {
+            const option = selector.querySelector(`option[value="${current}"]`);
+            if (option) {
+                selector.value = current;
+            }
+        }
+    }
+};
+
+window.googleTranslateElementInit = function() {
+    GoogleTranslateHelper.initElement();
+};
+
+if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => GoogleTranslateHelper.init());
+    } else {
+        GoogleTranslateHelper.init();
+    }
+}
+
 // Export to global window namespace & CommonJS for testing
 if (typeof window !== "undefined") {
     window.Localization = Localization;
     window.Storage = Storage;
     window.ThemeManager = ThemeManager;
     window.Cryptography = Cryptography;
+    window.GoogleTranslateHelper = GoogleTranslateHelper;
 }
 if (typeof module !== "undefined" && module.exports) {
-    module.exports = { Localization, Storage, ThemeManager, Cryptography };
+    module.exports = { Localization, Storage, ThemeManager, Cryptography, GoogleTranslateHelper };
 }
+

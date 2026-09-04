@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 2. DOM ELEMENT CACHE ---
     const dom = {
         languageSelector: document.getElementById("languageSelector"),
+        googleTranslateQuickSelector: document.getElementById("googleTranslateQuickSelector"),
+        googleTranslateElement: document.getElementById("google_translate_element"),
         themeToggleBtn: document.getElementById("themeToggleBtn"),
         
         // Panels
@@ -197,6 +199,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 dom.btnCompareText.textContent = state.localization.get("btn_view_selected");
             } else {
                 dom.btnCompareText.textContent = state.localization.get("btn_compare_selected");
+            }
+        }
+    });
+
+    // Google Translate Multi-Language Switcher Events
+    if (dom.googleTranslateQuickSelector) {
+        dom.googleTranslateQuickSelector.addEventListener("change", (e) => {
+            const val = e.target.value;
+            if (val === "more") {
+                // Toggle the full Google Translate official gadget box
+                if (dom.googleTranslateElement) {
+                    dom.googleTranslateElement.classList.toggle("active");
+                }
+            } else if (val === "reset") {
+                if (window.GoogleTranslateHelper) {
+                    window.GoogleTranslateHelper.reset();
+                }
+            } else if (val) {
+                if (window.GoogleTranslateHelper) {
+                    window.GoogleTranslateHelper.setLanguage(val);
+                }
+            }
+        });
+    }
+
+    // Dismiss Google Translate gadget box when clicking outside
+    document.addEventListener("click", (e) => {
+        if (dom.googleTranslateElement && dom.googleTranslateElement.classList.contains("active")) {
+            const wrapper = e.target.closest(".google-translate-wrapper");
+            if (!wrapper) {
+                dom.googleTranslateElement.classList.remove("active");
             }
         }
     });
@@ -1064,9 +1097,9 @@ document.addEventListener("DOMContentLoaded", () => {
             meta.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <h4 style="margin: 0; font-size: 1.05rem;">${p.owner_name}</h4>
-                    <span class="person-type-badge hartman-badge-${hColor.toLowerCase()}" style="padding: 2px 8px; font-size: 0.72rem;">${hColor}</span>
-                    <span class="person-type-badge type-a" style="padding: 2px 8px; font-size: 0.72rem;">DISC: ${discType}</span>
-                    <span class="person-type-badge type-b" style="padding: 2px 8px; font-size: 0.72rem;">${mbti}</span>
+                    <span class="person-type-badge hartman-badge-${hColor.toLowerCase()} notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">${hColor}</span>
+                    <span class="person-type-badge type-a notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">DISC: ${discType}</span>
+                    <span class="person-type-badge type-b notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">${mbti}</span>
                 </div>
                 <p style="margin-top: 4px; font-size: 0.82rem; color: var(--text-secondary);">
                     ${state.localization.get("created_at")}: ${p.created_at} • ${state.localization.get("birkman_label")}: <strong>${need}</strong>

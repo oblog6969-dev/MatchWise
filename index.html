@@ -3,34 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="description" content="MatchWise Lite - AI-Powered Relationship Compatibility Assessment. Fully localized & Google Translate compatible.">
     <title data-i18n="app_title">MatchWise Lite</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Google Translate SPA DOM Crash Protection (Runs before any rendering) -->
+    <script>
+        if (typeof Node === "function" && Node.prototype) {
+            const originalRemoveChild = Node.prototype.removeChild;
+            Node.prototype.removeChild = function(child) {
+                if (child.parentNode !== this) {
+                    return child;
+                }
+                return originalRemoveChild.apply(this, arguments);
+            };
+            const originalInsertBefore = Node.prototype.insertBefore;
+            Node.prototype.insertBefore = function(newNode, referenceNode) {
+                if (referenceNode && referenceNode.parentNode !== this) {
+                    return newNode;
+                }
+                return originalInsertBefore.apply(this, arguments);
+            };
+        }
+
+        // Global Google Translate Init Callback
+        function googleTranslateElementInit() {
+            if (window.GoogleTranslateHelper && typeof window.GoogleTranslateHelper.initElement === "function") {
+                window.GoogleTranslateHelper.initElement();
+            } else if (typeof google !== "undefined" && google.translate && google.translate.TranslateElement) {
+                try {
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'en',
+                        autoDisplay: false,
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                    }, 'google_translate_element');
+                } catch(e) {}
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Top Premium Navigation Bar -->
     <header class="app-header">
         <div class="header-container">
-            <div class="logo-area">
-                <svg class="heart-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="logo-area notranslate" translate="no">
+                <svg class="heart-logo notranslate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" translate="no">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
-                <div class="logo-text">
-                    <h1 data-i18n="app_title">MatchWise Lite</h1>
+                <div class="logo-text notranslate" translate="no">
+                    <h1 class="notranslate" translate="no">MatchWise Lite</h1>
                     <p data-i18n="app_subtitle">AI-Powered Relationship Compatibility Assessment</p>
                 </div>
             </div>
             
             <div class="nav-controls">
-                <!-- Language Selector -->
-                <div class="control-group">
-                    <select id="languageSelector" class="premium-select">
-                        <option value="en">English (LTR)</option>
-                        <option value="ar">العربية (RTL)</option>
+                <!-- Native Interface Language Selector -->
+                <div class="control-group notranslate" translate="no">
+                    <select id="languageSelector" class="premium-select notranslate" translate="no" title="Interface Language / لغة الواجهة">
+                        <option value="en">English (Native LTR)</option>
+                        <option value="ar">العربية (Native RTL)</option>
                     </select>
                 </div>
 
+                <!-- Google Translate Quick Switcher (100+ Languages) -->
+                <div class="control-group google-translate-wrapper notranslate" translate="no">
+                    <div class="google-translate-bar">
+                        <svg class="translate-icon notranslate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" translate="no">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <select id="googleTranslateQuickSelector" class="premium-select notranslate" translate="no" aria-label="Translate website to any language with Google Translate">
+                            <option value="" disabled selected>🌐 Translate (100+ Languages)</option>
+                            <optgroup label="Popular World Languages">
+                                <option value="es">🇪🇸 Español (Spanish)</option>
+                                <option value="fr">🇫🇷 Français (French)</option>
+                                <option value="de">🇩🇪 Deutsch (German)</option>
+                                <option value="it">🇮🇹 Italiano (Italian)</option>
+                                <option value="pt">🇵🇹 Português (Portuguese)</option>
+                                <option value="tr">🇹🇷 Türkçe (Turkish)</option>
+                                <option value="ru">🇷🇺 Русский (Russian)</option>
+                                <option value="zh-CN">🇨🇳 中文 (Simplified Chinese)</option>
+                                <option value="ja">🇯🇵 日本語 (Japanese)</option>
+                                <option value="ko">🇰🇷 한국어 (Korean)</option>
+                                <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+                                <option value="ur">🇵🇰 اردو (Urdu)</option>
+                                <option value="id">🇮🇩 Bahasa Indonesia</option>
+                                <option value="fa">🇮🇷 فارسی (Persian)</option>
+                                <option value="sw">🇰🇪 Kiswahili</option>
+                                <option value="nl">🇳🇱 Nederlands (Dutch)</option>
+                                <option value="pl">🇵🇱 Polski (Polish)</option>
+                                <option value="vi">🇻🇳 Tiếng Việt (Vietnamese)</option>
+                            </optgroup>
+                            <optgroup label="Translate Controls">
+                                <option value="more">➕ All 100+ Languages (Google Dropdown)</option>
+                                <option value="reset">↺ Show Original (Reset Translation)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <!-- Google Translate Widget Target Element -->
+                    <div id="google_translate_element" class="google-translate-gadget-box notranslate" translate="no"></div>
+                </div>
+
                 <!-- DeepSeek Pro AI Settings Button -->
-                <button id="btnOpenAiSettings" class="ai-settings-btn" aria-label="AI Configuration">
+                <button id="btnOpenAiSettings" class="ai-settings-btn notranslate" aria-label="AI Configuration" translate="no">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
                         <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
                         <circle cx="12" cy="12" r="4"></circle>
@@ -39,8 +116,8 @@
                 </button>
                 
                 <!-- Dark Mode Toggle Button -->
-                <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle Theme">
-                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button id="themeToggleBtn" class="icon-btn notranslate" aria-label="Toggle Theme" translate="no">
+                    <svg class="sun-icon notranslate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" translate="no">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -51,7 +128,7 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="moon-icon notranslate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" translate="no">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
@@ -637,5 +714,7 @@
     <script src="compatibility.js"></script>
     <script src="demo_profiles.js"></script>
     <script src="script.js"></script>
+    <!-- Google Website Translator Script (Multi-language global reach) -->
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 </body>
 </html>
