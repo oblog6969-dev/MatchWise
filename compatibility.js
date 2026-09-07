@@ -1,6 +1,6 @@
 /**
- * MatchWise Lite v2.6.0
- * compatibility.js - Multi-Framework Dyadic Relationship Compatibility Engine
+ * MatchWise Lite v2.9.0
+ * compatibility.js - Multi-Framework Dyadic Match & Narrative Engine
  * Compares two psychological profiles across 12 standard relationship dimensions
  * plus 6 deep multi-framework behavioral interaction dynamics:
  * 1. Hartman Core Motive Synergy (Red, Blue, White, Yellow pairing dynamics)

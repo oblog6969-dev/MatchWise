@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.6.0 AI Service
+ * MatchWise Lite v2.9.0 AI Service
  * Multi-Provider Clinical & Psychometric Orchestration:
  * 1. MatchWise Autonomous AI (Built-in Free / No Key Required / Unlimited Requests)
  * 2. Google Gemini 1.5 Flash (Free Tier via aistudio.google.com)
@@ -320,8 +320,28 @@ Output raw JSON only matching schema:
     }
 
     /**
-     * Autonomous Local Clinical Analysis for Single Profile
+     * Generate a short instructional tip based on context.
+     * Context values: 'landing', 'question_<id>', 'report_section_<name>', 'compare_overview'.
+     * Language is derived from currentLanguage ('en' or 'ar').
      */
+    async generateInstruction(context, language) {
+        const cacheKey = `instruction_${context}_${language}`;
+        const cached = typeof localStorage !== "undefined" ? localStorage.getItem(cacheKey) : null;
+        if (cached) return cached;
+        const prompt = `You are an instructional designer for a psychometric test. Provide a concise (1‑2 sentence) friendly tip that helps the user understand how to get the most out of the upcoming step described by the context "${context}". Use ${language === "ar" ? "Arabic" : "English"}. Keep the tone supportive and premium.`;
+        try {
+            const response = await this.callAI(prompt);
+            const cleaned = response.replace(/```(?:json)?/g, "").trim();
+            if (typeof localStorage !== "undefined") localStorage.setItem(cacheKey, cleaned);
+            return cleaned;
+        } catch (e) {
+            console.warn("Instruction generation failed, fallback to static tip", e);
+            const fallback = language === "ar" ? "نصيحة سريعة: احرص على قراءة التعليمات بعناية قبل المتابعة." : "Quick tip: Read the instructions carefully before proceeding.";
+            if (typeof localStorage !== "undefined") localStorage.setItem(cacheKey, fallback);
+            return fallback;
+        }
+    }
+
     generateBuiltinSingleAnalysis(userProfile, currentLanguage) {
         const isAr = currentLanguage === "ar";
         const traits = userProfile.calculated_personality || {};

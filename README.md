@@ -1,10 +1,14 @@
-# MatchWise Lite v2.6.0
+# MatchWise Lite v2.9.0
 
-**MatchWise Lite v2.6.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, and Autonomous AI.
+**MatchWise Lite v2.9.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, **Google Gemini 3.8 Flash**, and Autonomous AI.
 
 ---
 
-## 🌟 What's New in v2.6.0: Awareness & Consciousness Frameworks
+## 🌟 What's New in v2.9.0: AI Educational Guidance System
+- **Landing Page Clinical Readiness Tip**: Guides users to answer from spontaneous reality to maximize assessment diagnostic fidelity.
+- **In-Test Psychological Reflection Angles**: Dynamic contextual prompts explaining why each question matters with a 1-click **Clarify** button.
+- **Dossier Reading Guides**: Educational blueprints for single-profile self-discovery and dyadic comparative communication.
+- **User Preference Toggle**: Enable/disable educational instructions via AI Configuration modal.
 
 ### 1. Hawkins Map of Consciousness & Abraham Hicks Emotional Guidance
 - **David Hawkins Map of Consciousness**: Logarithmic scale (20 to 600+) measuring spiritual awareness, emotional ownership, and the critical **200 Courage threshold** separating reactive **Force** (Pride, Anger, Desire, Fear, Grief, Apathy, Guilt, Shame) from life-affirming **Power** (Neutrality, Willingness, Acceptance, Reason, Love, Peace).

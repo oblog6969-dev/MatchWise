@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.8.0
-**Release Name:** Hartman Motive Spectrum Circle Chart Visualizer & Dynamic Focus/Shadow Interactivity  
-**Date:** September 7, 2026  
+## Current Version: v2.9.0
+**Release Name:** AI Educational Guidance System & Contextual Clinical Instructions  
+**Date:** September 8, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -23,6 +23,7 @@
 | **M10: Consciousness & Resonance** | Hawkins Map of Consciousness (20-600+, 200 Courage threshold), Hicks 22-level Emotional Guidance, 10 polytomous questions (q76-q85), dual-ladder SVG visualizer, dyadic resonance. | ✅ Complete | Node & Browser Subagent Tested |
 | **M11: Interactive Popovers & Print Fidelity** | Interactive JS visualizers with bilingual hover/touch popovers explaining every framework component; vector SVG print fidelity with zero popover artifacts. | ✅ Complete | Browser Subagent & Multi-Device Tested |
 | **M12: Hartman Circle Chart & Dynamic Focus/Shadow** | Exact SVG donut arc paths (`<path d="...">`), direct slice percentages, dynamic center hub, interactive person focus/shadowing, and organized compact comparison micro-rows. | ✅ Complete | Visual Verification & Browser Tested |
+| **M13: AI Educational Guidance** | Multi-stage AI educational tips (landing readiness, in-test reflection angles with dynamic re-clarification, and single/dyadic report reading guides), Gemini 3.8 Flash support, caching, and user preference toggle. | ✅ Complete | Browser Subagent & End-to-End Tested |
 
 ---
 
@@ -138,3 +139,21 @@
 - **Dyadic AI Consultation Scope Resolution (`nameB`)**: Hoisted `nameB` to top of `generateAndRenderReport()` scope and localized catch error fallbacks, eliminating the runtime `ReferenceError: nameB is not defined` in conversational bridge scripts that previously triggered `.Failed to generate dyadic AI consultation`.
 - **Variable Hoisting in Comparison Mode**: Resolved a scope issue in `renderHartmanDonut()` where Person B variables (`pctB`, `primaryColorB`, `primaryHexB`, `motiveNameB`) were block-scoped, ensuring `applyFocus("B")` updates the center hub cleanly to `46% Nour: Blue` without console errors.
 - **Arabic / RTL Compatibility**: Full bidirectional support preserved with correct text anchors and RTL-compliant alignment in both single profile and dyadic comparison modes.
+
+---
+
+## 📝 Changelog (v2.9.0) - AI Educational Guidance System
+
+### Added
+- **Multi-Stage Contextual Guidance**:
+  - **Landing Page Readiness Card (`#landingInstructionContainer`)**: Guides test takers to approach questions from spontaneous everyday reality rather than idealized expectations.
+  - **In-Test Psychological Reflection Angle (`#questionInstructionContainer`)**: Injects contextual reflection guidance above question cards based on current question category and frameworks.
+  - **Interactive Clarification Button (`#btnClarifyTip`)**: Allows users to re-prompt the AI for alternative angles of reflection if a question feels ambiguous.
+  - **Dossier Reading Guides (`#reportInstructionContainer`)**: Educational guidance cards for both individual profiles (interpreting core motives and stress baseline) and dyadic comparisons (interpreting differences as complementary strengths and using bridge scripts).
+- **Core AI Service Enhancements (`ai_service.js`)**:
+  - Added `generateInstruction(context, language)` supporting Gemini 3.8 Flash / 1.5 Flash, DeepSeek, Groq, OpenAI, and autonomous offline clinical fallbacks.
+  - Added persistent `localStorage` caching (`instruction_${context}_${language}`) preventing duplicate network calls.
+- **User Preference Control**:
+  - Added `🎓 AI Educational Guidance` toggle (`#inputAiGuidanceToggle`) in MatchWise AI Settings modal with `localStorage` persistence (`mw_ai_guide_enabled`).
+- **Glassmorphic Styling (`style.css`)**:
+  - Added `.ai-instruction-box`, `.landing-guide`, `.in-test-guide`, `.report-guide`, `.ai-instruction-icon`, `.ai-instruction-title`, `.ai-instruction-text`, `.ai-instruction-refresh-btn`, and `@keyframes fadeInInstruction`.

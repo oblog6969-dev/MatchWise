@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.6.0
+ * MatchWise Lite v2.9.0
  * utils.js - Core Utilities
  * Contains: Localization/Translations, LocalStorage wrapper, Theme Controller,
  * and robust UTF-8 byte-level profile encryption & result-sharing code utilities.
@@ -157,7 +157,7 @@ const TRANSLATIONS = {
         act_5_title: "Act 5: Vibrational Resonance & Spiritual Orbit",
         act_5_desc: "Dyadic consciousness spectrum: Hawkins Power vs. Force dynamics, mutual vibrational elevation, and spiritual harmony.",
         load_demo_profiles: "Load Live Demo Profiles (Tariq & Nour)",
-        report_dossier_title: "MatchWise Lite v2.6.0",
+        report_dossier_title: "MatchWise Lite v2.9.0",
         report_dossier_subtitle: "Executive Multi-Framework Behavioral & Relationship Dossier",
         executive_overview: "Executive Overview",
         hartman_card_title: "Hartman Motive Spectrum (Fuel & Motives)",
@@ -182,7 +182,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "MatchWise AI",
         start_desc: "Begin a structured comprehensive assessment covering all 10 behavioral frameworks and emotional awareness (David Hawkins LoC & Abraham Hicks scales).",
         compare_desc: "Load or import completed personality assessments to generate an extremely comprehensive, printable multi-dimensional compatibility report.",
-        hero_badge: "v2.6.0 • Consciousness & AI Insights",
+        hero_badge: "v2.9.0 • Consciousness & AI Insights",
         parameter_label: "Parameter",
         radar_title: "Multivariable Compatibility Index (12 Axes)",
         bar_title: "Big Five / Temperament Alignment",
@@ -322,7 +322,7 @@ const TRANSLATIONS = {
         act_5_title: "المحور الخامس: الرنين المشاعري والمدار الروحي",
         act_5_desc: "حقل الوعي الثنائي: ديناميكيات القوة مقابل القسر (هوكينز)، والارتقاء المشاعري المتبادل، والجاذبية الروحية.",
         load_demo_profiles: "تحميل الملفات التجريبية الحية (طارق ونور)",
-        report_dossier_title: "ماتش وايز لايت v2.6.0",
+        report_dossier_title: "ماتش وايز لايت v2.9.0",
         report_dossier_subtitle: "الملف التحليلي التنفيذي للتوافق النفسي والسلوكي والعاطفي",
         executive_overview: "نظرة عامة تنفيذية",
         hartman_card_title: "طيف دوافع هارتمان (الوقود النفسي والاحتياجات)",
@@ -347,7 +347,7 @@ const TRANSLATIONS = {
         ai_settings_btn: "ذكاء ماتش وايز",
         start_desc: "ابدأ جلسة تقييم شاملة تغطي كافة النماذج السلوكية ومقاييس الوعي المشاعري (هوكينز وهيكس) لفهم أنماط التواصل والأولويات الحياتية.",
         compare_desc: "حمّل أو استورد ملفات التقييم المكتملة لإنشاء تقرير توافق شامل ومفصل متعدد الأبعاد وقابل للطباعة والتصدير.",
-        hero_badge: "v2.6.0 • رؤى الوعي والذكاء الاصطناعي",
+        hero_badge: "v2.9.0 • رؤى الوعي والذكاء الاصطناعي",
         parameter_label: "المؤشر / المعيار",
         radar_title: "مؤشر التوافق متعدد الأبعاد (12 محوراً)",
         bar_title: "محاذاة السمات الخمس الكبرى",
@@ -596,7 +596,7 @@ const Cryptography = {
                     created_at: new Date().toLocaleDateString("en-US", {
                         year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                     }),
-                    app_version: "v2.6.0",
+                    app_version: "v2.9.0",
                     calculated_personality: null,
                     assessment_confidence: 85
                 };

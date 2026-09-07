@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.6.0
+ * MatchWise Lite v2.9.0
  * script.js - Core SPA Coordinator & Adaptive Question Engine
  */
 
@@ -160,8 +160,22 @@ document.addEventListener("DOMContentLoaded", () => {
         modalAiConfigForm: document.getElementById("modalAiConfigForm"),
         selectAiProvider: document.getElementById("selectAiProvider"),
         inputAiApiKey: document.getElementById("inputAiApiKey"),
+        inputAiGuidanceToggle: document.getElementById("inputAiGuidanceToggle"),
         aiInsightsSection: document.getElementById("aiInsightsSection"),
         reportAIInsightsContainer: document.getElementById("reportAIInsightsContainer"),
+
+        // AI Educational Guidance Elements
+        landingInstructionContainer: document.getElementById("landingInstructionContainer"),
+        landingInstructionTitle: document.getElementById("landingInstructionTitle"),
+        landingInstructionText: document.getElementById("landingInstructionText"),
+        questionInstructionContainer: document.getElementById("questionInstructionContainer"),
+        questionInstructionTitle: document.getElementById("questionInstructionTitle"),
+        questionInstructionText: document.getElementById("questionInstructionText"),
+        btnClarifyTip: document.getElementById("btnClarifyTip"),
+        btnClarifyText: document.getElementById("btnClarifyText"),
+        reportInstructionContainer: document.getElementById("reportInstructionContainer"),
+        reportInstructionTitle: document.getElementById("reportInstructionTitle"),
+        reportInstructionText: document.getElementById("reportInstructionText"),
         
         reportStrengthsList: document.getElementById("reportStrengthsList"),
         reportChallengesList: document.getElementById("reportChallengesList"),
@@ -204,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dom.languageSelector.addEventListener("change", (e) => {
         state.localization.setLanguage(e.target.value);
+        renderLandingInstruction();
         if (state.currentPanel === "panelAssessment") {
             renderCurrentQuestion();
         } else if (state.currentPanel === "panelDashboard") {
@@ -313,6 +328,9 @@ document.addEventListener("DOMContentLoaded", () => {
             // Populate current values
             dom.selectAiProvider.value = state.aiService.provider || "builtin";
             dom.inputAiApiKey.value = (state.aiService.apiKey && state.aiService.apiKey !== "YOUR_API_KEY_HERE") ? state.aiService.apiKey : "";
+            if (dom.inputAiGuidanceToggle) {
+                dom.inputAiGuidanceToggle.checked = state.aiGuidanceEnabled !== false;
+            }
 
             dom.modalBackdrop.classList.add("active-backdrop");
             dom.btnModalSubmit.style.display = "block";
@@ -322,6 +340,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 const key = dom.inputAiApiKey.value.trim();
                 state.aiService.setConfiguration(prov, key);
                 state.isAiMode = true;
+                if (dom.inputAiGuidanceToggle) {
+                    const isEnabled = dom.inputAiGuidanceToggle.checked;
+                    state.aiGuidanceEnabled = isEnabled;
+                    localStorage.setItem("mw_ai_guide_enabled", isEnabled ? "true" : "false");
+                    renderLandingInstruction();
+                }
                 cleanup();
                 dom.modalBackdrop.classList.remove("active-backdrop");
                 showFeedbackModal(
@@ -344,6 +368,35 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.btnModalCancel.addEventListener("click", cancelAiSettings);
         });
     }
+
+    // --- AI EDUCATIONAL GUIDANCE CONTROLLER ---
+    state.aiGuidanceEnabled = localStorage.getItem("mw_ai_guide_enabled") !== "false";
+
+    async function renderLandingInstruction() {
+        if (!dom.landingInstructionContainer) return;
+        if (!state.aiGuidanceEnabled) {
+            dom.landingInstructionContainer.style.display = "none";
+            return;
+        }
+
+        const isAr = state.localization.currentLang === "ar";
+        dom.landingInstructionContainer.style.display = "flex";
+        dom.landingInstructionTitle.textContent = isAr ? "✨ نصيحة الجاهزية الذكية للتقييم" : "✨ AI Clinical Readiness Tip";
+        dom.landingInstructionText.textContent = isAr ? "جارٍ تحضير إرشادات الاستعداد للتقييم..." : "Preparing assessment guidance...";
+
+        try {
+            if (!state.aiService) state.aiService = new window.AIService();
+            const tip = await state.aiService.generateInstruction("landing", isAr ? "ar" : "en");
+            dom.landingInstructionText.textContent = tip;
+        } catch (e) {
+            dom.landingInstructionText.textContent = isAr
+                ? "أجب بعفوية وصدق بناءً على واقعك الحقيقي وتصرفاتك التلقائية، وليس ما تتمنى أن تكون عليه، لضمان أعلى دقة في كشف محركات الشخصية."
+                : "Answer spontaneously reflecting your real everyday self rather than ideal wishes, ensuring deep psychological precision across all 10 frameworks.";
+        }
+    }
+
+    // Trigger landing instruction initially
+    renderLandingInstruction();
 
     // Toggle Print Preview Mode
     if (dom.btnTogglePrintPreview) {
@@ -851,6 +904,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const localizedText = isAr ? q.arabic.text : q.english.text;
         dom.questionText.textContent = localizedText;
 
+        // In-Test Educational Guidance Context Injection
+        if (dom.questionInstructionContainer) {
+            if (state.aiGuidanceEnabled) {
+                dom.questionInstructionContainer.style.display = "flex";
+                if (dom.questionInstructionTitle) {
+                    dom.questionInstructionTitle.textContent = isAr ? "✨ زاوية التأمل النفسي للسؤال" : "✨ AI Reflection Angle";
+                }
+                if (dom.btnClarifyText) {
+                    dom.btnClarifyText.textContent = isAr ? "توضيح أكثر" : "Clarify";
+                }
+                if (dom.questionInstructionText) {
+                    dom.questionInstructionText.textContent = isAr ? "جارٍ تحليل عمق السؤال..." : "Formulating reflection guidance...";
+                }
+
+                const catContext = q.category || "General";
+                if (state.aiService) {
+                    state.aiService.generateInstruction(`question_${q.id}_${catContext}`, isAr ? "ar" : "en").then(tip => {
+                        if (dom.questionInstructionText) dom.questionInstructionText.textContent = tip;
+                    }).catch(e => {
+                        if (dom.questionInstructionText) {
+                            dom.questionInstructionText.textContent = isAr 
+                                ? "تذكر أن هذا السؤال يقيس أسلوبك التلقائي، لا توجد إجابة صحيحة أو خاطئة."
+                                : "Remember, this item assesses your spontaneous baseline; there are no right or wrong answers.";
+                        }
+                    });
+                }
+            } else {
+                dom.questionInstructionContainer.style.display = "none";
+            }
+        }
+
         // Clear previous options
         dom.answerOptionsContainer.innerHTML = "";
 
@@ -883,6 +967,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Disable back button on first question
         dom.btnBackQuestion.disabled = history.length <= 1;
+
+        // Clarify button event
+        if (dom.btnClarifyTip) {
+            dom.btnClarifyTip.onclick = async () => {
+                if (!state.aiService) return;
+                const oldText = dom.btnClarifyText.textContent;
+                dom.btnClarifyText.textContent = isAr ? "..." : "...";
+                try {
+                    const freshTip = await state.aiService.generateInstruction(`question_clarify_${q.id}_${Date.now()}`, isAr ? "ar" : "en");
+                    if (dom.questionInstructionText) dom.questionInstructionText.textContent = freshTip;
+                } finally {
+                    dom.btnClarifyText.textContent = oldText;
+                }
+            };
+        }
     }
 
     // Input renderer: Modernized Likert Scale (1 to 7) with sentiment badge & auto-advance
@@ -1145,7 +1244,7 @@ document.addEventListener("DOMContentLoaded", () => {
             created_at: new Date().toLocaleDateString(state.localization.currentLang === "ar" ? "ar-EG" : "en-US", {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             }),
-            app_version: "v2.6.0",
+            app_version: "v2.9.0",
             answers: state.sessionAnswers,
             calculated_personality: calculatedTraits,
             assessment_confidence: calculatedTraits.assessment_confidence
@@ -1425,6 +1524,34 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.radarChartCard.classList.add("hidden");
             dom.reportSectionDealbreakers.classList.add("hidden");
             
+            // Educational Guidance for Single Report
+            if (dom.reportInstructionContainer) {
+                if (state.aiGuidanceEnabled) {
+                    dom.reportInstructionContainer.style.display = "flex";
+                    if (dom.reportInstructionTitle) {
+                        dom.reportInstructionTitle.textContent = isAr 
+                            ? "✨ دليل الذكاء الاصطناعي: كيف تقرأ ملفك الشخصي وتستفيد منه"
+                            : "✨ AI Guide: How to Read & Apply Your Individual Dossier";
+                    }
+                    if (dom.reportInstructionText) {
+                        dom.reportInstructionText.textContent = isAr ? "جارٍ إعداد دليل قراءة التقرير..." : "Preparing report reading guidance...";
+                    }
+                    if (state.aiService) {
+                        state.aiService.generateInstruction("single_report_overview", isAr ? "ar" : "en").then(tip => {
+                            if (dom.reportInstructionText) dom.reportInstructionText.textContent = tip;
+                        }).catch(() => {
+                            if (dom.reportInstructionText) {
+                                dom.reportInstructionText.textContent = isAr
+                                    ? "ركّز على التناغم بين دافعك الجوهري ونمط تعاملك مع الضغوط لفهم محركاتك العميقة."
+                                    : "Focus on the alignment between your core motive and stress response to understand your deep operating baseline.";
+                            }
+                        });
+                    }
+                } else {
+                    dom.reportInstructionContainer.style.display = "none";
+                }
+            }
+            
             dom.barChartTitle.textContent = isAr ? "تحليل السمات الشخصية الخمس الكبرى" : "Big Five Personality Analysis";
 
             const traitsA = profileA.calculated_personality;
@@ -1609,6 +1736,34 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.gaugeCardContainer.classList.remove("hidden");
             dom.radarChartCard.classList.remove("hidden");
             if (dom.dyadicConflictCard) dom.dyadicConflictCard.style.display = "block";
+
+            // Educational Guidance for Comparative Report
+            if (dom.reportInstructionContainer) {
+                if (state.aiGuidanceEnabled) {
+                    dom.reportInstructionContainer.style.display = "flex";
+                    if (dom.reportInstructionTitle) {
+                        dom.reportInstructionTitle.textContent = isAr 
+                            ? "✨ دليل الذكاء الاصطناعي: كيف تقرأ وتناقش تقرير التوافق المشترك"
+                            : "✨ AI Guide: How to Interpret & Discuss This Compatibility Report";
+                    }
+                    if (dom.reportInstructionText) {
+                        dom.reportInstructionText.textContent = isAr ? "جارٍ إعداد دليل النقاش الزوجي..." : "Preparing shared discussion guidance...";
+                    }
+                    if (state.aiService) {
+                        state.aiService.generateInstruction("compare_overview", isAr ? "ar" : "en").then(tip => {
+                            if (dom.reportInstructionText) dom.reportInstructionText.textContent = tip;
+                        }).catch(() => {
+                            if (dom.reportInstructionText) {
+                                dom.reportInstructionText.textContent = isAr
+                                    ? "لا تنظر إلى الفروقات كعيوب بل كنقاط تكامل وفرص لبناء تفاهم متبادل وجسور صريحة."
+                                    : "View personality differences not as flaws, but as complementary strengths and blueprints for proactive communication.";
+                            }
+                        });
+                    }
+                } else {
+                    dom.reportInstructionContainer.style.display = "none";
+                }
+            }
             
             dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد (12 محوراً)" : "Multivariable Compatibility Index (12 Axes)";
             dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
