@@ -135,5 +135,6 @@
 - **Script Cache Busting**: Updated script tag in `index.html` to `script.js?v=2.1` to ensure browsers load the updated visualizer instantly.
 
 ### Fixed
+- **Dyadic AI Consultation Scope Resolution (`nameB`)**: Hoisted `nameB` to top of `generateAndRenderReport()` scope and localized catch error fallbacks, eliminating the runtime `ReferenceError: nameB is not defined` in conversational bridge scripts that previously triggered `.Failed to generate dyadic AI consultation`.
 - **Variable Hoisting in Comparison Mode**: Resolved a scope issue in `renderHartmanDonut()` where Person B variables (`pctB`, `primaryColorB`, `primaryHexB`, `motiveNameB`) were block-scoped, ensuring `applyFocus("B")` updates the center hub cleanly to `46% Nour: Blue` without console errors.
 - **Arabic / RTL Compatibility**: Full bidirectional support preserved with correct text anchors and RTL-compliant alignment in both single profile and dyadic comparison modes.

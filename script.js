@@ -1337,6 +1337,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isAr = state.localization.currentLang === "ar";
         const getDisplayName = (p, ar) => (ar && p?.owner_name_ar ? p.owner_name_ar : p?.owner_name || "");
         const nameA = getDisplayName(profileA, isAr);
+        const nameB = profileB ? getDisplayName(profileB, isAr) : "";
 
         // Show/hide comparison elements dynamically using css class .hidden
         const bCols = document.querySelectorAll(".person-b-col");
@@ -1563,11 +1564,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.circleProgressFill.setAttribute("stroke-dasharray", `${report.overall_index}, 100`);
             dom.reportConfidence.textContent = `${report.report_confidence}%`;
 
-            const getDisplayName = (p, ar) => (ar && p?.owner_name_ar ? p.owner_name_ar : p?.owner_name || "");
-            const nameA = getDisplayName(profileA, isAr);
-            const nameB = getDisplayName(profileB, isAr);
-
-            // Bilingual Dynamic Summary Builder
+            // Dynamic Summary Builder
             let summaryText = "";
             if (report.overall_index >= 85) {
                 summaryText = isAr 
@@ -1778,14 +1775,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         aiContainer.appendChild(warnDiv);
                     }
                 }).catch(err => {
-                    aiContainer.innerHTML = "<p>Failed to generate AI insights.</p>";
-                    console.error(err);
+                    aiContainer.innerHTML = `<p style="color: var(--text-secondary); text-align: start;">${isAr ? "تعذر إنشاء التحليل المعمق حالياً." : "Failed to generate AI insights."}</p>`;
+                    console.error("AI Single Analysis Error:", err);
                 });
             } else {
                 // COMPARISON DYADIC AI CONSULTATION
                 state.aiService.compareProfilesWithAI(profileA, profileB, isAr ? "ar" : "en").then(aiData => {
                     if (!aiData) {
-                        aiContainer.innerHTML = `<p>${isAr ? "تعذر إنشاء استشارة التوافق الثنائي حالياً." : "Could not generate dyadic consultation at this time."}</p>`;
+                        aiContainer.innerHTML = `<p style="color: var(--text-secondary); text-align: start;">${isAr ? "تعذر إنشاء استشارة التوافق الثنائي حالياً." : "Could not generate dyadic consultation at this time."}</p>`;
                         return;
                     }
                     aiContainer.innerHTML = "";
@@ -1808,7 +1805,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (aiData.conversationalBridgeScripts && aiData.conversationalBridgeScripts.length > 0) {
                         const scriptWrapper = document.createElement("div");
                         scriptWrapper.style.marginTop = "20px";
-                        scriptWrapper.innerHTML = `<h4 style="color: var(--accent-color); margin-bottom: 12px;">${isAr ? "نصوص الحوار وجسور التفاهم المقترحة" : "Conversational Bridge Scripts (What to Say in Tough Moments)"}</h4>`;
+                        scriptWrapper.innerHTML = `<h4 style="color: var(--accent-color); margin-bottom: 12px; text-align: start;">${isAr ? "نصوص الحوار وجسور التفاهم المقترحة" : "Conversational Bridge Scripts (What to Say in Tough Moments)"}</h4>`;
                         
                         aiData.conversationalBridgeScripts.forEach(bs => {
                             const sc = document.createElement("div");
@@ -1823,8 +1820,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         aiContainer.appendChild(scriptWrapper);
                     }
                 }).catch(err => {
-                    aiContainer.innerHTML = "<p>Failed to generate dyadic AI consultation.</p>";
-                    console.error(err);
+                    aiContainer.innerHTML = `<p style="color: var(--text-secondary); text-align: start;">${isAr ? "تعذر إنشاء استشارة التوافق الثنائي حالياً." : "Failed to generate dyadic AI consultation."}</p>`;
+                    console.error("Dyadic AI Consultation Error:", err);
                 });
             }
         } else {
