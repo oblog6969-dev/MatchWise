@@ -64,79 +64,214 @@ class AIService {
 
     /**
      * Adaptive Question Determination
-     * Evaluates psychometric convergence and returns optimal diagnostic question.
+     * Evaluates demographic constraints and psychometric convergence to return optimal diagnostic question.
      */
-    async determineNextQuestion(currentHistory, currentAnswers, allQuestions, currentLanguage) {
+    async determineNextQuestion(currentHistory = [], currentAnswers = {}, allQuestions = [], currentLanguage = "en", userDemographics = {}) {
         let currentProfile = {};
         try {
-            if (typeof window !== "undefined" && window.PersonalityEngine) {
-                currentProfile = window.PersonalityEngine.calculate(currentAnswers, allQuestions);
+            const engine = (typeof window !== "undefined" && window.PersonalityEngine) || (typeof global !== "undefined" && global.PersonalityEngine);
+            if (engine) {
+                currentProfile = engine.calculate(currentAnswers, allQuestions);
             }
         } catch (err) {
             console.warn("PersonalityEngine calculation skipped for prompt:", err);
         }
 
-        const remainingQuestions = allQuestions.filter(q => !currentAnswers[q.id]);
-        if (remainingQuestions.length === 0) return null;
+        const userGender = userDemographics.gender || null;
+        const userMarital = userDemographics.maritalStatus || null;
+
+        // Strict Demographic Gate: Filter remaining questions to only those matching user demographics
+        const eligibleRemaining = allQuestions.filter(q => {
+            if (currentAnswers[q.id] !== undefined) return false;
+            if (q.gender_constraint && userGender && q.gender_constraint !== userGender) return false;
+            if (q.marital_constraint && userMarital && q.marital_constraint !== userMarital) return false;
+            return true;
+        });
+
+        if (eligibleRemaining.length === 0) return null;
 
         // If using built-in or if no API key is provided, use autonomous psychometric convergence
         if (this.provider === "builtin" || !this.apiKey) {
-            return this.determineNextQuestionAutonomous(currentAnswers, remainingQuestions, currentProfile, currentLanguage);
+            return this.determineNextQuestionAutonomous(currentAnswers, eligibleRemaining, currentProfile, currentLanguage, userDemographics, currentHistory, allQuestions);
         }
 
         const askedCount = Object.keys(currentAnswers).length;
         const prompt = `You are an expert psychometrician and relationship psychologist AI.
 Assess 10 frameworks (Hartman, DISC, Birkman, FIRO-B, TKI, Gottman, Attachment, Schwartz, Big Five).
+User Profile: Name: ${userDemographics.name || "User"}, Gender: ${userGender === 'M' ? 'Male' : 'Female'}, Marital Status: ${userMarital || "single"}.
 User has answered ${askedCount} questions.
 Current State: Hartman: ${currentProfile.hartman?.primary || "Pending"}, DISC: ${currentProfile.disc?.primary || "Pending"}, Need: ${currentProfile.birkman?.underlying_need || "Pending"}.
-Choose the most diagnostic next question from: ${JSON.stringify(remainingQuestions.slice(0, 20).map(q => ({ id: q.id, trait: q.trait, cat: q.category })))}.
+Choose the most diagnostic next question from these demographically verified candidates:
+${JSON.stringify(eligibleRemaining.slice(0, 15).map(q => ({ id: q.id, trait: q.trait, cat: q.category })))}.
 Output valid JSON only: { "nextQuestionId": "string", "clinicalReason": "string in ${currentLanguage === 'ar' ? 'Arabic' : 'English'}" }`;
 
         try {
             const responseText = await this.callAI(prompt);
             const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
             const parsed = JSON.parse(jsonStr);
-            if (parsed && parsed.nextQuestionId && remainingQuestions.some(q => q.id === parsed.nextQuestionId)) {
+            if (parsed && parsed.nextQuestionId && eligibleRemaining.some(q => q.id === parsed.nextQuestionId)) {
                 return parsed;
             }
         } catch (e) {
             console.warn("External AI call failed, falling back to autonomous engine:", e.message);
         }
 
-        return this.determineNextQuestionAutonomous(currentAnswers, remainingQuestions, currentProfile, currentLanguage);
+        return this.determineNextQuestionAutonomous(currentAnswers, eligibleRemaining, currentProfile, currentLanguage, userDemographics, currentHistory, allQuestions);
     }
 
-    determineNextQuestionAutonomous(currentAnswers, remainingQuestions, currentProfile, currentLanguage) {
+    determineNextQuestionAutonomous(currentAnswers, eligibleRemaining, currentProfile, currentLanguage, userDemographics = {}, currentHistory = [], allQuestions = []) {
+        if (!eligibleRemaining || eligibleRemaining.length === 0) return null;
+
         const isAr = currentLanguage === "ar";
-        // Prioritize diagnostic multi-framework scenario questions first
-        const scenarioQuestions = remainingQuestions.filter(q => ["q71", "q72", "q73", "q74", "q75"].includes(q.id));
-        if (scenarioQuestions.length > 0) {
-            const q = scenarioQuestions[0];
-            return {
-                nextQuestionId: q.id,
-                clinicalReason: isAr
-                    ? "سؤال تشخيصي لوزن التوافق العملي في إدارة المواقف والأولويات المشتركة."
-                    : "Diagnostic scenario evaluating multi-framework decision styles and underlying needs.",
-                frameworkTarget: q.trait || "multi-framework"
-            };
+        const askedCount = Object.keys(currentAnswers).length;
+
+        // Build question lookup map
+        const allQuestionsMap = {};
+        (allQuestions || []).forEach(q => { allQuestionsMap[q.id] = q; });
+
+        // Analyze recent history categories to prevent repetitive clustering
+        const lastQId = currentHistory[currentHistory.length - 1];
+        const secondLastQId = currentHistory[currentHistory.length - 2];
+        const lastCategory = allQuestionsMap[lastQId]?.category;
+        const secondLastCategory = allQuestionsMap[secondLastQId]?.category;
+
+        // Track category distribution count so far
+        const categoryCounts = {};
+        for (const qId of Object.keys(currentAnswers)) {
+            const q = allQuestionsMap[qId];
+            if (q && q.category) {
+                categoryCounts[q.category] = (categoryCounts[q.category] || 0) + 1;
+            }
         }
 
-        // Otherwise pick the question addressing the most uncertain category
-        const hScores = currentProfile.hartman?.scores || {};
-        const isHartmanTied = Math.abs((hScores.red || 25) - (hScores.blue || 25)) < 8;
-        
-        let targetQ = remainingQuestions[0];
-        if (isHartmanTied) {
-            const found = remainingQuestions.find(q => q.options && q.options.some(opt => opt.trait_scores && (opt.trait_scores.hartman_red || opt.trait_scores.hartman_blue)));
-            if (found) targetQ = found;
+        // Psychometric Ambiguity & Latent Need Indicators
+        const hScores = currentProfile.hartman?.scores || { red: 25, blue: 25, white: 25, yellow: 25 };
+        const sortedColors = Object.entries(hScores).sort((a, b) => b[1] - a[1]);
+        const top1Color = sortedColors[0]?.[0];
+        const top2Color = sortedColors[1]?.[0];
+        const hartmanGap = (sortedColors[0]?.[1] || 25) - (sortedColors[1]?.[1] || 25);
+        const isHartmanAmbiguous = hartmanGap < 9;
+
+        const attScores = currentProfile.attachment || { secure: 15, anxious: 5, avoidant: 5 };
+        const isAttachmentAmbiguous = Math.abs((attScores.anxious || 5) - (attScores.avoidant || 5)) < 4;
+
+        // Score each candidate question using Computerized Adaptive Testing (CAT) principles
+        const scoredCandidates = eligibleRemaining.map(q => {
+            let score = (q.weight || 1.0) * 5;
+            if (q.importance === "high") score += 4;
+            if (q.type === "scenario") score += 3;
+
+            // 1. Demographic Signature Relevance
+            const isDemographicSpecific = (q.gender_constraint && q.gender_constraint === userDemographics.gender) ||
+                                          (q.marital_constraint && q.marital_constraint === userDemographics.maritalStatus);
+            if (isDemographicSpecific) {
+                if (askedCount >= 3 && askedCount <= 18) {
+                    score += 35; // Ideal window for stage-specific personal question
+                } else {
+                    score += 15;
+                }
+            }
+
+            // 2. Category Information Gain & Pillar Coverage
+            const curCatCount = categoryCounts[q.category] || 0;
+            if (curCatCount === 0) {
+                score += 26; // High reward for uncovering new relationship pillar
+            } else if (curCatCount === 1) {
+                score += 14;
+            } else if (curCatCount === 2) {
+                score += 6;
+            } else if (curCatCount >= 4) {
+                score -= 8; // Penalty for over-represented category
+            }
+
+            // 3. Category Recency / Anti-Fatigue Penalty
+            if (q.category === lastCategory) {
+                score -= 16;
+            }
+            if (q.category === secondLastCategory) {
+                score -= 8;
+            }
+
+            // 4. Hartman Motive Tie Resolution
+            if (isHartmanAmbiguous && q.options) {
+                const touchesHartman = q.options.some(opt => {
+                    const ts = opt.trait_scores || {};
+                    return ts[`hartman_${top1Color}`] !== undefined || ts[`hartman_${top2Color}`] !== undefined;
+                });
+                if (touchesHartman) score += 18;
+            }
+
+            // 5. Attachment Pattern Clarification
+            if (isAttachmentAmbiguous && (q.trait === "attachment" || (q.options && q.options.some(o => o.trait_scores && (o.trait_scores.attachment_anxious || o.trait_scores.attachment_avoidant))))) {
+                score += 14;
+            }
+
+            // 6. Consciousness Scale Pacing (q76 - q85)
+            const isConsciousnessQ = q.category === "Awareness & Consciousness" || (q.options && q.options.some(o => o.consciousness_delta !== undefined));
+            if (isConsciousnessQ) {
+                if (askedCount >= 10 && askedCount % 5 === 0) {
+                    score += 22; // Well-spaced consciousness probing
+                } else if (askedCount < 8) {
+                    score -= 8; // Defer till core behavioral styles are established
+                }
+            }
+
+            return { question: q, score, isDemographicSpecific, curCatCount, isConsciousnessQ };
+        });
+
+        // Sort descending by calculated information gain score
+        scoredCandidates.sort((a, b) => b.score - a.score);
+        const best = scoredCandidates[0];
+        const bestQ = best.question;
+
+        // Dynamic, psychologically insightful clinical rationale
+        let clinicalReason = "";
+        const CATEGORY_AR_NAMES = {
+            "Personality": "الشخصية والطباع",
+            "Lifestyle": "نمط الحياة واليوميات",
+            "Money": "الإدارة المالية والإنفاق",
+            "Decision making": "صناعة القرار والشراكة",
+            "Conflict": "إدارة الخلافات والتهدئة",
+            "Communication": "التواصل والحوار",
+            "Children": "التربية ورؤية الأبناء",
+            "Religion": "القيم الإيمانية والروحية",
+            "Career": "الطموح المهني والعمل",
+            "Boundaries": "الحدود والخصوصية",
+            "Trust": "الثقة والأمان النفسي",
+            "Affection": "المودة ولغات الحب",
+            "Emotional intelligence": "الذكاء العاطفي والاستيعاب",
+            "Future planning": "التخطيط المستقبلي والرؤية",
+            "Marriage": "فلسفة الزواج والارتباط",
+            "Awareness & Consciousness": "مستوى الوعي والاتزان"
+        };
+
+        if (best.isDemographicSpecific) {
+            clinicalReason = isAr
+                ? "سؤال استراتيجي مخصص لتقييم الجاهزية والتوافق الحياتي بناءً على خلفيتك الاجتماعية وظروف المرحلة."
+                : "Targeted diagnostic scenario evaluating relational readiness and stage-specific life priorities.";
+        } else if (isHartmanAmbiguous && (bestQ.category === "Personality" || bestQ.category === "Decision making")) {
+            clinicalReason = isAr
+                ? "تم استدعاء هذا السؤال لفض الالتباس بين الدوافع الأساسية (Hartman) وتحديد المحرك السلوكي الأول بدقة."
+                : "Selected to resolve variance between primary motives and accurately calibrate core behavioral drivers.";
+        } else if (best.curCatCount === 0) {
+            const catName = isAr ? (CATEGORY_AR_NAMES[bestQ.category] || bestQ.category) : bestQ.category;
+            clinicalReason = isAr
+                ? `سؤال استكشافي لتغطية ركيزة (${catName}) وتحقيق وزن شامل لكافة أبعاد التوافق الزواجي.`
+                : `Exploratory item measuring (${bestQ.category}) to ensure comprehensive multidimensional profile calibration.`;
+        } else if (best.isConsciousnessQ) {
+            clinicalReason = isAr
+                ? "سؤال لوزن مستوى الوعي الذاتي وإدارة الانفعالات (Hawkins Scale) في المواقف الزوجية التفاعلية."
+                : "Calibrating emotional consciousness and ego defensiveness (Hawkins Scale) under relational stress.";
+        } else {
+            clinicalReason = isAr
+                ? "سؤال تشخيصي لضبط النمط التواصلي ومستوى المرونة العاطفية في إدارة التفاعلات اليومية."
+                : "Diagnostic item measuring communicative pacing and emotional elasticity in daily dynamics.";
         }
 
         return {
-            nextQuestionId: targetQ.id,
-            clinicalReason: isAr
-                ? "سؤال استكشافي لقياس النمط التواصلي ومستوى الحساسية العاطفية."
-                : "Exploratory item measuring communicative pace and relational priorities.",
-            frameworkTarget: targetQ.trait || "general"
+            nextQuestionId: bestQ.id,
+            clinicalReason,
+            frameworkTarget: bestQ.trait || bestQ.category || "multi-framework"
         };
     }
 

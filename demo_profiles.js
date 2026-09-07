@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.5.2 - Clinical Live Test Archetypes
+ * MatchWise Lite v2.8.1 - Clinical Live Test Archetypes
  * Tariq Al-Mansoor (Executive Leader) & Nour Al-Sabah (Empathetic Harmonizer)
  */
 const DEMO_PROFILES = [
@@ -29,9 +29,6 @@ const DEMO_PROFILES = [
       "q15": "opt1",
       "q16": "opt1",
       "q17_m": "opt2",
-      "q17_f": "opt2",
-      "q18_mrd": "opt3",
-      "q19_utb": "opt1",
       "q20": "opt1",
       "q21": "opt2",
       "q22": "opt1",
@@ -96,39 +93,40 @@ const DEMO_PROFILES = [
       "q82": "opt2",
       "q83": "opt1",
       "q84": "opt2",
-      "q85": "opt2"
+      "q85": "opt2",
+      "q18_sgl": "opt3"
     },
     "calculated_personality": {
       "big_five": {
         "openness": 78,
         "conscientiousness": 95,
         "extroversion": 81,
-        "agreeableness": 92,
-        "neuroticism": 32
+        "agreeableness": 95,
+        "neuroticism": 68
       },
       "mbti": {
         "type": "ESTJ",
         "scores": {
           "e_i": 79,
           "s_n": 12,
-          "t_f": 31,
+          "t_f": 124,
           "j_p": 85
         }
       },
       "attachment": {
         "primary": "secure",
-        "anxiety_score": 15,
-        "avoidance_score": 27,
+        "anxiety_score": 92,
+        "avoidance_score": 26,
         "scores": {
-          "secure": 398,
-          "anxious": 6,
+          "secure": 839,
+          "anxious": 231,
           "avoidant": 50
         }
       },
       "communication": {
         "primary": "assertive",
         "scores": {
-          "assertive": 151,
+          "assertive": 183,
           "passive": 20,
           "passive_aggressive": 10,
           "reserved": 20
@@ -137,10 +135,10 @@ const DEMO_PROFILES = [
       "conflict": {
         "primary": "competing",
         "scores": {
-          "collaborating": 38,
+          "collaborating": 34,
           "avoiding": 3,
-          "competing": 48,
-          "compromising": 6
+          "competing": 42,
+          "compromising": 18
         }
       },
       "decision_style": "consensus",
@@ -170,11 +168,11 @@ const DEMO_PROFILES = [
         "worklife_balance": 71,
         "trust_jealousy": 43,
         "trust_privacy": 33,
-        "trust_past": 85,
+        "trust_past": 61,
         "marriage_commitment": 93,
         "marriage_growth": 95,
         "children_desire": 92,
-        "emotional_regulation": 73,
+        "emotional_regulation": 95,
         "emotional_empathy": 67,
         "emotional_comforting": 50,
         "boundaries_independence": 94,
@@ -192,21 +190,21 @@ const DEMO_PROFILES = [
         "liberalism": 24,
         "capitalism": 17
       },
-      "assessment_confidence": 75,
+      "assessment_confidence": 73,
       "hartman": {
         "primary": "red",
         "secondary": "blue",
         "scores": {
-          "red": 64,
-          "blue": 23,
-          "white": 3,
-          "yellow": 9
+          "red": 55,
+          "blue": 18,
+          "white": 14,
+          "yellow": 13
         },
         "breakdown": {
-          "red": 64,
-          "blue": 23,
-          "white": 3,
-          "yellow": 9
+          "red": 55,
+          "blue": 18,
+          "white": 14,
+          "yellow": 13
         },
         "metadata": {
           "motive_en": "Power, Progress & Leadership",
@@ -222,16 +220,16 @@ const DEMO_PROFILES = [
         "secondary": "C",
         "type": "DC",
         "scores": {
-          "d": 56,
+          "d": 48,
           "i": 13,
-          "s": 4,
-          "c": 26
+          "s": 3,
+          "c": 36
         },
         "breakdown": {
-          "D": 56,
+          "D": 48,
           "I": 13,
-          "S": 4,
-          "C": 26
+          "S": 3,
+          "C": 36
         },
         "pace": "Fast-Paced & Responsive",
         "pace_ar": "سريع الإيقاع واستجابي",
@@ -267,46 +265,46 @@ const DEMO_PROFILES = [
           "wanted": 1
         },
         "affection": {
-          "expressed": 4,
-          "wanted": 4
+          "expressed": 9,
+          "wanted": 8
         }
       },
       "tki_conflict": {
         "primary": "competing",
         "secondary": "collaborating",
         "scores": {
-          "competing": 48,
-          "collaborating": 38,
-          "compromising": 6,
+          "competing": 42,
+          "collaborating": 34,
+          "compromising": 18,
           "avoiding": 3,
           "accommodating": 3
         },
-        "assertiveness": 43,
-        "cooperativeness": 21
+        "assertiveness": 38,
+        "cooperativeness": 19
       },
       "gottman_safety": {
         "repair_receptivity": 95,
-        "emotional_safety_index": 90,
+        "emotional_safety_index": 70,
         "risks": {
-          "criticism": 23,
-          "defensiveness": 26,
-          "stonewalling": 11,
-          "contempt": 5
+          "criticism": 40,
+          "defensiveness": 37,
+          "stonewalling": 10,
+          "contempt": 32
         },
         "four_horsemen_risk": {
-          "criticism": 23,
-          "defensiveness": 26,
-          "stonewalling": 11,
-          "contempt": 5
+          "criticism": 40,
+          "defensiveness": 37,
+          "stonewalling": 10,
+          "contempt": 32
         }
       },
       "attachment_ecr": {
         "primary": "secure",
-        "anxiety_score": 15,
-        "avoidance_score": 27,
+        "anxiety_score": 92,
+        "avoidance_score": 26,
         "scores": {
-          "secure": 398,
-          "anxious": 6,
+          "secure": 839,
+          "anxious": 231,
           "avoidant": 50
         }
       },
@@ -314,15 +312,15 @@ const DEMO_PROFILES = [
         "top_values": [
           "security",
           "tradition",
-          "self_direction"
+          "achievement"
         ],
         "scores": {
-          "tradition": 18,
-          "security": 27,
-          "self_direction": 18,
-          "benevolence": 14,
-          "hedonism": 6,
-          "achievement": 17
+          "tradition": 20,
+          "security": 29,
+          "self_direction": 15,
+          "benevolence": 12,
+          "hedonism": 5,
+          "achievement": 19
         }
       },
       "consciousness": {
@@ -382,10 +380,7 @@ const DEMO_PROFILES = [
       "q14": "opt3",
       "q15": "opt3",
       "q16": "opt2",
-      "q17_m": "opt3",
       "q17_f": "opt3",
-      "q18_mrd": "opt2",
-      "q19_utb": "opt3",
       "q20": "opt3",
       "q21": "opt1",
       "q22": "opt3",
@@ -450,12 +445,13 @@ const DEMO_PROFILES = [
       "q82": "opt1",
       "q83": "opt1",
       "q84": "opt1",
-      "q85": "opt1"
+      "q85": "opt1",
+      "q18_sgl": "opt1"
     },
     "calculated_personality": {
       "big_five": {
-        "openness": 91,
-        "conscientiousness": 51,
+        "openness": 95,
+        "conscientiousness": 75,
         "extroversion": 28,
         "agreeableness": 95,
         "neuroticism": 41
@@ -464,26 +460,26 @@ const DEMO_PROFILES = [
         "type": "INFP",
         "scores": {
           "e_i": -70,
-          "s_n": -81,
+          "s_n": -85,
           "t_f": -85,
-          "j_p": -39
+          "j_p": -15
         }
       },
       "attachment": {
         "primary": "secure",
         "anxiety_score": 53,
-        "avoidance_score": 92,
+        "avoidance_score": 88,
         "scores": {
-          "secure": 504,
+          "secure": 1516,
           "anxious": 82,
-          "avoidant": 227
+          "avoidant": 173
         }
       },
       "communication": {
-        "primary": "passive",
+        "primary": "assertive",
         "scores": {
-          "assertive": 79,
-          "passive": 104,
+          "assertive": 135,
+          "passive": 68,
           "passive_aggressive": 10,
           "reserved": 20
         }
@@ -491,8 +487,8 @@ const DEMO_PROFILES = [
       "conflict": {
         "primary": "collaborating",
         "scores": {
-          "collaborating": 50,
-          "avoiding": 40,
+          "collaborating": 65,
+          "avoiding": 25,
           "competing": 2,
           "compromising": 5
         }
@@ -509,7 +505,7 @@ const DEMO_PROFILES = [
         }
       },
       "values_and_lifestyle": {
-        "money_saver": 83,
+        "money_saver": 61,
         "lifestyle_neatness": 60,
         "lifestyle_health": 60,
         "social_frequency": 35,
@@ -524,15 +520,15 @@ const DEMO_PROFILES = [
         "worklife_balance": 93,
         "trust_jealousy": 95,
         "trust_privacy": 67,
-        "trust_past": 49,
+        "trust_past": 61,
         "marriage_commitment": 63,
         "marriage_growth": 95,
         "children_desire": 10,
-        "emotional_regulation": 85,
+        "emotional_regulation": 95,
         "emotional_empathy": 61,
         "emotional_comforting": 45,
         "boundaries_independence": 95,
-        "future_stability": 60
+        "future_stability": 90
       },
       "aesthetic_profile": {
         "self_presentation": "opt3",
@@ -541,26 +537,26 @@ const DEMO_PROFILES = [
         "expect_fashion": "opt3"
       },
       "ideology_profile": {
-        "traditionalism": 43,
-        "feminism": 9,
-        "liberalism": 38,
-        "capitalism": 9
+        "traditionalism": 45,
+        "feminism": 10,
+        "liberalism": 36,
+        "capitalism": 10
       },
-      "assessment_confidence": 75,
+      "assessment_confidence": 73,
       "hartman": {
         "primary": "blue",
         "secondary": "white",
         "scores": {
-          "red": 4,
-          "blue": 46,
-          "white": 42,
-          "yellow": 8
+          "red": 6,
+          "blue": 43,
+          "white": 36,
+          "yellow": 14
         },
         "breakdown": {
-          "red": 4,
-          "blue": 46,
-          "white": 42,
-          "yellow": 8
+          "red": 6,
+          "blue": 43,
+          "white": 36,
+          "yellow": 14
         },
         "metadata": {
           "motive_en": "Intimacy, Connection & Loyalty",
@@ -576,16 +572,16 @@ const DEMO_PROFILES = [
         "secondary": "C",
         "type": "SC",
         "scores": {
-          "d": 4,
+          "d": 8,
           "i": 1,
-          "s": 70,
-          "c": 25
+          "s": 63,
+          "c": 29
         },
         "breakdown": {
-          "D": 4,
+          "D": 8,
           "I": 1,
-          "S": 70,
-          "C": 25
+          "S": 63,
+          "C": 29
         },
         "pace": "Reflective & Deliberate",
         "pace_ar": "متأنٍ ومتأمل وهادئ الإيقاع",
@@ -593,13 +589,13 @@ const DEMO_PROFILES = [
         "focus_ar": "موجه نحو العلاقات والأشخاص"
       },
       "birkman": {
-        "usual_style": "supportive",
+        "usual_style": "social",
         "underlying_need": "freedom",
         "stress_trigger": "withdrawing",
         "summary": {
           "usual": {
-            "en": "Gentle, collaborative, and considerate of others.",
-            "ar": "ودود، متعاون، ومراعٍ جداً لمشاعر الآخرين."
+            "en": "Expressive, engaging, energetic and lively.",
+            "ar": "تعبيري، اجتماعي، متفاعل ومفعم بالحيوية."
           },
           "needs": {
             "en": "Personal space, trust without micromanagement, and autonomy.",
@@ -621,7 +617,7 @@ const DEMO_PROFILES = [
           "wanted": 6
         },
         "affection": {
-          "expressed": 6,
+          "expressed": 9,
           "wanted": 9
         }
       },
@@ -630,52 +626,52 @@ const DEMO_PROFILES = [
         "secondary": "avoiding",
         "scores": {
           "competing": 2,
-          "collaborating": 50,
+          "collaborating": 65,
           "compromising": 5,
-          "avoiding": 40,
+          "avoiding": 25,
           "accommodating": 3
         },
-        "assertiveness": 26,
-        "cooperativeness": 27
+        "assertiveness": 34,
+        "cooperativeness": 34
       },
       "gottman_safety": {
         "repair_receptivity": 95,
-        "emotional_safety_index": 80,
+        "emotional_safety_index": 89,
         "risks": {
-          "criticism": 17,
-          "defensiveness": 11,
-          "stonewalling": 60,
+          "criticism": 15,
+          "defensiveness": 10,
+          "stonewalling": 39,
           "contempt": 5
         },
         "four_horsemen_risk": {
-          "criticism": 17,
-          "defensiveness": 11,
-          "stonewalling": 60,
+          "criticism": 15,
+          "defensiveness": 10,
+          "stonewalling": 39,
           "contempt": 5
         }
       },
       "attachment_ecr": {
         "primary": "secure",
         "anxiety_score": 53,
-        "avoidance_score": 92,
+        "avoidance_score": 88,
         "scores": {
-          "secure": 504,
+          "secure": 1516,
           "anxious": 82,
-          "avoidant": 227
+          "avoidant": 173
         }
       },
       "schwartz_values": {
         "top_values": [
-          "tradition",
           "self_direction",
-          "security"
+          "tradition",
+          "benevolence"
         ],
         "scores": {
-          "tradition": 28,
-          "security": 19,
-          "self_direction": 28,
-          "benevolence": 13,
-          "hedonism": 8,
+          "tradition": 25,
+          "security": 17,
+          "self_direction": 26,
+          "benevolence": 21,
+          "hedonism": 7,
           "achievement": 4
         }
       },
@@ -713,9 +709,6 @@ const DEMO_PROFILES = [
   }
 ];
 
-if (typeof window !== "undefined") {
-    window.DEMO_PROFILES = DEMO_PROFILES;
-}
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
     module.exports = DEMO_PROFILES;
 }

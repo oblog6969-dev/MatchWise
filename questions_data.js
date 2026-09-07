@@ -1,4 +1,4 @@
-[
+window.MATCHWISE_QUESTIONS = [
   {
     "id": "q1",
     "category": "Personality",
@@ -3030,4 +3030,4 @@
       }
     ]
   }
-]
+];

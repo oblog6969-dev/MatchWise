@@ -23,10 +23,7 @@
     "q14": "opt3",
     "q15": "opt3",
     "q16": "opt2",
-    "q17_m": "opt3",
     "q17_f": "opt3",
-    "q18_mrd": "opt2",
-    "q19_utb": "opt3",
     "q20": "opt3",
     "q21": "opt1",
     "q22": "opt3",
@@ -91,12 +88,13 @@
     "q82": "opt1",
     "q83": "opt1",
     "q84": "opt1",
-    "q85": "opt1"
+    "q85": "opt1",
+    "q18_sgl": "opt1"
   },
   "calculated_personality": {
     "big_five": {
-      "openness": 91,
-      "conscientiousness": 51,
+      "openness": 95,
+      "conscientiousness": 75,
       "extroversion": 28,
       "agreeableness": 95,
       "neuroticism": 41
@@ -105,26 +103,26 @@
       "type": "INFP",
       "scores": {
         "e_i": -70,
-        "s_n": -81,
+        "s_n": -85,
         "t_f": -85,
-        "j_p": -39
+        "j_p": -15
       }
     },
     "attachment": {
       "primary": "secure",
       "anxiety_score": 53,
-      "avoidance_score": 92,
+      "avoidance_score": 88,
       "scores": {
-        "secure": 504,
+        "secure": 1516,
         "anxious": 82,
-        "avoidant": 227
+        "avoidant": 173
       }
     },
     "communication": {
-      "primary": "passive",
+      "primary": "assertive",
       "scores": {
-        "assertive": 79,
-        "passive": 104,
+        "assertive": 135,
+        "passive": 68,
         "passive_aggressive": 10,
         "reserved": 20
       }
@@ -132,8 +130,8 @@
     "conflict": {
       "primary": "collaborating",
       "scores": {
-        "collaborating": 50,
-        "avoiding": 40,
+        "collaborating": 65,
+        "avoiding": 25,
         "competing": 2,
         "compromising": 5
       }
@@ -150,7 +148,7 @@
       }
     },
     "values_and_lifestyle": {
-      "money_saver": 83,
+      "money_saver": 61,
       "lifestyle_neatness": 60,
       "lifestyle_health": 60,
       "social_frequency": 35,
@@ -165,15 +163,15 @@
       "worklife_balance": 93,
       "trust_jealousy": 95,
       "trust_privacy": 67,
-      "trust_past": 49,
+      "trust_past": 61,
       "marriage_commitment": 63,
       "marriage_growth": 95,
       "children_desire": 10,
-      "emotional_regulation": 85,
+      "emotional_regulation": 95,
       "emotional_empathy": 61,
       "emotional_comforting": 45,
       "boundaries_independence": 95,
-      "future_stability": 60
+      "future_stability": 90
     },
     "aesthetic_profile": {
       "self_presentation": "opt3",
@@ -182,26 +180,26 @@
       "expect_fashion": "opt3"
     },
     "ideology_profile": {
-      "traditionalism": 43,
-      "feminism": 9,
-      "liberalism": 38,
-      "capitalism": 9
+      "traditionalism": 45,
+      "feminism": 10,
+      "liberalism": 36,
+      "capitalism": 10
     },
-    "assessment_confidence": 75,
+    "assessment_confidence": 73,
     "hartman": {
       "primary": "blue",
       "secondary": "white",
       "scores": {
-        "red": 4,
-        "blue": 46,
-        "white": 42,
-        "yellow": 8
+        "red": 6,
+        "blue": 43,
+        "white": 36,
+        "yellow": 14
       },
       "breakdown": {
-        "red": 4,
-        "blue": 46,
-        "white": 42,
-        "yellow": 8
+        "red": 6,
+        "blue": 43,
+        "white": 36,
+        "yellow": 14
       },
       "metadata": {
         "motive_en": "Intimacy, Connection & Loyalty",
@@ -217,16 +215,16 @@
       "secondary": "C",
       "type": "SC",
       "scores": {
-        "d": 4,
+        "d": 8,
         "i": 1,
-        "s": 70,
-        "c": 25
+        "s": 63,
+        "c": 29
       },
       "breakdown": {
-        "D": 4,
+        "D": 8,
         "I": 1,
-        "S": 70,
-        "C": 25
+        "S": 63,
+        "C": 29
       },
       "pace": "Reflective & Deliberate",
       "pace_ar": "متأنٍ ومتأمل وهادئ الإيقاع",
@@ -234,13 +232,13 @@
       "focus_ar": "موجه نحو العلاقات والأشخاص"
     },
     "birkman": {
-      "usual_style": "supportive",
+      "usual_style": "social",
       "underlying_need": "freedom",
       "stress_trigger": "withdrawing",
       "summary": {
         "usual": {
-          "en": "Gentle, collaborative, and considerate of others.",
-          "ar": "ودود، متعاون، ومراعٍ جداً لمشاعر الآخرين."
+          "en": "Expressive, engaging, energetic and lively.",
+          "ar": "تعبيري، اجتماعي، متفاعل ومفعم بالحيوية."
         },
         "needs": {
           "en": "Personal space, trust without micromanagement, and autonomy.",
@@ -262,7 +260,7 @@
         "wanted": 6
       },
       "affection": {
-        "expressed": 6,
+        "expressed": 9,
         "wanted": 9
       }
     },
@@ -271,52 +269,52 @@
       "secondary": "avoiding",
       "scores": {
         "competing": 2,
-        "collaborating": 50,
+        "collaborating": 65,
         "compromising": 5,
-        "avoiding": 40,
+        "avoiding": 25,
         "accommodating": 3
       },
-      "assertiveness": 26,
-      "cooperativeness": 27
+      "assertiveness": 34,
+      "cooperativeness": 34
     },
     "gottman_safety": {
       "repair_receptivity": 95,
-      "emotional_safety_index": 80,
+      "emotional_safety_index": 89,
       "risks": {
-        "criticism": 17,
-        "defensiveness": 11,
-        "stonewalling": 60,
+        "criticism": 15,
+        "defensiveness": 10,
+        "stonewalling": 39,
         "contempt": 5
       },
       "four_horsemen_risk": {
-        "criticism": 17,
-        "defensiveness": 11,
-        "stonewalling": 60,
+        "criticism": 15,
+        "defensiveness": 10,
+        "stonewalling": 39,
         "contempt": 5
       }
     },
     "attachment_ecr": {
       "primary": "secure",
       "anxiety_score": 53,
-      "avoidance_score": 92,
+      "avoidance_score": 88,
       "scores": {
-        "secure": 504,
+        "secure": 1516,
         "anxious": 82,
-        "avoidant": 227
+        "avoidant": 173
       }
     },
     "schwartz_values": {
       "top_values": [
-        "tradition",
         "self_direction",
-        "security"
+        "tradition",
+        "benevolence"
       ],
       "scores": {
-        "tradition": 28,
-        "security": 19,
-        "self_direction": 28,
-        "benevolence": 13,
-        "hedonism": 8,
+        "tradition": 25,
+        "security": 17,
+        "self_direction": 26,
+        "benevolence": 21,
+        "hedonism": 7,
         "achievement": 4
       }
     },

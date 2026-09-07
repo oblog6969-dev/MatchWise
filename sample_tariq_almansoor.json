@@ -24,9 +24,6 @@
     "q15": "opt1",
     "q16": "opt1",
     "q17_m": "opt2",
-    "q17_f": "opt2",
-    "q18_mrd": "opt3",
-    "q19_utb": "opt1",
     "q20": "opt1",
     "q21": "opt2",
     "q22": "opt1",
@@ -91,39 +88,40 @@
     "q82": "opt2",
     "q83": "opt1",
     "q84": "opt2",
-    "q85": "opt2"
+    "q85": "opt2",
+    "q18_sgl": "opt3"
   },
   "calculated_personality": {
     "big_five": {
       "openness": 78,
       "conscientiousness": 95,
       "extroversion": 81,
-      "agreeableness": 92,
-      "neuroticism": 32
+      "agreeableness": 95,
+      "neuroticism": 68
     },
     "mbti": {
       "type": "ESTJ",
       "scores": {
         "e_i": 79,
         "s_n": 12,
-        "t_f": 31,
+        "t_f": 124,
         "j_p": 85
       }
     },
     "attachment": {
       "primary": "secure",
-      "anxiety_score": 15,
-      "avoidance_score": 27,
+      "anxiety_score": 92,
+      "avoidance_score": 26,
       "scores": {
-        "secure": 398,
-        "anxious": 6,
+        "secure": 839,
+        "anxious": 231,
         "avoidant": 50
       }
     },
     "communication": {
       "primary": "assertive",
       "scores": {
-        "assertive": 151,
+        "assertive": 183,
         "passive": 20,
         "passive_aggressive": 10,
         "reserved": 20
@@ -132,10 +130,10 @@
     "conflict": {
       "primary": "competing",
       "scores": {
-        "collaborating": 38,
+        "collaborating": 34,
         "avoiding": 3,
-        "competing": 48,
-        "compromising": 6
+        "competing": 42,
+        "compromising": 18
       }
     },
     "decision_style": "consensus",
@@ -165,11 +163,11 @@
       "worklife_balance": 71,
       "trust_jealousy": 43,
       "trust_privacy": 33,
-      "trust_past": 85,
+      "trust_past": 61,
       "marriage_commitment": 93,
       "marriage_growth": 95,
       "children_desire": 92,
-      "emotional_regulation": 73,
+      "emotional_regulation": 95,
       "emotional_empathy": 67,
       "emotional_comforting": 50,
       "boundaries_independence": 94,
@@ -187,21 +185,21 @@
       "liberalism": 24,
       "capitalism": 17
     },
-    "assessment_confidence": 75,
+    "assessment_confidence": 73,
     "hartman": {
       "primary": "red",
       "secondary": "blue",
       "scores": {
-        "red": 64,
-        "blue": 23,
-        "white": 3,
-        "yellow": 9
+        "red": 55,
+        "blue": 18,
+        "white": 14,
+        "yellow": 13
       },
       "breakdown": {
-        "red": 64,
-        "blue": 23,
-        "white": 3,
-        "yellow": 9
+        "red": 55,
+        "blue": 18,
+        "white": 14,
+        "yellow": 13
       },
       "metadata": {
         "motive_en": "Power, Progress & Leadership",
@@ -217,16 +215,16 @@
       "secondary": "C",
       "type": "DC",
       "scores": {
-        "d": 56,
+        "d": 48,
         "i": 13,
-        "s": 4,
-        "c": 26
+        "s": 3,
+        "c": 36
       },
       "breakdown": {
-        "D": 56,
+        "D": 48,
         "I": 13,
-        "S": 4,
-        "C": 26
+        "S": 3,
+        "C": 36
       },
       "pace": "Fast-Paced & Responsive",
       "pace_ar": "سريع الإيقاع واستجابي",
@@ -262,46 +260,46 @@
         "wanted": 1
       },
       "affection": {
-        "expressed": 4,
-        "wanted": 4
+        "expressed": 9,
+        "wanted": 8
       }
     },
     "tki_conflict": {
       "primary": "competing",
       "secondary": "collaborating",
       "scores": {
-        "competing": 48,
-        "collaborating": 38,
-        "compromising": 6,
+        "competing": 42,
+        "collaborating": 34,
+        "compromising": 18,
         "avoiding": 3,
         "accommodating": 3
       },
-      "assertiveness": 43,
-      "cooperativeness": 21
+      "assertiveness": 38,
+      "cooperativeness": 19
     },
     "gottman_safety": {
       "repair_receptivity": 95,
-      "emotional_safety_index": 90,
+      "emotional_safety_index": 70,
       "risks": {
-        "criticism": 23,
-        "defensiveness": 26,
-        "stonewalling": 11,
-        "contempt": 5
+        "criticism": 40,
+        "defensiveness": 37,
+        "stonewalling": 10,
+        "contempt": 32
       },
       "four_horsemen_risk": {
-        "criticism": 23,
-        "defensiveness": 26,
-        "stonewalling": 11,
-        "contempt": 5
+        "criticism": 40,
+        "defensiveness": 37,
+        "stonewalling": 10,
+        "contempt": 32
       }
     },
     "attachment_ecr": {
       "primary": "secure",
-      "anxiety_score": 15,
-      "avoidance_score": 27,
+      "anxiety_score": 92,
+      "avoidance_score": 26,
       "scores": {
-        "secure": 398,
-        "anxious": 6,
+        "secure": 839,
+        "anxious": 231,
         "avoidant": 50
       }
     },
@@ -309,15 +307,15 @@
       "top_values": [
         "security",
         "tradition",
-        "self_direction"
+        "achievement"
       ],
       "scores": {
-        "tradition": 18,
-        "security": 27,
-        "self_direction": 18,
-        "benevolence": 14,
-        "hedonism": 6,
-        "achievement": 17
+        "tradition": 20,
+        "security": 29,
+        "self_direction": 15,
+        "benevolence": 12,
+        "hedonism": 5,
+        "achievement": 19
       }
     },
     "consciousness": {

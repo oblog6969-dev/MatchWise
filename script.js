@@ -180,15 +180,22 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // --- 3. FETCH AND INITIALIZE QUESTIONS ---
+    if (typeof window !== "undefined" && window.MATCHWISE_QUESTIONS && Array.isArray(window.MATCHWISE_QUESTIONS)) {
+        questions = window.MATCHWISE_QUESTIONS;
+        renderSavedProfiles();
+    }
     fetch("questions.json")
         .then(response => response.json())
         .then(data => {
-            questions = data;
-            // Initialize Dashboard list on startup
-            renderSavedProfiles();
+            if (data && Array.isArray(data) && data.length > 0) {
+                questions = data;
+                renderSavedProfiles();
+            }
         })
         .catch(err => {
-            console.error("Failed to load questions database.", err);
+            if (!questions || questions.length === 0) {
+                console.warn("fetch failed, using offline embedded questions data.", err);
+            }
         });
 
     // --- 4. LANGUAGE & THEME EVENTS ---
@@ -507,7 +514,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "Affection": "لغات الحب والمودة",
         "Marriage": "الرؤية الزوجية والشراكة",
         "Future planning": "التخطيط المستقبلي",
-        "Family": "العلاقات والحدود الأسرية"
+        "Family": "العلاقات والحدود الأسرية",
+        "Awareness & Consciousness": "مستوى الوعي والاتزان"
     };
 
     const RADAR_CATEGORY_TRANSLATIONS = {
@@ -596,49 +604,87 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     /**
+     * Checks if a question is eligible for the user based on gender and marital status constraints.
+     */
+    function isQuestionEligibleForUser(q, gender, maritalStatus, answers = null) {
+        if (!q) return false;
+        if (answers && answers[q.id] !== undefined) return false;
+        if (q.gender_constraint && gender && q.gender_constraint !== gender) return false;
+        if (q.marital_constraint && maritalStatus && q.marital_constraint !== maritalStatus) return false;
+        return true;
+    }
+
+    /**
+     * Returns all unanswered questions strictly eligible for the current user's demographic profile.
+     */
+    function getEligibleRemainingQuestions() {
+        const currentGender = state.assessmentSession.gender;
+        const currentMarital = state.assessmentSession.maritalStatus;
+        return questions.filter(q => isQuestionEligibleForUser(q, currentGender, currentMarital, state.sessionAnswers));
+    }
+
+    /**
+     * Checks if any eligible unanswered question remains in the pool.
+     */
+    function hasNextQuestion() {
+        return getEligibleRemainingQuestions().length > 0;
+    }
+
+    /**
      * Finds the next question dynamically.
-     * Evaluates followups and maps paths intelligently based on answer scores.
+     * Evaluates followups and selects optimal adaptive candidate from demographically eligible questions.
      */
     function getNextQuestionId(currentQId) {
-        const currentQ = questions.find(q => q.id === currentQId);
-        if (!currentQ) return null;
-
-        // Check for specific follow-ups
-        if (currentQ.followups && currentQ.followups.length > 0) {
-            const answer = state.sessionAnswers[currentQId];
-            for (const followup of currentQ.followups) {
-                // If Likert and condition is agree/disagree
-                if (followup.condition === "agree" && parseInt(answer, 10) >= 5) {
-                    return followup.next_id;
-                }
-                if (followup.condition === "disagree" && parseInt(answer, 10) <= 3) {
-                    return followup.next_id;
-                }
-            }
-        }
-
-        // Default path: traverse linear questions.json index, skipping follow-ups and constraint mismatches
-        const currentIndex = questions.findIndex(q => q.id === currentQId);
         const currentGender = state.assessmentSession.gender;
         const currentMarital = state.assessmentSession.maritalStatus;
 
-        for (let i = currentIndex + 1; i < questions.length; i++) {
-            const candidate = questions[i];
-            if (candidate.is_followup) continue;
-
-            // Skip if question is restricted to a different gender
-            if (candidate.gender_constraint && candidate.gender_constraint !== currentGender) {
-                continue;
+        // Check for specific follow-ups if present
+        const currentQ = questions.find(q => q.id === currentQId);
+        if (currentQ && currentQ.followups && currentQ.followups.length > 0) {
+            const answer = state.sessionAnswers[currentQId];
+            for (const followup of currentQ.followups) {
+                const targetQ = questions.find(q => q.id === followup.next_id);
+                if (targetQ && isQuestionEligibleForUser(targetQ, currentGender, currentMarital, state.sessionAnswers)) {
+                    if (followup.condition === "agree" && parseInt(answer, 10) >= 5) {
+                        return followup.next_id;
+                    }
+                    if (followup.condition === "disagree" && parseInt(answer, 10) <= 3) {
+                        return followup.next_id;
+                    }
+                }
             }
-
-            // Skip if question is restricted to a different marital status
-            if (candidate.marital_constraint && candidate.marital_constraint !== currentMarital) {
-                continue;
-            }
-
-            return candidate.id;
         }
-        return null;
+
+        const eligibleRemaining = getEligibleRemainingQuestions();
+        if (eligibleRemaining.length === 0) return null;
+
+        // Use autonomous psychometric CAT selector to find optimal next question
+        if (state.aiService && typeof state.aiService.determineNextQuestionAutonomous === "function") {
+            let currentProfile = {};
+            try {
+                if (window.PersonalityEngine) {
+                    currentProfile = window.PersonalityEngine.calculate(state.sessionAnswers, questions);
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+            const autonomousResult = state.aiService.determineNextQuestionAutonomous(
+                state.sessionAnswers,
+                eligibleRemaining,
+                currentProfile,
+                state.localization.currentLang,
+                { gender: currentGender, maritalStatus: currentMarital, name: state.assessmentSession.personName },
+                state.assessmentSession.history,
+                questions
+            );
+            if (autonomousResult && autonomousResult.nextQuestionId) {
+                state.currentClinicalReason = autonomousResult.clinicalReason;
+                return autonomousResult.nextQuestionId;
+            }
+        }
+
+        // Direct fallback: pick first eligible remaining question
+        return eligibleRemaining[0].id;
     }
 
     // Auto-advance controller for single-select questions
@@ -651,13 +697,6 @@ document.addEventListener("DOMContentLoaded", () => {
             autoAdvanceTimer = null;
         }
         isAutoAdvancing = false;
-    }
-
-    function hasNextQuestion() {
-        const history = state.assessmentSession.history;
-        const currentQId = history[history.length - 1];
-        if (!currentQId) return false;
-        return getNextQuestionId(currentQId) !== null;
     }
 
     function triggerAutoAdvance(delay = 300) {
@@ -694,15 +733,36 @@ document.addEventListener("DOMContentLoaded", () => {
         dom.btnNextQuestion.disabled = true;
 
         let nextQId = null;
+        const currentGender = state.assessmentSession.gender;
+        const currentMarital = state.assessmentSession.maritalStatus;
+        const userDemographics = {
+            gender: currentGender,
+            maritalStatus: currentMarital,
+            name: state.assessmentSession.personName
+        };
 
         try {
             if (state.isAiMode && state.aiService) {
-                const aiResponse = await state.aiService.determineNextQuestion(history, state.sessionAnswers, questions, state.localization.currentLang);
+                const aiResponse = await state.aiService.determineNextQuestion(
+                    history,
+                    state.sessionAnswers,
+                    questions,
+                    state.localization.currentLang,
+                    userDemographics
+                );
+                if (aiResponse && aiResponse.clinicalReason) {
+                    state.currentClinicalReason = aiResponse.clinicalReason;
+                }
                 if (aiResponse && aiResponse.next_id === "NEW" && aiResponse.new_question) {
                     questions.push(aiResponse.new_question);
                     nextQId = aiResponse.new_question.id;
-                } else if (aiResponse && aiResponse.nextQuestionId && questions.some(q => q.id === aiResponse.nextQuestionId && !state.sessionAnswers[q.id])) {
-                    nextQId = aiResponse.nextQuestionId;
+                } else if (aiResponse && aiResponse.nextQuestionId) {
+                    const candQ = questions.find(q => q.id === aiResponse.nextQuestionId);
+                    if (candQ && isQuestionEligibleForUser(candQ, currentGender, currentMarital, state.sessionAnswers)) {
+                        nextQId = aiResponse.nextQuestionId;
+                    } else {
+                        nextQId = getNextQuestionId(currentQId);
+                    }
                 } else {
                     nextQId = getNextQuestionId(currentQId);
                 }
@@ -756,7 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (candidate.gender_constraint && candidate.gender_constraint !== currentGender) return false;
             if (candidate.marital_constraint && candidate.marital_constraint !== currentMarital) return false;
             return true;
-        }).length || 70;
+        }).length || 83;
 
         const currentLength = history.length;
         const progressPercentage = Math.min(100, Math.round((currentLength / matchingQuestionsCount) * 100));
@@ -768,6 +828,23 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.questionCountBadge.textContent = isAr
                 ? `السؤال ${currentLength} من ${matchingQuestionsCount}`
                 : `Question ${currentLength} of ${matchingQuestionsCount}`;
+        }
+
+        // Dynamic Adaptive Clinical Indicator
+        const adaptiveBadgeEl = document.querySelector(".adaptive-note-mini");
+        if (adaptiveBadgeEl) {
+            if (q.gender_constraint || q.marital_constraint) {
+                adaptiveBadgeEl.textContent = isAr ? "🎯 سؤال مخصص لملفك الشخصي" : "🎯 Demographically Targeted Item";
+                adaptiveBadgeEl.style.color = "var(--primary-color)";
+                adaptiveBadgeEl.title = isAr ? "تم تخصيص هذا السؤال بناءً على حالتك وظروفك الاجتماعية" : "Targeted specifically to your demographic profile";
+            } else if (state.currentClinicalReason) {
+                adaptiveBadgeEl.textContent = `✨ ${state.currentClinicalReason}`;
+                adaptiveBadgeEl.style.color = "var(--text-secondary)";
+                adaptiveBadgeEl.title = state.currentClinicalReason;
+            } else {
+                adaptiveBadgeEl.textContent = isAr ? "✨ محرك التشخيص التكيفي الذكي" : "✨ Adaptive Psychometric Engine";
+                adaptiveBadgeEl.style.color = "var(--text-tertiary)";
+            }
         }
 
         // Bilingual Text Support
@@ -792,7 +869,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Adjust Next Button text dynamically at end of test
-        const hasNext = getNextQuestionId(currentQId);
+        const hasNext = hasNextQuestion();
         const nextSpan = dom.btnNextQuestion.querySelector("span");
         if (nextSpan) {
             if (!hasNext) {
