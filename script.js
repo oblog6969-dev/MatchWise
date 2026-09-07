@@ -2488,93 +2488,618 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 9B. MULTI-FRAMEWORK INTERACTIVE SVG VISUALIZERS ---
 
-// 1. Hartman Motive Spectrum Donut
+// Helper to calculate SVG donut slice path using exact arc geometry
+    function describeDonutSlice(cx, cy, rInner, rOuter, startDeg, endDeg, gapDeg = 0) {
+        const span = endDeg - startDeg;
+        if (span <= 0) return { path: "", midX: cx, midY: cy, midAngle: startDeg, span: 0 };
+
+        let a1 = startDeg;
+        let a2 = endDeg;
+        if (gapDeg > 0 && span > gapDeg * 1.5) {
+            a1 += gapDeg / 2;
+            a2 -= gapDeg / 2;
+        }
+
+        const rad = (deg) => ((deg - 90) * Math.PI) / 180;
+        const midDeg = (a1 + a2) / 2;
+        const midR = (rInner + rOuter) / 2;
+        const midX = cx + midR * Math.cos(rad(midDeg));
+        const midY = cy + midR * Math.sin(rad(midDeg));
+
+        if (span >= 359.9) {
+            // Full circle donut
+            const path = `
+                M ${cx} ${cy - rOuter}
+                A ${rOuter} ${rOuter} 0 1 1 ${cx} ${cy + rOuter}
+                A ${rOuter} ${rOuter} 0 1 1 ${cx} ${cy - rOuter}
+                M ${cx} ${cy - rInner}
+                A ${rInner} ${rInner} 0 1 0 ${cx} ${cy + rInner}
+                A ${rInner} ${rInner} 0 1 0 ${cx} ${cy - rInner}
+                Z
+            `;
+            return { path, midX, midY, midAngle: midDeg, span };
+        }
+
+        const r1 = rad(a1);
+        const r2 = rad(a2);
+
+        const x1Out = cx + rOuter * Math.cos(r1);
+        const y1Out = cy + rOuter * Math.sin(r1);
+        const x2Out = cx + rOuter * Math.cos(r2);
+        const y2Out = cy + rOuter * Math.sin(r2);
+
+        const x1In = cx + rInner * Math.cos(r1);
+        const y1In = cy + rInner * Math.sin(r1);
+        const x2In = cx + rInner * Math.cos(r2);
+        const y2In = cy + rInner * Math.sin(r2);
+
+        const largeArc = (a2 - a1 > 180) ? 1 : 0;
+
+        const path = [
+            `M ${x1Out.toFixed(2)} ${y1Out.toFixed(2)}`,
+            `A ${rOuter.toFixed(2)} ${rOuter.toFixed(2)} 0 ${largeArc} 1 ${x2Out.toFixed(2)} ${y2Out.toFixed(2)}`,
+            `L ${x2In.toFixed(2)} ${y2In.toFixed(2)}`,
+            `A ${rInner.toFixed(2)} ${rInner.toFixed(2)} 0 ${largeArc} 0 ${x1In.toFixed(2)} ${y1In.toFixed(2)}`,
+            `Z`
+        ].join(" ");
+
+        return { path, midX, midY, midAngle: midDeg, span };
+    }
+
+    // 1. Hartman Motive Spectrum Donut & Percentage Visualizer
     function renderHartmanDonut(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
         if (!container) return;
         container.innerHTML = "";
 
-        const hA = traitsA.hartman || { breakdown: { red: 25, blue: 25, white: 25, yellow: 25 }, primary: "blue" };
-        const bA = hA.breakdown || { red: 25, blue: 25, white: 25, yellow: 25 };
+        const hA = (traitsA && traitsA.hartman) || { breakdown: { red: 25, blue: 25, white: 25, yellow: 25 }, primary: "red" };
+        const bA = hA.breakdown || hA.scores || { red: 25, blue: 25, white: 25, yellow: 25 };
 
         const colors = {
-            red: { hex: "#ef4444", label: isAr ? "أحمر (قيادة وإنجاز)" : "Red (Power & Progress)" },
-            blue: { hex: "#3b82f6", label: isAr ? "أزرق (قرب وأصالة)" : "Blue (Intimacy & Depth)" },
-            white: { hex: "#94a3b8", label: isAr ? "أبيض (سلام ووضوح)" : "White (Peace & Clarity)" },
-            yellow: { hex: "#eab308", label: isAr ? "أصفر (حماس وبهجة)" : "Yellow (Fun & Passion)" }
+            red: {
+                hex: "#ef4444",
+                gradStart: "#f87171",
+                gradEnd: "#dc2626",
+                stroke: "#b91c1c",
+                label: isAr ? "الأحمر (القيادة والإنجاز)" : "Red (Power & Progress)",
+                shortLabel: isAr ? "الأحمر" : "Red",
+                motive: isAr ? "القوة والإنجاز والقيادة" : "Power & Progress",
+                desc: isAr ? "الكفاءة، الحسم، والمباشرة" : "Efficiency, decisive leadership, and directness"
+            },
+            blue: {
+                hex: "#3b82f6",
+                gradStart: "#60a5fa",
+                gradEnd: "#2563eb",
+                stroke: "#1d4ed8",
+                label: isAr ? "الأزرق (العمق والوفاء)" : "Blue (Intimacy & Depth)",
+                shortLabel: isAr ? "الأزرق" : "Blue",
+                motive: isAr ? "التقارب والعمق العاطفي والوفاء" : "Intimacy & Devotion",
+                desc: isAr ? "الوفاء، الصدق، والتواصل العميق" : "Loyalty, sincere devotion, and empathy"
+            },
+            white: {
+                hex: "#94a3b8",
+                gradStart: "#e2e8f0",
+                gradEnd: "#94a3b8",
+                stroke: "#64748b",
+                label: isAr ? "الأبيض (السلام والسكينة)" : "White (Peace & Clarity)",
+                shortLabel: isAr ? "الأبيض" : "White",
+                motive: isAr ? "السلام والوضوح والهدوء الداخلي" : "Peace & Clarity",
+                desc: isAr ? "الهدوء، الدبلوماسية، والقبول" : "Inner tranquility, diplomacy, and quiet space"
+            },
+            yellow: {
+                hex: "#f59e0b",
+                gradStart: "#fde047",
+                gradEnd: "#d97706",
+                stroke: "#b45309",
+                label: isAr ? "الأصفر (المرح والبهجة)" : "Yellow (Fun & Passion)",
+                shortLabel: isAr ? "الأصفر" : "Yellow",
+                motive: isAr ? "المرح والعفوية والتفاؤل الحيوي" : "Fun & Optimism",
+                desc: isAr ? "التفاؤل، الحيوية، والاحتفال بالحياة" : "Joyful celebration, enthusiasm, and play"
+            }
         };
 
-        const width = 280, height = 280;
-        const cx = 140, cy = 140, r = 95, strokeW = 30;
-        const circ = 2 * Math.PI * r;
-
-        let offset = 0;
         const colorKeys = ["red", "blue", "white", "yellow"];
 
-        let pathsSvg = "";
+        // Normalize Person A percentages so they sum to 100
+        const rawSumA = colorKeys.reduce((acc, k) => acc + Math.max(0, Number(bA[k]) || 0), 0) || 100;
+        const pctA = {};
         colorKeys.forEach(k => {
-            const val = Math.max(3, bA[k] || 0);
-            const dashLen = (val / 100) * circ;
-            const dashOffset = -offset;
-            offset += dashLen;
-            pathsSvg += `
-                <circle class="chart-node chart-interactive-element" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[k].hex}" stroke-width="${strokeW}"
-                    stroke-dasharray="${dashLen} ${circ - dashLen}" stroke-dashoffset="${dashOffset}"
-                    transform="rotate(-90 ${cx} ${cy})" data-color-key="${k}">
-                </circle>
-            `;
+            pctA[k] = Math.round(((Math.max(0, Number(bA[k]) || 0)) / rawSumA) * 100);
         });
+        // Correct rounding drift if any
+        const sumPctA = colorKeys.reduce((acc, k) => acc + pctA[k], 0);
+        if (sumPctA !== 100) {
+            const sortedByVal = [...colorKeys].sort((a, b) => pctA[b] - pctA[a]);
+            pctA[sortedByVal[0]] += (100 - sumPctA);
+        }
 
-        const primaryColor = (hA.primary || "blue").toLowerCase();
-        const primaryHex = colors[primaryColor]?.hex || "#3b82f6";
-        const motiveName = hA.metadata ? (isAr ? hA.metadata.motive_ar : hA.metadata.motive_en) : (isAr ? (HARTMAN_MAP[primaryColor]?.ar || primaryColor) : primaryColor.toUpperCase());
+        const primaryColorA = (hA.primary || Object.entries(pctA).sort((a, b) => b[1] - a[1])[0][0] || "red").toLowerCase();
+        const primaryHexA = colors[primaryColorA]?.hex || "#ef4444";
+        const motiveNameA = hA.metadata ? (isAr ? hA.metadata.motive_ar : hA.metadata.motive_en) : (colors[primaryColorA]?.motive || primaryColorA.toUpperCase());
 
-        const svg = `
-            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 270px; height: auto; aspect-ratio: 1 / 1;">
-                    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${strokeW}" />
-                    ${pathsSvg}
-                    <g class="chart-node chart-interactive-element" data-hub="true" style="cursor: pointer;">
-                        <circle cx="${cx}" cy="${cy}" r="55" fill="var(--bg-secondary)" opacity="0.85" />
-                        <text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="${primaryHex}" font-size="16" font-weight="800">${primaryColor.toUpperCase()}</text>
-                        <text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="var(--text-secondary)" font-size="10.5" font-weight="600">${motiveName}</text>
-                    </g>
-                </svg>
-                <div class="visual-legend" style="margin-top: 16px; font-size: 0.85rem;">
+        const getFirstName = (fullName, fallback) => {
+            if (!fullName) return fallback;
+            const parts = String(fullName).trim().split(/\s+/);
+            return parts[0] || fallback;
+        };
+        const shortNameA = getFirstName(nameA, isAr ? "الطرف الأول" : "Person A");
+        const shortNameB = getFirstName(nameB, isAr ? "الطرف الثاني" : "Person B");
+
+        // Person B setup for comparison
+        const hB = (traitsB && traitsB.hartman) || { breakdown: { red: 25, blue: 25, white: 25, yellow: 25 }, primary: "blue" };
+        const bB = hB.breakdown || hB.scores || { red: 25, blue: 25, white: 25, yellow: 25 };
+        const rawSumB = colorKeys.reduce((acc, k) => acc + Math.max(0, Number(bB[k]) || 0), 0) || 100;
+        const pctB = {};
+        colorKeys.forEach(k => {
+            pctB[k] = Math.round(((Math.max(0, Number(bB[k]) || 0)) / rawSumB) * 100);
+        });
+        const sumPctB = colorKeys.reduce((acc, k) => acc + pctB[k], 0);
+        if (sumPctB !== 100) {
+            const sortedByValB = [...colorKeys].sort((a, b) => pctB[b] - pctB[a]);
+            pctB[sortedByValB[0]] += (100 - sumPctB);
+        }
+        const primaryColorB = (hB.primary || Object.entries(pctB).sort((a, b) => b[1] - a[1])[0][0] || "blue").toLowerCase();
+        const primaryHexB = colors[primaryColorB]?.hex || "#3b82f6";
+        const motiveNameB = hB.metadata ? (isAr ? hB.metadata.motive_ar : hB.metadata.motive_en) : (colors[primaryColorB]?.motive || primaryColorB.toUpperCase());
+
+        const width = 280, height = 280;
+        const cx = 140, cy = 140;
+
+        // Common SVG Definitions (Gradients & Filters)
+        const defsSvg = `
+            <defs>
+                ${colorKeys.map(k => `
+                    <linearGradient id="hartman_grad_${k}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${colors[k].gradStart}" />
+                        <stop offset="100%" stop-color="${colors[k].gradEnd}" />
+                    </linearGradient>
+                `).join('')}
+                <filter id="hartmanGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+        `;
+
+        let ringsSvg = "";
+        let hubSvg = "";
+        let legendHtml = "";
+
+        if (isSingle) {
+            // --- SINGLE VIEW: Rich Segmented Donut ---
+            const rOuter = 114, rInner = 68;
+            const nonZeroCount = colorKeys.filter(k => pctA[k] > 0).length;
+            const gapDeg = nonZeroCount > 1 ? 2.0 : 0;
+
+            let currentAngle = 0;
+            let slicesSvg = "";
+            let textLabelsSvg = "";
+
+            colorKeys.forEach(k => {
+                const pct = pctA[k];
+                if (pct <= 0) return;
+                const span = (pct / 100) * 360;
+                const startDeg = currentAngle;
+                const endDeg = currentAngle + span;
+                currentAngle += span;
+
+                const slice = describeDonutSlice(cx, cy, rInner, rOuter, startDeg, endDeg, gapDeg);
+                slicesSvg += `
+                    <path class="hartman-slice chart-interactive-element"
+                          data-color-key="${k}"
+                          data-person="A"
+                          data-pct="${pct}"
+                          d="${slice.path}"
+                          fill="url(#hartman_grad_${k})"
+                          stroke="${colors[k].stroke}"
+                          stroke-width="1.2">
+                    </path>
+                `;
+
+                // Render percentage text directly on slice if span allows
+                if (slice.span >= 20) {
+                    textLabelsSvg += `
+                        <text class="hartman-slice-text notranslate" translate="no"
+                              x="${slice.midX.toFixed(1)}" y="${(slice.midY + 4).toFixed(1)}"
+                              text-anchor="middle" font-size="12" font-weight="900" fill="#ffffff"
+                              style="text-shadow: 0 1px 3px rgba(0,0,0,0.85);">
+                            ${pct}%
+                        </text>
+                    `;
+                }
+            });
+
+            ringsSvg = `
+                <circle cx="${cx}" cy="${cy}" r="${(rInner + rOuter) / 2}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${rOuter - rInner}" />
+                ${slicesSvg}
+                ${textLabelsSvg}
+            `;
+
+            // Interactive Center Hub
+            hubSvg = `
+                <g class="hartman-hub chart-interactive-element" data-hub="true">
+                    <circle class="hartman-hub-circle" cx="${cx}" cy="${cy}" r="58" fill="var(--bg-secondary)" stroke="var(--border-color)" stroke-width="2" />
+                    <circle id="hartmanHubRing" class="hub-accent-ring" cx="${cx}" cy="${cy}" r="53" fill="none" stroke="${primaryHexA}" stroke-width="2" opacity="0.4" />
+                    <text id="hartmanHubPercent" class="notranslate" translate="no" x="${cx}" y="${cy - 12}" text-anchor="middle" fill="${primaryHexA}" font-size="22" font-weight="900">${pctA[primaryColorA]}%</text>
+                    <text id="hartmanHubTitle" x="${cx}" y="${cy + 8}" text-anchor="middle" fill="var(--text-primary)" font-size="12" font-weight="800">${colors[primaryColorA]?.shortLabel || primaryColorA.toUpperCase()}</text>
+                    <text id="hartmanHubSub" x="${cx}" y="${cy + 24}" text-anchor="middle" fill="var(--text-secondary)" font-size="9" font-weight="600">${motiveNameA}</text>
+                </g>
+            `;
+
+            // Enhanced Compact Interactive Legend
+            legendHtml = `
+                <div class="hartman-legend-grid">
                     ${colorKeys.map(k => `
-                        <div class="legend-item chart-interactive-element" data-color-key="${k}" style="display: inline-flex; align-items: center; gap: 6px; margin: 4px 8px; cursor: pointer;">
-                            <span class="legend-color-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: ${colors[k].hex};"></span>
-                            <span>${isAr ? (HARTMAN_MAP[k]?.ar || k.toUpperCase()) : k.charAt(0).toUpperCase() + k.slice(1)}: <strong>${Math.round(bA[k] || 0)}%</strong></span>
+                        <div class="hartman-legend-card chart-interactive-element" data-color-key="${k}">
+                            <div class="hartman-card-header">
+                                <div class="hartman-header-title">
+                                    <span class="hartman-color-pill" style="background-color: ${colors[k].hex};"></span>
+                                    <strong>${colors[k].shortLabel}</strong>
+                                    <span class="hartman-card-sub">${colors[k].motive}</span>
+                                </div>
+                                <strong class="hartman-row-val notranslate" translate="no" style="color: ${colors[k].hex}; font-size: 0.95rem;">${pctA[k]}%</strong>
+                            </div>
+                            <div class="hartman-row-bar-track" style="margin-top: 6px;">
+                                <div class="hartman-row-bar-fill" style="width: ${pctA[k]}%; background: linear-gradient(90deg, ${colors[k].gradStart}, ${colors[k].gradEnd});"></div>
+                            </div>
+                            <div class="hartman-mini-desc">${colors[k].desc}</div>
                         </div>
                     `).join('')}
                 </div>
-                ${hA.metadata ? `
-                    <div style="font-size: 0.88rem; margin-top: 12px; color: var(--text-secondary); line-height: 1.5; text-align: center; max-width: 320px; background: rgba(0, 113, 227, 0.05); padding: 8px 14px; border-radius: 8px;">
-                        <strong>${isAr ? "الوقود العاطفي:" : "Core Fuel:"}</strong> ${isAr ? hA.metadata.fuel_ar : hA.metadata.fuel_en}
-                    </div>
-                ` : ''}
+            `;
+
+        } else {
+            // --- COMPARISON VIEW: Dual Concentric Rings with Interactive Person Focus/Shadow ---
+
+            // Outer Ring: Person A
+            const rOuterA = 122, rInnerA = 88;
+            const gapDegA = colorKeys.filter(k => pctA[k] > 0).length > 1 ? 1.8 : 0;
+            let currentAngleA = 0;
+            let slicesSvgA = "";
+            let textLabelsSvgA = "";
+
+            colorKeys.forEach(k => {
+                const pct = pctA[k];
+                if (pct <= 0) return;
+                const span = (pct / 100) * 360;
+                const slice = describeDonutSlice(cx, cy, rInnerA, rOuterA, currentAngleA, currentAngleA + span, gapDegA);
+                currentAngleA += span;
+
+                slicesSvgA += `
+                    <path class="hartman-slice chart-interactive-element"
+                          data-color-key="${k}"
+                          data-person="A"
+                          data-pct="${pct}"
+                          d="${slice.path}"
+                          fill="url(#hartman_grad_${k})"
+                          stroke="${colors[k].stroke}"
+                          stroke-width="1.2">
+                    </path>
+                `;
+                if (slice.span >= 24) {
+                    textLabelsSvgA += `
+                        <text class="hartman-slice-text notranslate" translate="no"
+                              data-person="A"
+                              x="${slice.midX.toFixed(1)}" y="${(slice.midY + 4).toFixed(1)}"
+                              text-anchor="middle" font-size="11" font-weight="900" fill="#ffffff"
+                              style="text-shadow: 0 1px 3px rgba(0,0,0,0.85);">
+                            ${pct}%
+                        </text>
+                    `;
+                }
+            });
+
+            // Inner Ring: Person B
+            const rOuterB = 84, rInnerB = 52;
+            const gapDegB = colorKeys.filter(k => pctB[k] > 0).length > 1 ? 1.8 : 0;
+            let currentAngleB = 0;
+            let slicesSvgB = "";
+            let textLabelsSvgB = "";
+
+            colorKeys.forEach(k => {
+                const pct = pctB[k];
+                if (pct <= 0) return;
+                const span = (pct / 100) * 360;
+                const slice = describeDonutSlice(cx, cy, rInnerB, rOuterB, currentAngleB, currentAngleB + span, gapDegB);
+                currentAngleB += span;
+
+                slicesSvgB += `
+                    <path class="hartman-slice chart-interactive-element"
+                          data-color-key="${k}"
+                          data-person="B"
+                          data-pct="${pct}"
+                          d="${slice.path}"
+                          fill="url(#hartman_grad_${k})"
+                          stroke="${colors[k].stroke}"
+                          stroke-width="1.2">
+                    </path>
+                `;
+                if (slice.span >= 28) {
+                    textLabelsSvgB += `
+                        <text class="hartman-slice-text notranslate" translate="no"
+                              data-person="B"
+                              x="${slice.midX.toFixed(1)}" y="${(slice.midY + 3.5).toFixed(1)}"
+                              text-anchor="middle" font-size="10" font-weight="900" fill="#ffffff"
+                              style="text-shadow: 0 1px 3px rgba(0,0,0,0.85);">
+                            ${pct}%
+                        </text>
+                    `;
+                }
+            });
+
+            ringsSvg = `
+                <circle cx="${cx}" cy="${cy}" r="${(rInnerA + rOuterA) / 2}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${rOuterA - rInnerA}" />
+                <circle cx="${cx}" cy="${cy}" r="${(rInnerB + rOuterB) / 2}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${rOuterB - rInnerB}" />
+                ${slicesSvgA}
+                ${textLabelsSvgA}
+                ${slicesSvgB}
+                ${textLabelsSvgB}
+            `;
+
+            // Comparison Center Hub
+            hubSvg = `
+                <g class="hartman-hub chart-interactive-element" data-hub="true">
+                    <circle class="hartman-hub-circle" cx="${cx}" cy="${cy}" r="45" fill="var(--bg-secondary)" stroke="var(--border-color)" stroke-width="1.8" />
+                    <text id="hartmanHubPersonA" class="notranslate" translate="no" x="${cx}" y="${cy - 10}" text-anchor="middle" fill="${primaryHexA}" font-size="11" font-weight="900">${shortNameA}: ${pctA[primaryColorA]}%</text>
+                    <text id="hartmanHubPersonB" class="notranslate" translate="no" x="${cx}" y="${cy + 8}" text-anchor="middle" fill="${primaryHexB}" font-size="11" font-weight="900">${shortNameB}: ${pctB[primaryColorB]}%</text>
+                    <text id="hartmanHubSub" x="${cx}" y="${cy + 22}" text-anchor="middle" fill="var(--text-secondary)" font-size="8.5" font-weight="700">${isAr ? "تكامل الطيف" : "Spectrum Synergy"}</text>
+                </g>
+            `;
+
+            // Interactive Ring Filter Badges (Buttons to shadow/focus)
+            const ringBadgesHtml = `
+                <div class="hartman-ring-legend">
+                    <button type="button" class="hartman-ring-btn active-btn-both" data-person-toggle="both" title="${isAr ? 'عرض كلا الطرفين معاً' : 'Show both profiles together'}">
+                        <span>👁️</span>
+                        <span>${isAr ? "كلاهما معاً" : "Both"}</span>
+                    </button>
+                    <button type="button" class="hartman-ring-btn" data-person-toggle="A" title="${isAr ? 'التركيز على ' + shortNameA + ' وتظليل الشريك' : 'Focus on ' + shortNameA + ' and shadow partner'}">
+                        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+                        <span>${shortNameA} (${isAr ? "الخارجية" : "Outer"}: ${pctA[primaryColorA]}%)</span>
+                    </button>
+                    <button type="button" class="hartman-ring-btn" data-person-toggle="B" title="${isAr ? 'التركيز على ' + shortNameB + ' وتظليل الشريك' : 'Focus on ' + shortNameB + ' and shadow partner'}">
+                        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#f59e0b;"></span>
+                        <span>${shortNameB} (${isAr ? "الداخلية" : "Inner"}: ${pctB[primaryColorB]}%)</span>
+                    </button>
+                </div>
+            `;
+
+            // Organized Minimal Comparison Boxes
+            legendHtml = `
+                ${ringBadgesHtml}
+                <div class="hartman-legend-grid">
+                    ${colorKeys.map(k => `
+                        <div class="hartman-legend-card chart-interactive-element" data-color-key="${k}">
+                            <div class="hartman-card-header">
+                                <div class="hartman-header-title">
+                                    <span class="hartman-color-pill" style="background-color: ${colors[k].hex};"></span>
+                                    <strong>${colors[k].shortLabel}</strong>
+                                    <span class="hartman-card-sub">${colors[k].motive}</span>
+                                </div>
+                            </div>
+                            <div class="hartman-comp-rows">
+                                <div class="hartman-person-row row-person-a">
+                                    <span class="hartman-row-label">${shortNameA}</span>
+                                    <div class="hartman-row-bar-track">
+                                        <div class="hartman-row-bar-fill" style="width: ${pctA[k]}%; background: ${colors[k].hex};"></div>
+                                    </div>
+                                    <strong class="hartman-row-val notranslate" translate="no" style="color: ${colors[k].hex};">${pctA[k]}%</strong>
+                                </div>
+                                <div class="hartman-person-row row-person-b">
+                                    <span class="hartman-row-label">${shortNameB}</span>
+                                    <div class="hartman-row-bar-track">
+                                        <div class="hartman-row-bar-fill" style="width: ${pctB[k]}%; background: ${colors[k].hex}; opacity: 0.75;"></div>
+                                    </div>
+                                    <strong class="hartman-row-val notranslate" translate="no" style="color: ${colors[k].hex}; opacity: 0.9;">${pctB[k]}%</strong>
+                                </div>
+                            </div>
+                            <div class="hartman-mini-desc">${colors[k].desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Fuel Card Info
+        const fuelText = isAr
+            ? (hA.metadata?.fuel_ar || "الكفاءة والإنجاز العملي")
+            : (hA.metadata?.fuel_en || "Competence and efficiency");
+
+        const fuelHtml = `
+            <div class="hartman-fuel-banner chart-interactive-element" data-hub="true">
+                <span class="fuel-icon">⚡</span>
+                <div>
+                    <strong style="color: var(--accent-color);">${isAr ? "الوقود النفسي الحاكم:" : "Governing Core Fuel:"}</strong>
+                    <span>${fuelText}</span>
+                </div>
             </div>
         `;
-        container.innerHTML = svg;
 
-        // Attach Interactive Tooltips & Touch Popovers
+        const fullSvg = `
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <svg class="interactive-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; max-width: 290px; height: auto; aspect-ratio: 1 / 1; overflow: visible;">
+                    ${defsSvg}
+                    ${ringsSvg}
+                    ${hubSvg}
+                </svg>
+                ${legendHtml}
+                ${fuelHtml}
+            </div>
+        `;
+
+        container.innerHTML = fullSvg;
+
+        // Setup Dynamic Interactive Center Hub & Hover Sync
+        const hubEl = container.querySelector("[data-hub='true']");
+        const hubPercent = container.querySelector("#hartmanHubPercent");
+        const hubTitle = container.querySelector("#hartmanHubTitle");
+        const hubSub = container.querySelector("#hartmanHubSub");
+        const hubRing = container.querySelector("#hartmanHubRing");
+
+        let activeFocus = "both"; // 'both', 'A', or 'B'
+
+        function applyFocus(targetPerson) {
+            activeFocus = targetPerson;
+
+            const btnBoth = container.querySelector('[data-person-toggle="both"]');
+            const btnA = container.querySelector('[data-person-toggle="A"]');
+            const btnB = container.querySelector('[data-person-toggle="B"]');
+
+            if (btnBoth) btnBoth.className = `hartman-ring-btn ${targetPerson === "both" ? "active-btn-both" : "dimmed-btn"}`;
+            if (btnA) btnA.className = `hartman-ring-btn ${targetPerson === "A" ? "active-btn-a" : (targetPerson === "B" ? "dimmed-btn" : "")}`;
+            if (btnB) btnB.className = `hartman-ring-btn ${targetPerson === "B" ? "active-btn-b" : (targetPerson === "A" ? "dimmed-btn" : "")}`;
+
+            const slicesA = container.querySelectorAll('.hartman-slice[data-person="A"]');
+            const slicesB = container.querySelectorAll('.hartman-slice[data-person="B"]');
+            const textsA = container.querySelectorAll('.hartman-slice-text[data-person="A"]');
+            const textsB = container.querySelectorAll('.hartman-slice-text[data-person="B"]');
+            const rowsA = container.querySelectorAll('.row-person-a');
+            const rowsB = container.querySelectorAll('.row-person-b');
+
+            const getFirstName = (fullName, fallback) => {
+                if (!fullName) return fallback;
+                const parts = fullName.trim().split(/\s+/);
+                return parts[0] || fallback;
+            };
+            const sNameA = getFirstName(nameA, isAr ? "الطرف الأول" : "Person A");
+            const sNameB = getFirstName(nameB, isAr ? "الطرف الثاني" : "Person B");
+
+            if (targetPerson === "A") {
+                // Focus Person A, Shadow Person B
+                slicesA.forEach(el => { el.classList.remove("slice-shadowed"); el.classList.add("slice-focused"); });
+                textsA.forEach(el => { el.classList.remove("text-shadowed"); el.classList.add("text-focused"); });
+                slicesB.forEach(el => { el.classList.remove("slice-focused"); el.classList.add("slice-shadowed"); });
+                textsB.forEach(el => { el.classList.remove("text-focused"); el.classList.add("text-shadowed"); });
+
+                rowsA.forEach(el => { el.classList.remove("row-shadowed"); el.classList.add("row-focused"); });
+                rowsB.forEach(el => { el.classList.remove("row-focused"); el.classList.add("row-shadowed"); });
+
+                if (hubEl) {
+                    hubEl.innerHTML = `
+                        <circle class="hartman-hub-circle" cx="${cx}" cy="${cy}" r="45" fill="var(--bg-secondary)" stroke="${primaryHexA}" stroke-width="2.5" />
+                        <text class="notranslate" translate="no" x="${cx}" y="${cy - 10}" text-anchor="middle" fill="${primaryHexA}" font-size="18" font-weight="900">${pctA[primaryColorA]}%</text>
+                        <text x="${cx}" y="${cy + 8}" text-anchor="middle" fill="var(--text-primary)" font-size="11.5" font-weight="800">${sNameA}: ${colors[primaryColorA]?.shortLabel}</text>
+                        <text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="var(--text-secondary)" font-size="8.5" font-weight="600">${motiveNameA}</text>
+                    `;
+                }
+            } else if (targetPerson === "B") {
+                // Focus Person B, Shadow Person A
+                slicesB.forEach(el => { el.classList.remove("slice-shadowed"); el.classList.add("slice-focused"); });
+                textsB.forEach(el => { el.classList.remove("text-shadowed"); el.classList.add("text-focused"); });
+                slicesA.forEach(el => { el.classList.remove("slice-focused"); el.classList.add("slice-shadowed"); });
+                textsA.forEach(el => { el.classList.remove("text-focused"); el.classList.add("text-shadowed"); });
+
+                rowsB.forEach(el => { el.classList.remove("row-shadowed"); el.classList.add("row-focused"); });
+                rowsA.forEach(el => { el.classList.remove("row-focused"); el.classList.add("row-shadowed"); });
+
+                if (hubEl) {
+                    hubEl.innerHTML = `
+                        <circle class="hartman-hub-circle" cx="${cx}" cy="${cy}" r="45" fill="var(--bg-secondary)" stroke="${primaryHexB}" stroke-width="2.5" />
+                        <text class="notranslate" translate="no" x="${cx}" y="${cy - 10}" text-anchor="middle" fill="${primaryHexB}" font-size="18" font-weight="900">${pctB[primaryColorB]}%</text>
+                        <text x="${cx}" y="${cy + 8}" text-anchor="middle" fill="var(--text-primary)" font-size="11.5" font-weight="800">${shortNameB}: ${colors[primaryColorB]?.shortLabel}</text>
+                        <text x="${cx}" y="${cy + 22}" text-anchor="middle" fill="var(--text-secondary)" font-size="8.5" font-weight="600">${motiveNameB}</text>
+                    `;
+                }
+            } else {
+                // Reset to Both
+                slicesA.forEach(el => el.classList.remove("slice-shadowed", "slice-focused"));
+                slicesB.forEach(el => el.classList.remove("slice-shadowed", "slice-focused"));
+                textsA.forEach(el => el.classList.remove("text-shadowed", "text-focused"));
+                textsB.forEach(el => el.classList.remove("text-shadowed", "text-focused"));
+
+                rowsA.forEach(el => el.classList.remove("row-shadowed", "row-focused"));
+                rowsB.forEach(el => el.classList.remove("row-shadowed", "row-focused"));
+
+                if (hubEl) {
+                    hubEl.innerHTML = `
+                        <circle class="hartman-hub-circle" cx="${cx}" cy="${cy}" r="45" fill="var(--bg-secondary)" stroke="var(--border-color)" stroke-width="1.8" />
+                        <text id="hartmanHubPersonA" class="notranslate" translate="no" x="${cx}" y="${cy - 10}" text-anchor="middle" fill="${primaryHexA}" font-size="11" font-weight="900">${shortNameA}: ${pctA[primaryColorA]}%</text>
+                        <text id="hartmanHubPersonB" class="notranslate" translate="no" x="${cx}" y="${cy + 8}" text-anchor="middle" fill="${primaryHexB}" font-size="11" font-weight="900">${shortNameB}: ${pctB[primaryColorB]}%</text>
+                        <text id="hartmanHubSub" x="${cx}" y="${cy + 22}" text-anchor="middle" fill="var(--text-secondary)" font-size="8.5" font-weight="700">${isAr ? "تكامل الطيف" : "Spectrum Synergy"}</text>
+                    `;
+                }
+            }
+        }
+
+        // Attach Click Listener to Filter Buttons
+        container.querySelectorAll("[data-person-toggle]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const target = btn.getAttribute("data-person-toggle");
+                if (activeFocus === target && target !== "both") {
+                    applyFocus("both");
+                } else {
+                    applyFocus(target);
+                }
+            });
+        });
+
+        function highlightColor(k, pct, person) {
+            if (isSingle) {
+                if (hubPercent) {
+                    hubPercent.textContent = `${pct || pctA[k]}%`;
+                    hubPercent.setAttribute("fill", colors[k].hex);
+                }
+                if (hubTitle) {
+                    hubTitle.textContent = colors[k].shortLabel;
+                }
+                if (hubSub) {
+                    hubSub.textContent = colors[k].motive;
+                }
+                if (hubRing) {
+                    hubRing.setAttribute("stroke", colors[k].hex);
+                    hubRing.setAttribute("opacity", "0.9");
+                }
+            }
+            container.querySelectorAll(`.hartman-slice[data-color-key="${k}"]`).forEach(el => el.classList.add("active-slice"));
+            container.querySelectorAll(`.hartman-legend-card[data-color-key="${k}"]`).forEach(el => el.classList.add("active-card"));
+        }
+
+        function resetHighlight() {
+            if (isSingle) {
+                if (hubPercent) {
+                    hubPercent.textContent = `${pctA[primaryColorA]}%`;
+                    hubPercent.setAttribute("fill", primaryHexA);
+                }
+                if (hubTitle) {
+                    hubTitle.textContent = colors[primaryColorA]?.shortLabel || primaryColorA.toUpperCase();
+                }
+                if (hubSub) {
+                    hubSub.textContent = motiveNameA;
+                }
+                if (hubRing) {
+                    hubRing.setAttribute("stroke", primaryHexA);
+                    hubRing.setAttribute("opacity", "0.4");
+                }
+            } else {
+                applyFocus(activeFocus);
+            }
+            container.querySelectorAll(".hartman-slice").forEach(el => el.classList.remove("active-slice"));
+            container.querySelectorAll(".hartman-legend-card").forEach(el => el.classList.remove("active-card"));
+        }
+
         container.querySelectorAll("[data-color-key]").forEach(el => {
             const k = el.getAttribute("data-color-key");
-            const val = Math.round(bA[k] || 0);
+            const person = el.getAttribute("data-person") || "A";
+            const val = person === "B" && !isSingle ? (pctB[k] || 0) : (pctA[k] || 0);
+
+            el.addEventListener("mouseenter", () => highlightColor(k, val, person));
+            el.addEventListener("mouseleave", resetHighlight);
+
             attachChartTooltip(el, () => ({
                 ...CHART_EXPLANATION_DICTIONARY.hartman[k],
-                metric_ar: `${isAr ? "النسبة المحسوبة" : "Calculated Share"}: ${val}%`,
-                metric_en: `Calculated Share: ${val}%`
+                metric_ar: `${isAr ? "النسبة المحسوبة" : "Calculated Share"}: ${val}% ${!isSingle ? `(${person === "A" ? nameA : nameB})` : ''}`,
+                metric_en: `Calculated Share: ${val}% ${!isSingle ? `(${person === "A" ? nameA : nameB})` : ''}`
             }));
         });
 
-        const hubEl = container.querySelector("[data-hub='true']");
         if (hubEl) {
             attachChartTooltip(hubEl, () => ({
                 ...CHART_EXPLANATION_DICTIONARY.hartman.hub,
-                title_ar: `${isAr ? "الدافع المهيمن" : "Primary Motive"}: ${motiveName}`,
-                title_en: `Primary Motive: ${motiveName}`,
-                metric_ar: `${isAr ? "الوقود العاطفي" : "Core Fuel"}: ${hA.metadata ? (isAr ? hA.metadata.fuel_ar : hA.metadata.fuel_en) : primaryColor.toUpperCase()}`,
-                metric_en: `Core Fuel: ${hA.metadata ? hA.metadata.fuel_en : primaryColor.toUpperCase()}`
+                title_ar: `${isAr ? "الدافع المهيمن" : "Primary Motive"}: ${motiveNameA}`,
+                title_en: `Primary Motive: ${motiveNameA}`,
+                metric_ar: `${isAr ? "الوقود العاطفي" : "Core Fuel"}: ${fuelText}`,
+                metric_en: `Core Fuel: ${fuelText}`
             }));
         }
     }

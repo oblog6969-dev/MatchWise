@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.7.0
-**Release Name:** Interactive Visualizers & Touch Tooltips with Vector SVG Print Fidelity  
-**Date:** September 4, 2026  
+## Current Version: v2.8.0
+**Release Name:** Hartman Motive Spectrum Circle Chart Visualizer & Dynamic Focus/Shadow Interactivity  
+**Date:** September 7, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -22,6 +22,7 @@
 | **M9: Global Google Translate** | Seamless 100+ language translation, defensive Node DOM crash prevention, notranslate badges, Apple-grade UI dropdown. | ✅ Complete | End-to-End Browser Tested |
 | **M10: Consciousness & Resonance** | Hawkins Map of Consciousness (20-600+, 200 Courage threshold), Hicks 22-level Emotional Guidance, 10 polytomous questions (q76-q85), dual-ladder SVG visualizer, dyadic resonance. | ✅ Complete | Node & Browser Subagent Tested |
 | **M11: Interactive Popovers & Print Fidelity** | Interactive JS visualizers with bilingual hover/touch popovers explaining every framework component; vector SVG print fidelity with zero popover artifacts. | ✅ Complete | Browser Subagent & Multi-Device Tested |
+| **M12: Hartman Circle Chart & Dynamic Focus/Shadow** | Exact SVG donut arc paths (`<path d="...">`), direct slice percentages, dynamic center hub, interactive person focus/shadowing, and organized compact comparison micro-rows. | ✅ Complete | Visual Verification & Browser Tested |
 
 ---
 
@@ -105,3 +106,34 @@
   - Implemented `CHART_EXPLANATION_DICTIONARY` containing rich clinical explanations for every segment across Hartman, DISC, Birkman, Attachment, FIRO-B, Gottman, Hawkins/Hicks, and Big Five in both Arabic and English.
   - Implemented `ChartTooltipManager` with real-time viewport boundary detection and collision clamping for both desktop hover and mobile/tablet touch.
   - Attached interactive tooltips to Hartman donut slices & hub, DISC quadrants & coordinate pins, Birkman iceberg tip & base cards, Attachment quadrants & partner points, FIRO-B reciprocity bars, Gottman emotional safety gauge & Four Horsemen bars, Dyadic Conflict Loop cards, Consciousness dual spectrum ladders, SVG Radar vertices, and Big Five rows.
+
+---
+
+## 📝 Changelog (v2.8.0) - Hartman Motive Spectrum Circle Chart Visualizer & Dynamic Focus/Shadow Interactivity
+
+### Added
+- **Exact SVG Arc Geometry (`describeDonutSlice`)**: Replaced deprecated stroke-dashoffset circle calculation with exact trigonometry-based SVG `<path d="M ... A ... L ... A ... Z">` arc geometry, eliminating Chromium `transform-origin` translation artifacts and guaranteeing pixel-perfect rendering across all screen densities.
+- **Direct Percentage Badges on Slices**: Added embedded bold percentage labels placed along radial mid-angles on all slices $\ge 20^\circ$ with intelligent luminance-based fill colors for instant readability.
+- **Dynamic Interactive Focus & Shadow Interactivity**:
+  - Introduced interactive person filter buttons (`[Tariq Al-Mansoor]`, `[Nour Al-Sabah]`, `[Both / كلاهما]`) directly below the comparison donut.
+  - Clicking a person's name isolates their concentric ring while gracefully shadowing the other person's ring to a 14% opacity desaturated silhouette.
+  - Dynamic center hub spotlighting: toggling between Person A, Person B, or Both dynamically updates the center circular hub to show the active person's primary percentage, motive title, and fuel description with smooth CSS transitions.
+- **Structured Comparison Micro-Rows**:
+  - Completely reorganized the bottom motive comparison cards into sleek 3-column micro-rows (`[Short Name]` `[Progress Bar]` `[Percentage]`).
+  - Switched from verbose full-name text strings to clean first names (`Tariq`, `Nour`), eliminating multi-line vertical wrapping and visual clutter.
+  - Connected comparison card micro-rows to the dynamic focus state (`.row-focused` / `.row-shadowed`), highlighting the active partner's metrics in real time.
+
+### Changed
+- **Concentric Dual-Ring Comparison Architecture**:
+  - Person A rendered on the outer ring ($r = 88\text{--}122\text{px}$).
+  - Person B rendered on the inner ring ($r = 52\text{--}84\text{px}$).
+  - Center hub ($r = 45\text{px}$) provides clear visual hierarchy and instant feedback on hover or selection.
+- **Enhanced CSS Styling (`style.css`)**:
+  - Added `.hartman-slice`, `.slice-shadowed`, `.slice-focused`, `.text-shadowed`, `.text-focused`.
+  - Added `.hartman-ring-btn`, `.active-btn-a`, `.active-btn-b`, `.active-btn-both`, `.dimmed-btn`.
+  - Added `.hartman-person-row` (`grid-template-columns: 52px 1fr 36px`), `.hartman-mini-desc`, and vertical padding on `.chart-center-wrapper`.
+- **Script Cache Busting**: Updated script tag in `index.html` to `script.js?v=2.1` to ensure browsers load the updated visualizer instantly.
+
+### Fixed
+- **Variable Hoisting in Comparison Mode**: Resolved a scope issue in `renderHartmanDonut()` where Person B variables (`pctB`, `primaryColorB`, `primaryHexB`, `motiveNameB`) were block-scoped, ensuring `applyFocus("B")` updates the center hub cleanly to `46% Nour: Blue` without console errors.
+- **Arabic / RTL Compatibility**: Full bidirectional support preserved with correct text anchors and RTL-compliant alignment in both single profile and dyadic comparison modes.
