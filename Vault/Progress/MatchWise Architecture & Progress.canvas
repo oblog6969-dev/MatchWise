@@ -1,0 +1,20 @@
+{
+	"nodes":[
+		{"id":"node_version","x":-200,"y":-280,"width":400,"height":140,"type":"text","text":"## 🚀 Current Release: v2.9.0\n**AI Educational Guidance System**\n- ✅ Contextual Readiness\n- ✅ In-Test Reflection Guidance\n- ✅ Dynamic Clarification\n- 🟢 **Production Ready**"},
+		{"id":"node_m13","x":-200,"y":-60,"width":380,"height":180,"type":"file","file":"Progress/Milestones/M13 - AI Educational Guidance System.md"},
+		{"id":"node_m12","x":-640,"y":-60,"width":380,"height":180,"type":"file","file":"Progress/Milestones/M12 - Hartman Circle Chart & Dynamic Focus.md"},
+		{"id":"node_m11","x":-1080,"y":-60,"width":380,"height":180,"type":"file","file":"Progress/Milestones/M11 - Interactive Popovers & Print Fidelity.md"},
+		{"id":"node_m10","x":-1080,"y":200,"width":380,"height":180,"type":"file","file":"Progress/Milestones/M10 - Consciousness & Resonance Scales.md"},
+		{"id":"node_m14","x":260,"y":-60,"width":380,"height":180,"type":"file","file":"Progress/Milestones/M14 - Clinical PDF Export & Advanced Diagnostics.md"},
+		{"id":"node_framework_hartman","x":-640,"y":200,"width":380,"height":180,"type":"file","file":"Progress/Frameworks/Hartman Color Code.md"},
+		{"id":"node_framework_gottman","x":-200,"y":200,"width":380,"height":180,"type":"file","file":"Progress/Frameworks/Gottman Relationship House.md"}
+	],
+	"edges":[
+		{"id":"edge_v_to_m13","fromNode":"node_version","fromSide":"bottom","toNode":"node_m13","toSide":"top"},
+		{"id":"edge_m11_to_m12","fromNode":"node_m11","fromSide":"right","toNode":"node_m12","toSide":"left"},
+		{"id":"edge_m12_to_m13","fromNode":"node_m12","fromSide":"right","toNode":"node_m13","toSide":"left"},
+		{"id":"edge_m13_to_m14","fromNode":"node_m13","fromSide":"right","toNode":"node_m14","toSide":"left","label":"Next Sprint"},
+		{"id":"edge_m12_to_hartman","fromNode":"node_m12","fromSide":"bottom","toNode":"node_framework_hartman","toSide":"top"},
+		{"id":"edge_m10_to_m11","fromNode":"node_m10","fromSide":"top","toNode":"node_m11","toSide":"bottom"}
+	]
+}
