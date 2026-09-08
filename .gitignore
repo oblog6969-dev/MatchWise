@@ -15,3 +15,10 @@ yarn-error.log*
 .obsidian/workspace*.json
 Vault/.obsidian/workspace*.json
 Vault/.obsidian/cache/
+
+# Exported personal profile backups and dumps
+MatchWise_Profile_*.json
+*profile*.json
+!sample_*.json
+!demo_profiles.js
+

@@ -709,6 +709,13 @@ const DEMO_PROFILES = [
   }
 ];
 
+if (typeof window !== 'undefined') {
+    window.DEMO_PROFILES = DEMO_PROFILES;
+}
+if (typeof globalThis !== 'undefined') {
+    globalThis.DEMO_PROFILES = DEMO_PROFILES;
+}
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DEMO_PROFILES;
 }
+

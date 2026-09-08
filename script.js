@@ -193,24 +193,37 @@ document.addEventListener("DOMContentLoaded", () => {
         btnModalSubmit: document.getElementById("btnModalSubmit")
     };
 
-    // --- 3. FETCH AND INITIALIZE QUESTIONS ---
-    if (typeof window !== "undefined" && window.MATCHWISE_QUESTIONS && Array.isArray(window.MATCHWISE_QUESTIONS)) {
+    // --- 3. PURGE POISONED CACHE & INITIALIZE QUESTIONS ---
+    try {
+        if (typeof localStorage !== "undefined") {
+            Object.keys(localStorage).forEach(k => {
+                if (k.startsWith("instruction_")) {
+                    const val = localStorage.getItem(k);
+                    if (val && (val.includes("Quick tip:") || val.includes("نصيحة سريعة:"))) {
+                        localStorage.removeItem(k);
+                    }
+                }
+            });
+        }
+    } catch(e) {}
+
+    if (typeof window !== "undefined" && window.MATCHWISE_QUESTIONS && Array.isArray(window.MATCHWISE_QUESTIONS) && window.MATCHWISE_QUESTIONS.length > 0) {
         questions = window.MATCHWISE_QUESTIONS;
         renderSavedProfiles();
+    } else {
+        fetch("questions.json")
+            .then(response => response.json())
+            .then(data => {
+                if (data && Array.isArray(data) && data.length > 0) {
+                    questions = data;
+                    renderSavedProfiles();
+                }
+            })
+            .catch(err => {
+                console.warn("fetch failed, using offline embedded questions data if available.", err);
+            });
     }
-    fetch("questions.json")
-        .then(response => response.json())
-        .then(data => {
-            if (data && Array.isArray(data) && data.length > 0) {
-                questions = data;
-                renderSavedProfiles();
-            }
-        })
-        .catch(err => {
-            if (!questions || questions.length === 0) {
-                console.warn("fetch failed, using offline embedded questions data.", err);
-            }
-        });
+
 
     // --- 4. LANGUAGE & THEME EVENTS ---
     dom.languageSelector.value = state.localization.currentLang;
@@ -1035,23 +1048,31 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSentiment(initialVal);
 
         // 7 Touch-Friendly Circles (1 to 7)
+        optionsRow.setAttribute("role", "radiogroup");
+        optionsRow.setAttribute("aria-label", "Agreement scale from 1 to 7");
         for (let i = 1; i <= 7; i++) {
             const circle = document.createElement("div");
             circle.className = "likert-option-circle";
-            circle.setAttribute("role", "button");
+            circle.setAttribute("role", "radio");
             circle.setAttribute("tabindex", "0");
+            const isSelected = state.sessionAnswers[question.id] == i;
+            circle.setAttribute("aria-checked", isSelected ? "true" : "false");
             circle.setAttribute("aria-label", `${i}: ${state.localization.get(LIKERT_INFO[i - 1].key)}`);
             circle.textContent = i;
 
-            if (state.sessionAnswers[question.id] == i) {
+            if (isSelected) {
                 circle.classList.add("selected-likert");
             }
 
             const selectLikert = () => {
                 if (isAutoAdvancing) return;
                 const elements = optionsRow.querySelectorAll(".likert-option-circle");
-                elements.forEach(el => el.classList.remove("selected-likert"));
+                elements.forEach(el => {
+                    el.classList.remove("selected-likert");
+                    el.setAttribute("aria-checked", "false");
+                });
                 circle.classList.add("selected-likert");
+                circle.setAttribute("aria-checked", "true");
                 state.sessionAnswers[question.id] = i;
                 updateSentiment(i);
                 triggerAutoAdvance(300);
@@ -1078,14 +1099,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderMultipleChoiceOptions(question) {
         const list = document.createElement("div");
         list.className = "choice-list";
+        list.setAttribute("role", "radiogroup");
+        list.setAttribute("aria-label", "Answer options");
 
         question.options.forEach(opt => {
             const row = document.createElement("div");
             row.className = "choice-option-row";
-            row.setAttribute("role", "button");
+            row.setAttribute("role", "radio");
             row.setAttribute("tabindex", "0");
 
-            if (state.sessionAnswers[question.id] === opt.id) {
+            const isSelected = state.sessionAnswers[question.id] === opt.id;
+            row.setAttribute("aria-checked", isSelected ? "true" : "false");
+
+            if (isSelected) {
                 row.classList.add("selected-choice");
             }
 
@@ -1103,8 +1129,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const selectChoice = () => {
                 if (isAutoAdvancing) return;
                 const siblings = list.querySelectorAll(".choice-option-row");
-                siblings.forEach(s => s.classList.remove("selected-choice"));
+                siblings.forEach(s => {
+                    s.classList.remove("selected-choice");
+                    s.setAttribute("aria-checked", "false");
+                });
                 row.classList.add("selected-choice");
+                row.setAttribute("aria-checked", "true");
                 state.sessionAnswers[question.id] = opt.id;
                 triggerAutoAdvance(300);
             };
@@ -1119,6 +1149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             list.appendChild(row);
         });
+
 
         dom.answerOptionsContainer.appendChild(list);
     }
@@ -1330,17 +1361,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const meta = document.createElement("div");
             meta.className = "profile-meta-info";
-            meta.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <h4 style="margin: 0; font-size: 1.05rem;">${p.owner_name}</h4>
-                    <span class="person-type-badge hartman-badge-${hColor.toLowerCase()} notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">${hColor}</span>
-                    <span class="person-type-badge type-a notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">DISC: ${discType}</span>
-                    <span class="person-type-badge type-b notranslate" translate="no" style="padding: 2px 8px; font-size: 0.72rem;">${mbti}</span>
-                </div>
-                <p style="margin-top: 4px; font-size: 0.82rem; color: var(--text-secondary);">
-                    ${state.localization.get("created_at")}: ${p.created_at} • ${state.localization.get("birkman_label")}: <strong>${need}</strong>
-                </p>
-            `;
+
+            const headerRow = document.createElement("div");
+            headerRow.style.cssText = "display: flex; align-items: center; gap: 8px; flex-wrap: wrap;";
+
+            const nameEl = document.createElement("h4");
+            nameEl.style.cssText = "margin: 0; font-size: 1.05rem;";
+            nameEl.textContent = (state.localization.currentLang === "ar" && p.owner_name_ar) ? p.owner_name_ar : (p.owner_name || "Profile");
+
+            const badgeH = document.createElement("span");
+            badgeH.className = `person-type-badge hartman-badge-${hColor.toLowerCase()} notranslate`;
+            badgeH.setAttribute("translate", "no");
+            badgeH.style.cssText = "padding: 2px 8px; font-size: 0.72rem;";
+            badgeH.textContent = hColor;
+
+            const badgeD = document.createElement("span");
+            badgeD.className = "person-type-badge type-a notranslate";
+            badgeD.setAttribute("translate", "no");
+            badgeD.style.cssText = "padding: 2px 8px; font-size: 0.72rem;";
+            badgeD.textContent = `DISC: ${discType}`;
+
+            const badgeM = document.createElement("span");
+            badgeM.className = "person-type-badge type-b notranslate";
+            badgeM.setAttribute("translate", "no");
+            badgeM.style.cssText = "padding: 2px 8px; font-size: 0.72rem;";
+            badgeM.textContent = mbti;
+
+            headerRow.appendChild(nameEl);
+            headerRow.appendChild(badgeH);
+            headerRow.appendChild(badgeD);
+            headerRow.appendChild(badgeM);
+
+            const subP = document.createElement("p");
+            subP.style.cssText = "margin-top: 4px; font-size: 0.82rem; color: var(--text-secondary);";
+            subP.textContent = `${state.localization.get("created_at")}: ${p.created_at || ""} • ${state.localization.get("birkman_label")}: `;
+            const strongNeed = document.createElement("strong");
+            strongNeed.textContent = need;
+            subP.appendChild(strongNeed);
+
+            meta.appendChild(headerRow);
+            meta.appendChild(subP);
+
 
             selectCol.appendChild(checkbox);
             selectCol.appendChild(meta);
@@ -1429,21 +1490,28 @@ document.addEventListener("DOMContentLoaded", () => {
         reader.onload = function(evt) {
             try {
                 const json = JSON.parse(evt.target.result);
+                let validProfile = null;
                 if (json && json.matchwise_lite_payload) {
-                    const decrypted = window.Cryptography.decrypt(json.matchwise_lite_payload);
-                    if (decrypted) {
-                        window.Storage.saveProfile(decrypted);
-                        showFeedbackModal(
-                            state.localization.get("import_profile"),
-                            state.localization.get("success_import")
-                        );
-                        renderSavedProfiles();
-                    } else {
-                        throw new Error("Decryption failed");
+                    validProfile = window.Cryptography.decrypt(json.matchwise_lite_payload);
+                } else if (json && (json.answers || json.a) && (json.owner_name || json.n)) {
+                    validProfile = window.Cryptography.validateAndSanitizeProfile(json);
+                }
+
+                if (validProfile) {
+                    if (!validProfile.calculated_personality && window.PersonalityEngine) {
+                        validProfile.calculated_personality = window.PersonalityEngine.calculate(validProfile.answers, questions);
+                        validProfile.assessment_confidence = validProfile.calculated_personality.assessment_confidence;
                     }
+                    window.Storage.saveProfile(validProfile);
+                    showFeedbackModal(
+                        state.localization.get("import_profile"),
+                        state.localization.get("success_import")
+                    );
+                    renderSavedProfiles();
                 } else {
                     throw new Error("Invalid format");
                 }
+
             } catch (err) {
                 alert(state.localization.get("invalid_file"));
             } finally {
@@ -2080,12 +2148,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.className = "manual-profile-card";
             const ownerName = (isAr && profile.owner_name_ar) ? profile.owner_name_ar : profile.owner_name;
+            const safeOwnerName = (window.escapeHtml) ? window.escapeHtml(ownerName) : String(ownerName).replace(/</g, "&lt;");
             const hTitle = isAr ? (HARTMAN_MAP[(h.primary || "blue").toLowerCase()]?.ar || h.primary) : (h.primary || "Blue").toUpperCase();
             card.innerHTML = `
                 <div class="manual-profile-header">
-                    <div class="manual-owner-title">${ownerName}</div>
+                    <div class="manual-owner-title">${safeOwnerName}</div>
                     <span class="person-type-badge ${typeClass}">${hTitle} • ${(traits.disc?.primary || "D")}</span>
                 </div>
+
                 <div class="manual-point">
                     <div class="manual-point-label">
                         <span>🌟</span>
@@ -4544,7 +4614,16 @@ row.appendChild(labelInfo);
         document.getElementById("modalStartForm").style.display = "none";
         const fb = document.getElementById("modalFeedbackContent");
         fb.style.display = "block";
-        fb.innerHTML = `<p class="p-container">${text}</p>`;
+        fb.innerHTML = "";
+        if (typeof text === "string" && (text.startsWith("<p") || text.startsWith("<textarea") || text.startsWith("<div"))) {
+            fb.innerHTML = text;
+        } else {
+            const p = document.createElement("p");
+            p.className = "p-container";
+            p.textContent = text;
+            fb.appendChild(p);
+        }
+
         
         dom.btnModalSubmit.style.display = "none";
         

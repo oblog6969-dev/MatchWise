@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.9.0
-**Release Name:** AI Educational Guidance System & Contextual Clinical Instructions  
-**Date:** September 8, 2026  
+## Current Version: v2.9.1
+**Release Name:** Production Security Hardening, Audit Remediation & Zero-Dependency Test Suite  
+**Date:** September 9, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -24,6 +24,8 @@
 | **M11: Interactive Popovers & Print Fidelity** | Interactive JS visualizers with bilingual hover/touch popovers explaining every framework component; vector SVG print fidelity with zero popover artifacts. | ✅ Complete | Browser Subagent & Multi-Device Tested |
 | **M12: Hartman Circle Chart & Dynamic Focus/Shadow** | Exact SVG donut arc paths (`<path d="...">`), direct slice percentages, dynamic center hub, interactive person focus/shadowing, and organized compact comparison micro-rows. | ✅ Complete | Visual Verification & Browser Tested |
 | **M13: AI Educational Guidance** | Multi-stage AI educational tips (landing readiness, in-test reflection angles with dynamic re-clarification, and single/dyadic report reading guides), Gemini 3.8 Flash support, caching, and user preference toggle. | ✅ Complete | Browser Subagent & End-to-End Tested |
+| **M15: Production Hardening & Test Suite** | Stored XSS eradication, schema validation, demo button export, AI offline fallback, and zero-dependency Node test suite. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
+
 
 ---
 
@@ -157,3 +159,32 @@
   - Added `🎓 AI Educational Guidance` toggle (`#inputAiGuidanceToggle`) in MatchWise AI Settings modal with `localStorage` persistence (`mw_ai_guide_enabled`).
 - **Glassmorphic Styling (`style.css`)**:
   - Added `.ai-instruction-box`, `.landing-guide`, `.in-test-guide`, `.report-guide`, `.ai-instruction-icon`, `.ai-instruction-title`, `.ai-instruction-text`, `.ai-instruction-refresh-btn`, and `@keyframes fadeInInstruction`.
+
+---
+
+## 📝 Changelog (v2.9.1) - Production Security Hardening, Audit Remediation & Test Suite
+
+### Security & Integrity
+- **Stored XSS Elimination**: Refactored profile card rendering in `script.js` to create DOM elements safely using `createElement` and `.textContent`, eliminating `innerHTML` interpolation of user-supplied fields (`owner_name`, `created_at`, `owner_name_ar`).
+- **Profile Schema Validation & Sanitization**: Added `Cryptography.validateAndSanitizeProfile()` in `utils.js` to strip HTML/script tags, control characters, and validate answers and demographics before saving or importing JSON or `MWCODE-` shareable strings.
+- **Content Security Policy (CSP)**: Added `<meta http-equiv="Content-Security-Policy">` in `index.html` to prevent execution of unauthorized inline scripts.
+
+### Fixed
+- **Live Demo Profiles Activation**: Exported `DEMO_PROFILES` to `window.DEMO_PROFILES` and `globalThis.DEMO_PROFILES` in `demo_profiles.js`. The headline "Load Live Demo Profiles" button now works immediately in production.
+- **AI Guidance Fallback (`generateInstruction`)**: Built a curated static dictionary (`BUILTIN_INSTRUCTIONS`) in `ai_service.js` for offline/builtin mode. Stopped caching failed API responses into `localStorage`, namespaced cache keys, and added startup auto-purging of legacy generic placeholders.
+
+### Psychometrics & Legal Compliance
+- **Couples Exploration Positioning**: Added a visible disclaimer badge on the landing page (*"🛡️ Educational & Self-Reflection Tool for Couples — Not a Clinical Diagnostic Instrument"*), and softened over-claimed clinical terminology in the UI.
+- **Honest Confidence & Compatibility Clamping**: Adjusted `assessment_confidence` lower bound from an artificial 65% to 15% in `traits.js`, and lowered the compatibility index clamp floor from 30% to 10% in `compatibility.js` so low-completeness and severe incompatibilities are accurately reported.
+- **Trademark Attribution Footnotes**: Added formal attribution footnotes for MBTI®, DISC®, The Birkman Method®, FIRO-B®, and Thomas-Kilmann (TKI)® in `index.html` and `utils.js`.
+
+### Performance & Accessibility
+- **Network Double-Load Removal**: Bypassed redundant network fetching of `questions.json` when questions are already loaded synchronously via `questions_data.js`, saving ~122KB per page load.
+- **Scoped Google Translate DOM Safety Patch**: Restricted `removeChild` / `insertBefore` error suppression in `index.html` and `utils.js` to active Google Translate sessions only.
+- **CDN Optimization**: Removed unused Chart.js (69KB) from `index.html` in favor of the custom responsive SVG radar chart, and added SRI hashes (`integrity`) to `jspdf` and `html2canvas`.
+- **Accessibility & SEO**: Added `aria-label` to `#languageSelector` and `#profileCodeInput`, `aria-live="polite"` to `#questionCard`, `role="radiogroup"` / `role="radio"` / `aria-checked` to assessment options, inline SVG favicon, and Open Graph / Twitter card tags.
+- **Privacy Protection**: Updated `.gitignore` to prevent committing personal exported assessment JSON files.
+
+### Added
+- **Automated Smoke Test Suite (`test_suite.js`)**: Added zero-dependency Node.js test script verifying 10 critical test vectors across exports, XSS sanitization, schema validation, psychometrics, compatibility, and offline AI fallbacks. Verified 10/10 tests pass.
+

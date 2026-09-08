@@ -8,14 +8,25 @@
 // --- GOOGLE TRANSLATE SPA DOM CRASH PREVENTION PATCH ---
 // When Google Translate mutates DOM text nodes into <font> tags, standard
 // DOM removal/insertion in SPAs throws NotFoundError. This defensive polyfill ensures zero crashes.
+// When Google Translate mutates DOM text nodes into <font> tags, standard
+// DOM removal/insertion in SPAs throws NotFoundError.
+// We defensively scope this suppression to fire only when translation is active.
 if (typeof Node === "function" && Node.prototype) {
+    const isDocTranslated = () => {
+        if (typeof document === "undefined" || !document.documentElement) return false;
+        const cls = document.documentElement.className || "";
+        return cls.includes("translated-") || !!document.querySelector(".goog-te-banner-frame");
+    };
+
     const originalRemoveChild = Node.prototype.removeChild;
     Node.prototype.removeChild = function(child) {
-        if (child.parentNode !== this) {
-            if (typeof console !== "undefined" && console.warn) {
-                console.warn("[GoogleTranslateSafety] Suppressed removeChild mismatch:", child);
+        if (child && child.parentNode !== this) {
+            if (isDocTranslated()) {
+                if (typeof console !== "undefined" && console.warn) {
+                    console.warn("[GoogleTranslateSafety] Suppressed removeChild mismatch during translation:", child);
+                }
+                return child;
             }
-            return child;
         }
         return originalRemoveChild.apply(this, arguments);
     };
@@ -23,14 +34,17 @@ if (typeof Node === "function" && Node.prototype) {
     const originalInsertBefore = Node.prototype.insertBefore;
     Node.prototype.insertBefore = function(newNode, referenceNode) {
         if (referenceNode && referenceNode.parentNode !== this) {
-            if (typeof console !== "undefined" && console.warn) {
-                console.warn("[GoogleTranslateSafety] Suppressed insertBefore mismatch:", referenceNode);
+            if (isDocTranslated()) {
+                if (typeof console !== "undefined" && console.warn) {
+                    console.warn("[GoogleTranslateSafety] Suppressed insertBefore mismatch during translation:", referenceNode);
+                }
+                return newNode;
             }
-            return newNode;
         }
         return originalInsertBefore.apply(this, arguments);
     };
 }
+
 
 // --- 1. LOCALIZATION & TRANSLATIONS ---
 const TRANSLATIONS = {
@@ -120,6 +134,8 @@ const TRANSLATIONS = {
         export_success_msg: "Assessment completed and profile saved! An encrypted backup JSON file has been downloaded to your device.",
         confidence_explanation: "Confidence score is calculated based on answer consistency across polar scales, response variance, and completeness.",
         report_disclaimer: "Disclaimer: This report is an educational self-reflection simulation based on psychometric research and relationship dynamics. It does not replace clinical therapy or professional relationship counseling.",
+        couples_disclaimer: "Educational & Self-Reflection Tool for Couples — Not a Clinical Diagnostic Instrument",
+        trademark_disclaimer: "MBTI® is a registered trademark of The Myers & Briggs Foundation. DISC®, The Birkman Method®, FIRO-B®, and Thomas-Kilmann Conflict Mode Instrument (TKI)® are trademarks of their respective copyright holders. MatchWise Lite is an independent educational tool not affiliated with or endorsed by these entities.",
         no_saved_profiles: "No saved profiles yet. Complete an assessment or import a partner's file to begin.",
         compare_instructions: "Select one profile to view individual results or select two profiles to generate a full compatibility report.",
         view_single_profile: "View Profile",
@@ -285,6 +301,8 @@ const TRANSLATIONS = {
         export_success_msg: "تم إكمال التقييم وحفظ الملف بنجاح! تم تنزيل نسخة JSON مشفرة على جهازك.",
         confidence_explanation: "يتم حساب درجة الموثوقية بناءً على اتساق الإجابات عبر المقاييس المتقابلة، وتباين الاستجابة، واكتمال المحاور.",
         report_disclaimer: "إخلاء مسؤولية: هذا التقرير عبارة عن محاكاة للتأمل الذاتي قائمة على أبحاث القياس النفسي وديناميكيات العلاقات. وهو مصمم للتوجيه والتوعية ولا يغني عن الاستشارة النفسية أو الزوجية المتخصصة.",
+        couples_disclaimer: "أداة تعليمية واستكشافية للحوار والتأمل الذاتي بين الشريكين — وليست أداة تشخيصية سريرية",
+        trademark_disclaimer: "إن MBTI® وDISC® وThe Birkman Method® وFIRO-B® وThomas-Kilmann (TKI)® هي علامات تجارية مسجلة لأصحابها المعنيين. ماتش وايز لايت أداة تعليمية واستكشافية مستقلة وغير تابعة أو معتمدة من هذه الجهات.",
         no_saved_profiles: "لا توجد ملفات محفوظة بعد. أكمل تقييماً أو استورد ملف شريكك للبدء.",
         compare_instructions: "حدد ملفاً واحداً لعرض النتائج الفردية أو حدد ملفين شخصيين لإنشاء تقرير توافق شامل ومفصل.",
         view_single_profile: "عرض الملف",
@@ -540,6 +558,86 @@ const Cryptography = {
         }
     },
 
+    sanitizeString(str, maxLen = 80) {
+        if (!str || typeof str !== "string") return "";
+        // Strip any HTML tags, script constructs, and control chars
+        return str
+            .replace(/<[^>]*>?/gm, "")
+            .replace(/[\u0000-\u001F\u007F-\u009F]/g, "")
+            .trim()
+            .slice(0, maxLen);
+    },
+
+    escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    },
+
+    validateAndSanitizeProfile(raw) {
+        if (!raw || typeof raw !== "object") return null;
+
+        // 1. Sanitize owner_name (crucial against XSS)
+        const rawName = raw.owner_name || raw.n || "";
+        const safeName = this.sanitizeString(rawName, 60);
+        if (!safeName) return null; // Reject if no valid name
+
+        // 2. Safe ID
+        const rawId = raw.id || "";
+        const safeId = typeof rawId === "string" && rawId.length > 0
+            ? rawId.replace(/[^\w\-]/g, "").slice(0, 48)
+            : "mw_" + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        // 3. Demographics
+        const safeGender = (raw.gender || raw.g) === "F" ? "F" : "M";
+        const rawMarital = raw.marital_status || raw.m || "single";
+        const safeMarital = ["single", "married", "used_to_be_married"].includes(rawMarital)
+            ? rawMarital
+            : "single";
+
+        // 4. Validate answers map
+        const rawAnswers = raw.answers || raw.a;
+        if (!rawAnswers || typeof rawAnswers !== "object") return null;
+        const safeAnswers = {};
+        for (const [k, v] of Object.entries(rawAnswers)) {
+            const safeK = String(k).replace(/[^\w\-]/g, "").slice(0, 32);
+            if (safeK && (typeof v === "string" || typeof v === "number")) {
+                safeAnswers[safeK] = typeof v === "number" ? v : this.sanitizeString(String(v), 24);
+            }
+        }
+
+        // 5. Safe creation date
+        const safeCreatedAt = this.sanitizeString(
+            raw.created_at || new Date().toLocaleDateString("en-US", {
+                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            }), 60
+        );
+
+        // 6. Optional localized name
+        const safeNameAr = raw.owner_name_ar ? this.sanitizeString(raw.owner_name_ar, 60) : undefined;
+
+        // 7. Confidence validation
+        const confNum = typeof raw.assessment_confidence === "number" ? raw.assessment_confidence : 85;
+        const safeConfidence = Math.min(100, Math.max(0, Math.round(confNum)));
+
+        return {
+            id: safeId || "MW_" + Date.now(),
+            owner_name: safeName,
+            ...(safeNameAr ? { owner_name_ar: safeNameAr } : {}),
+            gender: safeGender,
+            marital_status: safeMarital,
+            answers: safeAnswers,
+            created_at: safeCreatedAt,
+            app_version: raw.app_version ? this.sanitizeString(raw.app_version, 16) : "v2.9.0",
+            calculated_personality: raw.calculated_personality && typeof raw.calculated_personality === "object" ? raw.calculated_personality : null,
+            assessment_confidence: safeConfidence
+        };
+    },
+
     decrypt(encryptedString) {
         try {
             if (!encryptedString) return null;
@@ -547,8 +645,8 @@ const Cryptography = {
             const plainBytes = this._xorBytes(cipherBytes, this.SECRET_KEY_SALT);
             const jsonStr = new TextDecoder().decode(plainBytes);
             const parsed = JSON.parse(jsonStr);
-            if (parsed && parsed.id && parsed.answers && parsed.calculated_personality) {
-                return parsed;
+            if (parsed && (parsed.id || parsed.n || parsed.owner_name) && (parsed.answers || parsed.a)) {
+                return this.validateAndSanitizeProfile(parsed);
             }
             return null;
         } catch (e) {
@@ -561,7 +659,7 @@ const Cryptography = {
         try {
             const compactObj = {
                 id: profile.id,
-                n: profile.owner_name,
+                n: this.sanitizeString(profile.owner_name, 60),
                 g: profile.gender,
                 m: profile.marital_status,
                 a: profile.answers
@@ -586,20 +684,8 @@ const Cryptography = {
             const plainBytes = this._xorBytes(cipherBytes, this.SHARING_KEY_SALT);
             const jsonStr = new TextDecoder().decode(plainBytes);
             const parsed = JSON.parse(jsonStr);
-            if (parsed && parsed.n && parsed.a) {
-                return {
-                    id: parsed.id || "mw_" + Math.random().toString(36).substring(2, 10).toUpperCase(),
-                    owner_name: parsed.n,
-                    gender: parsed.g || "M",
-                    marital_status: parsed.m || "single",
-                    answers: parsed.a,
-                    created_at: new Date().toLocaleDateString("en-US", {
-                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                    }),
-                    app_version: "v2.9.0",
-                    calculated_personality: null,
-                    assessment_confidence: 85
-                };
+            if (parsed && (parsed.n || parsed.owner_name) && (parsed.a || parsed.answers)) {
+                return this.validateAndSanitizeProfile(parsed);
             }
             return null;
         } catch (e) {
@@ -736,13 +822,20 @@ window.googleTranslateElementInit = function() {
     GoogleTranslateHelper.initElement();
 };
 
-if (typeof document !== "undefined") {
+if (typeof document !== "undefined" && typeof document.getElementById === "function") {
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", () => GoogleTranslateHelper.init());
     } else {
         GoogleTranslateHelper.init();
     }
 }
+
+
+const Utils = {
+    escapeHtml: Cryptography.escapeHtml,
+    sanitizeString: Cryptography.sanitizeString,
+    validateAndSanitizeProfile: Cryptography.validateAndSanitizeProfile.bind(Cryptography)
+};
 
 // Export to global window namespace & CommonJS for testing
 if (typeof window !== "undefined") {
@@ -751,8 +844,11 @@ if (typeof window !== "undefined") {
     window.ThemeManager = ThemeManager;
     window.Cryptography = Cryptography;
     window.GoogleTranslateHelper = GoogleTranslateHelper;
+    window.Utils = Utils;
+    window.escapeHtml = Cryptography.escapeHtml;
 }
 if (typeof module !== "undefined" && module.exports) {
-    module.exports = { Localization, Storage, ThemeManager, Cryptography, GoogleTranslateHelper };
+    module.exports = { Localization, Storage, ThemeManager, Cryptography, GoogleTranslateHelper, Utils };
 }
+
 

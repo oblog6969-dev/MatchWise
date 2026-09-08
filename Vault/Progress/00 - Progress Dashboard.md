@@ -16,12 +16,12 @@ aliases:
 # 🚀 MatchWise Project Progress Dashboard
 
 > [!summary] Current Release State
-> **Version:** `v2.9.0` (Release: *AI Educational Guidance System & Contextual Clinical Instructions*)  
+> **Version:** `v2.9.1` (Release: *Security Hardening, Production Fixes & Smoke Test Suite*)  
 > **Status:** 🟢 **Production Ready & Fully Verified**  
-> **Active Milestone:** [[M13 - AI Educational Guidance System]] ✅ Complete  
+> **Active Milestone:** [[M15 - Production Hardening & Test Suite]] ✅ Complete  
 > **Upcoming Milestone:** [[M14 - Clinical PDF Export & Advanced Diagnostics]] 🟡 In Design  
-> **Overall Milestone Completion:** `93% (13 / 14)`  
-> <progress value="13" max="14" style="width: 100%; height: 16px;"></progress>
+> **Overall Milestone Completion:** `93% (14 / 15)`  
+> <progress value="14" max="15" style="width: 100%; height: 16px;"></progress>
 
 ---
 
@@ -53,17 +53,20 @@ SORT file.name ASC
 | [[M11 - Interactive Popovers & Print Fidelity]] | Interactive JS popovers & 100% clean vector print | ✅ Complete | 100% | Mobile touch backdrop |
 | [[M12 - Hartman Circle Chart & Dynamic Focus]] | Trigonometric SVG donut paths & ring focus/shadow | ✅ Complete | 100% | Center hub spotlighting |
 | [[M13 - AI Educational Guidance System]] | Multi-stage readiness, in-test reflection & report tips | ✅ Complete | 100% | Gemini 3.8 Flash & LocalStorage |
+| [[M15 - Production Hardening & Test Suite]] | Stored XSS fix, schema validation, demo button, Node test suite | ✅ Complete | 100% | 10/10 automated tests passed |
 | [[M14 - Clinical PDF Export & Advanced Diagnostics]] | Multi-page PDF pagination & longitudinal assessment | 🟡 Planned | 15% | Next sprint target |
 
 ---
 
 ## 📦 Recent Version Changelogs
 
+- [[v2.9.1 - Security Hardening, Production Fixes & Test Suite]] — September 9, 2026 *(Stored XSS mitigation, Demo export fix, AI fallback, 10/10 test suite)*
 - [[v2.9.0 - AI Educational Guidance System]] — September 8, 2026 *(Readiness card, In-test reflection tips, Dynamic re-prompting)*
 - [[v2.8.0 - Hartman Donut Geometry & Focus Interactivity]] — September 2026 *(Exact SVG `<path d="...">` arc geometry & center hub spotlight)*
 - [[v2.7.0 - Interactive Tooltips & Vector Print]] — September 2026 *(Glassmorphic tooltips & vector SVG print isolation)*
 - [[v2.6.1 - Unified Arabic & Zero English Remnants]] — September 2026 *(100% Arabic report audit & Schwartz translations)*
 - [[v2.5.0 - Narrative Archetypes & Multi-Framework]] — August 2026 *(Archetype seeding, 5 Chapters & 4 Acts)*
+
 
 ---
 

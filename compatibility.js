@@ -450,7 +450,7 @@ const CompatibilityEngine = {
             avg -= (dealBreakers.length * 12);
         }
 
-        const overallCompatibilityIndex = Math.round(Math.max(30, Math.min(98, avg)));
+        const overallCompatibilityIndex = Math.round(Math.max(10, Math.min(98, avg)));
 
         // Dynamic Recommendations
         const recommendations = [];

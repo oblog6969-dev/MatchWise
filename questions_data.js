@@ -3031,3 +3031,8 @@ window.MATCHWISE_QUESTIONS = [
     ]
   }
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.MATCHWISE_QUESTIONS;
+}
+

@@ -805,9 +805,10 @@ const PersonalityEngine = {
             values_and_lifestyle: finalOthers,
             aesthetic_profile: aesthetic_profile,
             ideology_profile: ideologyPercentages,
-            assessment_confidence: clamp(calculatedConfidence, 65, 96),
+            assessment_confidence: clamp(calculatedConfidence, 15, 98),
 
             // --- MULTI-FRAMEWORK EXTENSIONS ---
+
             hartman: finalHartman,
             disc: finalDisc,
             birkman: finalBirkman,

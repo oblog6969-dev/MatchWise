@@ -46,6 +46,27 @@ const AI_TRANSLATIONS = {
     }
 };
 
+// Curated contextual instructional guidance for offline & builtin autonomous modes
+const BUILTIN_INSTRUCTIONS = {
+    landing: {
+        en: "Answer spontaneously reflecting your real everyday self rather than ideal wishes, ensuring deep psychological precision across all frameworks.",
+        ar: "أجب بعفوية وصدق بناءً على واقعك الحقيقي وتصرفاتك التلقائية، وليس ما تتمنى أن تكون عليه، لضمان أعلى دقة في كشف محركات الشخصية."
+    },
+    single_report_overview: {
+        en: "This report outlines your comprehensive psychological landscape, core motivations, and emotional needs; focus on understanding your innate strengths and growth opportunities.",
+        ar: "يوضح هذا التقرير خريطتك النفسية المتكاملة ودوافعك الجوهرية واحتياجاتك العاطفية؛ ركّز على فهم نقاط التميز وفرص النمو الذاتي."
+    },
+    compare_overview: {
+        en: "This report compares both partners' profiles to illuminate harmony zones and friction triggers; use these insights as a foundation for empathetic dialogue and mutual understanding.",
+        ar: "يقارن هذا التقرير بين نمطي الشريكين لتحديد نقاط التناغم ومناطق الحذر المحتملة؛ استخدم هذه الرؤى كمدخل لحوار واعٍ وبناء جسور التفاهم."
+    },
+    question_default: {
+        en: "Read the scenario calmly and select the option closest to your natural response in everyday life, without overthinking or aiming for perfection.",
+        ar: "اقرأ الموقف بتأنٍ واختر الخيار الأقرب لردة فعلك الطبيعية في الأيام العادية، بعيداً عن المثالية."
+    }
+};
+
+
 class AIService {
     constructor() {
         const getStored = (k) => (typeof localStorage !== "undefined" ? localStorage.getItem(k) : null);
@@ -319,28 +340,52 @@ Output raw JSON only matching schema:
         }
     }
 
+    getBuiltinInstruction(context, language) {
+        const lang = language === "ar" ? "ar" : "en";
+        if (BUILTIN_INSTRUCTIONS[context]) {
+            return BUILTIN_INSTRUCTIONS[context][lang];
+        }
+        if (typeof context === "string" && context.startsWith("question")) {
+            return BUILTIN_INSTRUCTIONS.question_default[lang];
+        }
+        return BUILTIN_INSTRUCTIONS.landing[lang];
+    }
+
     /**
      * Generate a short instructional tip based on context.
-     * Context values: 'landing', 'question_<id>', 'report_section_<name>', 'compare_overview'.
+     * Context values: 'landing', 'question_<id>', 'single_report_overview', 'compare_overview'.
      * Language is derived from currentLanguage ('en' or 'ar').
      */
     async generateInstruction(context, language) {
-        const cacheKey = `instruction_${context}_${language}`;
+        const lang = language === "ar" ? "ar" : "en";
+
+        // 1. If provider is builtin or no API key, immediately return curated static instruction
+        if (this.provider === "builtin" || !this.apiKey) {
+            return this.getBuiltinInstruction(context, lang);
+        }
+
+        // 2. Check namespaced cache
+        const cacheKey = `mw_instr_v2.9_${context}_${lang}`;
         const cached = typeof localStorage !== "undefined" ? localStorage.getItem(cacheKey) : null;
-        if (cached) return cached;
-        const prompt = `You are an instructional designer for a psychometric test. Provide a concise (1‑2 sentence) friendly tip that helps the user understand how to get the most out of the upcoming step described by the context "${context}". Use ${language === "ar" ? "Arabic" : "English"}. Keep the tone supportive and premium.`;
+        if (cached && !cached.includes("Quick tip:") && !cached.includes("نصيحة سريعة:")) {
+            return cached;
+        }
+
+        const prompt = `You are an instructional designer for a relationship psychometric assessment. Provide a concise (1-2 sentence) friendly tip that helps the user understand how to get the most out of the upcoming step described by the context "${context}". Use ${lang === "ar" ? "Arabic" : "English"}. Keep the tone supportive, encouraging, and clear.`;
         try {
             const response = await this.callAI(prompt);
             const cleaned = response.replace(/```(?:json)?/g, "").trim();
-            if (typeof localStorage !== "undefined") localStorage.setItem(cacheKey, cleaned);
+            if (cleaned && typeof localStorage !== "undefined") {
+                localStorage.setItem(cacheKey, cleaned);
+            }
             return cleaned;
         } catch (e) {
-            console.warn("Instruction generation failed, fallback to static tip", e);
-            const fallback = language === "ar" ? "نصيحة سريعة: احرص على قراءة التعليمات بعناية قبل المتابعة." : "Quick tip: Read the instructions carefully before proceeding.";
-            if (typeof localStorage !== "undefined") localStorage.setItem(cacheKey, fallback);
-            return fallback;
+            console.warn("External AI instruction generation failed, falling back to curated builtin instruction:", e);
+            // Return curated builtin instruction WITHOUT caching failure placeholder permanently
+            return this.getBuiltinInstruction(context, lang);
         }
     }
+
 
     generateBuiltinSingleAnalysis(userProfile, currentLanguage) {
         const isAr = currentLanguage === "ar";
