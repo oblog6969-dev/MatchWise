@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.8.1 - Clinical Live Test Archetypes
+ * MatchWise Lite v2.9.1 - Clinical Live Test Archetypes
  * Tariq Al-Mansoor (Executive Leader) & Nour Al-Sabah (Empathetic Harmonizer)
  */
 const DEMO_PROFILES = [
@@ -94,11 +94,21 @@ const DEMO_PROFILES = [
       "q83": "opt1",
       "q84": "opt2",
       "q85": "opt2",
-      "q18_sgl": "opt3"
+      "q18_sgl": "opt3",
+      "q86": "opt3",
+      "q87": "opt1",
+      "q88": "opt2",
+      "q89": "opt1",
+      "q90": "opt2",
+      "q91": "opt2",
+      "q92": "opt2",
+      "q93": "opt1",
+      "q94": "opt2",
+      "q95": "opt2"
     },
     "calculated_personality": {
       "big_five": {
-        "openness": 78,
+        "openness": 95,
         "conscientiousness": 95,
         "extroversion": 81,
         "agreeableness": 95,
@@ -108,8 +118,8 @@ const DEMO_PROFILES = [
         "type": "ESTJ",
         "scores": {
           "e_i": 79,
-          "s_n": 12,
-          "t_f": 124,
+          "s_n": 86,
+          "t_f": 220,
           "j_p": 85
         }
       },
@@ -118,7 +128,7 @@ const DEMO_PROFILES = [
         "anxiety_score": 92,
         "avoidance_score": 26,
         "scores": {
-          "secure": 839,
+          "secure": 1211,
           "anxious": 231,
           "avoidant": 50
         }
@@ -126,7 +136,7 @@ const DEMO_PROFILES = [
       "communication": {
         "primary": "assertive",
         "scores": {
-          "assertive": 183,
+          "assertive": 303,
           "passive": 20,
           "passive_aggressive": 10,
           "reserved": 20
@@ -195,16 +205,16 @@ const DEMO_PROFILES = [
         "primary": "red",
         "secondary": "blue",
         "scores": {
-          "red": 55,
-          "blue": 18,
-          "white": 14,
-          "yellow": 13
+          "red": 59,
+          "blue": 17,
+          "white": 12,
+          "yellow": 12
         },
         "breakdown": {
-          "red": 55,
-          "blue": 18,
-          "white": 14,
-          "yellow": 13
+          "red": 59,
+          "blue": 17,
+          "white": 12,
+          "yellow": 12
         },
         "metadata": {
           "motive_en": "Power, Progress & Leadership",
@@ -220,16 +230,16 @@ const DEMO_PROFILES = [
         "secondary": "C",
         "type": "DC",
         "scores": {
-          "d": 48,
-          "i": 13,
+          "d": 43,
+          "i": 11,
           "s": 3,
-          "c": 36
+          "c": 42
         },
         "breakdown": {
-          "D": 48,
-          "I": 13,
+          "D": 43,
+          "I": 11,
           "S": 3,
-          "C": 36
+          "C": 42
         },
         "pace": "Fast-Paced & Responsive",
         "pace_ar": "سريع الإيقاع واستجابي",
@@ -284,18 +294,18 @@ const DEMO_PROFILES = [
       },
       "gottman_safety": {
         "repair_receptivity": 95,
-        "emotional_safety_index": 70,
+        "emotional_safety_index": 75,
         "risks": {
-          "criticism": 40,
-          "defensiveness": 37,
-          "stonewalling": 10,
-          "contempt": 32
+          "criticism": 36,
+          "defensiveness": 33,
+          "stonewalling": 9,
+          "contempt": 28
         },
         "four_horsemen_risk": {
-          "criticism": 40,
-          "defensiveness": 37,
-          "stonewalling": 10,
-          "contempt": 32
+          "criticism": 36,
+          "defensiveness": 33,
+          "stonewalling": 9,
+          "contempt": 28
         }
       },
       "attachment_ecr": {
@@ -303,37 +313,37 @@ const DEMO_PROFILES = [
         "anxiety_score": 92,
         "avoidance_score": 26,
         "scores": {
-          "secure": 839,
+          "secure": 1211,
           "anxious": 231,
           "avoidant": 50
         }
       },
       "schwartz_values": {
         "top_values": [
+          "achievement",
           "security",
-          "tradition",
-          "achievement"
+          "tradition"
         ],
         "scores": {
-          "tradition": 20,
-          "security": 29,
-          "self_direction": 15,
-          "benevolence": 12,
-          "hedonism": 5,
-          "achievement": 19
+          "tradition": 17,
+          "security": 25,
+          "self_direction": 13,
+          "benevolence": 10,
+          "hedonism": 4,
+          "achievement": 31
         }
       },
       "consciousness": {
         "hawkins": {
-          "score": 305,
-          "level": "Neutrality & Trust (250)",
-          "level_ar": "الحياد والثقة (250)",
-          "view_of_life": "Satisfactory / Feasible",
-          "view_of_life_ar": "مُرضٍ ومريح",
+          "score": 310,
+          "level": "Willingness & Optimism (310)",
+          "level_ar": "الاستعداد والتفاؤل (310)",
+          "view_of_life": "Hopeful / Cooperative",
+          "view_of_life_ar": "مفعم بالأمل ومتعاون",
           "is_above_200": true,
           "domain": "Power",
           "domain_ar": "القوة الروحية البنّاءة",
-          "power_ratio": 70
+          "power_ratio": 73
         },
         "hicks": {
           "level": 6,
@@ -350,6 +360,35 @@ const DEMO_PROFILES = [
           "score": 79,
           "rating_en": "Rapid & Resilient",
           "rating_ar": "سريع ومرن"
+        }
+      },
+      "maslow_profile": {
+        "tiers": {
+          "somatic": 3,
+          "safety": 20,
+          "belonging": 10,
+          "esteem": 32,
+          "actualization": 30,
+          "transcendence": 5
+        },
+        "primary_need": "esteem",
+        "primary_need_en": "Esteem, Mastery & Social Competence",
+        "primary_need_ar": "التقدير والكفاءة والمكانة الاجتماعية",
+        "d_need_pct": 65,
+        "b_need_pct": 35,
+        "orientation_en": "Deficiency & Security Anchored (D-Needs)",
+        "orientation_ar": "مرتكز على الأمان وسد الاحتياج (D-Needs)"
+      },
+      "developmental_profile": {
+        "kegan": {
+          "score": 3.8,
+          "stage_en": "Stage 4: Self-Authoring Mind (Internal Compass)",
+          "stage_ar": "المرحلة 4: العقل المستقل والمؤلف لذاته (السيادة النفسية)"
+        },
+        "differentiation": {
+          "score": 4.4,
+          "level_en": "High Sovereignty",
+          "level_ar": "سيادة نفسية وتمايز عالي"
         }
       }
     },
@@ -446,7 +485,17 @@ const DEMO_PROFILES = [
       "q83": "opt1",
       "q84": "opt1",
       "q85": "opt1",
-      "q18_sgl": "opt1"
+      "q18_sgl": "opt1",
+      "q86": "opt2",
+      "q87": "opt2",
+      "q88": "opt3",
+      "q89": "opt1",
+      "q90": "opt1",
+      "q91": "opt3",
+      "q92": "opt1",
+      "q93": "opt2",
+      "q94": "opt1",
+      "q95": "opt1"
     },
     "calculated_personality": {
       "big_five": {
@@ -460,18 +509,18 @@ const DEMO_PROFILES = [
         "type": "INFP",
         "scores": {
           "e_i": -70,
-          "s_n": -85,
+          "s_n": -176,
           "t_f": -85,
           "j_p": -15
         }
       },
       "attachment": {
         "primary": "secure",
-        "anxiety_score": 53,
+        "anxiety_score": 92,
         "avoidance_score": 88,
         "scores": {
           "secure": 1516,
-          "anxious": 82,
+          "anxious": 385,
           "avoidant": 173
         }
       },
@@ -480,7 +529,7 @@ const DEMO_PROFILES = [
         "scores": {
           "assertive": 135,
           "passive": 68,
-          "passive_aggressive": 10,
+          "passive_aggressive": 115,
           "reserved": 20
         }
       },
@@ -636,48 +685,48 @@ const DEMO_PROFILES = [
       },
       "gottman_safety": {
         "repair_receptivity": 95,
-        "emotional_safety_index": 89,
+        "emotional_safety_index": 91,
         "risks": {
-          "criticism": 15,
-          "defensiveness": 10,
-          "stonewalling": 39,
-          "contempt": 5
+          "criticism": 14,
+          "defensiveness": 9,
+          "stonewalling": 35,
+          "contempt": 4
         },
         "four_horsemen_risk": {
-          "criticism": 15,
-          "defensiveness": 10,
-          "stonewalling": 39,
-          "contempt": 5
+          "criticism": 14,
+          "defensiveness": 9,
+          "stonewalling": 35,
+          "contempt": 4
         }
       },
       "attachment_ecr": {
         "primary": "secure",
-        "anxiety_score": 53,
+        "anxiety_score": 92,
         "avoidance_score": 88,
         "scores": {
           "secure": 1516,
-          "anxious": 82,
+          "anxious": 385,
           "avoidant": 173
         }
       },
       "schwartz_values": {
         "top_values": [
-          "self_direction",
+          "benevolence",
           "tradition",
-          "benevolence"
+          "security"
         ],
         "scores": {
           "tradition": 25,
-          "security": 17,
-          "self_direction": 26,
-          "benevolence": 21,
-          "hedonism": 7,
-          "achievement": 4
+          "security": 20,
+          "self_direction": 19,
+          "benevolence": 28,
+          "hedonism": 5,
+          "achievement": 3
         }
       },
       "consciousness": {
         "hawkins": {
-          "score": 441,
+          "score": 446,
           "level": "Reason & Understanding (400)",
           "level_ar": "المنطق والاستبصار (400)",
           "view_of_life": "Wise / Meaningful",
@@ -703,6 +752,35 @@ const DEMO_PROFILES = [
           "rating_en": "Rapid & Resilient",
           "rating_ar": "سريع ومرن"
         }
+      },
+      "maslow_profile": {
+        "tiers": {
+          "somatic": 9,
+          "safety": 20,
+          "belonging": 24,
+          "esteem": 3,
+          "actualization": 23,
+          "transcendence": 21
+        },
+        "primary_need": "belonging",
+        "primary_need_en": "Love, Belonging & Relational Closeness",
+        "primary_need_ar": "الانتماء والمودة والقرب الوجداني",
+        "d_need_pct": 56,
+        "b_need_pct": 44,
+        "orientation_en": "Growth & Actualization Driven (B-Needs)",
+        "orientation_ar": "مدفوع بالنمو وتحقيق الذات (B-Needs)"
+      },
+      "developmental_profile": {
+        "kegan": {
+          "score": 3.8,
+          "stage_en": "Stage 4: Self-Authoring Mind (Internal Compass)",
+          "stage_ar": "المرحلة 4: العقل المستقل والمؤلف لذاته (السيادة النفسية)"
+        },
+        "differentiation": {
+          "score": 3.1,
+          "level_en": "Balanced Interdependence",
+          "level_ar": "ترابط متوازن ومرن"
+        }
       }
     },
     "assessment_confidence": 94
@@ -712,10 +790,6 @@ const DEMO_PROFILES = [
 if (typeof window !== 'undefined') {
     window.DEMO_PROFILES = DEMO_PROFILES;
 }
-if (typeof globalThis !== 'undefined') {
-    globalThis.DEMO_PROFILES = DEMO_PROFILES;
-}
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DEMO_PROFILES;
 }
-

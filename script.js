@@ -134,10 +134,15 @@ document.addEventListener("DOMContentLoaded", () => {
         dyadicConflictLoopContainer: document.getElementById("dyadicConflictLoopContainer"),
         dyadicConflictCard: document.getElementById("dyadicConflictCard"),
         consciousnessSpectrumContainer: document.getElementById("consciousnessSpectrumContainer"),
+        maslowPyramidContainer: document.getElementById("maslowPyramidContainer"),
         hawkinsBadgeA: document.getElementById("hawkinsBadgeA"),
         hawkinsBadgeB: document.getElementById("hawkinsBadgeB"),
         hicksBadgeA: document.getElementById("hicksBadgeA"),
         hicksBadgeB: document.getElementById("hicksBadgeB"),
+        maslowBadgeA: document.getElementById("maslowBadgeA"),
+        maslowBadgeB: document.getElementById("maslowBadgeB"),
+        keganBadgeA: document.getElementById("keganBadgeA"),
+        keganBadgeB: document.getElementById("keganBadgeB"),
         
         chapter1Badge: document.getElementById("chapter1Badge"),
         chapter1Title: document.getElementById("chapter1Title"),
@@ -581,7 +586,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "Marriage": "الرؤية الزوجية والشراكة",
         "Future planning": "التخطيط المستقبلي",
         "Family": "العلاقات والحدود الأسرية",
-        "Awareness & Consciousness": "مستوى الوعي والاتزان"
+        "Awareness & Consciousness": "مستوى الوعي والاتزان",
+        "Needs Hierarchy & Human Development": "هرم الاحتياجات والارتقاء الإنساني"
     };
 
     const RADAR_CATEGORY_TRANSLATIONS = {
@@ -595,6 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Cultural & Spiritual": "القيم الروحية والثقافية",
         "Aesthetic Alignment": "التناغم الشكلي والجمالي",
         "Awareness & Consciousness": "طيف الوعي والرنين الترددي",
+        "Needs & Human Development": "الاحتياجات والارتقاء الإنساني",
         "Communication": "أسلوب التواصل",
         "Conflict": "إدارة الخلافات",
         "Money": "التوافق المالي",
@@ -1738,6 +1745,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (dom.hicksBadgeB) dom.hicksBadgeB.textContent = "--";
             renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsA, null, true, nameA, null, isAr);
 
+            // Populate Maslow & Kegan Badges & Spectrum
+            if (dom.maslowBadgeA) {
+                dom.maslowBadgeA.textContent = isAr ? (traitsA.maslow_profile?.primary_need_ar || "تحقيق الذات") : (traitsA.maslow_profile?.primary_need_en || "Self-Actualization");
+            }
+            if (dom.maslowBadgeB) dom.maslowBadgeB.textContent = "--";
+            if (dom.keganBadgeA) {
+                dom.keganBadgeA.textContent = isAr ? (traitsA.developmental_profile?.kegan?.stage_ar || "المرحلة 4: العقل المستقل") : (traitsA.developmental_profile?.kegan?.stage_en || "Stage 4: Self-Authoring");
+            }
+            if (dom.keganBadgeB) dom.keganBadgeB.textContent = "--";
+            renderMaslowPyramidVisualizer(dom.maslowPyramidContainer, traitsA, null, true, nameA, null, isAr);
+
             // Render Relationship Operating Manual for Person A
             renderOperatingManual(profileA, null, isAr);
 
@@ -1968,6 +1986,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 dom.hicksBadgeB.textContent = isAr ? (traitsCompB.consciousness?.hicks?.state_ar || "التوقع الإيجابي") : (traitsCompB.consciousness?.hicks?.state || "Positive Expectation");
             }
 
+            if (dom.maslowBadgeA && dom.maslowBadgeB) {
+                dom.maslowBadgeA.textContent = isAr ? (traitsCompA.maslow_profile?.primary_need_ar || "تحقيق الذات") : (traitsCompA.maslow_profile?.primary_need_en || "Self-Actualization");
+                dom.maslowBadgeB.textContent = isAr ? (traitsCompB.maslow_profile?.primary_need_ar || "الانتماء") : (traitsCompB.maslow_profile?.primary_need_en || "Belonging");
+            }
+            if (dom.keganBadgeA && dom.keganBadgeB) {
+                dom.keganBadgeA.textContent = isAr ? (traitsCompA.developmental_profile?.kegan?.stage_ar || "المرحلة 4") : (traitsCompA.developmental_profile?.kegan?.stage_en || "Stage 4");
+                dom.keganBadgeB.textContent = isAr ? (traitsCompB.developmental_profile?.kegan?.stage_ar || "المرحلة 4") : (traitsCompB.developmental_profile?.kegan?.stage_en || "Stage 4");
+            }
+
             // Render Interactive Multi-Framework SVG Visualizers for Comparison View
             renderHartmanDonut(dom.hartmanChartContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
             renderDiscQuadrantMap(dom.discQuadrantContainer, traitsCompA.disc, traitsCompB.disc, false, nameA, nameB, isAr);
@@ -1977,6 +2004,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderGottmanSafetyGauge(dom.gottmanGaugeContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
             renderDyadicConflictLoop(dom.dyadicConflictLoopContainer, report, profileA, profileB, isAr);
             renderConsciousnessSpectrum(dom.consciousnessSpectrumContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
+            renderMaslowPyramidVisualizer(dom.maslowPyramidContainer, traitsCompA, traitsCompB, false, nameA, nameB, isAr);
 
             // Render Relationship Operating Manual for BOTH
             renderOperatingManual(profileA, profileB, isAr);
@@ -2581,6 +2609,88 @@ document.addEventListener("DOMContentLoaded", () => {
                 subtitle_en: "22-tier vibrational emotional continuum",
                 body_ar: "المستويات 1-7 (محاذاة عليا وبهجة)، المستويات 8-14 (احتكاك وتردد يتطلب انتباهاً)، المستويات 15-22 (مقاومة حادة تتطلب تهدئة عاجلة قبل النقاش).",
                 body_en: "Levels 1-7 (Joy & Contentment), Levels 8-14 (Friction & Doubt), Levels 15-22 (Contraction & Fear requiring grounding before discussing issues)."
+            }
+        },
+        maslow: {
+            tier_transcendence: {
+                icon: "✨",
+                color: "#8b5cf6",
+                title_ar: "التسامي عن الذات والرسالة (Self-Transcendence)",
+                title_en: "Self-Transcendence & Purpose (Apex)",
+                subtitle_ar: "أعلى مراتب الهرم: خدمة ما وراء الأنا، الروحانية، والرسالة المشتركة",
+                subtitle_en: "Service beyond ego, spiritual unity, and trans-personal contribution",
+                body_ar: "المستوى الأسمى في هرم ماسلو المعدل (1970). العلاقة هنا ليست مجرد سكن أو إشباع نفسي، بل مساحة ارتقاء روحي وتكامل في خدمة أثر مبارك في المجتمع.",
+                body_en: "The peak of Maslow's revised hierarchy (1970). Relationship becomes an evolutionary partnership serving causes beyond individual comfort."
+            },
+            tier_actualization: {
+                icon: "🌟",
+                color: "#06b6d4",
+                title_ar: "تحقيق الذات والسيادة الفردية (Self-Actualization)",
+                title_en: "Self-Actualization & Autonomy",
+                subtitle_ar: "العيش بصدق وفق بوصلة القيم الداخلية وتحقيق الإمكانات الكامنة",
+                subtitle_en: "Authenticity, realization of personal potential, and internal compass",
+                body_ar: "احتياج نمائي (B-Need) يعبر عن رغبة الإنسان في أن يكون أفضل نسخة ممكنة من ذاته دون تبعية أو خوف، والارتباط بشريك يحترم تفرد شخصيته.",
+                body_en: "A primary growth need (B-Need) focused on living authentically, fulfilling unique potential, and thriving with an encouraging, non-restrictive partner."
+            },
+            tier_esteem: {
+                icon: "🏆",
+                color: "#eab308",
+                title_ar: "التقدير والكفاءة والمكانة (Esteem & Mastery)",
+                title_en: "Esteem, Mastery & Respect",
+                subtitle_ar: "الاحترام المتبادل، الإنجاز المهني، والاعتراف بالكفاءة والمجهود",
+                subtitle_en: "Dignity, competence, external recognition, and mutual admiration",
+                body_ar: "احتياج للشعور بالجدارة والاحترام المتبادل وتقدير الإنجازات الأسرية والمهنية. الشريك هنا سند يعزز الثقة بالنفس والمكانة الاجتماعية.",
+                body_en: "Drives self-respect, professional competence, and mutual recognition. Partners flourish when their contributions are genuinely admired."
+            },
+            tier_belonging: {
+                icon: "💖",
+                color: "#ec4899",
+                title_ar: "الحب والانتماء والقرب الوجداني (Love & Belonging)",
+                title_en: "Love, Belonging & Intimacy",
+                subtitle_ar: "الدفء العاطفي، الاحتواء، والاطمئنان الوجداني وتجنب العزلة",
+                subtitle_en: "Emotional bonding, affectionate warmth, and acceptance",
+                body_ar: "احتياج أساسي للشعور بالقبول غير المشروط والحميمية والمودة. غياب هذا الإشباع يولد قلق الهجر أو الجفاف العاطفي داخل الأسرة.",
+                body_en: "Core attachment need for emotional safety, feeling cherished, and deep belonging, shielding the couple from loneliness or isolation."
+            },
+            tier_safety: {
+                icon: "🛡️",
+                color: "#3b82f6",
+                title_ar: "الأمان والاستقرار المالي (Safety & Security)",
+                title_en: "Safety, Security & Predictability",
+                subtitle_ar: "الاستقرار المالي، السكن المستقل، ووضوح الاتفاقيات والحدود",
+                subtitle_en: "Financial predictability, domestic order, and clear boundaries",
+                body_ar: "ركيزة الطمأنينة المادية والمعيشية. أي اضطراب في هذا المستوى يدفع الإنسان للانكماش والقلق التلقائي لحماية استقرار الأسرة.",
+                body_en: "Foundational deficiency need (D-Need) for economic security, predictable routines, and emotional reliability that insulates against chaos."
+            },
+            tier_somatic: {
+                icon: "🌿",
+                color: "#10b981",
+                title_ar: "الاتزان الجسدي والتنظيم العصبي (Somatic Homeostasis)",
+                title_en: "Somatic Pacing & Nervous System Ease",
+                subtitle_ar: "الراحة البدنية، النوم الصحي، والتناغم في وتيرة النشاط اليومي",
+                subtitle_en: "Physical regulation, sleep rhythm, and somatic calm",
+                body_ar: "قاعدة الهرم البيولوجية. احترام حدود الجسد والاسترخاء يخلق صفاءً ذهنياً يمنع الانفعال غير المبرر في الحياة الزوجية.",
+                body_en: "The physiological foundation: respecting biological rhythms, rest, and nervous system calm to prevent burnout and reactive irritability."
+            },
+            kegan_scale: {
+                icon: "🧠",
+                color: "#6366f1",
+                title_ar: "مقياس روبرت كيجان لمستويات الوعي والارتقاء",
+                title_en: "Robert Kegan's Orders of Consciousness",
+                subtitle_ar: "تطور العقل من النفعي إلى الاجتماعي إلى المستقل إلى التكاملي",
+                subtitle_en: "Evolution from Instrumental to Socialized to Self-Authoring Mind",
+                body_ar: "المرحلة 2 (نفعي تبادلي)، المرحلة 3 (اجتماعي اندماجي يستمد قيمته من العلاقة)، المرحلة 4 (مستقل ومؤلف لذاته يملك بوصلة داخلية)، المرحلة 5 (تكاملي يتسامى عن الأنا ويحتوي التناقض).",
+                body_en: "Stage 2 (Instrumental/Transactional), Stage 3 (Socialized/Relational Fusion), Stage 4 (Self-Authoring/Sovereign internal compass), Stage 5 (Self-Transforming/Inter-individual)."
+            },
+            differentiation: {
+                icon: "⚖️",
+                color: "#14b8a6",
+                title_ar: "مستوى التمايز النفسي (Differentiation of Self)",
+                title_en: "Bowen Differentiation of Self Index",
+                subtitle_ar: "القدرة على الحفاظ على استقلالية الذات مع البقاء قريباً عاطفياً",
+                subtitle_en: "Holding individual sovereignty while staying intimately connected",
+                body_ar: "التمايز العالي يمكن الإنسان من أن يقول 'أنا' بوضوح دون أن يفقد قربه العاطفي من شريكه، ودون أن يمتص توتر الطرف الآخر كعدوى نفسية.",
+                body_en: "High differentiation allows individuals to maintain emotional calm and clear selfhood under pressure without resorting to defensive distancing or enmeshment."
             }
         },
         big_five: {
@@ -4237,6 +4347,246 @@ document.addEventListener("DOMContentLoaded", () => {
                 body_en: `${nameB}'s habitual emotional set-point centers around ${cB.hicks.state} with resilient agility.`,
                 metric_ar: `المستوى: ${hicksB} / 22`,
                 metric_en: `Level: ${hicksB} / 22`
+            }));
+        });
+    }
+
+    // 9. Maslow Hierarchy of Needs & Human Development Spectrum
+    function renderMaslowPyramidVisualizer(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
+        if (!container) return;
+        container.innerHTML = "";
+
+        const mA = traitsA?.maslow_profile || {
+            tiers: { somatic: 10, safety: 15, belonging: 20, esteem: 25, actualization: 20, transcendence: 10 },
+            primary_need: "esteem",
+            d_need_pct: 70,
+            b_need_pct: 30,
+            orientation_en: "Balanced Integrative",
+            orientation_ar: "توازن تكاملي مرن"
+        };
+        const mB = traitsB?.maslow_profile || (isSingle ? null : {
+            tiers: { somatic: 15, safety: 20, belonging: 25, esteem: 10, actualization: 15, transcendence: 15 },
+            primary_need: "belonging",
+            d_need_pct: 70,
+            b_need_pct: 30,
+            orientation_en: "Balanced Integrative",
+            orientation_ar: "توازن تكاملي مرن"
+        });
+
+        const devA = traitsA?.developmental_profile || {
+            kegan: { score: 3.8, stage_en: "Stage 4: Self-Authoring", stage_ar: "المرحلة 4: العقل المستقل" },
+            differentiation: { score: 3.8, level_en: "High Sovereignty", level_ar: "سيادة نفسية عالية" }
+        };
+        const devB = traitsB?.developmental_profile || (isSingle ? null : {
+            kegan: { score: 3.5, stage_en: "Stage 3-to-4 Bridge", stage_ar: "جسر العبور (3 إلى 4)" },
+            differentiation: { score: 3.5, level_en: "Balanced Interdependence", level_ar: "ترابط متوازن" }
+        });
+
+        const keganA = devA.kegan.score;
+        const keganB = devB ? devB.kegan.score : keganA;
+        const getKeganPct = (score) => Math.max(5, Math.min(95, Math.round(((score - 2.0) / 3.0) * 100)));
+        const keganPctA = getKeganPct(keganA);
+        const keganPctB = devB ? getKeganPct(keganB) : 0;
+
+        // Tier configurations (from Top Apex down to Base)
+        const tiersConfig = [
+            { key: "transcendence", dictKey: "tier_transcendence", color: "#8b5cf6", en: "Self-Transcendence (Apex)", ar: "التسامي والرسالة المشتركة", y: 20, w: 200 },
+            { key: "actualization", dictKey: "tier_actualization", color: "#06b6d4", en: "Self-Actualization & Autonomy", ar: "تحقيق الذات والاستقلالية", y: 64, w: 270 },
+            { key: "esteem", dictKey: "tier_esteem", color: "#eab308", en: "Esteem & Mastery", ar: "التقدير والكفاءة والاحترام", y: 108, w: 340 },
+            { key: "belonging", dictKey: "tier_belonging", color: "#ec4899", en: "Love & Belonging", ar: "الانتماء والمودة العاطفية", y: 152, w: 410 },
+            { key: "safety", dictKey: "tier_safety", color: "#3b82f6", en: "Safety & Predictability", ar: "الأمان والاستقرار المالي", y: 196, w: 480 },
+            { key: "somatic", dictKey: "tier_somatic", color: "#10b981", en: "Somatic Homeostasis", ar: "الاتزان الجسدي والتنظيم العصبي", y: 240, w: 550 }
+        ];
+
+        const cx = 310;
+        const tierHeight = 36;
+
+        let tiersSvg = "";
+        tiersConfig.forEach(t => {
+            const pctA = mA.tiers[t.key] || 0;
+            const pctB = mB ? (mB.tiers[t.key] || 0) : 0;
+            const isPrimaryA = mA.primary_need === t.key;
+            const isPrimaryB = mB && (mB.primary_need === t.key);
+            const x = cx - (t.w / 2);
+
+            tiersSvg += `
+                <g class="chart-node chart-interactive-element" data-maslow-tier="${t.key}" style="cursor: pointer;">
+                    <!-- Tier Card -->
+                    <rect x="${x}" y="${t.y}" width="${t.w}" height="${tierHeight}" rx="7" fill="${t.color}" fill-opacity="0.16" stroke="${t.color}" stroke-width="1.6" />
+                    
+                    <!-- Title inside tier -->
+                    <text x="${cx}" y="${t.y + 22}" fill="var(--text-primary)" font-size="11.5" font-weight="700" text-anchor="middle">
+                        ${isAr ? t.ar : t.en}
+                    </text>
+
+                    <!-- Partner A Value Badge -->
+                    <g transform="translate(${x + 12}, ${t.y + 10})">
+                        ${isPrimaryA ? `<circle cx="-4" cy="8" r="4.5" fill="#10b981" />` : ''}
+                        <rect x="0" y="0" width="${!isSingle ? 40 : 48}" height="17" rx="4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1" />
+                        <text x="${!isSingle ? 20 : 24}" y="12" fill="#059669" font-size="9.5" font-weight="800" text-anchor="middle">${pctA}%</text>
+                    </g>
+
+                    <!-- Partner B Value Badge (if comparison) -->
+                    ${!isSingle ? `
+                        <g transform="translate(${x + t.w - 52}, ${t.y + 10})">
+                            ${isPrimaryB ? `<circle cx="44" cy="8" r="4.5" fill="#f59e0b" />` : ''}
+                            <rect x="0" y="0" width="40" height="17" rx="4" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1" />
+                            <text x="20" y="12" fill="#d97706" font-size="9.5" font-weight="800" text-anchor="middle">${pctB}%</text>
+                        </g>
+                    ` : ''}
+                </g>
+            `;
+        });
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "maslow-spectrum-wrapper";
+        wrapper.style.cssText = "width: 100%; max-width: 650px; margin: 0 auto; padding: 12px 0;";
+
+        const titlePyramid = isAr ? "1. هرم ماسلو للاحتياجات وتوزيع الطاقة النفسية" : "1. Maslow Hierarchy of Needs Distribution";
+        const titleKegan = isAr ? "2. مقياس روبرت كيجان للوعي والتمايز النفسي (Kegan Orders of Mind)" : "2. Kegan Orders of Mind & Differentiation Continuum";
+
+        wrapper.innerHTML = `
+            <!-- 1. MASLOW PYRAMID SECTION -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span class="chart-node chart-interactive-element" data-maslow-header="pyramid" style="font-weight: 700; font-size: 0.88rem; cursor: pointer;">${titlePyramid}</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">D-Needs ◄► B-Needs</span>
+                </div>
+
+                <div style="position: relative; width: 100%; display: flex; justify-content: center;">
+                    <svg class="interactive-svg" viewBox="0 0 620 290" style="width: 100%; max-width: 620px; height: auto; direction: ltr;">
+                        <!-- Bracket Indicators on left: B-Needs vs D-Needs -->
+                        <path d="M 35 22 L 20 22 L 20 60 L 10 60 L 20 60 L 20 98 L 35 98" fill="none" stroke="#8b5cf6" stroke-width="1.8" />
+                        <text x="8" y="63" fill="#8b5cf6" font-size="9" font-weight="800" text-anchor="end">${isAr ? "احتياجات نمو (B-Needs)" : "B-Needs (Growth)"}</text>
+
+                        <path d="M 35 110 L 20 110 L 20 190 L 10 190 L 20 190 L 20 274 L 35 274" fill="none" stroke="#3b82f6" stroke-width="1.8" />
+                        <text x="8" y="193" fill="#3b82f6" font-size="9" font-weight="800" text-anchor="end">${isAr ? "احتياجات سد النقص (D-Needs)" : "D-Needs (Deficiency)"}</text>
+
+                        <!-- Tiers Elements -->
+                        ${tiersSvg}
+                    </svg>
+                </div>
+
+                <!-- Legend & Primary Focus Callout -->
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-top: 10px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <span style="display: inline-flex; align-items: center; gap: 5px;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                            <strong>${nameA}</strong>: ${isAr ? mA.orientation_ar : mA.orientation_en}
+                        </span>
+                        ${!isSingle ? `
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+                                <strong>${nameB}</strong>: ${isAr ? mB.orientation_ar : mB.orientation_en}
+                            </span>
+                        ` : ''}
+                    </div>
+                    <span style="font-size: 0.72rem; color: var(--text-secondary);">
+                        ${isAr ? "● تشير النقطة لاحتياج مركز الثقل الأساسي" : "● Pin denotes primary Center of Gravity"}
+                    </span>
+                </div>
+            </div>
+
+            <!-- 2. KEGAN ORDERS OF CONSCIOUSNESS CONTINUUM -->
+            <div style="margin-top: 28px; padding-top: 18px; border-top: 1px dashed var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span class="chart-node chart-interactive-element" data-spectrum="kegan" style="font-weight: 700; font-size: 0.88rem; cursor: pointer;">${titleKegan}</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">2.0 — 5.0</span>
+                </div>
+
+                <!-- Spectrum Gradient Track -->
+                <div class="chart-node chart-interactive-element" data-spectrum="kegan" style="position: relative; height: 26px; border-radius: 13px; background: linear-gradient(to right, #64748b 0%, #3b82f6 30%, #10b981 55%, #8b5cf6 85%, #ec4899 100%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.15); cursor: pointer;">
+                    <!-- Stage 3 Marker -->
+                    <div style="position: absolute; left: 33.3%; top: -4px; bottom: -4px; width: 2px; background: rgba(255,255,255,0.7); z-index: 4;">
+                        <span style="position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; font-weight: 800; background: var(--bg-secondary); padding: 1px 3px; border-radius: 3px; border: 1px solid var(--border-color);">Stage 3</span>
+                    </div>
+                    <!-- Stage 4 Marker -->
+                    <div style="position: absolute; left: 66.6%; top: -4px; bottom: -4px; width: 2px; background: rgba(255,255,255,0.7); z-index: 4;">
+                        <span style="position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; font-weight: 800; background: var(--bg-secondary); padding: 1px 3px; border-radius: 3px; border: 1px solid var(--border-color);">Stage 4</span>
+                    </div>
+
+                    <!-- Marker A -->
+                    <div class="chart-node chart-interactive-element" data-kegan-node="A" style="position: absolute; left: ${keganPctA}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameA}: Stage ${keganA}">A</div>
+
+                    <!-- Marker B (if comparison) -->
+                    ${!isSingle && devB ? `
+                        <div class="chart-node chart-interactive-element" data-kegan-node="B" style="position: absolute; left: ${keganPctB}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameB}: Stage ${keganB}">B</div>
+                    ` : ''}
+                </div>
+
+                <!-- Stage Labels below track -->
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary); margin-top: 6px;">
+                    <span>${isAr ? "المرحلة 2 (نفعي)" : "Stage 2 (Instrumental)"}</span>
+                    <span>${isAr ? "المرحلة 3 (اجتماعي)" : "Stage 3 (Socialized)"}</span>
+                    <span>${isAr ? "المرحلة 4 (مستقل ذاتي)" : "Stage 4 (Self-Authoring)"}</span>
+                    <span>${isAr ? "المرحلة 5 (تكاملي)" : "Stage 5 (Transforming)"}</span>
+                </div>
+
+                <!-- Developmental Badges -->
+                <div style="display: flex; gap: 12px; margin-top: 10px; font-size: 0.82rem; flex-wrap: wrap;">
+                    <div class="chart-node chart-interactive-element" data-kegan-node="A" style="background: rgba(16,185,129,0.1); border: 1px solid #10b981; border-radius: 8px; padding: 4px 10px; cursor: pointer;">
+                        <strong>${nameA}</strong>: ${isAr ? devA.kegan.stage_ar : devA.kegan.stage_en} • ${isAr ? devA.differentiation.level_ar : devA.differentiation.level_en}
+                    </div>
+                    ${!isSingle && devB ? `
+                        <div class="chart-node chart-interactive-element" data-kegan-node="B" style="background: rgba(245,158,11,0.1); border: 1px solid #f59e0b; border-radius: 8px; padding: 4px 10px; cursor: pointer;">
+                            <strong>${nameB}</strong>: ${isAr ? devB.kegan.stage_ar : devB.kegan.stage_en} • ${isAr ? devB.differentiation.level_ar : devB.differentiation.level_en}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(wrapper);
+
+        // Tooltip Attachments
+        tiersConfig.forEach(t => {
+            const els = wrapper.querySelectorAll(`[data-maslow-tier='${t.key}']`);
+            els.forEach(el => {
+                attachChartTooltip(el, () => {
+                    const dict = CHART_EXPLANATION_DICTIONARY.maslow[t.dictKey];
+                    const pctValA = mA.tiers[t.key] || 0;
+                    const pctValB = mB ? (mB.tiers[t.key] || 0) : 0;
+                    return {
+                        ...dict,
+                        metric_ar: !isSingle ? `${nameA}: ${pctValA}% | ${nameB}: ${pctValB}%` : `النسبة: ${pctValA}%`,
+                        metric_en: !isSingle ? `${nameA}: ${pctValA}% | ${nameB}: ${pctValB}%` : `Weight: ${pctValA}%`
+                    };
+                });
+            });
+        });
+
+        const keganTrack = wrapper.querySelector("[data-spectrum='kegan']");
+        if (keganTrack) attachChartTooltip(keganTrack, () => CHART_EXPLANATION_DICTIONARY.maslow.kegan_scale);
+
+        const nodeKeganA = wrapper.querySelectorAll("[data-kegan-node='A']");
+        nodeKeganA.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟢",
+                color: "#10b981",
+                title_ar: `${nameA}: التطور النفسي والوعي`,
+                title_en: `${nameA}: Developmental Consciousness`,
+                subtitle_ar: `${isAr ? devA.kegan.stage_ar : devA.kegan.stage_en} (مستوى ${keganA})`,
+                subtitle_en: `${devA.kegan.stage_en} (Stage ${keganA})`,
+                body_ar: `درجة التمايز النفسي (بوين): ${devA.differentiation.score} / 5.0 (${isAr ? devA.differentiation.level_ar : devA.differentiation.level_en}). يعكس قدرة ${nameA} على حفظ استقلالية الذات والبوصلة الداخلية دون انغلاق أو تبعية.`,
+                body_en: `Bowen Differentiation Index: ${devA.differentiation.score} / 5.0 (${devA.differentiation.level_en}). Reflects ${nameA}'s internal compass and healthy autonomy.`,
+                metric_ar: `مستوى كيجان: ${keganA} / 5.0`,
+                metric_en: `Kegan Stage: ${keganA} / 5.0`
+            }));
+        });
+
+        const nodeKeganB = wrapper.querySelectorAll("[data-kegan-node='B']");
+        nodeKeganB.forEach(el => {
+            attachChartTooltip(el, () => ({
+                icon: "🟡",
+                color: "#f59e0b",
+                title_ar: `${nameB}: التطور النفسي والوعي`,
+                title_en: `${nameB}: Developmental Consciousness`,
+                subtitle_ar: `${isAr ? devB.kegan.stage_ar : devB.kegan.stage_en} (مستوى ${keganB})`,
+                subtitle_en: `${devB.kegan.stage_en} (Stage ${keganB})`,
+                body_ar: `درجة التمايز النفسي (بوين): ${devB.differentiation.score} / 5.0 (${isAr ? devB.differentiation.level_ar : devB.differentiation.level_en}). يعكس قدرة ${nameB} على حفظ استقلالية الذات والبوصلة الداخلية دون انغلاق أو تبعية.`,
+                body_en: `Bowen Differentiation Index: ${devB.differentiation.score} / 5.0 (${devB.differentiation.level_en}). Reflects ${nameB}'s internal compass and healthy autonomy.`,
+                metric_ar: `مستوى كيجان: ${keganB} / 5.0`,
+                metric_en: `Kegan Stage: ${keganB} / 5.0`
             }));
         });
     }

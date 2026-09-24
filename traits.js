@@ -121,6 +121,23 @@ const PersonalityEngine = {
             power_weight: 0
         };
 
+        // 12. Maslow's Hierarchy of Needs & Human Development Frameworks (Kegan & Bowen)
+        const maslow_accum = {
+            somatic: 12,
+            safety: 15,
+            belonging: 15,
+            esteem: 15,
+            actualization: 15,
+            transcendence: 10
+        };
+
+        const developmental_accum = {
+            kegan_weighted_sum: 0,
+            kegan_weight: 0,
+            diff_weighted_sum: 0,
+            diff_weight: 0
+        };
+
         let totalWeight = 0;
         let answeredCount = 0;
 
@@ -338,6 +355,23 @@ const PersonalityEngine = {
                         } else if (traitKey === "hicks_level") {
                             consciousness_accum.hicks_weighted_sum += tScore * weight;
                             consciousness_accum.hicks_weight += weight;
+                        }
+
+                        // 12. Maslow Hierarchy of Needs
+                        else if (traitKey === "maslow_somatic") maslow_accum.somatic += Math.max(0, scaled * 4);
+                        else if (traitKey === "maslow_safety") maslow_accum.safety += Math.max(0, scaled * 4);
+                        else if (traitKey === "maslow_belonging") maslow_accum.belonging += Math.max(0, scaled * 4);
+                        else if (traitKey === "maslow_esteem") maslow_accum.esteem += Math.max(0, scaled * 4);
+                        else if (traitKey === "maslow_actualization") maslow_accum.actualization += Math.max(0, scaled * 4);
+                        else if (traitKey === "maslow_transcendence") maslow_accum.transcendence += Math.max(0, scaled * 4);
+
+                        // 13. Human Development (Kegan Orders of Consciousness & Bowen Differentiation)
+                        else if (traitKey === "kegan_stage") {
+                            developmental_accum.kegan_weighted_sum += tScore * weight;
+                            developmental_accum.kegan_weight += weight;
+                        } else if (traitKey === "differentiation_level") {
+                            developmental_accum.diff_weighted_sum += tScore * weight;
+                            developmental_accum.diff_weight += weight;
                         }
 
                         // Other Traits
@@ -761,6 +795,113 @@ const PersonalityEngine = {
             }
         };
 
+        // 12. SYNTHESIS: MASLOW'S HIERARCHY OF NEEDS
+        const mRawSomatic = Math.max(5, maslow_accum.somatic);
+        const mRawSafety = Math.max(5, maslow_accum.safety);
+        const mRawBelonging = Math.max(5, maslow_accum.belonging);
+        const mRawEsteem = Math.max(5, maslow_accum.esteem);
+        const mRawActualization = Math.max(5, maslow_accum.actualization);
+        const mRawTranscendence = Math.max(5, maslow_accum.transcendence);
+
+        const mTotal = mRawSomatic + mRawSafety + mRawBelonging + mRawEsteem + mRawActualization + mRawTranscendence;
+
+        const mPctSomatic = Math.round((mRawSomatic / mTotal) * 100);
+        const mPctSafety = Math.round((mRawSafety / mTotal) * 100);
+        const mPctBelonging = Math.round((mRawBelonging / mTotal) * 100);
+        const mPctEsteem = Math.round((mRawEsteem / mTotal) * 100);
+        const mPctActualization = Math.round((mRawActualization / mTotal) * 100);
+        const mPctTranscendence = Math.max(0, 100 - (mPctSomatic + mPctSafety + mPctBelonging + mPctEsteem + mPctActualization));
+
+        const maslowTiers = {
+            somatic: mPctSomatic,
+            safety: mPctSafety,
+            belonging: mPctBelonging,
+            esteem: mPctEsteem,
+            actualization: mPctActualization,
+            transcendence: mPctTranscendence
+        };
+
+        // Determine Primary Need Center of Gravity
+        const tierEntries = Object.entries(maslowTiers);
+        tierEntries.sort((a, b) => b[1] - a[1]);
+        const primaryTierKey = tierEntries[0][0];
+
+        const MASLOW_NAMES = {
+            somatic: { en: "Somatic Homeostasis & Biological Pacing", ar: "الاتزان الجسدي والتنظيم العصبي" },
+            safety: { en: "Safety, Security & Predictability", ar: "الأمان والاستقرار المالي والتنظيمي" },
+            belonging: { en: "Love, Belonging & Relational Closeness", ar: "الانتماء والمودة والقرب الوجداني" },
+            esteem: { en: "Esteem, Mastery & Social Competence", ar: "التقدير والكفاءة والمكانة الاجتماعية" },
+            actualization: { en: "Self-Actualization & Autonomy", ar: "تحقيق الذات والسيادة الفردية" },
+            transcendence: { en: "Self-Transcendence & Purpose", ar: "التسامي عن الذات والرسالة المشتركة" }
+        };
+
+        const dNeedPct = mPctSomatic + mPctSafety + mPctBelonging + mPctEsteem;
+        const bNeedPct = mPctActualization + mPctTranscendence;
+
+        let needOrientationEn = "Balanced Integrative";
+        let needOrientationAr = "توازن تكاملي مرن";
+        if (dNeedPct >= 65) {
+            needOrientationEn = "Deficiency & Security Anchored (D-Needs)";
+            needOrientationAr = "مرتكز على الأمان وسد الاحتياج (D-Needs)";
+        } else if (bNeedPct >= 38) {
+            needOrientationEn = "Growth & Actualization Driven (B-Needs)";
+            needOrientationAr = "مدفوع بالنمو وتحقيق الذات (B-Needs)";
+        }
+
+        const finalMaslow = {
+            tiers: maslowTiers,
+            primary_need: primaryTierKey,
+            primary_need_en: MASLOW_NAMES[primaryTierKey].en,
+            primary_need_ar: MASLOW_NAMES[primaryTierKey].ar,
+            d_need_pct: dNeedPct,
+            b_need_pct: bNeedPct,
+            orientation_en: needOrientationEn,
+            orientation_ar: needOrientationAr
+        };
+
+        // 13. SYNTHESIS: HUMAN DEVELOPMENT (KEGAN & BOWEN)
+        let keganScore = developmental_accum.kegan_weight > 0
+            ? (developmental_accum.kegan_weighted_sum / developmental_accum.kegan_weight)
+            : (3.1 + (ocean.openness / 100) * 0.7 + (finalHawkinsScore >= 350 ? 0.4 : 0));
+        keganScore = Math.max(2.0, Math.min(5.0, Math.round(keganScore * 10) / 10));
+
+        let diffScore = developmental_accum.diff_weight > 0
+            ? (developmental_accum.diff_weighted_sum / developmental_accum.diff_weight)
+            : (2.8 + (ocean.conscientiousness / 100) * 0.7 + (finalAttachment.primary === "secure" ? 0.7 : -0.3));
+        diffScore = Math.max(1.0, Math.min(5.0, Math.round(diffScore * 10) / 10));
+
+        let keganStageEn = "Stage 3: Socialized Mind (Interpersonal)";
+        let keganStageAr = "المرحلة 3: العقل الاجتماعي (الانتماء والولاء المشترك)";
+        if (keganScore >= 4.6) {
+            keganStageEn = "Stage 5: Self-Transforming Mind (Inter-individual)";
+            keganStageAr = "المرحلة 5: العقل المتسامي والتحولي (الوعي التكاملي)";
+        } else if (keganScore >= 3.8) {
+            keganStageEn = "Stage 4: Self-Authoring Mind (Internal Compass)";
+            keganStageAr = "المرحلة 4: العقل المستقل والمؤلف لذاته (السيادة النفسية)";
+        } else if (keganScore >= 3.2) {
+            keganStageEn = "Stage 3-to-4 Bridge (Differentiating)";
+            keganStageAr = "جسر العبور (بين الانتماء والسيادة الذاتية)";
+        } else if (keganScore >= 2.6) {
+            keganStageEn = "Stage 3: Socialized Mind (Interpersonal)";
+            keganStageAr = "المرحلة 3: العقل الاجتماعي (الانتماء والولاء المشترك)";
+        } else {
+            keganStageEn = "Stage 2: Instrumental Mind (Transactional)";
+            keganStageAr = "المرحلة 2: العقل النفعي (المعاملات والحماية الذاتية)";
+        }
+
+        const finalDevelopmental = {
+            kegan: {
+                score: keganScore,
+                stage_en: keganStageEn,
+                stage_ar: keganStageAr
+            },
+            differentiation: {
+                score: diffScore,
+                level_en: diffScore >= 4.0 ? "High Sovereignty" : (diffScore >= 2.8 ? "Balanced Interdependence" : "Enmeshment / Low Differentiation"),
+                level_ar: diffScore >= 4.0 ? "سيادة نفسية وتمايز عالي" : (diffScore >= 2.8 ? "ترابط متوازن ومرن" : "اندماجية وحساسية مفرطة")
+            }
+        };
+
         // Assessment Confidence Calculation
         const totalPossible = questionsList.length || 70;
         const completeness = Math.min(1.0, answeredCount / totalPossible);
@@ -817,7 +958,9 @@ const PersonalityEngine = {
             gottman_safety: finalGottman,
             attachment_ecr: finalAttachment,
             schwartz_values: finalSchwartz,
-            consciousness: finalConsciousness
+            consciousness: finalConsciousness,
+            maslow_profile: finalMaslow,
+            developmental_profile: finalDevelopmental
         };
     }
 };

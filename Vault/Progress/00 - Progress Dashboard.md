@@ -16,12 +16,12 @@ aliases:
 # 🚀 MatchWise Project Progress Dashboard
 
 > [!summary] Current Release State
-> **Version:** `v2.9.1` (Release: *Security Hardening, Production Fixes & Smoke Test Suite*)  
+> **Version:** `v3.0.0` (Release: *Maslow Hierarchy of Needs, Kegan Human Development & Dyadic Asymmetry Engine*)  
 > **Status:** 🟢 **Production Ready & Fully Verified**  
-> **Active Milestone:** [[M15 - Production Hardening & Test Suite]] ✅ Complete  
+> **Active Milestone:** [[M16 - Maslow Needs & Human Development]] ✅ Complete  
 > **Upcoming Milestone:** [[M14 - Clinical PDF Export & Advanced Diagnostics]] 🟡 In Design  
-> **Overall Milestone Completion:** `93% (14 / 15)`  
-> <progress value="14" max="15" style="width: 100%; height: 16px;"></progress>
+> **Overall Milestone Completion:** `94% (15 / 16)`  
+> <progress value="15" max="16" style="width: 100%; height: 16px;"></progress>
 
 ---
 
@@ -54,12 +54,14 @@ SORT file.name ASC
 | [[M12 - Hartman Circle Chart & Dynamic Focus]] | Trigonometric SVG donut paths & ring focus/shadow | ✅ Complete | 100% | Center hub spotlighting |
 | [[M13 - AI Educational Guidance System]] | Multi-stage readiness, in-test reflection & report tips | ✅ Complete | 100% | Gemini 3.8 Flash & LocalStorage |
 | [[M15 - Production Hardening & Test Suite]] | Stored XSS fix, schema validation, demo button, Node test suite | ✅ Complete | 100% | 10/10 automated tests passed |
+| [[M16 - Maslow Needs & Human Development]] | Maslow 6-tier hierarchy, Kegan Orders of Mind, Dyadic Asymmetry | ✅ Complete | 100% | Dual pyramid visualizer & 10 Qs |
 | [[M14 - Clinical PDF Export & Advanced Diagnostics]] | Multi-page PDF pagination & longitudinal assessment | 🟡 Planned | 15% | Next sprint target |
 
 ---
 
 ## 📦 Recent Version Changelogs
 
+- [[v3.0.0 - Maslow Needs, Kegan Human Development & Dyadic Asymmetry]] — September 25, 2026 *(Maslow 6-tier hierarchy, Kegan Orders of Mind, Bowen Differentiation, dual pyramid visualizer, 10 scenario questions, 5 dyadic asymmetry archetypes)*
 - [[v2.9.1 - Security Hardening, Production Fixes & Test Suite]] — September 9, 2026 *(Stored XSS mitigation, Demo export fix, AI fallback, 10/10 test suite)*
 - [[v2.9.0 - AI Educational Guidance System]] — September 8, 2026 *(Readiness card, In-test reflection tips, Dynamic re-prompting)*
 - [[v2.8.0 - Hartman Donut Geometry & Focus Interactivity]] — September 2026 *(Exact SVG `<path d="...">` arc geometry & center hub spotlight)*
@@ -72,10 +74,11 @@ SORT file.name ASC
 
 ## 🔬 Behavioral Frameworks Spec Sheet
 
-Quick references to the 12 clinical assessment engines:
+Quick references to the 14 clinical assessment engines:
 
 | Category | Frameworks |
 | :--- | :--- |
+| **Needs Hierarchy & Human Development** | [[Maslow Hierarchy of Needs]], [[Kegan Orders of Mind & Bowen Differentiation]] |
 | **Spiritual & Emotional Resonance** | [[Hawkins Map of Consciousness]], [[Hicks Emotional Guidance Scale]] |
 | **Core Motives & Temperament** | [[Hartman Color Code]], [[DISC Assessment]], [[MBTI & Cognitive Functions]] |
 | **Submerged Personality & Needs** | [[The Birkman Method]], [[Big Five (OCEAN)]] |

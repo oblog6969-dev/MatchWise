@@ -152,6 +152,22 @@ async function runAllTests() {
         assert.ok(result.attachment_ecr, "Must include Attachment ECR");
         assert.ok(result.schwartz_values, "Must include Schwartz Values");
         assert.ok(result.consciousness, "Must include Consciousness (Hawkins & Hicks)");
+        assert.ok(result.maslow_profile, "Must include Maslow's Hierarchy of Needs profile");
+        assert.ok(result.developmental_profile, "Must include Human Development (Kegan & Bowen) profile");
+        
+        // Validate Maslow profile sum
+        const tiers = result.maslow_profile.tiers;
+        const tierSum = tiers.somatic + tiers.safety + tiers.belonging + tiers.esteem + tiers.actualization + tiers.transcendence;
+        assert.strictEqual(tierSum, 100, `Maslow tiers must sum to 100% (got ${tierSum})`);
+        assert.strictEqual(result.maslow_profile.d_need_pct + result.maslow_profile.b_need_pct, 100, "D-Need and B-Need percentages must sum to 100%");
+        assert.ok(result.maslow_profile.primary_need, "Primary need center of gravity must exist");
+
+        // Validate Developmental profile
+        const kScore = result.developmental_profile.kegan.score;
+        assert.ok(kScore >= 2.0 && kScore <= 5.0, `Kegan score must be between 2.0 and 5.0 (got ${kScore})`);
+        const diffScore = result.developmental_profile.differentiation.score;
+        assert.ok(diffScore >= 1.0 && diffScore <= 5.0, `Differentiation score must be between 1.0 and 5.0 (got ${diffScore})`);
+
         assert.ok(result.assessment_confidence >= 15 && result.assessment_confidence <= 100, "Confidence in range");
     });
 
@@ -170,20 +186,25 @@ async function runAllTests() {
     const compatibilityModule = require("./compatibility.js");
     const CompatibilityEngine = compatibilityModule.CompatibilityEngine || compatibilityModule;
 
-
     test("Compatibility calculation runs successfully for Tariq & Nour", () => {
         const tariq = demoProfiles[0];
         const nour = demoProfiles[1];
         const comp = CompatibilityEngine.compare(tariq, nour);
 
         assert.ok(comp, "Compatibility output should exist");
-
         assert.ok(typeof comp.overall_index === "number", "overall_index must be a number");
         assert.ok(comp.overall_index >= 10 && comp.overall_index <= 100, "overall_index within range");
         assert.ok(Array.isArray(comp.strengths), "Strengths array should exist");
         assert.ok(Array.isArray(comp.challenges), "Challenges array should exist");
         assert.ok(comp.category_scores, "Category scores object should exist");
 
+        // Validate Dyadic Needs Dynamics
+        const needsDyn = comp.multi_framework_dynamics?.needs_dynamics;
+        assert.ok(needsDyn, "Multi-framework dynamics must contain needs_dynamics");
+        assert.ok(typeof needsDyn.archetype === "string" && needsDyn.archetype.length > 0, "Needs archetype must be a defined non-empty string");
+        assert.ok(needsDyn.overlap_score >= 20 && needsDyn.overlap_score <= 100, "Needs overlap score in range 20-100");
+        assert.ok(needsDyn.category_score >= 35 && needsDyn.category_score <= 98, "Needs category score in range 35-98");
+        assert.strictEqual(comp.category_scores["Needs & Human Development"], needsDyn.category_score, "Category score must match needs_dynamics score");
     });
 
     // --- TEST GROUP 5: AI GUIDANCE SYSTEM & FALLBACKS ---

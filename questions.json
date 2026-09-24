@@ -759,7 +759,7 @@
         "english": "I am eager and fully ready to blend daily routines, share personal spaces, and build mutual life habits collaboratively.",
         "arabic": "أنا متلهف ومستعد تماماً لمشاركة تفاصيل يومي، وتعديل عاداتي الفردية، وبناء نمط حياة مشترك بمرونة وشغف.",
         "trait_scores": {
-          "attachment_secure": 2.0,
+          "attachment_secure": 2,
           "birkman_usual_social": 1.5,
           "firo_exp_aff": 1.5,
           "hartman_blue": 1.5,
@@ -772,9 +772,9 @@
         "english": "I look forward to close companionship, while valuing clear boundaries, personal space, and independent pursuits.",
         "arabic": "أتطلع بحماس للمودة والاستقرار، مع حرصي الواعي على الاحتفاظ بمساحة شخصية معقولة واستقلالية صحية.",
         "trait_scores": {
-          "boundaries_independence": 2.0,
-          "birkman_need_freedom": 2.0,
-          "hartman_white": 2.0,
+          "boundaries_independence": 2,
+          "birkman_need_freedom": 2,
+          "hartman_white": 2,
           "disc_c": 1.2,
           "schwartz_self_direction": 1.5
         }
@@ -786,8 +786,8 @@
         "trait_scores": {
           "conscientiousness": 1.5,
           "disc_c": 1.5,
-          "hartman_red": 1.0,
-          "birkman_need_structure": 2.0,
+          "hartman_red": 1,
+          "birkman_need_structure": 2,
           "schwartz_security": 1.5
         }
       }
@@ -1378,7 +1378,9 @@
         "arabic": "الأولوية لبناء مدخرات قوية، وصندوق طوارئ، وتملك عقار واستثمارات آمنة قبل السفر الفاخر.",
         "trait_scores": {
           "money_saver": 2,
-          "future_stability": 2
+          "future_stability": 2,
+          "maslow_safety": 3.5,
+          "kegan_stage": 2.8
         }
       },
       {
@@ -1387,7 +1389,10 @@
         "arabic": "توازن ذكي: ادخار نسبة شهرية ثابتة مع تخصيص ميزانية واضحة للسفر والاستمتاع بالحياة.",
         "trait_scores": {
           "money_saver": 0.5,
-          "future_stability": 1
+          "future_stability": 1,
+          "maslow_safety": 2,
+          "maslow_actualization": 2,
+          "kegan_stage": 3.6
         }
       },
       {
@@ -1396,7 +1401,10 @@
         "arabic": "الحياة نعيشها مرة واحدة؛ وصناعة الذكريات والتجارب الممتعة أثمن من تجميع وتكديس الأموال.",
         "trait_scores": {
           "money_saver": -2,
-          "openness": 1.5
+          "openness": 1.5,
+          "maslow_actualization": 3,
+          "kegan_stage": 3.8,
+          "maslow_somatic": 2
         }
       }
     ]
@@ -2202,7 +2210,9 @@
           "birkman_usual_assertive": 2,
           "birkman_need_structure": 2,
           "schwartz_achievement": 2.5,
-          "firo_exp_ctrl": 2
+          "firo_exp_ctrl": 2,
+          "maslow_esteem": 3.5,
+          "kegan_stage": 3.6
         }
       },
       {
@@ -2215,7 +2225,9 @@
           "birkman_need_empathy": 3,
           "firo_wnt_aff": 3,
           "attachment_secure": 2,
-          "schwartz_benevolence": 2.5
+          "schwartz_benevolence": 2.5,
+          "maslow_belonging": 4,
+          "kegan_stage": 3
         }
       },
       {
@@ -2228,7 +2240,10 @@
           "birkman_need_freedom": 2.5,
           "tki_avoiding": 1.5,
           "firo_exp_ctrl": -1.5,
-          "schwartz_security": 2
+          "schwartz_security": 2,
+          "maslow_safety": 3.5,
+          "maslow_somatic": 3,
+          "kegan_stage": 3
         }
       },
       {
@@ -2241,7 +2256,9 @@
           "birkman_usual_social": 2.5,
           "firo_exp_inc": 2.5,
           "schwartz_hedonism": 3,
-          "openness": 1.5
+          "openness": 1.5,
+          "maslow_actualization": 3,
+          "kegan_stage": 3.8
         }
       }
     ]
@@ -2445,7 +2462,10 @@
           "schwartz_tradition": 3.5,
           "schwartz_security": 2.5,
           "ideology_traditionalism": 3,
-          "birkman_need_structure": 2
+          "birkman_need_structure": 2,
+          "maslow_belonging": 4,
+          "kegan_stage": 3,
+          "differentiation_level": 2
         }
       },
       {
@@ -2456,7 +2476,10 @@
           "schwartz_self_direction": 3.5,
           "birkman_need_freedom": 3,
           "ideology_liberalism": 3,
-          "openness": 2
+          "openness": 2,
+          "maslow_actualization": 4,
+          "kegan_stage": 4.3,
+          "differentiation_level": 4.5
         }
       },
       {
@@ -2467,7 +2490,10 @@
           "schwartz_benevolence": 3.5,
           "hartman_blue": 2.5,
           "firo_exp_inc": 2.5,
-          "agreeableness": 2
+          "agreeableness": 2,
+          "maslow_belonging": 3,
+          "maslow_transcendence": 2.5,
+          "kegan_stage": 3.7
         }
       }
     ]
@@ -3026,6 +3052,536 @@
           "tki_competing": 4,
           "hartman_red": 3,
           "birkman_stress_demanding": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q86",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "need_safety_vs_growth",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: You are offered an opportunity that carries significant career or creative potential, but requires moving out of your comfort zone and taking calculated financial risks for two years. Your instinct is:"
+    },
+    "arabic": {
+      "text": "سيناريو: عُرضت عليك فرصة تحمل إمكانات مهنية أو إبداعية واعدة جداً، لكنها تتطلب الخروج من منطقة راحتك وخوض مجازفة مالية ومكانية محسوبة لمدة سنتين. ما هو دافعك التلقائي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Embrace the leap enthusiastically; living authentically and realizing potential matters far more than playing it completely safe.",
+        "arabic": "خوض التجربة بحماس؛ فتحقيق الذات والنمو الإبداعي أهم بكثير من البقاء في أمان رتيب مقيد.",
+        "trait_scores": {
+          "maslow_actualization": 4.5,
+          "kegan_stage": 4.2,
+          "differentiation_level": 4,
+          "openness": 3.5,
+          "schwartz_self_direction": 4
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Decline or postpone; financial security, predictable living conditions, and domestic stability are the non-negotiable bedrock of life.",
+        "arabic": "الاعتذار أو التأجيل؛ فالاستقرار المالي والظروف المعيشية المضمونة هي الركيزة الأساسية التي لا يمكن التضحية بها.",
+        "trait_scores": {
+          "maslow_safety": 4.5,
+          "kegan_stage": 3,
+          "differentiation_level": 2.5,
+          "schwartz_security": 4.5,
+          "birkman_need_structure": 3.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Construct a rigorous safety-net backup plan first, only proceeding if our baseline survival buffer is 100% fortified.",
+        "arabic": "بناء خطة طوارئ محكمة أولاً، ولا أخطو للأمام إلا إذا كان صمام الأمان المالي مضموناً بنسبة 100%.",
+        "trait_scores": {
+          "maslow_safety": 3,
+          "maslow_actualization": 3,
+          "maslow_esteem": 2.5,
+          "kegan_stage": 3.8,
+          "conscientiousness": 3.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q87",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.6,
+    "trait": "differentiation_vs_fusion",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: You and your partner discover you hold fundamentally different philosophical or spiritual perspectives on an important life issue. Your inner experience is:"
+    },
+    "arabic": {
+      "text": "سيناريو: اكتشفت أنك وشريك حياتك تتبنيان قناعات فكرية أو فلسفية متباينة جوهرياً حول مسألة حياتية مهمة. ما هو شعورك الداخلي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Enriched and curious; true intimacy is two sovereign, whole individuals holding different perspectives with deep mutual respect.",
+        "arabic": "شعور بالثراء والفضول؛ فالقرب الحقيقي يقوم على لقاء شخصين مستقلين ومتكاملين يحترم كل منهما تفرد الآخر وفكره.",
+        "trait_scores": {
+          "maslow_actualization": 4,
+          "kegan_stage": 4.5,
+          "differentiation_level": 5,
+          "attachment_secure": 4,
+          "openness": 3
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Distressed or alienated; I crave a soulmate where we merge in worldview, values, and emotional reactions.",
+        "arabic": "قلق وغربة عاطفية؛ أبحث عن توأم روح يندمج معي في الرؤية والقناعات والمشاعر ككيان واحد.",
+        "trait_scores": {
+          "maslow_belonging": 4.5,
+          "kegan_stage": 3,
+          "differentiation_level": 1.5,
+          "attachment_anxious": 3.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Defensive or determined to debate and convince them of the correct, objective truth.",
+        "arabic": "نزوع للدفاع والجدال لإقناعه بالصواب والمنطق الصحيح حتى تتطابق وجهات نظرنا.",
+        "trait_scores": {
+          "maslow_esteem": 3.5,
+          "kegan_stage": 2.8,
+          "differentiation_level": 2,
+          "tki_competing": 3.5,
+          "hartman_red": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q88",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "need_esteem_vs_meaning",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Looking back on your life 30 years from now, which achievement would confirm to your soul that your life was truly successful?"
+    },
+    "arabic": {
+      "text": "سيناريو: بعد مرور 30 عاماً من الآن، ما هو الإنجاز الذي سيشعر روحك بأنك عشت حياة ناجحة وذات قيمة حقيقية؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Living in unwavering alignment with my core truth, creating meaningful art or ideas, and expanding my consciousness.",
+        "arabic": "العيش بانسجام تام مع قيمي الجوهرية، وإبداع أفكار ذات معنى، والارتقاء المستمر بوعيي الذاتي.",
+        "trait_scores": {
+          "maslow_actualization": 5,
+          "maslow_transcendence": 3,
+          "kegan_stage": 4.5,
+          "differentiation_level": 4.5,
+          "schwartz_self_direction": 4
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Attaining prominent social respect, professional mastery, and tangible markers of executive or financial excellence.",
+        "arabic": "نيل مكانة اجتماعية مرموقة، وإتقان مهني استثنائي، ومؤشرات ملموسة للريادة والنجاح المالي.",
+        "trait_scores": {
+          "maslow_esteem": 5,
+          "maslow_safety": 2.5,
+          "kegan_stage": 3.5,
+          "schwartz_achievement": 4.5,
+          "hartman_red": 3.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Dedication to elevating others, easing suffering, and leaving a lasting spiritual or humanitarian footprint.",
+        "arabic": "تسخير حياتي لخدمة الآخرين، وتخفيف آلامهم، وترك أثر إنساني أو روحي يلهم الأجيال القادمة.",
+        "trait_scores": {
+          "maslow_transcendence": 5,
+          "maslow_belonging": 2.5,
+          "kegan_stage": 4.8,
+          "schwartz_benevolence": 4.5,
+          "hawkins_loc": 500
+        }
+      }
+    ]
+  },
+  {
+    "id": "q89",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "stress_regression_holding",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: Your partner is hit by sudden financial distress or personal burnout, regressing into fearful irritability and demanding micromanagement. You instinctively:"
+    },
+    "arabic": {
+      "text": "سيناريو: تعرض شريكك لأزمة مالية مفاجئة أو إنهاك حاد، فارتد إلى حالة من الخوف والتوتر والسيطرة الدقيقة والتذمر. ما هو رد فعلك التلقائي؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Offer grounding somatic and emotional reassurance, stepping up to manage practical logistics without taking their regression personally.",
+        "arabic": "تقديم احتواء مهدئ وأمان عملي، وتولي الأمور اللوجستية دون أخذ تذمره وانكماشه بحساسية شخصية.",
+        "trait_scores": {
+          "maslow_safety": 3.5,
+          "maslow_actualization": 3.5,
+          "kegan_stage": 4.5,
+          "differentiation_level": 4.5,
+          "gottman_repair_receptivity": 4,
+          "hawkins_loc": 350
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Lecturing them on mindset or spiritual growth, feeling frustrated that they are losing their cool over worldly matters.",
+        "arabic": "الوعظ وتوجيه النصح الفكري أو الروحي، مع الشعور بالانزعاج من انشغاله الزائد بهذه التفاصيل الدنيوية.",
+        "trait_scores": {
+          "maslow_esteem": 3,
+          "kegan_stage": 3.3,
+          "differentiation_level": 2.5,
+          "gottman_contempt_risk": 2.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Catch their anxiety like a mirror, becoming equally defensive, panicked, or emotionally closed off.",
+        "arabic": "التأثر السريع بقلقه، والتحول إلى الدفاعية أو الذعر أو الانغلاق العاطفي والهروب.",
+        "trait_scores": {
+          "maslow_safety": 1,
+          "kegan_stage": 2.5,
+          "differentiation_level": 1.5,
+          "neuroticism": 4,
+          "attachment_anxious": 3.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q90",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.3,
+    "trait": "somatic_pacing_homeostasis",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When your schedule becomes overwhelmed, what is your relationship with your body's physical and somatic limits?"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما يزدحم جدولك اليومي بالضغوط والالتزامات، كيف تتعامل مع الإشارات الجسدية وتعبك البدني؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "I respect somatic cues immediately, intentionally pausing, resting, and prioritizing sleep, nourishment, and stillness.",
+        "arabic": "أحترم إشارات جسدي فوراً؛ فأتوقف بوعي للراحة وأمنح النوم والتغذية والسكينة الأولوية القصوى.",
+        "trait_scores": {
+          "maslow_somatic": 5,
+          "maslow_safety": 3,
+          "kegan_stage": 4,
+          "differentiation_level": 4
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "I override fatigue with adrenaline or caffeine to maintain high output and satisfy duties to family or career.",
+        "arabic": "أتجاهل الإرهاق وأضغط على نفسي بالمزيد من الجهد لأداء واجباتي تجاه أسرتي وعملي على أكمل وجه.",
+        "trait_scores": {
+          "maslow_esteem": 4,
+          "maslow_somatic": 1,
+          "kegan_stage": 3.2,
+          "schwartz_achievement": 3.5
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "I push until I experience complete somatic collapse or severe illness before I finally allow myself to stop.",
+        "arabic": "أواصل الضغط حتى أصل إلى مرحلة الانهيار الجسدي التام أو المرض قبل أن أسمح لنفسي بالراحة.",
+        "trait_scores": {
+          "maslow_somatic": 0.5,
+          "maslow_safety": 1,
+          "neuroticism": 3.5,
+          "birkman_stress_withdrawing": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q91",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "relational_contract_philosophy",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: At its highest and most sacred level, what is the ultimate purpose of marriage for you?"
+    },
+    "arabic": {
+      "text": "سيناريو: في أسمى وأعمق مستوياته، ما هو المعنى والهدف الأكبر للزواج في نظرك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "An evolutionary crucible where two distinct souls challenge each other to transcend ego, heal wounds, and serve a greater mission.",
+        "arabic": "محراب ارتقاء روحي؛ مساحة مقدسة يتلاقى فيها شخصان ليتحررا من قيود الأنا ويعينا بعضهما على النمو وخدمة رسالة أسمى.",
+        "trait_scores": {
+          "maslow_transcendence": 5,
+          "maslow_actualization": 4,
+          "kegan_stage": 5,
+          "differentiation_level": 5,
+          "hawkins_loc": 540
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "A shared partnership where two whole, mature individuals collaborate for mutual growth, happiness, and creative fulfillment.",
+        "arabic": "شراكة حياة متوازنة؛ يتعاون فيها شخصان ناضجان لدعم نمو بعضهما، وتحقيق السعادة الذاتية والمشتركة.",
+        "trait_scores": {
+          "maslow_actualization": 4.5,
+          "maslow_belonging": 3,
+          "kegan_stage": 4.2,
+          "differentiation_level": 4.2
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "A secure social sanctuary providing companionship, emotional belonging, legitimate family life, and social respect.",
+        "arabic": "ملاذ اجتماعي آمن يوفر السكن والمودة والونس والانتماء الأسري وبناء أسرة كريمة ومحترمة.",
+        "trait_scores": {
+          "maslow_belonging": 4.5,
+          "maslow_safety": 4,
+          "kegan_stage": 3,
+          "differentiation_level": 2.5,
+          "schwartz_tradition": 4
+        }
+      }
+    ]
+  },
+  {
+    "id": "q92",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.4,
+    "trait": "generativity_legacy_orientation",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: How much of your current energy is invested in mentoring the next generation or building a legacy versus enjoying immediate personal comfort?"
+    },
+    "arabic": {
+      "text": "سيناريو: ما مقدار الطاقة التي تستثمرها في توجيه ورعاية الجيل القادم وبناء أثر مستدام، مقارنة بالاستمتاع بملذات وراحة الحاضر؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Predominantly generativity; I derive deep joy from mentoring, fostering community, and preparing descendants for lasting wisdom.",
+        "arabic": "أولوية مطلقة للأثر المستدام؛ أجد متعتي الكبرى في رعاية الأبناء والتعليم وغرس بذور الخير التي تنفع الأجيال القادمة.",
+        "trait_scores": {
+          "maslow_transcendence": 4,
+          "maslow_actualization": 3.5,
+          "kegan_stage": 4.3,
+          "schwartz_benevolence": 4
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "A balanced focus: enjoying my personal achievements and hobbies while actively caring for my immediate household.",
+        "arabic": "توازن معتدل: الاستمتاع بإنجازاتي وراحتي الخاصة مع رعاية شؤون أسرتي المباشرة بوعي.",
+        "trait_scores": {
+          "maslow_esteem": 3,
+          "maslow_actualization": 3,
+          "kegan_stage": 3.6
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Mainly focused on immediate survival and present enjoyment; the future is too uncertain to sacrifice today for.",
+        "arabic": "التركيز على راحة الحاضر وتجاوز متطلبات اليوم؛ فالمستقبل غامض ولا يستحق التضحية بمتعة اللحظة.",
+        "trait_scores": {
+          "maslow_somatic": 3,
+          "maslow_safety": 2,
+          "kegan_stage": 2.7,
+          "schwartz_hedonism": 3.5
+        }
+      }
+    ]
+  },
+  {
+    "id": "q93",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.5,
+    "trait": "need_vulnerability_disclosure",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When you realize you have an unmet emotional need from your partner, your most frequent behavioral response is:"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما تشعر بأن لديك احتياجاً عاطفياً غير ملبى من قبل شريك حياتك، ما هو مسار تصرفك المعتاد؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Express the vulnerable need directly, cleanly, and without blame, taking responsibility for my feelings.",
+        "arabic": "التعبير عن احتياجي بوضوح وشفافية وهدوء دون لوم أو هجوم، متحملاً مسؤولية مشاعري.",
+        "trait_scores": {
+          "maslow_actualization": 4,
+          "kegan_stage": 4.5,
+          "differentiation_level": 4.8,
+          "communication_assertive": 4,
+          "attachment_secure": 4
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Withdraw into quiet disappointment or drop indirect hints, hoping they love me enough to notice on their own.",
+        "arabic": "الانسحاب بصمت والاعتماد على التلميح غير المباشر، متمنياً أن ينتبه بمفرده إن كان يهتم بي حقاً.",
+        "trait_scores": {
+          "maslow_belonging": 3,
+          "kegan_stage": 3,
+          "differentiation_level": 2,
+          "communication_passive_aggressive": 3.5,
+          "attachment_anxious": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Rationalize that I don't need anyone, shutting down vulnerability and focusing on self-reliance.",
+        "arabic": "إقناع نفسي بأني لا أحتاج لأحد، وإغلاق باب الضعف العاطفي بالتركيز على الاكتفاء الذاتي والعمل.",
+        "trait_scores": {
+          "maslow_esteem": 3.5,
+          "maslow_safety": 2.5,
+          "kegan_stage": 2.9,
+          "differentiation_level": 2.2,
+          "attachment_avoidant": 4
+        }
+      }
+    ]
+  },
+  {
+    "id": "q94",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.3,
+    "trait": "cognitive_metaneeds_meaning",
+    "importance": "medium",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: In deep conversations with a prospective spouse, what level of intellectual dialogue gives you life?"
+    },
+    "arabic": {
+      "text": "سيناريو: في الحوارات العميقة مع شريك الحياة المحتمل، ما هو مستوى النقاش الفكري الذي يشعل شغفك ويغذي روحك؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Exploring existential questions, philosophical paradoxes, psychology, and personal transformation.",
+        "arabic": "خوض نقاشات فكرية وفلسفية عميقة حول معاني الحياة، والنفس البشرية، والارتقاء الإنساني.",
+        "trait_scores": {
+          "maslow_actualization": 4.5,
+          "maslow_transcendence": 3.5,
+          "kegan_stage": 4.5,
+          "openness": 4,
+          "mbti_n": 3.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Practical, actionable topics: career strategies, financial milestones, home improvements, and real-world plans.",
+        "arabic": "مواضيع عملية وملموسة: الخطط المهنية، الشؤون المالية، تنظيم المنزل، والأمور الواقعية اليومية.",
+        "trait_scores": {
+          "maslow_safety": 3.5,
+          "maslow_esteem": 3.5,
+          "kegan_stage": 3.4,
+          "mbti_s": 3.5,
+          "disc_c": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Lighthearted, social banter, humor, family news, and relaxing small talk without heavy mental strain.",
+        "arabic": "أحاديث خفيفة ومرحة، أخبار المعارف والأسرة، والضحك والمؤانسة دون إجهاد فكري أو تعقيد.",
+        "trait_scores": {
+          "maslow_belonging": 4,
+          "maslow_somatic": 2.5,
+          "kegan_stage": 3,
+          "hartman_yellow": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "q95",
+    "category": "Needs Hierarchy & Human Development",
+    "type": "scenario",
+    "weight": 1.6,
+    "trait": "conflict_transcendence_ego",
+    "importance": "high",
+    "gender_constraint": null,
+    "marital_constraint": null,
+    "english": {
+      "text": "Scenario: When an argument exposes that an assumption or habit you defended for years is flawed, you:"
+    },
+    "arabic": {
+      "text": "سيناريو: عندما يُثبت نقاش صريح أن قناعة أو عادة دافعت عنها لسنوات كانت غير دقيقة، كيف تتعامل مع الموقف؟"
+    },
+    "options": [
+      {
+        "id": "opt1",
+        "english": "Experience relief and joy; dismantling my own ego illusions to embrace greater truth and intimacy is true victory.",
+        "arabic": "أشعر بارتياح وامتنان حقيقي؛ فتحرير النفس من أوهام الأنا لمصلحة الحقيقة وتطور العلاقة هو النصر الأكبر.",
+        "trait_scores": {
+          "maslow_transcendence": 5,
+          "maslow_actualization": 4,
+          "kegan_stage": 5,
+          "differentiation_level": 5,
+          "hawkins_loc": 540,
+          "agreeableness": 3.5
+        }
+      },
+      {
+        "id": "opt2",
+        "english": "Admit it logically and adjust my behavior, but prefer to move on quickly without emotional dwelling.",
+        "arabic": "أعترف بالخطأ بمنطقية وأعدل سلوكي، لكنني أفضل طي الصفحة سريعاً دون الخوض في المشاعر.",
+        "trait_scores": {
+          "maslow_esteem": 3.5,
+          "kegan_stage": 3.8,
+          "differentiation_level": 3.5,
+          "mbti_t": 3
+        }
+      },
+      {
+        "id": "opt3",
+        "english": "Feel intensely wounded, defensive, or compelled to counter-attack and expose their faults in return.",
+        "arabic": "أشعر بجرح في كبريائي، وتدفعني الدفاعية للبحث عن أخطاء الشريك وإثبات أنه ليس أفضل مني.",
+        "trait_scores": {
+          "maslow_esteem": 1,
+          "kegan_stage": 2.5,
+          "differentiation_level": 1.5,
+          "gottman_defensiveness_risk": 4,
+          "hawkins_loc": 150
         }
       }
     ]

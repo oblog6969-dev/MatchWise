@@ -442,6 +442,129 @@ const CompatibilityEngine = {
             });
         }
 
+        // --- 12. NEEDS HIERARCHY & HUMAN DEVELOPMENT DYNAMICS (Maslow & Kegan) ---
+        const mA = traitsA.maslow_profile || { tiers: { somatic: 15, safety: 20, belonging: 25, esteem: 20, actualization: 15, transcendence: 5 }, primary_need: "belonging", d_need_pct: 80, b_need_pct: 20 };
+        const mB = traitsB.maslow_profile || { tiers: { somatic: 15, safety: 20, belonging: 25, esteem: 20, actualization: 15, transcendence: 5 }, primary_need: "belonging", d_need_pct: 80, b_need_pct: 20 };
+
+        const devA = traitsA.developmental_profile || { kegan: { score: 3.5 }, differentiation: { score: 3.5 } };
+        const devB = traitsB.developmental_profile || { kegan: { score: 3.5 }, differentiation: { score: 3.5 } };
+
+        const keganDiff = Math.abs(devA.kegan.score - devB.kegan.score);
+        const diffDiff = Math.abs(devA.differentiation.score - devB.differentiation.score);
+
+        // Calculate tier divergence across the 6 Maslow tiers
+        const tierKeys = ["somatic", "safety", "belonging", "esteem", "actualization", "transcendence"];
+        let tierDiffSum = 0;
+        tierKeys.forEach(tk => {
+            tierDiffSum += Math.abs((mA.tiers[tk] || 0) - (mB.tiers[tk] || 0));
+        });
+        const maslowOverlapScore = Math.max(20, Math.min(100, Math.round(100 - (tierDiffSum * 0.45))));
+
+        // Needs & Developmental Compatibility Score
+        let needsCompScore = Math.round(
+            (maslowOverlapScore * 0.4) +
+            ((100 - (keganDiff * 25)) * 0.35) +
+            ((100 - (diffDiff * 20)) * 0.25)
+        );
+        needsCompScore = Math.max(35, Math.min(98, needsCompScore));
+        categoryScores["Needs & Human Development"] = needsCompScore;
+
+        // Dyadic Asymmetry Archetype Resolution
+        let needsArchetype = "";
+        let needsArchetypeAr = "";
+        let needsSummaryEn = "";
+        let needsSummaryAr = "";
+
+        const compNameA = profileA.owner_name || "Partner A";
+        const compNameB = profileB.owner_name || "Partner B";
+
+        // 1. The Anchor & The Explorer (D-Need vs B-Need Polarization)
+        if ((mA.d_need_pct >= 65 && mB.b_need_pct >= 35) || (mB.d_need_pct >= 65 && mA.b_need_pct >= 35)) {
+            needsArchetype = "The Anchor & The Explorer";
+            needsArchetypeAr = "رابط الأمان والمستكشف";
+            const anchorName = mA.d_need_pct > mB.d_need_pct ? compNameA : compNameB;
+            const explorerName = mA.d_need_pct > mB.d_need_pct ? compNameB : compNameA;
+            needsSummaryEn = `${anchorName} anchors the relationship with predictability, financial grounding, and domestic order, while ${explorerName} infuses dynamic growth, creative exploration, and horizon expansion.`;
+            needsSummaryAr = `يوفر (${anchorName}) مرساة الاستقرار والتنظيم المالي والواقعي للأسرة، بينما يدفع (${explorerName}) نحو آفاق النمو والتجارب الإبداعية والتطور.`;
+            strengths.push({
+                en: `Complementary Growth & Safety: ${anchorName}'s grounding protects against chaos, while ${explorerName}'s vision prevents relational stagnation.`,
+                ar: `تكامل الأمان والنمو: حرص (${anchorName}) على الاستقرار يحمي العلاقة من التخبط، بينما طموح (${explorerName}) يجدد شغف الحياة ويمنع الركود.`
+            });
+            challenges.push({
+                en: `Polarization Tripwire: ${anchorName} risks viewing the explorer as impractical or risky, while ${explorerName} risks viewing the anchor as overly cautious or rigid.`,
+                ar: `مطب القلق المتبادل: قد يرى (${anchorName}) شريكه مغامراً أو غير واقعي، بينما قد يشعر (${explorerName}) بأن الشريك متحفظ أو يقيد تطلعاته.`
+            });
+            discussionTopics.push({
+                en: "Establishing an agreed 'safety buffer': the exact financial and domestic stability threshold required before embarking on creative ventures.",
+                ar: "الاتفاق على 'صمام أمان واضح': تحديد خط الأمان المالي والأسري المتفق عليه قبل خوض أي مجازفات استثمارية أو مهنية."
+            });
+            growthOpportunities.push({
+                en: "The explorer should express explicit appreciation for the anchor's stabilizing discipline, validating it as the launchpad that makes exploration possible.",
+                ar: "أن يعبر الطرف المستكشف عن امتنانه العميق لاستقرار شريكه، معتبراً أمانه هو المنصة التي تسمح له بالإبداع."
+            });
+        }
+        // 2. The Fusionist & The Sovereign (Kegan Stage 3 vs Stage 4)
+        else if (keganDiff >= 0.8 && (devA.differentiation.score <= 2.8 || devB.differentiation.score <= 2.8)) {
+            needsArchetype = "The Fusionist & The Sovereign";
+            needsArchetypeAr = "التوأمة الاندماجية والشراكة المستقلة";
+            const fusionName = devA.differentiation.score < devB.differentiation.score ? compNameA : compNameB;
+            const sovereignName = devA.differentiation.score < devB.differentiation.score ? compNameB : compNameA;
+            needsSummaryEn = `${fusionName} seeks enmeshment and shared worldview confirmation, while ${sovereignName} thrives on differentiated autonomy and psychological sovereignty.`;
+            needsSummaryAr = `يبحث (${fusionName}) عن الاندماج وتطابق الرؤى والاحتواء المستمر، بينما يحتاج (${sovereignName}) لمساحة من الاستقلالية والسيادة الفردية.`;
+            challenges.push({
+                en: `Intimacy Gap: When ${sovereignName} takes healthy personal space, ${fusionName} may misinterpret it as emotional rejection or abandonment.`,
+                ar: `فارق مساحة القرب: عندما يحتاج (${sovereignName}) لمساحة خاصة، قد يفسرها (${fusionName}) على أنها ابتعاد أو فتور عاطفي.`
+            });
+            growthOpportunities.push({
+                en: `${sovereignName} should practice 'loving reassurance before taking space', explicitly affirming connection before enjoying solitude.`,
+                ar: `ممارسة 'التطمين قبل أخذ المساحة': أن يؤكد (${sovereignName}) محبته وتمسكه بالشريك بوضوح قبل الانشغال باهتماماته الخاصة.`
+            });
+        }
+        // 3. Mutual Self-Actualizing Crucible (Both High B-Needs & Stage 4+)
+        else if (mA.b_need_pct >= 35 && mB.b_need_pct >= 35 && devA.kegan.score >= 3.8 && devB.kegan.score >= 3.8) {
+            needsArchetype = "Mutual Self-Actualizing Crucible";
+            needsArchetypeAr = "محراب الارتقاء المشترك والنمو الذاتي";
+            needsSummaryEn = "Both partners operate with high internal self-direction and purpose. The marriage functions as an evolutionary partnership of two mature, differentiated equals.";
+            needsSummaryAr = "يعمل كلا الشريكين ببوصلة قيم داخلية ناضجة ورغبة عميقة في التطور. العلاقة هنا شراكة ارتقاء واعية بين شخصين ناضجين ومستقلين.";
+            strengths.push({
+                en: "Evolutionary Synergy: Outstanding capacity to hold paradox, respect individuality, and inspire each other toward peak authentic potential.",
+                ar: "تناغم ارتقائي استثنائي: قدرة عالية على احترام الاختلاف الفكري، وتحفيز بعضهما نحو أعلى مراتب النضج والتميز الإنساني."
+            });
+        }
+        // 4. Dual Deficiency Stability Lock
+        else if (mA.d_need_pct >= 75 && mB.d_need_pct >= 75) {
+            needsArchetype = "Dual Deficiency Stability Lock";
+            needsArchetypeAr = "التحالف الوقائي والاستقرار العملي";
+            needsSummaryEn = "Both partners strongly prioritize baseline security, predictability, family duties, and domestic safety over disruptive existential risks.";
+            needsSummaryAr = "يولي كلا الشريكين أولوية قصوى للأمان والاستقرار والالتزامات الأسرية الملموسة بعيداً عن المغامرات المربكة.";
+            strengths.push({
+                en: "Solid Shared Foundation: High mutual consensus on practical living, financial conservation, and keeping life orderly and predictable.",
+                ar: "قاعدة حياتية متماسكة: اتفاق كبير على إدارة شؤون الحياة بحكمة، وحماية مدخرات الأسرة، والحفاظ على وتيرة يومية مطمئنة."
+            });
+        }
+        // 5. Complementary Mastery & Legacy
+        else {
+            needsArchetype = "Complementary Mastery & Legacy";
+            needsArchetypeAr = "التكامل الإنجازي وبناء الأثر";
+            needsSummaryEn = "A balanced equilibrium across esteem, family belonging, and long-term legacy building, blending practical competence with heartfelt partnership.";
+            needsSummaryAr = "توازن متقن بين الكفاءة العملية، والانتماء الأسري الدافئ، وبناء أثر مستدام يخدم الأبناء والمجتمع.";
+            strengths.push({
+                en: "Balanced Life Architecture: Harmonious balance between professional drive and domestic connection.",
+                ar: "عمارة حياتية متوازنة: تناسق مريح بين الطموح المهني والترابط العاطفي والأسري."
+            });
+        }
+
+        const maslowDynamics = {
+            archetype: needsArchetype,
+            archetype_ar: needsArchetypeAr,
+            summary_en: needsSummaryEn,
+            summary_ar: needsSummaryAr,
+            kegan_diff: Math.round(keganDiff * 10) / 10,
+            diff_diff: Math.round(diffDiff * 10) / 10,
+            overlap_score: maslowOverlapScore,
+            category_score: needsCompScore
+        };
+
         // --- OVERALL COMPATIBILITY INDEX CALCULATION ---
         const scoresArr = Object.values(categoryScores);
         let avg = scoresArr.reduce((a, b) => a + b, 0) / scoresArr.length;
@@ -547,6 +670,7 @@ const CompatibilityEngine = {
                     summary_en: consciousnessSummaryEn,
                     summary_ar: consciousnessSummaryAr
                 },
+                needs_dynamics: maslowDynamics,
                 fair_fighting_rules: fairFightingRules
             }
         };

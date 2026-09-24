@@ -89,7 +89,17 @@
     "q83": "opt1",
     "q84": "opt1",
     "q85": "opt1",
-    "q18_sgl": "opt1"
+    "q18_sgl": "opt1",
+    "q86": "opt2",
+    "q87": "opt2",
+    "q88": "opt3",
+    "q89": "opt1",
+    "q90": "opt1",
+    "q91": "opt3",
+    "q92": "opt1",
+    "q93": "opt2",
+    "q94": "opt1",
+    "q95": "opt1"
   },
   "calculated_personality": {
     "big_five": {
@@ -103,18 +113,18 @@
       "type": "INFP",
       "scores": {
         "e_i": -70,
-        "s_n": -85,
+        "s_n": -176,
         "t_f": -85,
         "j_p": -15
       }
     },
     "attachment": {
       "primary": "secure",
-      "anxiety_score": 53,
+      "anxiety_score": 92,
       "avoidance_score": 88,
       "scores": {
         "secure": 1516,
-        "anxious": 82,
+        "anxious": 385,
         "avoidant": 173
       }
     },
@@ -123,7 +133,7 @@
       "scores": {
         "assertive": 135,
         "passive": 68,
-        "passive_aggressive": 10,
+        "passive_aggressive": 115,
         "reserved": 20
       }
     },
@@ -279,48 +289,48 @@
     },
     "gottman_safety": {
       "repair_receptivity": 95,
-      "emotional_safety_index": 89,
+      "emotional_safety_index": 91,
       "risks": {
-        "criticism": 15,
-        "defensiveness": 10,
-        "stonewalling": 39,
-        "contempt": 5
+        "criticism": 14,
+        "defensiveness": 9,
+        "stonewalling": 35,
+        "contempt": 4
       },
       "four_horsemen_risk": {
-        "criticism": 15,
-        "defensiveness": 10,
-        "stonewalling": 39,
-        "contempt": 5
+        "criticism": 14,
+        "defensiveness": 9,
+        "stonewalling": 35,
+        "contempt": 4
       }
     },
     "attachment_ecr": {
       "primary": "secure",
-      "anxiety_score": 53,
+      "anxiety_score": 92,
       "avoidance_score": 88,
       "scores": {
         "secure": 1516,
-        "anxious": 82,
+        "anxious": 385,
         "avoidant": 173
       }
     },
     "schwartz_values": {
       "top_values": [
-        "self_direction",
+        "benevolence",
         "tradition",
-        "benevolence"
+        "security"
       ],
       "scores": {
         "tradition": 25,
-        "security": 17,
-        "self_direction": 26,
-        "benevolence": 21,
-        "hedonism": 7,
-        "achievement": 4
+        "security": 20,
+        "self_direction": 19,
+        "benevolence": 28,
+        "hedonism": 5,
+        "achievement": 3
       }
     },
     "consciousness": {
       "hawkins": {
-        "score": 441,
+        "score": 446,
         "level": "Reason & Understanding (400)",
         "level_ar": "المنطق والاستبصار (400)",
         "view_of_life": "Wise / Meaningful",
@@ -345,6 +355,35 @@
         "score": 93,
         "rating_en": "Rapid & Resilient",
         "rating_ar": "سريع ومرن"
+      }
+    },
+    "maslow_profile": {
+      "tiers": {
+        "somatic": 9,
+        "safety": 20,
+        "belonging": 24,
+        "esteem": 3,
+        "actualization": 23,
+        "transcendence": 21
+      },
+      "primary_need": "belonging",
+      "primary_need_en": "Love, Belonging & Relational Closeness",
+      "primary_need_ar": "الانتماء والمودة والقرب الوجداني",
+      "d_need_pct": 56,
+      "b_need_pct": 44,
+      "orientation_en": "Growth & Actualization Driven (B-Needs)",
+      "orientation_ar": "مدفوع بالنمو وتحقيق الذات (B-Needs)"
+    },
+    "developmental_profile": {
+      "kegan": {
+        "score": 3.8,
+        "stage_en": "Stage 4: Self-Authoring Mind (Internal Compass)",
+        "stage_ar": "المرحلة 4: العقل المستقل والمؤلف لذاته (السيادة النفسية)"
+      },
+      "differentiation": {
+        "score": 3.1,
+        "level_en": "Balanced Interdependence",
+        "level_ar": "ترابط متوازن ومرن"
       }
     }
   },

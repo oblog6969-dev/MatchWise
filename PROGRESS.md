@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v2.9.1
-**Release Name:** Production Security Hardening, Audit Remediation & Zero-Dependency Test Suite  
-**Date:** September 9, 2026  
+## Current Version: v3.0.0
+**Release Name:** Maslow Hierarchy of Needs, Kegan Human Development & Dyadic Asymmetry Engine  
+**Date:** September 25, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -25,6 +25,7 @@
 | **M12: Hartman Circle Chart & Dynamic Focus/Shadow** | Exact SVG donut arc paths (`<path d="...">`), direct slice percentages, dynamic center hub, interactive person focus/shadowing, and organized compact comparison micro-rows. | ✅ Complete | Visual Verification & Browser Tested |
 | **M13: AI Educational Guidance** | Multi-stage AI educational tips (landing readiness, in-test reflection angles with dynamic re-clarification, and single/dyadic report reading guides), Gemini 3.8 Flash support, caching, and user preference toggle. | ✅ Complete | Browser Subagent & End-to-End Tested |
 | **M15: Production Hardening & Test Suite** | Stored XSS eradication, schema validation, demo button export, AI offline fallback, and zero-dependency Node test suite. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
+| **M16: Maslow Needs & Human Development** | Maslow 6-tier hierarchy (Somatic, Safety, Belonging, Esteem, Actualization, Transcendence), Kegan Orders of Mind (Stages 2-5), Bowen Differentiation, 10 new scenario questions (q86-q95), dual pyramid & continuum SVG visualizer, and dyadic asymmetry archetypes. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
 
 
 ---
@@ -45,6 +46,8 @@
 | **Schwartz Basic Values** | `traits.js` / `compatibility.js` | Trans-situational values & Cultural worldview | Multivariable Radar Chart |
 | **Big Five (OCEAN)** | `traits.js` / `compatibility.js` | Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism | Comparative Horizontal Bar Chart |
 | **MBTI / Cognitive Functions** | `traits.js` / `compatibility.js` | 4 Dichotomies (E/I, S/N, T/F, J/P) | Archetype Badges & Analytical Matrix |
+| **Maslow Hierarchy of Needs** | `traits.js` / `compatibility.js` | 6 Tiers (Somatic to Transcendence), D-Need vs. B-Need Ratio, Center of Gravity | Dual-Pyramid Tiered Stack with Overlap Gauge |
+| **Kegan Orders of Mind & Bowen** | `traits.js` / `compatibility.js` | Continuous Orders (Stage 2 to 5), Bowen Differentiation Index (1 to 5) | Developmental Gradient Continuum Track & Pins |
 
 ---
 
@@ -187,4 +190,37 @@
 
 ### Added
 - **Automated Smoke Test Suite (`test_suite.js`)**: Added zero-dependency Node.js test script verifying 10 critical test vectors across exports, XSS sanitization, schema validation, psychometrics, compatibility, and offline AI fallbacks. Verified 10/10 tests pass.
+
+---
+
+## 📝 Changelog (v3.0.0) - Maslow Hierarchy of Needs, Kegan Orders of Mind & Dyadic Asymmetry Engine
+
+### Psychometrics & Development Engines (`traits.js`, `compatibility.js`)
+- **Maslow 6-Tier Hierarchy**: Polytomous accumulation across Somatic, Safety, Belonging, Esteem/Mastery, Self-Actualization, and Self-Transcendence, normalized strictly to 100%.
+- **Needs Center of Gravity**: Identifies the primary dominant motivational tier for each partner with localized psychological definitions.
+- **D-Need vs. B-Need Dynamics**: Quantifies Deficiency Needs (Somatic, Safety, Belonging, Esteem) vs. Being/Growth Needs (Self-Actualization, Self-Transcendence) and categorizes orientation.
+- **Robert Kegan's Orders of Mind**: Computes continuous cognitive developmental maturity ($2.0 \le K \le 5.0$) across Stage 2 (Instrumental), Stage 3 (Socialized), Stage 4 (Self-Authoring), and Stage 5 (Self-Transforming).
+- **Murray Bowen Differentiation of Self**: Measures emotional reactivity vs. autonomous solid self ($1.0 \le D \le 5.0$).
+- **5 Dyadic Asymmetry Archetypes**:
+  1. *The Anchor & The Explorer* (Complementary stability grounding paired with creative venture growth).
+  2. *The Fusionist & The Sovereign* (Stage 3 relational fusion vs. Stage 4 autonomous differentiation).
+  3. *Mutual Self-Actualizing Crucible* (Shared Stage 4+ sovereignty and high B-Need growth).
+  4. *Dual Deficiency Stability Lock* (Shared conservative focus on financial and domestic security).
+  5. *Complementary Mastery & Legacy* (Harmonious executive esteem and intergenerational generativity).
+- **Category Compatibility Score**: Added `"Needs & Human Development"` category score and `multi_framework_dynamics.needs_dynamics` dyadic profile.
+
+### Question Bank Expansion (`questions.json`, `questions_data.js`)
+- **10 New Scenario Questions (`q86`–`q95`)**: Polytomous clinical scenarios covering risk horizons, relational intimacy, prestige vs. meaning, somatic holding in stress, nervous system homeostasis, relational contract paradigms, generativity & legacy, clean vulnerability disclosure, cognitive metaneeds, and conflict transcendence.
+- **Enhanced Anchor Questions**: Enriched `q29`, `q71`, and `q75` with Maslow, Kegan, and Bowen scoring dimensions.
+- Total question bank expanded from 86 to 96 questions.
+
+### Interactive SVG Visualizers & UI Integration (`index.html`, `script.js`, `style.css`)
+- **Chapter 5 Dual-Pyramid Visualizer**: 6-tier color-coded stacked SVG pyramid featuring percentage shares, Center-of-Gravity badges, and D-Need/B-Need brackets.
+- **Kegan Developmental Continuum Track**: Horizontal gradient spectrum bar plotting Partner A and Partner B across Stages 2 through 5.
+- **Executive Overview Badges**: Added real-time badges for Maslow Center of Gravity and Kegan Order of Mind for both partners in the report header.
+- **Interactive Bilingual Tooltips**: Integrated with `ChartTooltipManager` providing clinical interpretations and comparison stats on hover and mobile touch.
+
+### Test Profiles & Quality Assurance (`demo_profiles.js`, `sample_*.json`, `test_suite.js`)
+- Seeded calibrated responses for Tariq Al-Mansoor (Esteem Center of Gravity, Kegan Stage 4) and Nour Al-Sabah (Belonging Center of Gravity, Kegan Stage 4), evaluating dyadically to *The Anchor & The Explorer*.
+- Expanded `test_suite.js` to validate Maslow normalization, D/B need ratios, Kegan/Bowen bounds, and dyadic asymmetry outputs (10/10 automated tests passing).
 
