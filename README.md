@@ -1,6 +1,31 @@
-# MatchWise Lite v3.0.0
+# MatchWise Lite v3.1.0
 
-**MatchWise Lite v3.0.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, **Google Gemini 3.8 Flash**, and Autonomous AI.
+**MatchWise Lite v3.1.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, **Google Gemini 3.8 Flash**, and Autonomous AI.
+
+---
+
+## 🌟 What's New in v3.1.0: Maslow 18 Major Segments & Creative Multi-Perspective Visualizer
+
+### 1. 18 Clinically Grounded Major Segments
+Deconstructs all 6 tiers of Maslow's hierarchy into 3 granular psychological pillars each (18 total), with dynamic scoring ($0\% - 100\%$) tailored to OCEAN traits, emotional intelligence, attachment coordinates, differentiation of self, and Kegan stages:
+- **✨ Self-Transcendence (Apex)**: *Transpersonal Mission & Generational Legacy*, *Altruism & Generative Compassion*, *Spiritual Unity & Sacred Meaning*.
+- **🌟 Self-Actualization**: *Authenticity & Core Values Alignment*, *Creative Potential & Intellectual Expansion*, *Personal Sovereignty & Autonomous Freedom*.
+- **🏆 Esteem, Mastery & Respect**: *Self-Worth, Dignity & Inner Sovereignty*, *Competence, Mastery & Achievement*, *Mutual Admiration & Partner Validation*.
+- **💖 Love, Belonging & Intimacy**: *Deep Emotional Intimacy & Attunement*, *Unconditional Acceptance & Tender Warmth*, *Companionship & Connection Rituals*.
+- **🛡️ Safety, Security & Predictability**: *Financial Predictability & Resource Prudence*, *Emotional Safety & Non-Threatening Space*, *Domestic Order & External Boundary Clarity*.
+- **🌿 Somatic Homeostasis & Rhythm**: *Rest, Sleep & Somatic Recovery*, *Nervous System Grounding & De-escalation*, *Vitality, Pacing & Sensory Ease*.
+
+### 2. Tri-Perspective Visualizer Switcher
+- **🏛️ Pyramid Spectrum**: Redesigned SVG pyramid featuring mini segment cells inside each tier, widened apex layout eliminating text overlap, side-anchored partner share badges, and interactive tooltips.
+- **🧩 Segment Matrix (18 Pillars)**: Comprehensive side-by-side comparative dashboard displaying all 18 segments with dual partner meters and synergy classifications.
+- **💡 Dyadic Growth Compass**: Practical relationship blueprint offering tailored instructions to nourish each partner's primary need, along with weekly check-in synthesis accords.
+
+### 3. Dynamic Segment Inspector Panel
+- Interactive tier selector chips and detailed segment cards displaying:
+  - **Category Indicators**: D-Needs (Deficiency) vs. B-Needs (Growth/Being).
+  - **Dyadic Synergy Badges**: *Synergistic Alignment*, *Complementary Balance*, or *Active Growth Area*.
+  - **Dual Comparative Progress Bars**: Green (Partner A) and Amber (Partner B) score meters.
+  - **Actionable Couple Practices**: Specific behavioral exercises to cultivate intimacy and mutual respect.
 
 ---
 

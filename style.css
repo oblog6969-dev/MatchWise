@@ -3102,5 +3102,358 @@ body.rtl .ai-instruction-box.in-test-guide {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ================================================================
+   14. MASLOW PYRAMID OF NEEDS & MAJOR SEGMENTS VISUALIZER
+   ================================================================ */
+.maslow-spectrum-wrapper {
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 8px 0;
+}
+
+/* Perspective / View Mode Switcher */
+.maslow-view-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.maslow-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.maslow-tab-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-color);
+    background: var(--bg-secondary);
+}
+
+.maslow-tab-btn.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 3px 12px var(--accent-glow);
+}
+
+/* Interactive SVG Tier Elements */
+.maslow-tier-group {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.maslow-tier-group:hover {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+}
+
+.maslow-tier-bg {
+    transition: stroke-width 0.2s ease, fill-opacity 0.2s ease, stroke 0.2s ease;
+}
+
+.maslow-tier-group:hover .maslow-tier-bg {
+    stroke-width: 2.2px !important;
+    fill-opacity: 0.25 !important;
+}
+
+.maslow-tier-group.selected .maslow-tier-bg {
+    stroke-width: 3px !important;
+    fill-opacity: 0.35 !important;
+    stroke: var(--accent-color) !important;
+}
+
+.maslow-svg-segment-cell {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.maslow-svg-segment-cell:hover rect {
+    fill-opacity: 0.65;
+    stroke-width: 1.5px;
+}
+
+/* Interactive Segment Inspector Panel */
+.maslow-inspector-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 16px;
+    box-shadow: var(--card-shadow);
+    animation: fadeInInstruction 0.25s ease-out;
+}
+
+.maslow-tier-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.maslow-tier-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.maslow-tier-chip:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-primary);
+}
+
+.maslow-tier-chip.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.maslow-tier-meta-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.maslow-segment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
+}
+
+.maslow-segment-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.maslow-segment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.maslow-segment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.maslow-segment-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.maslow-synergy-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.badge-synergy {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-comp {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-grow {
+    background: rgba(245, 158, 11, 0.15);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Dual Comparison Meter */
+.maslow-meter-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0;
+}
+
+.maslow-meter-track {
+    width: 100%;
+    height: 7px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.maslow-meter-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fill-partner-a {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.fill-partner-b {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.maslow-meter-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.maslow-segment-relational {
+    font-size: 0.78rem;
+    line-height: 1.48;
+    color: var(--text-secondary);
+}
+
+.maslow-segment-action {
+    font-size: 0.76rem;
+    line-height: 1.45;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 8px 10px;
+    border-left: 3px solid var(--accent-color);
+    color: var(--text-primary);
+}
+
+body.rtl .maslow-segment-action {
+    border-left: none;
+    border-right: 3px solid var(--accent-color);
+}
+
+/* Segment Matrix Perspectives View */
+.maslow-matrix-tier-block {
+    margin-bottom: 20px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.maslow-matrix-tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border-color);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Dyadic Compass Perspectives View */
+.maslow-compass-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.maslow-compass-card h5 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.maslow-compass-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.maslow-compass-list li {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    position: relative;
+    padding-left: 18px;
+}
+
+body.rtl .maslow-compass-list li {
+    padding-left: 0;
+    padding-right: 18px;
+}
+
+.maslow-compass-list li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    top: 0;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+}
+
+body.rtl .maslow-compass-list li::before {
+    left: auto;
+    right: 4px;
+}
+
+@media (max-width: 640px) {
+    .maslow-segment-grid {
+        grid-template-columns: 1fr;
+    }
+    .maslow-view-tabs {
+        flex-direction: column;
+    }
+    .maslow-tab-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 
 

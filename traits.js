@@ -902,6 +902,257 @@ const PersonalityEngine = {
             }
         };
 
+        // 12B. MAJOR SEGMENTS FOR EACH MASLOW TIER (3 Core Segments Per Level)
+        const maslowSegments = {
+            transcendence: [
+                {
+                    key: "transpersonal_mission",
+                    icon: "✨",
+                    name_en: "Transpersonal Mission & Generational Legacy",
+                    name_ar: "الرسالة المتعدية والأثر الخالد",
+                    score: Math.round(clamp(0.45 * (finalOthers.religion_importance || 50) + 0.35 * keganScore * 20 + 0.2 * (mPctTranscendence * 6), 30, 98)),
+                    desc_en: "Uniting as a couple around a noble cause larger than individual comfort, building a lasting righteous legacy.",
+                    desc_ar: "توحيد جهود الزوجين حول رسالة سامية تتجاوز متعهما الخاصة لبناء أثر مبارك يمتد للأجيال القادمة.",
+                    relational_en: "Transforms the marriage into an evolutionary powerhouse, giving daily challenges transcendent meaning and resilience.",
+                    relational_ar: "يحول الزواج إلى مؤسسة رسالية ملهمة تمنح أعباء الحياة معنى وجودياً وتماسكاً يتجاوز كل الصعاب.",
+                    action_en: "Formulate a shared Family Mission Statement defining the positive imprint you intend to leave on your community.",
+                    action_ar: "صياغة ميثاق رسالة الأسرة المشترك لتحديد الأثر الإيجابي والخيري الذي يريد الزوجان غرسه في المجتمع."
+                },
+                {
+                    key: "altruistic_service",
+                    icon: "🌱",
+                    name_en: "Altruism & Generative Compassion",
+                    name_ar: "العطاء المجتمعي والإيثار المبارك",
+                    score: Math.round(clamp(0.5 * finalOcean.agreeableness + 0.3 * (finalOthers.marriage_commitment || 50) + 0.2 * (mPctTranscendence * 6), 35, 98)),
+                    desc_en: "Selfless generosity, mentoring younger generations, uplifting those in need, and living an outward-facing compassionate life.",
+                    desc_ar: "البذل والإيثار وخدمة الضعفاء وتوجيه الأجيال الناشئة والعيش بروح الرحمة والتكافل الاجتماعي.",
+                    relational_en: "Directs relational energy outward in service, eliminating petty domestic quarrels through shared noble contribution.",
+                    relational_ar: "توجيه طاقة الزوجين نحو نفع الناس، مما يصغر الخلافات اليومية أمام عظمة العطاء المشترك.",
+                    action_en: "Adopt a shared charitable project or community mentoring initiative that you actively nurture together.",
+                    action_ar: "تبني مشروع خيري أو مبادرة تطوعية مجتمعية يعمل الشريكان على رعايتها وتطويرها سوياً."
+                },
+                {
+                    key: "spiritual_unity",
+                    icon: "🌌",
+                    name_en: "Spiritual Unity & Sacred Meaning",
+                    name_ar: "الوحدة الروحية والمعنى الوجودي",
+                    score: Math.round(clamp(0.45 * (finalHawkinsScore / 6) + 0.35 * (finalOthers.religion_importance || 50) + 0.2 * (mPctTranscendence * 6), 30, 98)),
+                    desc_en: "Shared spiritual consciousness, experiences of awe, sacred reverence, and inner peace in the presence of the Divine.",
+                    desc_ar: "السكينة الروحية المشتركة واستشعار المعية الإلهية والعيش بخشوع وسلام وجودي عميق.",
+                    relational_en: "Anchors the couple in an eternal spiritual bond where physical and emotional companionship is crowned with spiritual harmony.",
+                    relational_ar: "يربط الزوجين برباط روحي خالد تتكامل فيه المودة الأرضية مع السكينة الإيمانية العلوية.",
+                    action_en: "Practice shared contemplative moments, spiritual study, or prayers together to renew sacred reverence and peace.",
+                    action_ar: "الحرص على جلسات تفكر وذكر ودعاء مشترك لتجديد الهدوء الروحي وربط الأسرة بالمعاني المقدسة."
+                }
+            ],
+            actualization: [
+                {
+                    key: "authentic_alignment",
+                    icon: "🧭",
+                    name_en: "Authenticity & Core Values Alignment",
+                    name_ar: "الأصالة والعيش وفق بوصلة المبادئ",
+                    score: Math.round(clamp(0.45 * finalOcean.openness + 0.35 * keganScore * 20 + 0.2 * (mPctActualization * 5), 35, 98)),
+                    desc_en: "Living in congruence with one's highest moral and existential convictions rather than conforming to social scripts.",
+                    desc_ar: "التطابق التام بين المبادئ الداخلية والسلوك العملي، والعيش بصدق وأمانة بعيداً عن الأقنعة الاجتماعية.",
+                    relational_en: "Creates an authentic union of two genuine souls who love each other for who they truly are, not false personas.",
+                    relational_ar: "يخلق زواجاً حقيقياً بين روحين صادقتين تحبان بعضهما على الحقيقة دون تزييف أو ادعاء.",
+                    action_en: "Engage in regular deep reflections on your family core values, aligning decisions with what truly matters to your souls.",
+                    action_ar: "مراجعة بوصلة القيم الأسرية بانتظام والتأكد من أن نمط حياتكما يجسد ما تؤمنان به حقاً."
+                },
+                {
+                    key: "creative_growth",
+                    icon: "🎨",
+                    name_en: "Creative Potential & Intellectual Expansion",
+                    name_ar: "الإبداع وتنمية الإمكانات الكامنة",
+                    score: Math.round(clamp(0.5 * finalOcean.openness + 0.3 * (finalOthers.marriage_growth || 50) + 0.2 * (mPctActualization * 5), 35, 98)),
+                    desc_en: "Cultivating artistic, intellectual, or entrepreneurial gifts; embracing lifelong curiosity and continuous evolution.",
+                    desc_ar: "تفجير الطاقات الإبداعية والفكرية وشغف التعلم المستمر واكتشاف مواهب جديدة في مختلف مراحل العمر.",
+                    relational_en: "Keeps the marriage intellectually stimulating and ever-evolving, preventing boredom and marital stagnation.",
+                    relational_ar: "يجدد روح الحيوية والشغف الفكري في الزواج، ويمنع الرتابة والملل من التسلل للحياة المشتركة.",
+                    action_en: "Encourage independent creative hobbies, reading, or new intellectual pursuits, dedicating time for partner self-expansion.",
+                    action_ar: "تشجيع الشريك على ممارسة هواياته الإبداعية والقراءة والتعلم، وتوفير الوقت اللازم لنموه الشخصي."
+                },
+                {
+                    key: "personal_sovereignty",
+                    icon: "🕊️",
+                    name_en: "Personal Sovereignty & Autonomous Freedom",
+                    name_ar: "السيادة الفردية والاستقلال الفكري",
+                    score: Math.round(clamp(0.45 * (finalOthers.boundaries_independence || 50) + 0.35 * diffScore * 20 + 0.2 * (mPctActualization * 5), 35, 98)),
+                    desc_en: "Possessing an internal locus of control and psychological sovereignty that enables loving partnership without enmeshment.",
+                    desc_ar: "امتلاك استقلالية فكرية ونفسية ناضجة تتيح بناء شراكة محبة دون ذوبان مرضي أو تبعية خانقة.",
+                    relational_en: "Allows differentiation: two autonomous adults holding hands, walking in the same direction with mutual freedom.",
+                    relational_ar: "يحقق مفهوم التمايز النفسي: شخصان ناضجان ومستقلان يسيران معاً في درب الحياة بحرية واختيار واعٍ.",
+                    action_en: "Honor partner solitude and individual perspectives without perceiving differences as threats to marital intimacy.",
+                    action_ar: "احترام حق الشريك في مساحته الخاصة ورؤيته المستقلة دون اعتبار الاختلاف تهديداً لمودة الزواج."
+                }
+            ],
+            esteem: [
+                {
+                    key: "self_worth_dignity",
+                    icon: "👑",
+                    name_en: "Self-Worth, Dignity & Inner Sovereignty",
+                    name_ar: "عزة النفس والكرامة الذاتية",
+                    score: Math.round(clamp(0.45 * (100 - finalOcean.neuroticism) + 0.35 * diffScore * 20 + 0.2 * (mPctEsteem * 4.5), 35, 98)),
+                    desc_en: "Robust self-respect, moral dignity, and healthy pride that does not depend on partner validation for survival.",
+                    desc_ar: "احترام الذات والكرامة الأخلاقية والشعور بالقيمة الشخصية المستقلة عن استحسان الآخرين.",
+                    relational_en: "Prevents needy insecurity, groveling, or passive-aggressive entitlement, enabling an equal partnership of equals.",
+                    relational_ar: "يمنع الاستجداء العاطفي أو التنازل عن الكرامة، ويتيح قيام شراكة ناضجة بين ندين محترمين.",
+                    action_en: "Never use belittling or dismissive sarcasm; actively affirm each other's inherent personal worth and voice.",
+                    action_ar: "الابتعاد التام عن التهكم والتقليل، وتأكيد احترام رأي الشريك وقيمته الإنسانية في كل مناسبة."
+                },
+                {
+                    key: "competence_mastery",
+                    icon: "🏆",
+                    name_en: "Competence, Mastery & Achievement",
+                    name_ar: "الكفاءة والإتقان والإنجاز",
+                    score: Math.round(clamp(0.45 * (finalOthers.career_ambition || 50) + 0.35 * finalOcean.conscientiousness + 0.2 * (mPctEsteem * 4.5), 35, 98)),
+                    desc_en: "Cultivating expertise, solving complex life challenges, fulfilling career and intellectual goals with excellence.",
+                    desc_ar: "تطوير المهارات وتجاوز التحديات الحياتية والنجاح المهني والفكري بروح الإتقان والتميز.",
+                    relational_en: "Builds mutual admiration and trust in each other's capability to steer the family vessel through life's storms.",
+                    relational_ar: "يولد الإعجاب المتبادل والثقة العميقة في قدرة الشريك على إدارة الأزمات وقيادة دفة الحياة باقتدار.",
+                    action_en: "Actively support and celebrate each other's professional and personal milestones, investing in partner skill growth.",
+                    action_ar: "تشجيع ودعم أهداف الشريك المهنية وتوفير البيئة المناسبة لتفوقه والاحتفاء بنجاحاته."
+                },
+                {
+                    key: "mutual_admiration",
+                    icon: "🌟",
+                    name_en: "Mutual Admiration & Partner Validation",
+                    name_ar: "الاحترام المتبادل والاعتراف بالجهد",
+                    score: Math.round(clamp(0.45 * (finalOthers.career_support || 50) + 0.35 * finalOcean.agreeableness + 0.2 * (mPctEsteem * 4.5), 35, 98)),
+                    desc_en: "Public and private recognition of each other's strengths, wisdom, hard work, and moral character.",
+                    desc_ar: "الاعتراف الصادق بجهود الشريك ومناقبه وفضائله أمام الأبناء والأهل والثناء على إسهاماته الكريمة.",
+                    relational_en: "Makes partners feel deeply valued, respected, and motivated to give their very best to the marriage.",
+                    relational_ar: "يشعر الشريك بجدارته وقيمته داخل الأسرة، ويحفزه على بذل أقصى جهده للعطاء والتفاني.",
+                    action_en: "Give explicit vocal credit for the partner's sacrifices, both privately and in the presence of family and children.",
+                    action_ar: "إبراز فضل الشريك وشكره علناً أمام الأهل والأبناء وتجنب نكران المجهود أو اعتباره تحصيل حاصل."
+                }
+            ],
+            belonging: [
+                {
+                    key: "emotional_intimacy",
+                    icon: "💖",
+                    name_en: "Deep Emotional Intimacy & Attunement",
+                    name_ar: "القرب الوجداني والتواصل العميق",
+                    score: Math.round(clamp(0.4 * (finalOthers.emotional_empathy || 50) + 0.35 * (100 - (finalAttachment.avoidance || 30)) + 0.25 * (mPctBelonging * 4.5), 30, 98)),
+                    desc_en: "Deep heart-to-heart sharing, feeling truly understood, empathic tuning into each other's emotional worlds.",
+                    desc_ar: "المشاركة الوجدانية الصادقة، والشعور بأن الشريك يفهم أعماق النفس ويستجيب للمشاعر بصدق واهتمام.",
+                    relational_en: "Prevents emotional isolation and loneliness, binding the couple into an intimate emotional sanctuary.",
+                    relational_ar: "يقضي على الوحشة والجفاف العاطفي، ويجعل العلاقة ملاذاً حميماً يشعر فيه الطرفان باكتمال الأنس.",
+                    action_en: "Spend 15 minutes every evening asking curious, non-judgmental open questions about each other's inner state.",
+                    action_ar: "تخصيص 15 دقيقة يومياً لحوار وجداني هادئ يسأل فيه كل طرف عن مشاعر الآخر وهمومه باهتمام خالص."
+                },
+                {
+                    key: "unconditional_acceptance",
+                    icon: "🫂",
+                    name_en: "Unconditional Acceptance & Tender Warmth",
+                    name_ar: "الدفء والقبول غير المشروط",
+                    score: Math.round(clamp(0.45 * finalOcean.agreeableness + 0.35 * (finalOthers.emotional_comforting || 50) + 0.2 * (mPctBelonging * 4.5), 35, 98)),
+                    desc_en: "Embracing each other's quirks, flaws, and vulnerabilities with tenderness rather than conditional approval.",
+                    desc_ar: "تقبل الشريك كما هو بمحاسنه وعيوبه، ومنحه الدفء والتقدير دون شروط تعجيزية أو محاولات تشكيل قسري.",
+                    relational_en: "Dissolves performance anxiety and shame, allowing both partners to relax into their most authentic selves.",
+                    relational_ar: "ينزع قلق إثبات الجدارة والخوف من الرفض، مما يسمح للشريكين بالعيش بعفوية واطمئنان كامل.",
+                    action_en: "Express three specific moments of gratitude or affection daily, focusing on who the partner is, not just what they do.",
+                    action_ar: "التعبير اليومي عن ثلاث لمسات امتنان ومودة تركز على محبة ذات الشريك وليس فقط ما ينجزه."
+                },
+                {
+                    key: "shared_rituals",
+                    icon: "☕",
+                    name_en: "Companionship & Connection Rituals",
+                    name_ar: "المؤانسة والطقوس المشتركة",
+                    score: Math.round(clamp(0.4 * (finalOthers.marriage_growth || 50) + 0.35 * finalOcean.extroversion + 0.25 * (mPctBelonging * 4.5), 35, 98)),
+                    desc_en: "Daily and weekly shared micro-rituals (morning coffee, date nights, shared humor) fostering joyous friendship.",
+                    desc_ar: "الطقوس اليومية والأسبوعية المحببة (قهوة الصباح، موعد أسبوعي، الضحك المشترك) التي تبني صداقة متينة.",
+                    relational_en: "Replenishes the couple's Emotional Bank Account and keeps passion and companionship vibrant through all seasons.",
+                    relational_ar: "يغذي الرصيد العاطفي المشترك باستمرار، ويبقي جذوة الصداقة والمرح متقدة وسط أعباء الحياة.",
+                    action_en: "Protect an unmissable weekly date night dedicated solely to romance, fun, and couple recreation.",
+                    action_ar: "الالتزام بموعد أسبوعي ثابت ومقدس مخصص للمتعة وتجديد الرومانسية والاستمتاع المشترك دون عمل أو أطفال."
+                }
+            ],
+            safety: [
+                {
+                    key: "financial_predictability",
+                    icon: "🛡️",
+                    name_en: "Financial Predictability & Resource Prudence",
+                    name_ar: "الأمان المالي وإدارة الموارد بحكمة",
+                    score: Math.round(clamp(0.45 * (finalOthers.religion_finances || 50) + 0.35 * finalOcean.conscientiousness + 0.2 * (mPctSafety * 4.5), 35, 98)),
+                    desc_en: "Prudent budget management, emergency reserves, and transparent alignment on spending and long-term saving.",
+                    desc_ar: "إدارة المصروفات بحكمة وبناء مدخرات للطوارئ والشفافية التامة في خطط الإنفاق والاستثمار المستقبلي.",
+                    relational_en: "Eliminates financial anxiety—one of the primary instigators of marital breakdown—creating peace of mind.",
+                    relational_ar: "ينزع فتيل القلق المالي الذي يعد أكبر مهدد لاستقرار البيوت، ويمنح الأسرة طمأنينة معيشية مستدامة.",
+                    action_en: "Conduct a monthly low-stress financial sync to review household goals, celebrate milestones, and agree on major purchases.",
+                    action_ar: "عقد جلسة مراجعة مالية شهرية ودية لتنسيق الميزانية والاحتفال بالإنجازات والاتفاق المسبق على النفقات الكبيرة."
+                },
+                {
+                    key: "emotional_safety",
+                    icon: "🔒",
+                    name_en: "Emotional Safety & Non-Threatening Space",
+                    name_ar: "الأمان النفسي والاحتواء الآمن",
+                    score: Math.round(clamp(0.4 * (100 - (finalAttachment.anxiety || 30)) + 0.35 * (100 - finalOcean.neuroticism) + 0.25 * (mPctSafety * 4.5), 30, 98)),
+                    desc_en: "Freedom from harsh contempt, threats of abandonment, ridicule, or weaponizing vulnerabilities during disagreement.",
+                    desc_ar: "انعدام التهديد بالانفصال أو السخرية أو استخدام نقاط الضعف ضد الشريك عند حدوث أي خلاف.",
+                    relational_en: "Forms the bedrock where genuine vulnerability, deep trust, and honest self-expression can safely unfold.",
+                    relational_ar: "حجر الأساس الذي يسمح بالبوح الصادق وإظهار الضعف البشري دون خوف من العقاب أو التقليل.",
+                    action_en: "Ban the Four Horsemen (criticism, contempt, defensiveness, stonewalling) and guarantee absolute relational loyalty.",
+                    action_ar: "إقصاء فرسان الهلاك (النقد، الازدراء، الدفاعية، الانغلاق) والتأكيد الدائم على أن الخلاف لا يمس رابط المودة."
+                },
+                {
+                    key: "domestic_order",
+                    icon: "🏡",
+                    name_en: "Domestic Order & External Boundary Clarity",
+                    name_ar: "النظام المنزلي وحماية الحدود الأسرية",
+                    score: Math.round(clamp(0.5 * finalOcean.conscientiousness + 0.3 * (finalOthers.boundaries_independence || 50) + 0.2 * (mPctSafety * 4.5), 35, 98)),
+                    desc_en: "Predictable domestic responsibilities, clean living sanctuary, and firm boundaries against intrusive external interference.",
+                    desc_ar: "وضوح الأدوار والمسؤوليات المنزلية، وحفظ خصوصية عش الزوجية بحزم ضد أي تدخلات خارجية مقتحمة.",
+                    relational_en: "Shields the marriage from chaos and extended family friction, preserving the home as a serene refuge.",
+                    relational_ar: "يحمي الأسرة من الفوضى والتدخلات المربكة، ويجعل المنزل واحة أمان واستقرار نفسي للشريكين.",
+                    action_en: "Agree on explicit household division of responsibilities and a united front regarding in-laws and external demands.",
+                    action_ar: "تحديد أدوار منزلية متفق عليها بوضوح، وتكوين جبهة موحدة تحمي قرارات الزوجين الخاصة من الضغوط الخارجية."
+                }
+            ],
+            somatic: [
+                {
+                    key: "rest_recovery",
+                    icon: "💤",
+                    name_en: "Rest, Sleep & Somatic Recovery",
+                    name_ar: "الراحة والنوم والتعافي الحيوي",
+                    score: Math.round(clamp(0.4 * (finalOthers.worklife_balance || 50) + 0.3 * (100 - finalOcean.neuroticism) + 0.3 * (mPctSomatic * 5), 35, 98)),
+                    desc_en: "Adequate physiological downtime, deep restorative sleep, and protecting the body from chronic physical exhaustion.",
+                    desc_ar: "كفاية النوم العميق وتجديد الطاقة البدنية وحماية الجسد من الإرهاق التراكمي وتفريغ الإجهاد اليومي.",
+                    relational_en: "Exhaustion triggers emotional reactivity and short tempers. A well-rested partner brings patience and gentleness to interactions.",
+                    relational_ar: "الإنهاك الجسدي يسبب سرعة الانفعال وضيق الصدر. حماية راحة الشريك توفر الطاقة الوجدانية للرفق والاحتواء.",
+                    action_en: "Establish a non-negotiable 30-minute tech-free evening wind-down routine without high-stakes marital debates before bed.",
+                    action_ar: "اعتماد روتين مسائي هادئ قبل النوم بـ 30 دقيقة خالٍ من الشاشات وتجنب فتح النقاشات الحساسة وقت الإرهاق."
+                },
+                {
+                    key: "nervous_regulation",
+                    icon: "🌿",
+                    name_en: "Nervous System Grounding & De-escalation",
+                    name_ar: "تنظيم الجهاز العصبي وتفريغ التوتر",
+                    score: Math.round(clamp(0.5 * (finalOthers.emotional_regulation || 50) + 0.3 * (100 - finalOcean.neuroticism) + 0.2 * (mPctSomatic * 5), 30, 98)),
+                    desc_en: "Capacity to down-regulate sympathetic fight-or-flight arousal and restore internal calm during interpersonal stress.",
+                    desc_ar: "القدرة على تهدئة استثارة الجهاز العصبي والعودة السريعة لحالة السكينة الداخلية عند مواجهة الضغوط.",
+                    relational_en: "Allows partners to co-regulate rather than trigger mutual defensive escalation when tensions arise.",
+                    relational_ar: "يمكن الشريكين من تهدئة بعضهما البعض (Co-regulation) بدلاً من تبادل الاستفزاز والانفعال الدفاعي.",
+                    action_en: "Take a 20-minute physiological pause (deep diaphragmatic breathing, walk, cool water) when emotional flooding begins.",
+                    action_ar: "أخذ استراحة بيولوجية لمدة 20 دقيقة (تنفس عميق، شرب ماء بارد، حركة خفيفة) عند الشعور بفيضان المشاعر."
+                },
+                {
+                    key: "vitality_rhythm",
+                    icon: "⚡",
+                    name_en: "Vitality, Pacing & Sensory Ease",
+                    name_ar: "الحيوية البدنية والتناغم الحركي",
+                    score: Math.round(clamp(0.4 * (100 - (finalOthers.worklife_balance || 50) * 0.15) + 0.3 * finalOcean.extroversion + 0.3 * (mPctSomatic * 5), 35, 96)),
+                    desc_en: "Daily rhythm of wholesome nourishment, physical movement, and sensory comfort in the home environment.",
+                    desc_ar: "التغذية المتوازنة والحركة اليومية وتهيئة بيئة معيشية مريحة حسياً تعزز النشاط والانشراح.",
+                    relational_en: "Synchronized activity levels and sensory comfort prevent mismatched domestic pacing and sluggish resentment.",
+                    relational_ar: "تناغم وتيرة النشاط المشترك والبيئة المنزلية المريحة يحفظ الحيوية ويمنع التباعد والكسل المنزلي.",
+                    action_en: "Schedule regular joint walks, wholesome shared meals, and optimize the home's lighting and noise levels for calm.",
+                    action_ar: "تخصيص وقت يومي للمشي المشترك أو وجبة متوازنة، وتحسين إضاءة وهدوء المنزل لطرد التوتر الحسي."
+                }
+            ]
+        };
+        finalMaslow.segments = maslowSegments;
+
         // Assessment Confidence Calculation
         const totalPossible = questionsList.length || 70;
         const completeness = Math.min(1.0, answeredCount / totalPossible);

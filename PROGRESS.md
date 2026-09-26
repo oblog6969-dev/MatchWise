@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v3.0.0
-**Release Name:** Maslow Hierarchy of Needs, Kegan Human Development & Dyadic Asymmetry Engine  
-**Date:** September 25, 2026  
+## Current Version: v3.1.0
+**Release Name:** Maslow 18 Major Segments & Creative Multi-Perspective Visualizer  
+**Date:** September 26, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -190,6 +190,27 @@
 
 ### Added
 - **Automated Smoke Test Suite (`test_suite.js`)**: Added zero-dependency Node.js test script verifying 10 critical test vectors across exports, XSS sanitization, schema validation, psychometrics, compatibility, and offline AI fallbacks. Verified 10/10 tests pass.
+
+## 📝 Changelog (v3.1.0) - Maslow 18 Major Segments & Creative Multi-Perspective Visualizer
+
+### 18 Major Segments Architecture (`traits.js`)
+- Deconstructed all 6 tiers of Maslow's hierarchy into 3 clinically grounded sub-segments each (18 total):
+  1. **Self-Transcendence (Apex)**: *Transpersonal Mission & Generational Legacy*, *Altruism & Generative Compassion*, *Spiritual Unity & Sacred Meaning*.
+  2. **Self-Actualization**: *Authenticity & Core Values Alignment*, *Creative Potential & Intellectual Expansion*, *Personal Sovereignty & Autonomous Freedom*.
+  3. **Esteem & Mastery**: *Self-Worth, Dignity & Inner Sovereignty*, *Competence, Mastery & Achievement*, *Mutual Admiration & Partner Validation*.
+  4. **Love & Belonging**: *Deep Emotional Intimacy & Attunement*, *Unconditional Acceptance & Tender Warmth*, *Companionship & Connection Rituals*.
+  5. **Safety & Security**: *Financial Predictability & Resource Prudence*, *Emotional Safety & Non-Threatening Space*, *Domestic Order & External Boundary Clarity*.
+  6. **Somatic Homeostasis**: *Rest, Sleep & Somatic Recovery*, *Nervous System Grounding & De-escalation*, *Vitality, Pacing & Sensory Ease*.
+- Integrated psychometric algorithms evaluating each segment (0-100%) dynamically derived from OCEAN traits, emotional intelligence, attachment style, differentiation of self, and Kegan stages.
+- Added comprehensive bilingual descriptions, relational impact dynamics, and actionable couple practices for every segment.
+
+### Multi-Perspective Creative Graphics & UX (`script.js`, `style.css`, `utils.js`)
+- **Tri-Perspective Switcher**:
+  - **🏛️ Pyramid Spectrum**: Redesigned SVG pyramid featuring mini segment cells inside each tier, widened apex layout eliminating text overlap, and side-anchored partner share badges.
+  - **🧩 Segment Matrix (18 Pillars)**: Side-by-side comparative dashboard displaying all 18 segments with dual partner meters and synergy classifications.
+  - **💡 Dyadic Growth Compass**: Practical relationship blueprint offering tailored instructions to nourish each partner's primary need, along with weekly check-in synthesis accords.
+- **Dynamic Segment Inspector Panel**: Interactive tier selector chips and detailed segment cards displaying dyadic synergy badges (*Synergistic Alignment*, *Complementary Balance*, *Active Growth Area*), comparative score bars, and actionable couple practices.
+- **Full Bilingual RTL Parity**: Seamless right-to-left layout and localized terminology for both English and Arabic.
 
 ---
 

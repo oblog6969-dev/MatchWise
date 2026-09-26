@@ -155,12 +155,24 @@ async function runAllTests() {
         assert.ok(result.maslow_profile, "Must include Maslow's Hierarchy of Needs profile");
         assert.ok(result.developmental_profile, "Must include Human Development (Kegan & Bowen) profile");
         
-        // Validate Maslow profile sum
+        // Validate Maslow profile sum & 18 major segments
         const tiers = result.maslow_profile.tiers;
         const tierSum = tiers.somatic + tiers.safety + tiers.belonging + tiers.esteem + tiers.actualization + tiers.transcendence;
         assert.strictEqual(tierSum, 100, `Maslow tiers must sum to 100% (got ${tierSum})`);
         assert.strictEqual(result.maslow_profile.d_need_pct + result.maslow_profile.b_need_pct, 100, "D-Need and B-Need percentages must sum to 100%");
         assert.ok(result.maslow_profile.primary_need, "Primary need center of gravity must exist");
+        assert.ok(result.maslow_profile.segments, "Must include major segments for each Maslow level");
+        const segmentTiers = Object.keys(result.maslow_profile.segments);
+        assert.strictEqual(segmentTiers.length, 6, "Must contain segments for all 6 tiers");
+        segmentTiers.forEach(tierKey => {
+            const segs = result.maslow_profile.segments[tierKey];
+            assert.strictEqual(segs.length, 3, `Tier ${tierKey} must contain exactly 3 major segments`);
+            segs.forEach(seg => {
+                assert.ok(seg.key && seg.name_en && seg.name_ar && seg.icon, `Segment ${seg.key} must have key, name, and icon`);
+                assert.ok(seg.score >= 0 && seg.score <= 100, `Segment score must be between 0 and 100 (got ${seg.score})`);
+                assert.ok(seg.desc_en && seg.desc_ar && seg.relational_en && seg.action_en, "Segment must have descriptions and action advice");
+            });
+        });
 
         // Validate Developmental profile
         const kScore = result.developmental_profile.kegan.score;

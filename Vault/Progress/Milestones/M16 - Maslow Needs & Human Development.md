@@ -73,11 +73,15 @@ Integrate **Abraham Maslow's Hierarchy of Needs** (Somatic, Safety, Belonging, E
 
 ### 4. Interactive SVG Visualizer & UI Representation (`index.html`, `style.css`, `script.js`)
 * **Executive Overview Table**: Added badges for **Primary Need (Maslow)** and **Consciousness Order (Kegan)**.
-* **Chapter 5 Visualizer (`#maslowPyramidContainer`)**:
-  - **6-Tier Stacked Pyramid**: Color-coded trapezoids with percentage shares, Center-of-Gravity indicator pins, and D-Need/B-Need brackets.
-  - **Kegan Consciousness Continuum**: Horizontal gradient track from Stage 2.0 to 5.0 with plotted pins for Partner A and Partner B.
-  - **Interactive Popover Cards**: Clicking or hovering any tier or track displays psychological meanings and comparative stats via `ChartTooltipManager`.
-* **Bilingual Localization**: Added complete English and Arabic keys in `utils.js` and `script.js`.
+* **18 Major Segments Architecture (v3.1.0)**: Deconstructed each tier into 3 core segments with dynamic scoring ($0\% - 100\%$), relational impact, and actionable couple practices.
+* **Tri-Perspective Switcher**:
+  - `[ 🏛️ Pyramid Spectrum ]`: Enhanced SVG pyramid with embedded mini-segment cells, zero text overlap, and side-anchored share badges.
+  - `[ 🧩 Segment Matrix (18 Pillars) ]`: Comprehensive comparative grid of all 18 pillars with partner comparison meters and dyadic synergy badges.
+  - `[ 💡 Dyadic Growth Compass ]`: Actionable nourishment guidelines for primary center-of-gravity needs and weekly check-in synthesis accords.
+* **Dynamic Segment Inspector**: Interactive tier selector chips and detailed segment cards displaying D/B need categories, synergy badges, and behavioral couple practices.
+* **Kegan Consciousness Continuum**: Horizontal gradient track from Stage 2.0 to 5.0 with plotted pins for Partner A and Partner B.
+* **Interactive Popover Cards**: Clicking or hovering any tier or track displays psychological meanings and comparative stats via `ChartTooltipManager`.
+* **Bilingual Localization**: Added complete English and Arabic keys in `utils.js` and `script.js` with full RTL layout support.
 
 ### 5. Calibrated Demo Profiles (`demo_profiles.js`)
 * Seeded answers for `q86`–`q95` for **Tariq Al-Mansoor** (Executive Leader: Esteem / Mastery Center of Gravity, Kegan Stage 4: Self-Authoring Mind) and **Nour Al-Sabah** (Empathetic Harmonizer: Love & Belonging Center of Gravity, Kegan Stage 4: Self-Authoring Mind).

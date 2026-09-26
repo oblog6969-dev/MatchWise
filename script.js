@@ -2672,6 +2672,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 body_ar: "قاعدة الهرم البيولوجية. احترام حدود الجسد والاسترخاء يخلق صفاءً ذهنياً يمنع الانفعال غير المبرر في الحياة الزوجية.",
                 body_en: "The physiological foundation: respecting biological rhythms, rest, and nervous system calm to prevent burnout and reactive irritability."
             },
+            b_needs_bracket: {
+                icon: "🌱",
+                color: "#8b5cf6",
+                title_ar: "احتياجات النمو والارتقاء (B-Needs - Being Needs)",
+                title_en: "Growth & Being Needs (B-Needs)",
+                subtitle_ar: "تشمل تحقيق الذات والتسامي: طاقة التطور والإبداع والأثر المبارك",
+                subtitle_en: "Self-Actualization & Transcendence: evolutionary growth and purpose",
+                body_ar: "احتياجات غير مدفوعة بالنقص بل بالفيض والارتقاء. كلما أُشبعت هذه الاحتياجات، ازداد الشغف بالحياة ولم تشبع الرغبة بل تتوسع وتثمر.",
+                body_en: "Growth needs are not driven by deficiency but by flourishing. Fulfilling them expands creativity, autonomy, and existential purpose."
+            },
+            d_needs_bracket: {
+                icon: "🛡️",
+                color: "#3b82f6",
+                title_ar: "احتياجات سد النقص والأمان (D-Needs - Deficiency Needs)",
+                title_en: "Deficiency & Safety Needs (D-Needs)",
+                subtitle_ar: "تشمل الاتزان الجسدي، الأمان، الانتماء، والتقدير: خط الأساس للاستقرار",
+                subtitle_en: "Somatic, Safety, Belonging, and Esteem: foundational security baseline",
+                body_ar: "احتياجات تنشأ عند الحرمان وتولد توتراً وقلقاً يزول عند الإشباع. تشكل الركيزة الحيوية التي لا يمكن للنمو أن يستقر بدونها.",
+                body_en: "Deficiency needs arise from deprivation and trigger survival tension until met. They form the non-negotiable launchpad for higher growth."
+            },
             kegan_scale: {
                 icon: "🧠",
                 color: "#6366f1",
@@ -4351,7 +4371,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 9. Maslow Hierarchy of Needs & Human Development Spectrum
+    // 9. Maslow Hierarchy of Needs & Major Segments Visualizer
     function renderMaslowPyramidVisualizer(container, traitsA, traitsB, isSingle, nameA, nameB, isAr) {
         if (!container) return;
         container.innerHTML = "";
@@ -4382,94 +4402,204 @@ document.addEventListener("DOMContentLoaded", () => {
             differentiation: { score: 3.5, level_en: "Balanced Interdependence", level_ar: "ترابط متوازن" }
         });
 
-        const keganA = devA.kegan.score;
-        const keganB = devB ? devB.kegan.score : keganA;
-        const getKeganPct = (score) => Math.max(5, Math.min(95, Math.round(((score - 2.0) / 3.0) * 100)));
-        const keganPctA = getKeganPct(keganA);
-        const keganPctB = devB ? getKeganPct(keganB) : 0;
+        // Helper to retrieve tier segments safely
+        const getTierSegments = (profile, tierKey) => {
+            if (profile?.segments && profile.segments[tierKey]) {
+                return profile.segments[tierKey];
+            }
+            // Fallback template if segments not explicitly pre-computed
+            const pct = profile?.tiers?.[tierKey] || 15;
+            const defs = {
+                transcendence: [
+                    { key: "transpersonal_mission", icon: "✨", name_en: "Transpersonal Mission & Generational Legacy", name_ar: "الرسالة المتعدية والأثر الخالد", score: Math.min(95, pct * 5 + 30) },
+                    { key: "altruistic_service", icon: "🌱", name_en: "Altruism & Generative Compassion", name_ar: "العطاء المجتمعي والإيثار المبارك", score: Math.min(95, pct * 5 + 25) },
+                    { key: "spiritual_unity", icon: "🌌", name_en: "Spiritual Unity & Sacred Meaning", name_ar: "الوحدة الروحية والمعنى الوجودي", score: Math.min(95, pct * 5 + 20) }
+                ],
+                actualization: [
+                    { key: "authentic_alignment", icon: "🧭", name_en: "Authenticity & Core Values Alignment", name_ar: "الأصالة والعيش وفق بوصلة المبادئ", score: Math.min(95, pct * 4 + 35) },
+                    { key: "creative_growth", icon: "🎨", name_en: "Creative Potential & Intellectual Expansion", name_ar: "الإبداع وتنمية الإمكانات الكامنة", score: Math.min(95, pct * 4 + 30) },
+                    { key: "personal_sovereignty", icon: "🕊️", name_en: "Personal Sovereignty & Autonomous Freedom", name_ar: "السيادة الفردية والاستقلال الفكري", score: Math.min(95, pct * 4 + 25) }
+                ],
+                esteem: [
+                    { key: "self_worth_dignity", icon: "👑", name_en: "Self-Worth, Dignity & Inner Sovereignty", name_ar: "عزة النفس والكرامة الذاتية", score: Math.min(95, pct * 3.5 + 40) },
+                    { key: "competence_mastery", icon: "🏆", name_en: "Competence, Mastery & Achievement", name_ar: "الكفاءة والإتقان والإنجاز", score: Math.min(95, pct * 3.5 + 35) },
+                    { key: "mutual_admiration", icon: "🌟", name_en: "Mutual Admiration & Partner Validation", name_ar: "الاحترام المتبادل والاعتراف بالجهد", score: Math.min(95, pct * 3.5 + 30) }
+                ],
+                belonging: [
+                    { key: "emotional_intimacy", icon: "💖", name_en: "Deep Emotional Intimacy & Attunement", name_ar: "القرب الوجداني والتواصل العميق", score: Math.min(95, pct * 3.5 + 35) },
+                    { key: "unconditional_acceptance", icon: "🫂", name_en: "Unconditional Acceptance & Tender Warmth", name_ar: "الدفء والقبول غير المشروط", score: Math.min(95, pct * 3.5 + 40) },
+                    { key: "shared_rituals", icon: "☕", name_en: "Companionship & Connection Rituals", name_ar: "المؤانسة والطقوس المشتركة", score: Math.min(95, pct * 3.5 + 30) }
+                ],
+                safety: [
+                    { key: "financial_predictability", icon: "🛡️", name_en: "Financial Predictability & Resource Prudence", name_ar: "الأمان المالي وإدارة الموارد بحكمة", score: Math.min(95, pct * 3.5 + 40) },
+                    { key: "emotional_safety", icon: "🔒", name_en: "Emotional Safety & Non-Threatening Space", name_ar: "الأمان النفسي والاحتواء الآمن", score: Math.min(95, pct * 3.5 + 35) },
+                    { key: "domestic_order", icon: "🏡", name_en: "Domestic Order & External Boundary Clarity", name_ar: "النظام المنزلي وحماية الحدود الأسرية", score: Math.min(95, pct * 3.5 + 30) }
+                ],
+                somatic: [
+                    { key: "rest_recovery", icon: "💤", name_en: "Rest, Sleep & Somatic Recovery", name_ar: "الراحة والنوم والتعافي الحيوي", score: Math.min(95, pct * 4 + 35) },
+                    { key: "nervous_regulation", icon: "🌿", name_en: "Nervous System Grounding & De-escalation", name_ar: "تنظيم الجهاز العصبي وتفريغ التوتر", score: Math.min(95, pct * 4 + 30) },
+                    { key: "vitality_rhythm", icon: "⚡", name_en: "Vitality, Pacing & Sensory Ease", name_ar: "الحيوية البدنية والتناغم الحركي", score: Math.min(95, pct * 4 + 35) }
+                ]
+            };
+            return defs[tierKey] || [];
+        };
+
+        // Short labels for SVG mini-cells
+        const SEGMENT_SHORT_NAMES = {
+            transpersonal_mission: { en: "Mission & Legacy", ar: "الرسالة والأثر" },
+            altruistic_service: { en: "Altruism & Service", ar: "الإيثار والعطاء" },
+            spiritual_unity: { en: "Sacred Unity", ar: "الوحدة الروحية" },
+            authentic_alignment: { en: "Authenticity", ar: "الأصالة والمبادئ" },
+            creative_growth: { en: "Creative Growth", ar: "الإبداع والنمو" },
+            personal_sovereignty: { en: "Sovereignty", ar: "السيادة والاستقلال" },
+            self_worth_dignity: { en: "Self-Worth", ar: "عزة النفس والكرامة" },
+            competence_mastery: { en: "Competence", ar: "الكفاءة والإتقان" },
+            mutual_admiration: { en: "Mutual Honor", ar: "التقدير المتبادل" },
+            emotional_intimacy: { en: "Deep Intimacy", ar: "القرب الوجداني" },
+            unconditional_acceptance: { en: "Acceptance", ar: "الدفء والقبول" },
+            shared_rituals: { en: "Shared Rituals", ar: "الطقوس المشتركة" },
+            financial_predictability: { en: "Financial Safety", ar: "الأمان المالي" },
+            emotional_safety: { en: "Emotional Safety", ar: "الأمان النفسي" },
+            domestic_order: { en: "Domestic Order", ar: "النظام والحدود" },
+            rest_recovery: { en: "Rest & Sleep", ar: "الراحة والنوم" },
+            nervous_regulation: { en: "Nervous Calm", ar: "تنظيم الأعصاب" },
+            vitality_rhythm: { en: "Physical Vitality", ar: "الحيوية والنشاط" }
+        };
 
         // Tier configurations (from Top Apex down to Base)
         const tiersConfig = [
-            { key: "transcendence", dictKey: "tier_transcendence", color: "#8b5cf6", en: "Self-Transcendence (Apex)", ar: "التسامي والرسالة المشتركة", y: 20, w: 200 },
-            { key: "actualization", dictKey: "tier_actualization", color: "#06b6d4", en: "Self-Actualization & Autonomy", ar: "تحقيق الذات والاستقلالية", y: 64, w: 270 },
-            { key: "esteem", dictKey: "tier_esteem", color: "#eab308", en: "Esteem & Mastery", ar: "التقدير والكفاءة والاحترام", y: 108, w: 340 },
-            { key: "belonging", dictKey: "tier_belonging", color: "#ec4899", en: "Love & Belonging", ar: "الانتماء والمودة العاطفية", y: 152, w: 410 },
-            { key: "safety", dictKey: "tier_safety", color: "#3b82f6", en: "Safety & Predictability", ar: "الأمان والاستقرار المالي", y: 196, w: 480 },
-            { key: "somatic", dictKey: "tier_somatic", color: "#10b981", en: "Somatic Homeostasis", ar: "الاتزان الجسدي والتنظيم العصبي", y: 240, w: 550 }
+            { key: "transcendence", dictKey: "tier_transcendence", color: "#8b5cf6", icon: "✨", en: "Self-Transcendence (Apex)", ar: "التسامي والرسالة المشتركة", y: 16, w: 290, h: 50 },
+            { key: "actualization", dictKey: "tier_actualization", color: "#06b6d4", icon: "🌟", en: "Self-Actualization & Autonomy", ar: "تحقيق الذات والسيادة الفردية", y: 72, w: 370, h: 50 },
+            { key: "esteem", dictKey: "tier_esteem", color: "#eab308", icon: "🏆", en: "Esteem, Mastery & Respect", ar: "التقدير والكفاءة والمكانة", y: 128, w: 450, h: 50 },
+            { key: "belonging", dictKey: "tier_belonging", color: "#ec4899", icon: "💖", en: "Love, Belonging & Intimacy", ar: "الانتماء والمودة والقرب الوجداني", y: 184, w: 530, h: 50 },
+            { key: "safety", dictKey: "tier_safety", color: "#3b82f6", icon: "🛡️", en: "Safety, Security & Predictability", ar: "الأمان والاستقرار المالي والتنظيمي", y: 240, w: 610, h: 50 },
+            { key: "somatic", dictKey: "tier_somatic", color: "#10b981", icon: "🌿", en: "Somatic Homeostasis & Rhythm", ar: "الاتزان الجسدي والتنظيم العصبي", y: 296, w: 690, h: 50 }
         ];
 
-        const cx = 310;
-        const tierHeight = 36;
+        const cx = 405;
 
+        // Build SVG Tiers with visually partitioned major segment cells
         let tiersSvg = "";
-        tiersConfig.forEach(t => {
+        tiersConfig.forEach((t) => {
             const pctA = mA.tiers[t.key] || 0;
             const pctB = mB ? (mB.tiers[t.key] || 0) : 0;
             const isPrimaryA = mA.primary_need === t.key;
             const isPrimaryB = mB && (mB.primary_need === t.key);
             const x = cx - (t.w / 2);
 
+            const segsA = getTierSegments(mA, t.key);
+            const segsB = mB ? getTierSegments(mB, t.key) : [];
+
+            // Segment mini-cells layout inside tier
+            const cellGap = 6;
+            const cellW = Math.max(76, Math.floor((t.w - 24 - (2 * cellGap)) / 3));
+            const totalCellsW = 3 * cellW + 2 * cellGap;
+            const startCellX = cx - (totalCellsW / 2);
+
+            let cellsSvg = "";
+            segsA.slice(0, 3).forEach((seg, sIdx) => {
+                const segB = segsB[sIdx] || seg;
+                const cellX = startCellX + sIdx * (cellW + cellGap);
+                const shortInfo = SEGMENT_SHORT_NAMES[seg.key] || { en: seg.name_en.split(" ")[0], ar: seg.name_ar.split(" ")[0] };
+                const shortLabel = isAr ? shortInfo.ar : shortInfo.en;
+
+                cellsSvg += `
+                    <g class="maslow-svg-segment-cell chart-node chart-interactive-element" data-maslow-tier="${t.key}" data-maslow-seg="${seg.key}" style="cursor: pointer;">
+                        <rect x="${cellX}" y="${t.y + 26}" width="${cellW}" height="18" rx="4" fill="${t.color}" fill-opacity="0.16" stroke="${t.color}" stroke-width="0.8" />
+                        <text x="${cellX + (cellW / 2)}" y="${t.y + 38.5}" fill="var(--text-primary)" font-size="8.2" font-weight="700" text-anchor="middle">
+                            ${seg.icon} ${shortLabel}
+                        </text>
+                    </g>
+                `;
+            });
+
             tiersSvg += `
-                <g class="chart-node chart-interactive-element" data-maslow-tier="${t.key}" style="cursor: pointer;">
-                    <!-- Tier Card -->
-                    <rect x="${x}" y="${t.y}" width="${t.w}" height="${tierHeight}" rx="7" fill="${t.color}" fill-opacity="0.16" stroke="${t.color}" stroke-width="1.6" />
+                <g class="maslow-tier-group chart-node chart-interactive-element" data-maslow-tier="${t.key}" style="cursor: pointer;">
+                    <!-- Tier Background Card -->
+                    <rect class="maslow-tier-bg" x="${x}" y="${t.y}" width="${t.w}" height="${t.h}" rx="9" fill="${t.color}" fill-opacity="0.14" stroke="${t.color}" stroke-width="1.5" />
                     
-                    <!-- Title inside tier -->
-                    <text x="${cx}" y="${t.y + 22}" fill="var(--text-primary)" font-size="11.5" font-weight="700" text-anchor="middle">
-                        ${isAr ? t.ar : t.en}
+                    <!-- Top Line: Tier Title & Percentage Badges -->
+                    <text x="${cx}" y="${t.y + 17}" fill="var(--text-primary)" font-size="11" font-weight="800" text-anchor="middle">
+                        ${t.icon} ${isAr ? t.ar : t.en}
                     </text>
 
-                    <!-- Partner A Value Badge -->
-                    <g transform="translate(${x + 12}, ${t.y + 10})">
-                        ${isPrimaryA ? `<circle cx="-4" cy="8" r="4.5" fill="#10b981" />` : ''}
-                        <rect x="0" y="0" width="${!isSingle ? 40 : 48}" height="17" rx="4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1" />
-                        <text x="${!isSingle ? 20 : 24}" y="12" fill="#059669" font-size="9.5" font-weight="800" text-anchor="middle">${pctA}%</text>
+                    <!-- Partner A Value Badge (Left) -->
+                    <g transform="translate(${x + 8}, ${t.y + 6})">
+                        ${isPrimaryA ? `<circle cx="-4" cy="8" r="4.5" fill="#10b981" filter="drop-shadow(0 0 3px #10b981)" />` : ''}
+                        <rect x="0" y="0" width="${!isSingle ? 38 : 46}" height="16" rx="4" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1" />
+                        <text x="${!isSingle ? 19 : 23}" y="11.5" fill="#059669" font-size="9" font-weight="800" text-anchor="middle">${pctA}%</text>
                     </g>
 
-                    <!-- Partner B Value Badge (if comparison) -->
+                    <!-- Partner B Value Badge (Right, if dyadic) -->
                     ${!isSingle ? `
-                        <g transform="translate(${x + t.w - 52}, ${t.y + 10})">
-                            ${isPrimaryB ? `<circle cx="44" cy="8" r="4.5" fill="#f59e0b" />` : ''}
-                            <rect x="0" y="0" width="40" height="17" rx="4" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1" />
-                            <text x="20" y="12" fill="#d97706" font-size="9.5" font-weight="800" text-anchor="middle">${pctB}%</text>
+                        <g transform="translate(${x + t.w - 46}, ${t.y + 6})">
+                            ${isPrimaryB ? `<circle cx="42" cy="8" r="4.5" fill="#f59e0b" filter="drop-shadow(0 0 3px #f59e0b)" />` : ''}
+                            <rect x="0" y="0" width="38" height="16" rx="4" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1" />
+                            <text x="19" y="11.5" fill="#d97706" font-size="9" font-weight="800" text-anchor="middle">${pctB}%</text>
                         </g>
                     ` : ''}
+
+                    <!-- Bottom Line: 3 Major Segment Mini-Cells -->
+                    ${cellsSvg}
                 </g>
             `;
         });
 
+        // Wrapper creation
         const wrapper = document.createElement("div");
         wrapper.className = "maslow-spectrum-wrapper";
-        wrapper.style.cssText = "width: 100%; max-width: 650px; margin: 0 auto; padding: 12px 0;";
 
         const titlePyramid = isAr ? "1. هرم ماسلو للاحتياجات وتوزيع الطاقة النفسية" : "1. Maslow Hierarchy of Needs Distribution";
         const titleKegan = isAr ? "2. مقياس روبرت كيجان للوعي والتمايز النفسي (Kegan Orders of Mind)" : "2. Kegan Orders of Mind & Differentiation Continuum";
 
+        // Determine initial selected tier (Partner A's primary center of gravity)
+        let activeTierKey = mA.primary_need || "esteem";
+
         wrapper.innerHTML = `
-            <!-- 1. MASLOW PYRAMID SECTION -->
-            <div style="margin-bottom: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <!-- Perspective Selector Tabs -->
+            <div class="maslow-view-tabs" role="tablist">
+                <button type="button" class="maslow-tab-btn active" data-view="pyramid">
+                    <span>🏛️</span><span>${isAr ? "الهرم التفاعلي" : "Pyramid Spectrum"}</span>
+                </button>
+                <button type="button" class="maslow-tab-btn" data-view="matrix">
+                    <span>🧩</span><span>${isAr ? "مصفوفة الأقسام (18 ركيزة)" : "Segment Matrix (18 Pillars)"}</span>
+                </button>
+                <button type="button" class="maslow-tab-btn" data-view="compass">
+                    <span>💡</span><span>${isAr ? "بوصلة التناغم وسد الاحتياج" : "Dyadic Growth Compass"}</span>
+                </button>
+            </div>
+
+            <!-- VIEW 1: PYRAMID SPECTRUM & SEGMENT INSPECTOR -->
+            <div id="maslowViewPyramid" class="maslow-perspective-view">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                     <span class="chart-node chart-interactive-element" data-maslow-header="pyramid" style="font-weight: 700; font-size: 0.88rem; cursor: pointer;">${titlePyramid}</span>
-                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">D-Needs ◄► B-Needs</span>
+                    <span class="translate-active-badge notranslate" translate="no" style="font-size: 0.72rem;">D-Needs (${mA.d_need_pct}%) ◄► B-Needs (${mA.b_need_pct}%)</span>
                 </div>
 
                 <div style="position: relative; width: 100%; display: flex; justify-content: center;">
-                    <svg class="interactive-svg" viewBox="0 0 620 290" style="width: 100%; max-width: 620px; height: auto; direction: ltr;">
-                        <!-- Bracket Indicators on left: B-Needs vs D-Needs -->
-                        <path d="M 35 22 L 20 22 L 20 60 L 10 60 L 20 60 L 20 98 L 35 98" fill="none" stroke="#8b5cf6" stroke-width="1.8" />
-                        <text x="8" y="63" fill="#8b5cf6" font-size="9" font-weight="800" text-anchor="end">${isAr ? "احتياجات نمو (B-Needs)" : "B-Needs (Growth)"}</text>
+                    <svg class="interactive-svg" viewBox="0 0 780 365" style="width: 100%; max-width: 780px; height: auto; direction: ltr;">
+                        <!-- Bracket Left: B-Needs (Growth: Transcendence & Actualization) -->
+                        <g class="chart-node chart-interactive-element" data-maslow-bracket="b_needs" style="cursor: pointer;">
+                            <path d="M 52 20 L 35 20 L 35 69 L 18 69 L 35 69 L 35 118 L 52 118" fill="none" stroke="#8b5cf6" stroke-width="2" />
+                            <text x="14" y="66" fill="#8b5cf6" font-size="8.8" font-weight="800" text-anchor="end">${isAr ? "احتياجات نمو" : "B-Needs"}</text>
+                            <text x="14" y="78" fill="#8b5cf6" font-size="7.5" font-weight="700" text-anchor="end">(Growth)</text>
+                        </g>
 
-                        <path d="M 35 110 L 20 110 L 20 190 L 10 190 L 20 190 L 20 274 L 35 274" fill="none" stroke="#3b82f6" stroke-width="1.8" />
-                        <text x="8" y="193" fill="#3b82f6" font-size="9" font-weight="800" text-anchor="end">${isAr ? "احتياجات سد النقص (D-Needs)" : "D-Needs (Deficiency)"}</text>
+                        <!-- Bracket Left: D-Needs (Deficiency: Esteem, Belonging, Safety, Somatic) -->
+                        <g class="chart-node chart-interactive-element" data-maslow-bracket="d_needs" style="cursor: pointer;">
+                            <path d="M 52 132 L 35 132 L 35 237 L 18 237 L 35 237 L 35 342 L 52 342" fill="none" stroke="#3b82f6" stroke-width="2" />
+                            <text x="14" y="234" fill="#3b82f6" font-size="8.8" font-weight="800" text-anchor="end">${isAr ? "سد النقص" : "D-Needs"}</text>
+                            <text x="14" y="246" fill="#3b82f6" font-size="7.5" font-weight="700" text-anchor="end">(Deficiency)</text>
+                        </g>
 
-                        <!-- Tiers Elements -->
+                        <!-- Tier Stacks -->
                         ${tiersSvg}
                     </svg>
                 </div>
 
                 <!-- Legend & Primary Focus Callout -->
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-top: 10px; flex-wrap: wrap; gap: 8px;">
-                    <div style="display: flex; gap: 12px; align-items: center;">
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                         <span style="display: inline-flex; align-items: center; gap: 5px;">
                             <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
                             <strong>${nameA}</strong>: ${isAr ? mA.orientation_ar : mA.orientation_en}
@@ -4482,9 +4612,40 @@ document.addEventListener("DOMContentLoaded", () => {
                         ` : ''}
                     </div>
                     <span style="font-size: 0.72rem; color: var(--text-secondary);">
-                        ${isAr ? "● تشير النقطة لاحتياج مركز الثقل الأساسي" : "● Pin denotes primary Center of Gravity"}
+                        ${isAr ? "● تشير النقطة لاحتياج مركز الثقل الأساسي • اضغط أي مستوى لتفصيل الأقسام" : "● Pin denotes primary Center of Gravity • Click any tier to explore segments"}
                     </span>
                 </div>
+
+                <!-- DYNAMIC SEGMENT INSPECTOR PANEL -->
+                <div class="maslow-inspector-container" id="maslowInspectorPanel">
+                    <!-- Tier Selector Chips -->
+                    <div class="maslow-tier-chips" role="tablist">
+                        ${tiersConfig.map(t => `
+                            <button type="button" class="maslow-tier-chip ${t.key === activeTierKey ? 'active' : ''}" data-select-tier="${t.key}">
+                                <span>${t.icon}</span>
+                                <span>${isAr ? t.ar.split(" ")[0] : t.en.split(" ")[0]}</span>
+                            </button>
+                        `).join("")}
+                    </div>
+
+                    <!-- Dynamic Tier Content Container -->
+                    <div id="maslowInspectorContent"></div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: SEGMENT MATRIX (ALL 18 PILLARS) -->
+            <div id="maslowViewMatrix" class="maslow-perspective-view" style="display: none;">
+                <div style="margin-bottom: 12px; font-size: 0.84rem; color: var(--text-secondary);">
+                    ${isAr 
+                        ? "استعراض تفصيلي متكامل لكافة الأقسام الـ 18 عبر مستويات هرم ماسلو الستة، مع مقارنة درجة الإشباع وتناغم الاحتياجات بين الشريكين:" 
+                        : "Comprehensive side-by-side comparative matrix of all 18 major segments across Maslow's 6 hierarchy levels:"}
+                </div>
+                <div id="maslowMatrixContent"></div>
+            </div>
+
+            <!-- VIEW 3: DYADIC GROWTH COMPASS -->
+            <div id="maslowViewCompass" class="maslow-perspective-view" style="display: none;">
+                <div id="maslowCompassContent"></div>
             </div>
 
             <!-- 2. KEGAN ORDERS OF CONSCIOUSNESS CONTINUUM -->
@@ -4506,11 +4667,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <!-- Marker A -->
-                    <div class="chart-node chart-interactive-element" data-kegan-node="A" style="position: absolute; left: ${keganPctA}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameA}: Stage ${keganA}">A</div>
+                    <div class="chart-node chart-interactive-element" data-kegan-node="A" style="position: absolute; left: ${Math.max(5, Math.min(95, Math.round(((devA.kegan.score - 2.0) / 3.0) * 100)))}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #10b981; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(16,185,129,0.7); z-index: 10; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameA}: Stage ${devA.kegan.score}">A</div>
 
                     <!-- Marker B (if comparison) -->
                     ${!isSingle && devB ? `
-                        <div class="chart-node chart-interactive-element" data-kegan-node="B" style="position: absolute; left: ${keganPctB}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameB}: Stage ${keganB}">B</div>
+                        <div class="chart-node chart-interactive-element" data-kegan-node="B" style="position: absolute; left: ${Math.max(5, Math.min(95, Math.round(((devB.kegan.score - 2.0) / 3.0) * 100)))}%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #f59e0b; border: 3px solid #ffffff; box-shadow: 0 0 8px rgba(245,158,11,0.7); z-index: 11; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.65rem; font-weight: 800; cursor: pointer;" title="${nameB}: Stage ${devB.kegan.score}">B</div>
                     ` : ''}
                 </div>
 
@@ -4538,7 +4699,307 @@ document.addEventListener("DOMContentLoaded", () => {
 
         container.appendChild(wrapper);
 
-        // Tooltip Attachments
+        // --- SUB-RENDERERS FOR SEGMENTS & PERSPECTIVES ---
+
+        // Render Inspector for active tier
+        const renderInspectorContent = (tierKey) => {
+            const contentEl = wrapper.querySelector("#maslowInspectorContent");
+            if (!contentEl) return;
+
+            const t = tiersConfig.find(item => item.key === tierKey) || tiersConfig[0];
+            const segsA = getTierSegments(mA, t.key);
+            const segsB = mB ? getTierSegments(mB, t.key) : [];
+
+            const pctA = mA.tiers[t.key] || 0;
+            const pctB = mB ? (mB.tiers[t.key] || 0) : 0;
+            const isBNeed = t.key === "transcendence" || t.key === "actualization";
+            const categoryLabel = isBNeed
+                ? (isAr ? "احتياج نمائي وارتقائي (B-Need)" : "Growth & Being Need (B-Need)")
+                : (isAr ? "احتياج أمان وسد نقص (D-Need)" : "Deficiency & Safety Need (D-Need)");
+
+            let cardsHtml = "";
+            segsA.forEach((segA, idx) => {
+                const segB = segsB[idx] || segA;
+                const scoreA = segA.score || 70;
+                const scoreB = segB.score || 70;
+
+                // Dyadic synergy evaluation
+                let badgeClass = "badge-synergy";
+                let badgeText = isAr ? "تناغم وتكامل عالي" : "Synergistic Alignment";
+                if (!isSingle) {
+                    const diff = Math.abs(scoreA - scoreB);
+                    if (diff >= 22) {
+                        badgeClass = "badge-comp";
+                        badgeText = isAr ? "توازن تكاملي متبادل" : "Complementary Balance";
+                    } else if (scoreA < 55 || scoreB < 55) {
+                        badgeClass = "badge-grow";
+                        badgeText = isAr ? "مساحة رعاية ونمو مشترك" : "Active Growth Area";
+                    }
+                }
+
+                cardsHtml += `
+                    <div class="maslow-segment-card">
+                        <div class="maslow-segment-header">
+                            <div class="maslow-segment-title">
+                                <span>${segA.icon}</span>
+                                <span>${isAr ? segA.name_ar : segA.name_en}</span>
+                            </div>
+                            ${!isSingle ? `<span class="maslow-synergy-badge ${badgeClass}">${badgeText}</span>` : ''}
+                        </div>
+
+                        <!-- Dual Comparison Meters -->
+                        <div class="maslow-meter-row">
+                            <div class="maslow-meter-label">
+                                <span>🟢 ${nameA}</span>
+                                <span>${scoreA}%</span>
+                            </div>
+                            <div class="maslow-meter-track">
+                                <div class="maslow-meter-fill fill-partner-a" style="width: ${scoreA}%;"></div>
+                            </div>
+                        </div>
+
+                        ${!isSingle ? `
+                            <div class="maslow-meter-row">
+                                <div class="maslow-meter-label">
+                                    <span>🟡 ${nameB}</span>
+                                    <span>${scoreB}%</span>
+                                </div>
+                                <div class="maslow-meter-track">
+                                    <div class="maslow-meter-fill fill-partner-b" style="width: ${scoreB}%;"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Relational Meaning & Actionable Advice -->
+                        <div class="maslow-segment-relational">
+                            ${isAr ? (segA.relational_ar || segA.desc_ar) : (segA.relational_en || segA.desc_en)}
+                        </div>
+
+                        <div class="maslow-segment-action">
+                            <strong>💡 ${isAr ? "التطبيق الزواجي العملي:" : "Actionable Couple Practice:"}</strong>
+                            ${isAr ? (segA.action_ar || segA.desc_ar) : (segA.action_en || segA.desc_en)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            contentEl.innerHTML = `
+                <!-- Tier Meta Banner -->
+                <div class="maslow-tier-meta-banner" style="border-left: 4px solid ${t.color};">
+                    <div>
+                        <strong style="color: ${t.color}; font-size: 0.95rem;">${t.icon} ${isAr ? t.ar : t.en}</strong>
+                        <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">${categoryLabel}</div>
+                    </div>
+                    <div style="font-size: 0.8rem; font-weight: 700; display: flex; gap: 10px; align-items: center;">
+                        <span>🟢 ${nameA}: ${pctA}%</span>
+                        ${!isSingle ? `<span>🟡 ${nameB}: ${pctB}%</span>` : ''}
+                    </div>
+                </div>
+
+                <!-- 3 Segment Cards Grid -->
+                <div class="maslow-segment-grid">
+                    ${cardsHtml}
+                </div>
+            `;
+        };
+
+        // Render Matrix View (all 18 pillars)
+        const renderMatrixContent = () => {
+            const matrixEl = wrapper.querySelector("#maslowMatrixContent");
+            if (!matrixEl) return;
+
+            let html = "";
+            tiersConfig.forEach(t => {
+                const segsA = getTierSegments(mA, t.key);
+                const segsB = mB ? getTierSegments(mB, t.key) : [];
+
+                let segItems = "";
+                segsA.forEach((segA, idx) => {
+                    const segB = segsB[idx] || segA;
+                    const scoreA = segA.score || 70;
+                    const scoreB = segB.score || 70;
+
+                    segItems += `
+                        <div style="padding: 10px; background: var(--bg-secondary); border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 0.84rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                <span>${segA.icon}</span>
+                                <span>${isAr ? segA.name_ar : segA.name_en}</span>
+                            </div>
+                            <div class="maslow-meter-row">
+                                <div class="maslow-meter-label">
+                                    <span>🟢 ${nameA}</span>
+                                    <span>${scoreA}%</span>
+                                </div>
+                                <div class="maslow-meter-track">
+                                    <div class="maslow-meter-fill fill-partner-a" style="width: ${scoreA}%;"></div>
+                                </div>
+                            </div>
+                            ${!isSingle ? `
+                                <div class="maslow-meter-row">
+                                    <div class="maslow-meter-label">
+                                        <span>🟡 ${nameB}</span>
+                                        <span>${scoreB}%</span>
+                                    </div>
+                                    <div class="maslow-meter-track">
+                                        <div class="maslow-meter-fill fill-partner-b" style="width: ${scoreB}%;"></div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                html += `
+                    <div class="maslow-matrix-tier-block" style="border-left: 4px solid ${t.color};">
+                        <div class="maslow-matrix-tier-header">
+                            <span style="color: ${t.color};">${t.icon} ${isAr ? t.ar : t.en}</span>
+                            <span style="font-size: 0.74rem; color: var(--text-secondary);">${nameA}: ${mA.tiers[t.key]}% ${!isSingle ? `| ${nameB}: ${mB.tiers[t.key]}%` : ''}</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+                            ${segItems}
+                        </div>
+                    </div>
+                `;
+            });
+
+            matrixEl.innerHTML = html;
+        };
+
+        // Render Dyadic Growth Compass View
+        const renderCompassContent = () => {
+            const compassEl = wrapper.querySelector("#maslowCompassContent");
+            if (!compassEl) return;
+
+            const primA = tiersConfig.find(t => t.key === mA.primary_need) || tiersConfig[2];
+            const primB = mB ? (tiersConfig.find(t => t.key === mB.primary_need) || tiersConfig[3]) : null;
+
+            compassEl.innerHTML = `
+                <!-- Partner A Nourishment Guide -->
+                <div class="maslow-compass-card" style="border-left: 4px solid #10b981;">
+                    <h5 style="color: #10b981;">
+                        <span>🟢</span>
+                        <span>${isAr ? `كيف يُسقى احتياج ${nameA} الأساسي (${primA.ar})` : `Nourishing ${nameA}'s Primary Need (${primA.en})`}</span>
+                    </h5>
+                    <ul class="maslow-compass-list">
+                        <li>${isAr 
+                            ? `يمثل مستوى (${primA.ar}) مركز الثقل الأكبر لطاقة ${nameA}. إشعار ${nameA} بالتقدير والأمان في هذا الجانب يمنحه راحة عميقة ويطلق قدرته على العطاء.` 
+                            : `${primA.en} serves as ${nameA}'s primary emotional anchor. Honoring this domain establishes psychological trust and unlocks generosity.`}</li>
+                        <li>${isAr 
+                            ? `تجنب التقليل من هذا الاحتياج أو اعتباره أمراً هامشياً، والحرص على التواصل اللفظي الصريح الذي يؤكد تلبية رغباته.` 
+                            : `Avoid dismissing this core priority. Proactive verbal reassurance in this area disarms defensiveness.`}</li>
+                    </ul>
+                </div>
+
+                ${!isSingle && primB ? `
+                    <!-- Partner B Nourishment Guide -->
+                    <div class="maslow-compass-card" style="border-left: 4px solid #f59e0b;">
+                        <h5 style="color: #d97706;">
+                            <span>🟡</span>
+                            <span>${isAr ? `كيف يُسقى احتياج ${nameB} الأساسي (${primB.ar})` : `Nourishing ${nameB}'s Primary Need (${primB.en})`}</span>
+                        </h5>
+                        <ul class="maslow-compass-list">
+                            <li>${isAr 
+                                ? `يمثل مستوى (${primB.ar}) البوصلة الأهم لـ ${nameB}. الاهتمام اليومي بهذا الجانب يحمي العلاقة من الجفاف ويوفر سداً منيعاً ضد التباعد.` 
+                                : `${primB.en} represents ${nameB}'s center of gravity. Attending to this need protects against emotional drift.`}</li>
+                            <li>${isAr 
+                                ? `مبادرة ${nameA} بإعطاء الأولوية لهذا الإشباع تجعل ${nameB} يشعر بالاحتواء والأمان الكامل.` 
+                                : `When ${nameA} actively validates this need, ${nameB} experiences profound acceptance and safety.`}</li>
+                        </ul>
+                    </div>
+                ` : ''}
+
+                <!-- Dyadic Need Synthesis -->
+                <div class="maslow-compass-card" style="border-left: 4px solid #8b5cf6;">
+                    <h5 style="color: #8b5cf6;">
+                        <span>✨</span>
+                        <span>${isAr ? "ميثاق التناغم وتكامل الاحتياجات المشتركة" : "Dyadic Needs Synthesis & Evolutionary Accord"}</span>
+                    </h5>
+                    <ul class="maslow-compass-list">
+                        <li>${isAr 
+                            ? `توازن الـ D-Needs (${mA.d_need_pct}%) مع الـ B-Needs (${mA.b_need_pct}%): يمثل صمام الأمان الذي يمنع الاستغراق في المخاوف المادية دون نمو، أو الاندفاع في الأحلام دون قاعدة مستقرة.` 
+                            : `Balancing D-Needs (${mA.d_need_pct}%) and B-Needs (${mA.b_need_pct}%): Anchors safety without stagnation, fostering creative expansion upon a stable launchpad.`}</li>
+                        <li>${isAr 
+                            ? "الاتفاق على تخصيص 20 دقيقة أسبوعياً لمراجعة الرضا عن الاحتياجات الستة، والاحتفال بنجاح كل طرف في سد احتياجات شريكه." 
+                            : "Establish a sacred 20-minute weekly check-in to celebrate mutual need fulfillment and align on any unmet needs."}</li>
+                    </ul>
+                </div>
+            `;
+        };
+
+        // Render initial view
+        renderInspectorContent(activeTierKey);
+        renderMatrixContent();
+        renderCompassContent();
+
+        // --- INTERACTION & EVENT LISTENERS ---
+
+        // 1. Perspective View Switcher Tabs
+        const tabBtns = wrapper.querySelectorAll(".maslow-tab-btn");
+        tabBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const targetView = btn.getAttribute("data-view");
+                tabBtns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                wrapper.querySelectorAll(".maslow-perspective-view").forEach(pv => pv.style.display = "none");
+                if (targetView === "pyramid") {
+                    const el = wrapper.querySelector("#maslowViewPyramid");
+                    if (el) el.style.display = "block";
+                } else if (targetView === "matrix") {
+                    const el = wrapper.querySelector("#maslowViewMatrix");
+                    if (el) el.style.display = "block";
+                } else if (targetView === "compass") {
+                    const el = wrapper.querySelector("#maslowViewCompass");
+                    if (el) el.style.display = "block";
+                }
+            });
+        });
+
+        // 2. Tier Selection via Chips inside Inspector
+        const tierChips = wrapper.querySelectorAll("[data-select-tier]");
+        tierChips.forEach(chip => {
+            chip.addEventListener("click", () => {
+                const tierKey = chip.getAttribute("data-select-tier");
+                activeTierKey = tierKey;
+                tierChips.forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+
+                // Highlight SVG tier
+                wrapper.querySelectorAll(".maslow-tier-group").forEach(tg => {
+                    if (tg.getAttribute("data-maslow-tier") === tierKey) tg.classList.add("selected");
+                    else tg.classList.remove("selected");
+                });
+
+                renderInspectorContent(tierKey);
+            });
+        });
+
+        // 3. Tier Selection via Click on SVG Tier
+        const svgTierGroups = wrapper.querySelectorAll(".maslow-tier-group");
+        svgTierGroups.forEach(tg => {
+            tg.addEventListener("click", () => {
+                const tierKey = tg.getAttribute("data-maslow-tier");
+                activeTierKey = tierKey;
+                svgTierGroups.forEach(g => g.classList.remove("selected"));
+                tg.classList.add("selected");
+
+                // Sync chips
+                wrapper.querySelectorAll("[data-select-tier]").forEach(c => {
+                    if (c.getAttribute("data-select-tier") === tierKey) c.classList.add("active");
+                    else c.classList.remove("active");
+                });
+
+                renderInspectorContent(tierKey);
+
+                // Scroll inspector gently into view if on mobile
+                const inspPanel = wrapper.querySelector("#maslowInspectorPanel");
+                if (inspPanel && window.innerWidth < 768) {
+                    inspPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+            });
+        });
+
+        // 4. Attach Tooltips to Tiers & Segments
         tiersConfig.forEach(t => {
             const els = wrapper.querySelectorAll(`[data-maslow-tier='${t.key}']`);
             els.forEach(el => {
@@ -4546,8 +5007,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     const dict = CHART_EXPLANATION_DICTIONARY.maslow[t.dictKey];
                     const pctValA = mA.tiers[t.key] || 0;
                     const pctValB = mB ? (mB.tiers[t.key] || 0) : 0;
+                    const segs = getTierSegments(mA, t.key);
+                    const segNames = segs.map(s => `${s.icon} ${isAr ? s.name_ar : s.name_en}`).join(" • ");
+
                     return {
                         ...dict,
+                        subtitle_ar: `${dict.subtitle_ar}\nالأقسام: ${segNames}`,
+                        subtitle_en: `${dict.subtitle_en}\nSegments: ${segNames}`,
                         metric_ar: !isSingle ? `${nameA}: ${pctValA}% | ${nameB}: ${pctValB}%` : `النسبة: ${pctValA}%`,
                         metric_en: !isSingle ? `${nameA}: ${pctValA}% | ${nameB}: ${pctValB}%` : `Weight: ${pctValA}%`
                     };
@@ -4555,6 +5021,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
+        // Bracket tooltips
+        const bBracket = wrapper.querySelector("[data-maslow-bracket='b_needs']");
+        if (bBracket) attachChartTooltip(bBracket, () => CHART_EXPLANATION_DICTIONARY.maslow.b_needs_bracket);
+
+        const dBracket = wrapper.querySelector("[data-maslow-bracket='d_needs']");
+        if (dBracket) attachChartTooltip(dBracket, () => CHART_EXPLANATION_DICTIONARY.maslow.d_needs_bracket);
+
+        // Kegan tooltips
         const keganTrack = wrapper.querySelector("[data-spectrum='kegan']");
         if (keganTrack) attachChartTooltip(keganTrack, () => CHART_EXPLANATION_DICTIONARY.maslow.kegan_scale);
 
@@ -4565,12 +5039,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 color: "#10b981",
                 title_ar: `${nameA}: التطور النفسي والوعي`,
                 title_en: `${nameA}: Developmental Consciousness`,
-                subtitle_ar: `${isAr ? devA.kegan.stage_ar : devA.kegan.stage_en} (مستوى ${keganA})`,
-                subtitle_en: `${devA.kegan.stage_en} (Stage ${keganA})`,
+                subtitle_ar: `${isAr ? devA.kegan.stage_ar : devA.kegan.stage_en} (مستوى ${devA.kegan.score})`,
+                subtitle_en: `${devA.kegan.stage_en} (Stage ${devA.kegan.score})`,
                 body_ar: `درجة التمايز النفسي (بوين): ${devA.differentiation.score} / 5.0 (${isAr ? devA.differentiation.level_ar : devA.differentiation.level_en}). يعكس قدرة ${nameA} على حفظ استقلالية الذات والبوصلة الداخلية دون انغلاق أو تبعية.`,
                 body_en: `Bowen Differentiation Index: ${devA.differentiation.score} / 5.0 (${devA.differentiation.level_en}). Reflects ${nameA}'s internal compass and healthy autonomy.`,
-                metric_ar: `مستوى كيجان: ${keganA} / 5.0`,
-                metric_en: `Kegan Stage: ${keganA} / 5.0`
+                metric_ar: `مستوى كيجان: ${devA.kegan.score} / 5.0`,
+                metric_en: `Kegan Stage: ${devA.kegan.score} / 5.0`
             }));
         });
 
@@ -4581,12 +5055,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 color: "#f59e0b",
                 title_ar: `${nameB}: التطور النفسي والوعي`,
                 title_en: `${nameB}: Developmental Consciousness`,
-                subtitle_ar: `${isAr ? devB.kegan.stage_ar : devB.kegan.stage_en} (مستوى ${keganB})`,
-                subtitle_en: `${devB.kegan.stage_en} (Stage ${keganB})`,
+                subtitle_ar: `${isAr ? devB.kegan.stage_ar : devB.kegan.stage_en} (مستوى ${devB.kegan.score})`,
+                subtitle_en: `${devB.kegan.stage_en} (Stage ${devB.kegan.score})`,
                 body_ar: `درجة التمايز النفسي (بوين): ${devB.differentiation.score} / 5.0 (${isAr ? devB.differentiation.level_ar : devB.differentiation.level_en}). يعكس قدرة ${nameB} على حفظ استقلالية الذات والبوصلة الداخلية دون انغلاق أو تبعية.`,
                 body_en: `Bowen Differentiation Index: ${devB.differentiation.score} / 5.0 (${devB.differentiation.level_en}). Reflects ${nameB}'s internal compass and healthy autonomy.`,
-                metric_ar: `مستوى كيجان: ${keganB} / 5.0`,
-                metric_en: `Kegan Stage: ${keganB} / 5.0`
+                metric_ar: `مستوى كيجان: ${devB.kegan.score} / 5.0`,
+                metric_en: `Kegan Stage: ${devB.kegan.score} / 5.0`
             }));
         });
     }

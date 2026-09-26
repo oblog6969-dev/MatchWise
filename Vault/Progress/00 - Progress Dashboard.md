@@ -1,7 +1,7 @@
 ---
 title: "MatchWise Progress Dashboard"
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-26
 type: dashboard
 status: active
 tags:
@@ -16,7 +16,7 @@ aliases:
 # 🚀 MatchWise Project Progress Dashboard
 
 > [!summary] Current Release State
-> **Version:** `v3.0.0` (Release: *Maslow Hierarchy of Needs, Kegan Human Development & Dyadic Asymmetry Engine*)  
+> **Version:** `v3.1.0` (Release: *Maslow 18 Major Segments & Creative Multi-Perspective Visualizer*)  
 > **Status:** 🟢 **Production Ready & Fully Verified**  
 > **Active Milestone:** [[M16 - Maslow Needs & Human Development]] ✅ Complete  
 > **Upcoming Milestone:** [[M14 - Clinical PDF Export & Advanced Diagnostics]] 🟡 In Design  
@@ -61,6 +61,7 @@ SORT file.name ASC
 
 ## 📦 Recent Version Changelogs
 
+- [[v3.1.0 - Maslow 18 Major Segments & Creative Multi-Perspective Visualizer]] — September 26, 2026 *(18 clinically grounded segments, tri-perspective switcher, dynamic segment inspector, full bilingual RTL)*
 - [[v3.0.0 - Maslow Needs, Kegan Human Development & Dyadic Asymmetry]] — September 25, 2026 *(Maslow 6-tier hierarchy, Kegan Orders of Mind, Bowen Differentiation, dual pyramid visualizer, 10 scenario questions, 5 dyadic asymmetry archetypes)*
 - [[v2.9.1 - Security Hardening, Production Fixes & Test Suite]] — September 9, 2026 *(Stored XSS mitigation, Demo export fix, AI fallback, 10/10 test suite)*
 - [[v2.9.0 - AI Educational Guidance System]] — September 8, 2026 *(Readiness card, In-test reflection tips, Dynamic re-prompting)*
