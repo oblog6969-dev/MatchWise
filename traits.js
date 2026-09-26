@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.9.0
+ * MatchWise Lite v3.1.0
  * traits.js - Multi-Framework Psychometric & Consciousness Calculation Engine
  * Unified Evaluator mapping single responses across 10 clinical & behavioral frameworks:
  * 1. Big Five (OCEAN)

@@ -1,5 +1,5 @@
 /**
- * MatchWise Lite v2.9.0
+ * MatchWise Lite v3.1.0
  * compatibility.js - Multi-Framework Dyadic Match & Narrative Engine
  * Compares two psychological profiles across 12 standard relationship dimensions
  * plus 6 deep multi-framework behavioral interaction dynamics:
