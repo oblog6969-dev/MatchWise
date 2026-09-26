@@ -2,13 +2,17 @@
  * MatchWise Lite v3.1.0
  * compatibility.js - Multi-Framework Dyadic Match & Narrative Engine
  * Compares two psychological profiles across 12 standard relationship dimensions
- * plus 6 deep multi-framework behavioral interaction dynamics:
+ * plus 10 deep multi-framework behavioral & developmental interaction dynamics:
  * 1. Hartman Core Motive Synergy (Red, Blue, White, Yellow pairing dynamics)
  * 2. DISC Pace & Focus Equilibrium (Tempo friction, Task vs. People balance)
  * 3. Birkman Cross-Need Satisfaction (Usual style vs. Partner's hidden needs)
  * 4. FIRO-B Reciprocal Compatibility (Control leadership vs. Affection reciprocity)
  * 5. Gottman Dyadic Safety & Repair Receptivity (Four horsemen vs. de-escalation)
  * 6. Attachment Trap & Cycle Analysis (Secure, Anxious, Avoidant cycles)
+ * 7. Hawkins Power vs. Force Consciousness Dynamic (200 Courage demarcation & energetic drag)
+ * 8. Hicks Emotional Guidance & Vibrational Set-Point Alignment (Joy to Fear agility)
+ * 9. Maslow Hierarchy of Needs Dynamics (18 Segments, D-Need safety vs. B-Need growth orientation)
+ * 10. Kegan Developmental & Bowen Differentiation Asymmetry (5 Dyadic Archetypes)
  */
 
 const CompatibilityEngine = {

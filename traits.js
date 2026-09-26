@@ -1,7 +1,7 @@
 /**
  * MatchWise Lite v3.1.0
  * traits.js - Multi-Framework Psychometric & Consciousness Calculation Engine
- * Unified Evaluator mapping single responses across 10 clinical & behavioral frameworks:
+ * Unified Evaluator mapping single responses across 14 clinical & behavioral frameworks:
  * 1. Big Five (OCEAN)
  * 2. MBTI / Jungian Cognitive Style
  * 3. Dr. Taylor Hartman Color Code (Core Motives)
@@ -12,11 +12,15 @@
  * 8. Gottman Sound Relationship House (Emotional Safety & Four Horsemen Risks)
  * 9. Adult Attachment Theory (ECR - Anxiety vs. Avoidance)
  * 10. Schwartz Theory of Basic Human Values & Life Domain Priorities
+ * 11. David R. Hawkins Map of Consciousness (LoC 20-600+, 200 Courage Threshold)
+ * 12. Abraham Hicks Emotional Guidance Scale (22 Calibrated Emotional Set-Points)
+ * 13. Abraham Maslow Hierarchy of Needs (6 Tiers, 18 Major Segments, D/B Needs, Center of Gravity)
+ * 14. Robert Kegan Orders of Mind (Stages 2-5) & Murray Bowen Differentiation of Self (1-5)
  */
 
 const PersonalityEngine = {
     /**
-     * Parse answers to determine all personality traits & types across 10 frameworks.
+     * Parse answers to determine all personality traits & types across 14 frameworks.
      * @param {Object} answers - Map of { questionId: answerValue }
      * @param {Array} questionsList - Array of question metadata from questions.json
      * @returns {Object} Calculated multi-framework profile metadata
