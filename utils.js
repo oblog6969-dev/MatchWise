@@ -228,7 +228,20 @@ const TRANSLATIONS = {
         avoid_label: "Avoid:",
         drag_rank_desc: "Reorder options by priority (1 = Highest priority)",
         move_up: "Move up",
-        move_down: "Move down"
+        move_down: "Move down",
+        view_mode_presentation: "Interactive Slides",
+        view_mode_dossier: "Printable Dossier",
+        slide_prev: "Previous",
+        slide_next: "Next",
+        eli5_badge: "Explain Like I'm 5 (Big Idea)",
+        what_it_measures_badge: "What It Measures",
+        superpower_badge: "Superpower",
+        watch_out_badge: "Watch Out / Trigger",
+        relationship_badge: "In Relationships",
+        pres_cat_overview: "✨ Match Results & AI Overview",
+        pres_cat_framework: "🔬 Framework Deep-Dive",
+        fullscreen_enter: "Enter Fullscreen",
+        fullscreen_exit: "Exit Fullscreen"
     },
     ar: {
         app_title: "ماتش وايز لايت",
@@ -409,7 +422,20 @@ const TRANSLATIONS = {
         avoid_label: "تجنب معه:",
         drag_rank_desc: "قم بإعادة ترتيب الخيارات حسب الأولوية (1 = الأولوية القصوى)",
         move_up: "تحريك لأعلى",
-        move_down: "تحريك لأسفل"
+        move_down: "تحريك لأسفل",
+        view_mode_presentation: "عرض الشرائح التفاعلي",
+        view_mode_dossier: "الملف الوثائقي للطباعة",
+        slide_prev: "السابق",
+        slide_next: "التالي",
+        eli5_badge: "شرح مبسط ومباشر (الفكرة الجوهرية)",
+        what_it_measures_badge: "ماذا يقيس المقياس؟",
+        superpower_badge: "نقطة القوة الفطرية",
+        watch_out_badge: "نقطة الحذر ومحفز التوتر",
+        relationship_badge: "في العلاقات والشراكة",
+        pres_cat_overview: "✨ نتائج التوافق واستشارة الذكاء الاصطناعي",
+        pres_cat_framework: "🔬 تفكيك وشرح المقاييس النفسية",
+        fullscreen_enter: "ملء الشاشة",
+        fullscreen_exit: "إنهاء ملء الشاشة"
     }
 };
 

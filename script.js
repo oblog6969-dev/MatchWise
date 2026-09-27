@@ -123,6 +123,22 @@ document.addEventListener("DOMContentLoaded", () => {
         conflictProtocolSection: document.getElementById("conflictProtocolSection"),
         fairFightingContainer: document.getElementById("fairFightingContainer"),
 
+        // Presentation Deck Mode Elements
+        reportViewModeToggle: document.getElementById("reportViewModeToggle"),
+        btnViewModePresentation: document.getElementById("btnViewModePresentation"),
+        btnViewModeDossier: document.getElementById("btnViewModeDossier"),
+        presentationReportContainer: document.getElementById("presentationReportContainer"),
+        printableReportDocument: document.getElementById("printableReportDocument"),
+        presentationCategoryBadge: document.getElementById("presentationCategoryBadge"),
+        presentationSlideTitle: document.getElementById("presentationSlideTitle"),
+        presentationSlideCounter: document.getElementById("presentationSlideCounter"),
+        presentationProgressFill: document.getElementById("presentationProgressFill"),
+        presentationSlideViewport: document.getElementById("presentationSlideViewport"),
+        presentationDotsContainer: document.getElementById("presentationDotsContainer"),
+        btnPrevSlide: document.getElementById("btnPrevSlide"),
+        btnNextSlide: document.getElementById("btnNextSlide"),
+        btnPresentationFullscreen: document.getElementById("btnPresentationFullscreen"),
+
         // Storytelling Chapters & Interactive Visualizers
         btnTogglePrintPreview: document.getElementById("btnTogglePrintPreview"),
         hartmanChartContainer: document.getElementById("hartmanChartContainer"),
@@ -430,6 +446,84 @@ document.addEventListener("DOMContentLoaded", () => {
                     : (isAr ? "معاينة الطباعة" : "Toggle Print View");
             }
         });
+    }
+
+    // --- REPORT VIEW MODE (PRESENTATION DECK VS CLINICAL DOSSIER) ---
+    state.reportViewMode = "presentation";
+
+    function setReportViewMode(mode) {
+        state.reportViewMode = mode;
+        if (mode === "presentation") {
+            if (dom.btnViewModePresentation) dom.btnViewModePresentation.classList.add("active");
+            if (dom.btnViewModeDossier) dom.btnViewModeDossier.classList.remove("active");
+            if (dom.presentationReportContainer) dom.presentationReportContainer.style.display = "flex";
+            if (dom.printableReportDocument) dom.printableReportDocument.style.display = "none";
+            PresentationDeckManager.renderCurrentSlide();
+        } else {
+            if (dom.btnViewModePresentation) dom.btnViewModePresentation.classList.remove("active");
+            if (dom.btnViewModeDossier) dom.btnViewModeDossier.classList.add("active");
+            if (dom.presentationReportContainer) dom.presentationReportContainer.style.display = "none";
+            if (dom.printableReportDocument) dom.printableReportDocument.style.display = "block";
+        }
+    }
+
+    if (dom.btnViewModePresentation) {
+        dom.btnViewModePresentation.addEventListener("click", () => setReportViewMode("presentation"));
+    }
+    if (dom.btnViewModeDossier) {
+        dom.btnViewModeDossier.addEventListener("click", () => setReportViewMode("dossier"));
+    }
+
+    if (dom.btnPrevSlide) {
+        dom.btnPrevSlide.addEventListener("click", () => PresentationDeckManager.prevSlide());
+    }
+    if (dom.btnNextSlide) {
+        dom.btnNextSlide.addEventListener("click", () => PresentationDeckManager.nextSlide());
+    }
+    if (dom.btnPresentationFullscreen) {
+        dom.btnPresentationFullscreen.addEventListener("click", () => PresentationDeckManager.toggleFullscreen());
+    }
+
+    // Keyboard navigation for presentation mode
+    document.addEventListener("keydown", (e) => {
+        if (state.currentPanel !== "panelReport" || state.reportViewMode !== "presentation") return;
+        if (e.key === "ArrowRight") {
+            const isAr = state.localization.currentLang === "ar";
+            if (isAr) PresentationDeckManager.prevSlide();
+            else PresentationDeckManager.nextSlide();
+        } else if (e.key === "ArrowLeft") {
+            const isAr = state.localization.currentLang === "ar";
+            if (isAr) PresentationDeckManager.nextSlide();
+            else PresentationDeckManager.prevSlide();
+        }
+    });
+
+    // Touch swipe gesture listener for presentation viewport
+    if (dom.presentationSlideViewport) {
+        dom.presentationSlideViewport.addEventListener("touchstart", (e) => {
+            if (e.changedTouches && e.changedTouches[0]) {
+                PresentationDeckManager.touchStartX = e.changedTouches[0].screenX;
+            }
+        }, { passive: true });
+
+        dom.presentationSlideViewport.addEventListener("touchend", (e) => {
+            if (e.changedTouches && e.changedTouches[0]) {
+                PresentationDeckManager.touchEndX = e.changedTouches[0].screenX;
+                const diff = PresentationDeckManager.touchEndX - PresentationDeckManager.touchStartX;
+                const isAr = state.localization.currentLang === "ar";
+                if (Math.abs(diff) > 40) {
+                    if (diff < 0) {
+                        // Swiped Left
+                        if (isAr) PresentationDeckManager.prevSlide();
+                        else PresentationDeckManager.nextSlide();
+                    } else {
+                        // Swiped Right
+                        if (isAr) PresentationDeckManager.nextSlide();
+                        else PresentationDeckManager.prevSlide();
+                    }
+                }
+            }
+        }, { passive: true });
     }
 
     dom.btnGoToDashboard.addEventListener("click", () => {
@@ -1583,6 +1677,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function generateAndRenderReport(profileA, profileB) {
         state.activeReportA = profileA;
         state.activeReportB = profileB;
+        let dyadicReport = null;
         if (!state.aiService) state.aiService = new window.AIService();
         navigateTo("panelReport");
         const isAr = state.localization.currentLang === "ar";
@@ -1854,7 +1949,8 @@ document.addEventListener("DOMContentLoaded", () => {
             dom.radarChartTitle.textContent = isAr ? "مؤشر التوافق متعدد الأبعاد (12 محوراً)" : "Multivariable Compatibility Index (12 Axes)";
             dom.barChartTitle.textContent = isAr ? "محاذاة السمات الخمس الكبرى" : "Big Five / Temperament Alignment";
 
-            const report = window.CompatibilityEngine.compare(profileA, profileB);
+            dyadicReport = window.CompatibilityEngine.compare(profileA, profileB);
+            const report = dyadicReport;
 
             // Update Narrative Chapter Headers for COMPARISON (Acts 1-4)
             if (dom.chapter1Badge) { dom.chapter1Badge.textContent = isAr ? "المحور الأول" : "Act 1"; dom.chapter1Badge.classList.add("act-badge"); }
@@ -2155,6 +2251,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             aiSection.style.display = "none";
         }
+
+        // Initialize or update Interactive Presentation Slide Deck
+        PresentationDeckManager.init(profileA, profileB, dyadicReport);
+        setReportViewMode(state.reportViewMode || "presentation");
     }
 
     // Helper: Render Operating Manual Card
@@ -5171,8 +5271,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderSVGRadarChart(categoryScores);
     }
 
-    function renderSVGRadarChart(categoryScores) {
-        dom.radarChartContainer.innerHTML = "";
+    function renderSVGRadarChart(categoryScores, targetContainer = null) {
+        const container = targetContainer || dom.radarChartContainer;
+        if (!container) return;
+        container.innerHTML = "";
         const isAr = state.localization.currentLang === "ar";
 
         const width = 460;
@@ -5290,11 +5392,13 @@ dataPoints.forEach((p, idx) => {
             }));
         });
 
-        dom.radarChartContainer.appendChild(svg);
+        container.appendChild(svg);
     }
 
-    function renderBigFiveBarCharts(oceanA, oceanB, isSingle = false, nameA = "Partner A", nameB = "Partner B") {
-        dom.bigFiveBarChartContainer.innerHTML = "";
+    function renderBigFiveBarCharts(oceanA, oceanB, isSingle = false, nameA = "Partner A", nameB = "Partner B", targetContainer = null) {
+        const container = targetContainer || dom.bigFiveBarChartContainer;
+        if (!container) return;
+        container.innerHTML = "";
         const isAr = state.localization.currentLang === "ar";
         const traits = Object.keys(oceanA);
 
@@ -5311,7 +5415,7 @@ dataPoints.forEach((p, idx) => {
                     ${nameB || (isAr ? "الطرف الثاني" : "Partner B")}
                 </span>
             `;
-            dom.bigFiveBarChartContainer.appendChild(legend);
+            container.appendChild(legend);
         }
 
         traits.forEach(trait => {
@@ -5380,9 +5484,965 @@ row.appendChild(labelInfo);
                 };
             });
 
-            dom.bigFiveBarChartContainer.appendChild(row);
+            container.appendChild(row);
         });
     }
+
+    // ==========================================================================
+    // 10. INTERACTIVE PRESENTATION & STORY DECK ENGINE
+    // ==========================================================================
+    const PresentationDeckManager = {
+        currentIndex: 0,
+        slides: [],
+        profileA: null,
+        profileB: null,
+        report: null,
+        isSingle: false,
+        isFullscreen: false,
+        touchStartX: 0,
+        touchEndX: 0,
+
+        FRAMEWORK_ELI5: {
+            hartman: {
+                title_en: "Hartman Core Motives",
+                title_ar: "شيفرة ألوان هارتمان (الدوافع الجوهرية)",
+                metaphor_en: "Think of your brain like a toy car: what kind of battery makes it drive happily? Red batteries run on Power & Getting Things Done; Blue batteries run on Love, Loyalty & Caring; White batteries run on Peace & Calm; and Yellow batteries run on Having Fun & Play!",
+                metaphor_ar: "تخيل عقلك مثل سيارة ألعاب: ما هي البطارية التي تجعلها تتحرك بسعادة؟ البطارية الحمراء تعمل بالقوة والإنجاز، والبطارية الزرقاء تعمل بالحب والوفاء والاهتمام، والبطارية البيضاء تعمل بالهدوء والسلام، والبطارية الصفراء تعمل بالمرح والبهجة!",
+                measure_en: "Your subconscious emotional fuel: the core motive behind your actions.",
+                measure_ar: "الوقود العاطفي الجوهري: الدافع اللاواعي الذي يحرك اختياراتك وسلوكياتك اليومية."
+            },
+            disc: {
+                title_en: "DISC Behavioral Rhythm",
+                title_ar: "نموذج ديسك (إيقاع السلوك والتواصل)",
+                metaphor_en: "When you play a game, how do you move? Do you run fast or walk carefully? And do you stare at the scoreboard to win (tasks), or hold hands with your friends to make sure everyone is smiling (people)?",
+                metaphor_ar: "عندما تلعب لعبة: هل تركض بسرعة أم تمشي بهدوء؟ وهل تركز كل عينيك على لوحة النقاط للفوز (المهام)، أم تنظر إلى أصدقائك لتتأكد أن الجميع يبتسم ومسرور (العلاقات)؟",
+                measure_en: "Your outward talking speed, how quickly you make decisions, and whether you prioritize task completion or emotional feelings.",
+                measure_ar: "سرعة إيقاعك في الحديث والقرارات، وما إذا كان اهتمامك الأول موجهاً نحو إنجاز المهام أم نحو مشاعر المحيطين بك."
+            },
+            mbti: {
+                title_en: "MBTI Cognitive Architecture",
+                title_ar: "الأنماط المعرفية (MBTI)",
+                metaphor_en: "Your mind wears magic sunglasses! Some glasses look at big future dreams (Intuition), some look at real touchable facts (Sensing), some decide with cool logic (Thinking), and some decide with warm hugs (Feeling)!",
+                metaphor_ar: "عقلك يرتدي نظارة سحرية خاصة! بعض النظارات تركز على الخيال والأفكار المستقبلية (الحدس)، وبعضها يركز على الحقائق الملموسة أمامك (الحس)، وبعضها يقرر بالمنطق الصارم (التفكير)، وبعضها يقرر بالدفء والمشاعر (الشعور)!",
+                measure_en: "How you recharge your energy battery and the mental lens you use to understand the world.",
+                measure_ar: "كيف تشحن طاقتك النفسية (العزلة مقابل الاجتماع) والفلتر العقلي الذي تعالج به الأحداث وتتخذ به قراراتك."
+            },
+            birkman: {
+                title_en: "The Birkman Iceberg",
+                title_ar: "منهجية بيركمان (جبل الجليد العاطفي)",
+                metaphor_en: "An iceberg has a shiny tip above the water that everyone can see, and a giant mountain hidden deep underwater! What people see is your polite everyday style. But deep underwater is what you secretly need to feel okay. If someone forgets your underwater need, you might suddenly melt or freeze!",
+                metaphor_ar: "جبل الجليد له قمة ظاهرة فوق الماء يراها الجميع، وقاعدة ضخمة غارقة تحت الماء! ما يراه الناس هو أسلوبك الاجتماعي المعتاد، أما تحت الماء فهناك احتياجاتك النفسية السرية. وإذا لم تلبَّ هذه الاحتياجات، يدخل الجبل في حالة توتر ودفاع!",
+                measure_en: "The gap between your outward social habits and your private, unexpressed emotional needs that trigger stress.",
+                measure_ar: "الفجوة بين تصرفاتك الظاهرة واحتياجاتك النفسية العميقة التي إذا أُهملت سببت التوتر وردود الفعل الدفاعية."
+            },
+            attachment: {
+                title_en: "Adult Attachment Security",
+                title_ar: "نظرية التعلق العاطفي (الملاذ الآمن)",
+                metaphor_en: "When you play hide-and-seek, what happens when someone you love hides? Do you worry they left you forever (Anxious)? Do you cross your arms and say you don't care anyway (Avoidant)? Or do you smile knowing they will come right back (Secure)?",
+                metaphor_ar: "عندما يلعب طفل الغميضة: ماذا يحدث عندما يختفي من يحبه؟ هل يبكي خائفاً أنهم نسوه للأبد (قلق)؟ أم يعقد ذراعيه ويقول: لا يهمني وسألعب وحدي (تجنبي)؟ أم يبتسم بهدوء وهو يعلم أنهم سيعودون حتماً (آمن)؟",
+                measure_en: "How safe you feel in close emotional intimacy, and whether you fear abandonment or losing your independence.",
+                measure_ar: "مدى شعورك بالأمان في العلاقات الوثيقة، وما إذا كان خوفك الأكبر هو الهجران أم فقدان الاستقلالية."
+            },
+            firo: {
+                title_en: "FIRO-B Interpersonal Exchange",
+                title_ar: "مقياس فايرو-بي (التبادل والقيادة)",
+                metaphor_en: "In the playground, who organizes the game and who wants to be invited? Some kids love inviting everyone to play, some wait quietly for an invitation. And who wants to steer the tricycle (Control)?",
+                metaphor_ar: "في ساحة الألعاب: من ينظم اللعبة ومن ينتظر أن يُدعى؟ بعض الناس يحبون دعوة الجميع باستمرار، وبعضهم يفضل أن يدعوه الآخرون. ومن يحب أن يقود الدراجة ويحدد الاتجاه (السيطرة والقيادة)؟",
+                measure_en: "Give-and-take reciprocity in Inclusion (belonging), Control (leadership), and Affection (warmth).",
+                measure_ar: "التوازن بين ما تبادر بتقديمه وما تتوقع الحصول عليه في: الانتماء والاحتواء، القيادة والسيطرة، والمودة العاطفية."
+            },
+            gottman: {
+                title_en: "Gottman Emotional Safety",
+                title_ar: "منزل غوتمان (الأمان ومضاد السموم)",
+                metaphor_en: "Imagine a cozy little house where love lives. To keep the roof safe from storms, we need strong walls of emotional safety! But beware of the four naughty gremlins: Criticizing, Mocking, Making Excuses, and Giving the Silent Treatment!",
+                metaphor_ar: "تخيل منزلاً دافئاً يسكنه الحب. لكي يصمد هذا البيت أمام العواصف، يحتاج إلى جدران قوية من الأمان النفسي! ولكن احذر من الوحوش الأربعة المشاكسة: الانتقاد الجارح، والاستهزاء، والدفاعية، والانعزال والصمت العقابي!",
+                measure_en: "Emotional safety score (0-100%) and vulnerability to the Four Horsemen that damage trust.",
+                measure_ar: "نسبة الأمان النفسي في الحوار ومدى الحصانة ضد فرسان الهلاك الأربعة المدمرين للعلاقات."
+            },
+            conflict: {
+                title_en: "TKI Conflict & Escalation Cycle",
+                title_ar: "إدارة الخلافات (توماس-كيلمان وقواطع الدائرة)",
+                metaphor_en: "When two friends both want the very last slice of cake: do you fight to win it, give it away, run to your room, split it in half, or bake a whole new giant pie together?",
+                metaphor_ar: "عندما يريد صديقان آخر قطعة كعكة: هل تتشاجر لتأخذها كلها؟ أم تتنازل عنها وأنت حزين؟ أم تهرب وتغلق الباب؟ أم تقسمها نصفين؟ أم تبتكران معاً وصفة كعكة جديدة تكفي الجميع بسعادة؟",
+                measure_en: "Your automatic argument reflex and the circuit breaker needed to stop escalation loops.",
+                measure_ar: "أسلوبك التلقائي عند نشوب النزاع وكيفية كسر حلقة التصعيد الدفاعية قبل أن تشتعل."
+            },
+            consciousness: {
+                title_en: "Consciousness & Vibrational Spectrum",
+                title_ar: "سلم الوعي والإرشاد العاطفي (هوكنز وهيكس)",
+                metaphor_en: "Your feelings are like an elevator! In the basement it's dark and heavy with fear, guilt, or anger (Force). But press the button and ride up past the 200 Courage door: suddenly there is light, understanding, joy, gratitude, and peace (Power)!",
+                metaphor_ar: "مشاعرك مثل مصعد داخلي! في القبو السفلي يكون الجو مظلماً وثقيلاً بالخوف والغضب وتأنيب الضمير (القوة القسرية). لكن اضغط الزر واصعد فوق عتبة الشجاعة (200): ستجد النور والتفهم والبهجة والامتنان والسلام (القوة البناءة)!",
+                measure_en: "Hawkins Map of Consciousness (20-600+) and Abraham Hicks 22 emotional set-points.",
+                measure_ar: "خريطة ديفيد هوكنز للوعي ومستويات أبراهام هيكس العاطفية لمعرفة طاقتك الحاكمة في التعامل."
+            },
+            maslow: {
+                title_en: "Maslow Needs & Kegan Mind",
+                title_ar: "هرم ماسلو ومستويات نمو العقل (كيغان)",
+                metaphor_en: "You can't build a treehouse without strong tree branches! First you need healthy food and sleep, then safety, then cuddles and friends, then proud high-fives, and finally helping the whole forest bloom!",
+                metaphor_ar: "لا يمكنك بناء بيت شجرة جميل دون أغصان متينة! أولاً تحتاج إلى طعام ونوم جيد، ثم الأمان والاستقرار، ثم الحب والأصدقاء، ثم الثقة والتقدير، وأخيراً إزهار إمكاناتك لخدمة العالم!",
+                measure_en: "Your primary psychological need right now and your Kegan adult mental maturity order.",
+                measure_ar: "الاحتياج النفسي المهيمن على اهتمامك حالياً، ومستوى نضجك العقلي المستقل."
+            },
+            big_five: {
+                title_en: "Big Five (OCEAN) Personality Ingredients",
+                title_ar: "السمات الخمس الكبرى (المكونات الأساسية للشخصية)",
+                metaphor_en: "Think of your personality like baking cookies! The 5 secret ingredients are: Curiosity (Openness), Neatness & Planning (Conscientiousness), Social Sunshine (Extraversion), Sweet Kindness (Agreeableness), and Sensitive Radar (Sensitivity)!",
+                metaphor_ar: "تخيل شخصيتك مثل وصفة حلوى خاصة! المكونات الخمسة السحرية هي: الفضول وحب الاستكشاف، النظام والانضباط، الحيوية الاجتماعية، طيبة القلب والتعاون، وحساسية المشاعر واليقظة!",
+                measure_en: "The scientifically validated gold standard of human personality and daily temperament.",
+                measure_ar: "المعيار العلمي العالمي لتصنيف سمات الشخصية الإنسانية والطباع اليومية المستقرة."
+            },
+            schwartz: {
+                title_en: "Schwartz Values & Shared Horizon",
+                title_ar: "قيم شوارتز والأفق المشترك للحياة",
+                metaphor_en: "When two people row a boat, it doesn't matter if one is tall and one is small — what matters is that both are rowing toward the very same sunny island! Your values are the treasure map showing where you want your life boat to land!",
+                metaphor_ar: "عندما يجدف اثنان في قارب، لا يهم إن كان أحدهما سريعاً والآخر هادئاً، الأهم هو أن يجدفا نحو نفس الجزيرة الجميلة! قيمكما المشتركة هي خريطة الكنز التي توجه قارب حياتكما معاً!",
+                measure_en: "Core human values and life priorities across family, finances, independence, and lifestyle.",
+                measure_ar: "القيم الإنسانية الجوهرية وأولويات الحياة عبر مجالات الأسرة، المال، والحرية الشخصية."
+            }
+        },
+
+        init(pA, pB, rep) {
+            this.profileA = pA;
+            this.profileB = pB;
+            this.report = rep;
+            this.isSingle = !pB;
+            this.currentIndex = 0;
+            this.buildSlides();
+            this.renderDots();
+            this.renderCurrentSlide();
+        },
+
+        buildSlides() {
+            const pA = this.profileA;
+            const pB = this.profileB;
+            const rep = this.report;
+            const isSingle = this.isSingle;
+            const isAr = state.localization.currentLang === "ar";
+            const traitsA = pA ? pA.calculated_personality : {};
+            const traitsB = pB ? pB.calculated_personality : null;
+            const nameA = isAr && pA?.owner_name_ar ? pA.owner_name_ar : (pA?.owner_name || (isAr ? "الطرف الأول" : "Partner A"));
+            const nameB = pB ? (isAr && pB?.owner_name_ar ? pB.owner_name_ar : (pB?.owner_name || (isAr ? "الطرف الثاني" : "Partner B"))) : "";
+
+            const catOverview = isAr ? "✨ نتائج التوافق واستشارة الذكاء الاصطناعي" : "✨ Match Results & AI Overview";
+            const catFramework = isAr ? "🔬 تفكيك وشرح المقاييس النفسية" : "🔬 Framework Deep-Dive";
+
+            this.slides = [
+                // SLIDE 1: Overall Match & Compatibility Index
+                {
+                    category: catOverview,
+                    title: isAr ? "1. مؤشر التوافق العام والانسجام" : "1. Overall Compatibility & Match Synergy",
+                    renderContent: () => {
+                        const score = isSingle ? (pA.assessment_confidence || 94) : (rep?.overall_compatibility || 85);
+                        const confScore = isSingle ? (pA.assessment_confidence || 90) : (rep?.confidence_score || 92);
+                        const dynamicTitle = isSingle
+                            ? (isAr ? "ملف نفسي قيادي متماسك وعميق" : "Cohesive Analytical Profile")
+                            : (isAr ? "تكامل ديناميكي بين الرؤية القيادية والاحتواء العاطفي" : "Direct Achiever & Empathetic Harmonizer Dynamic");
+                        const summaryText = isSingle
+                            ? (isAr ? "تظهر بياناتك وعياً ذاتياً عميقاً مع نمط تواصل حاسم، ووقود داخلي يرتكز على الإنجاز والمسؤولية." : "Your profile reflects strong emotional self-awareness, clear boundaries, and purposeful motive alignment.")
+                            : (rep?.executive_summary ? (isAr ? (rep.executive_summary.ar || rep.executive_summary) : (rep.executive_summary.en || rep.executive_summary)) : (isAr ? "يظهر الشريكان توافقاً فطرياً مميزاً يستند إلى قيم مشتركة قوية، مع تكامل وظيفي يوازن بين الحسم والاحتواء." : "Both partners show strong foundational alignment, complementary pacing, and genuine goodwill."));
+
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-overview-hero">
+                                    <div class="pres-hero-gauge-box">
+                                        <svg class="progress-circle" viewBox="0 0 36 36" style="width: 170px; height: 170px;">
+                                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                            <path class="circle-fill" stroke-dasharray="${score}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                        </svg>
+                                        <div style="position: absolute; display: flex; flex-direction: column; align-items: center;">
+                                            <span class="pres-hero-score">${score}%</span>
+                                            <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary);">${isSingle ? (isAr ? "اكتمال الملف" : "Profile Cohesion") : (isAr ? "نسبة التوافق" : "Match Index")}</span>
+                                        </div>
+                                    </div>
+                                    <div class="pres-dynamic-badge">${dynamicTitle}</div>
+                                    <p class="pres-executive-summary">${summaryText}</p>
+                                    <div class="pres-metadata-pills">
+                                        <span class="pres-meta-pill">🛡️ ${isAr ? "مستوى الثقة في التقييم" : "Confidence Score"}: <strong>${confScore}%</strong></span>
+                                        <span class="pres-meta-pill">👤 ${isSingle ? nameA : `${nameA} & ${nameB}`}</span>
+                                        <span class="pres-meta-pill">🔬 ${isAr ? "12 نموذجاً سلوكياً معتمداً" : "12 Psychometric Frameworks"}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+
+                // SLIDE 2: Highlights & Mutual Strengths
+                {
+                    category: catOverview,
+                    title: isAr ? "2. أبرز نقاط القوة والانسجام الفطري" : "2. Relationship Highlights & Core Strengths",
+                    renderContent: () => {
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-cards-grid">
+                                    <div class="pres-feature-card highlight-card">
+                                        <div class="pres-feature-icon">🎯</div>
+                                        <h4>${isAr ? "تطابق الأفق والقيم الجوهرية" : "Shared Core Horizon & Values"}</h4>
+                                        <p>${isAr ? "انسجام استثنائي في النظرة إلى الأسرة، الاستقرار المالي، والمسؤولية الأخلاقية مما يمنح العلاقة بوصلة موحدة صلبة." : "Exceptional alignment across family priorities, stability, and integrity, giving the union a steady shared compass."}</p>
+                                    </div>
+                                    <div class="pres-feature-card highlight-card">
+                                        <div class="pres-feature-icon">💖</div>
+                                        <h4>${isAr ? "الأمان النفسي وحسن النية المتبادل" : "High Emotional Safety & Goodwill"}</h4>
+                                        <p>${isAr ? "رصيد مرتفع من الاحترام العاطفي يمنع تراكم المرارة ويسمح بالحديث المفتوح دون خوف من الهجوم أو الاستهزاء." : "High emotional safety index shielding conversations from contempt, creating a secure space for open vulnerability."}</p>
+                                    </div>
+                                    <div class="pres-feature-card highlight-card">
+                                        <div class="pres-feature-icon">⚡</div>
+                                        <h4>${isAr ? "التكامل الوظيفي في الأدوار والإيقاع" : "Complementary Roles & Rhythms"}</h4>
+                                        <p>${isAr ? "أحدهما يمنح العلاقة العزم والحسم والمبادرة، بينما يضفي الآخر العمق والاحتواء والانسجام الهادئ." : "One partner brings decisive momentum and vision, while the other provides thorough harmony and nurturing depth."}</p>
+                                    </div>
+                                    <div class="pres-feature-card highlight-card">
+                                        <div class="pres-feature-icon">🛡️</div>
+                                        <h4>${isAr ? "المرونة وسرعة الإصلاح بعد التوتر" : "Constructive Repair & Resilience"}</h4>
+                                        <p>${isAr ? "قدرة طبيعية على احتواء لحظات سوء الفهم والعودة إلى التوازن العاطفي دون ترك رواسب سلبية." : "Natural capacity to initiate post-friction repairs, keeping disagreements localized without threatening the bond."}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+
+                // SLIDE 3: Points to Work On & Friction Alerts
+                {
+                    category: catOverview,
+                    title: isAr ? "3. نقاط التطوير ومحفزات الاحتكاك" : "3. Points to Work On & Friction Triggers",
+                    renderContent: () => {
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-cards-grid">
+                                    <div class="pres-feature-card challenge-card">
+                                        <div class="pres-feature-icon">⏱️</div>
+                                        <h4>${isAr ? "فجوة السرعة في معالجة القرارات" : "Decision Tempo & Processing Gap"}</h4>
+                                        <p>${isAr ? "الطرف الحاسم يميل للحسم الفوري، بينما يحتاج الطرف التأملي إلى وقت لمعالجة المشاعر دون شعور بالضغط أو الاستعجال." : "The fast-paced partner may push for immediate closure, while the reflective partner needs quiet time to process feelings."}</p>
+                                    </div>
+                                    <div class="pres-feature-card challenge-card">
+                                        <div class="pres-feature-icon">⚠️</div>
+                                        <h4>${isAr ? "دورة (المطالبة بالحل مقابل الانسحاب)" : "Demand vs. Withdraw Risk"}</h4>
+                                        <p>${isAr ? "عند ارتفاع الضغوط، قد يضغط أحدهما بإلحاح للحصول على إجابات، مما يدفع الآخر إلى الانغلاق التلقائي لحماية نفسه." : "Under high stress, one may escalate demand for answers while the other retreats into silence, spinning the conflict loop."}</p>
+                                    </div>
+                                    <div class="pres-feature-card challenge-card">
+                                        <div class="pres-feature-icon">🛡️</div>
+                                        <h4>${isAr ? "الاحتياجات العاطفية غير المعلنة" : "Unspoken Underlying Needs"}</h4>
+                                        <p>${isAr ? "المظهر الخارجي المستقل قد يخفي حاجة دفينة للتقدير الصادق والتشجيع المستمر الذي لا يُطلب صراحة." : "The outward confident facade can mask a deep, quiet need for heartfelt verbal reassurance and gentle recognition."}</p>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; padding: 14px 20px; border-radius: 14px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); text-align: center; font-weight: 700; color: #10b981; font-size: 0.95rem;">
+                                    ${isAr ? "🟢 لم يتم رصد أي خطوط حمراء حاسمة (Deal-Breakers) — القاعدة المشتركة صلبة وآمنة تماماً." : "🟢 No Critical Deal-Breakers Detected — The relationship rests on a solid, safe, and viable foundation."}
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+
+                // SLIDE 4: MatchWise AI Psychological Conclusion
+                {
+                    category: catOverview,
+                    title: isAr ? "4. استشارة الذكاء الاصطناعي وجسور الحوار" : "4. MatchWise AI Strategic Synthesis",
+                    renderContent: () => {
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-ai-container">
+                                    <div class="pres-ai-header">
+                                        <div class="pres-ai-logo">✨</div>
+                                        <div>
+                                            <h3 style="margin: 0; color: #8b5cf6; font-size: 1.15rem;">${isAr ? "الخلاصة الإرشادية من الذكاء الاصطناعي" : "Autonomous Psychological Consultation"}</h3>
+                                            <span style="font-size: 0.82rem; color: var(--text-secondary);">${isAr ? "توليف تركيبي متعدد النماذج لعلاقة مستدامة" : "Synthesized Cross-Framework Wisdom"}</span>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 1.02rem; line-height: 1.7; color: var(--text-primary); margin: 0;">
+                                        ${isAr 
+                                            ? `إن سر نجاح هذا اللقاء يكمن في إدراك أن الاختلاف في الإيقاع والأسلوب هو سر التكامل وليس دليلاً على عدم التوافق. عندما يشعر ${nameA} بأن مساحته القيادية محترمة، وعندما يشعر الطرف الآخر بأن مشاعره مصانة دون استعجال، تتحول العلاقة إلى ملاذ آمن لا يتزعزع.`
+                                            : `The secret to lasting harmony in this pairing lies in recognizing that differences in rhythm and motive are complementary gifts, not threats. When decisive momentum is met with emotional warmth and patience, friction transforms into profound mutual trust.`}
+                                    </p>
+                                    <div class="pres-ai-bridge-box">
+                                        <h4>💬 ${isAr ? "جسر التفاهم الذهبي (ماذا تقول عند بداية التوتر):" : "Golden Bridge Script (What to Say When Tension Sparks):"}</h4>
+                                        <p class="pres-ai-bridge-quote">
+                                            ${isAr 
+                                                ? `"أنا أسمعك وأعلم كم هذا الموضوع مهم بالنسبة لك. أحتاج فقط 10 دقائق لترتيب أفكاري، وأعدك أنني سأعود لنناقش كل شيء بهدوء كامل ودون أي دفاعية."`
+                                                : `"I hear you and I know how much this matters. Let's take 10 minutes to breathe, and I promise to return and listen with full heart and zero defensiveness."`}
+                                        </p>
+                                    </div>
+                                    <div style="font-size: 0.88rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+                                        <span>🌟</span>
+                                        <span>${isAr ? "القاعدة الذهبية: لا تحل خلافاً ونبض القلب يتجاوز 100 نبضة بالدقيقة. خذ استراحة العشرين دقيقة دائماً." : "The Golden Rule: Never solve high-stakes disputes while emotionally flooded. Take a 20-minute cooling break first."}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+
+                // SLIDE 5: Hartman Core Motives
+                {
+                    category: catFramework,
+                    title: isAr ? "5. شيفرة هارتمان: ما هو الوقود الحقيقي لقلبك؟" : "5. Hartman Core Motives: What Powers Your Heart?",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.hartman;
+                        const colorA = traitsA?.hartman?.primary || "red";
+                        const colorB = traitsB?.hartman?.primary || "blue";
+
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageHartman" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "دافع فطري هائل للإنجاز، المبادرة الشجاعة، وتحمل المسؤولية دون تردد." : "Fearless initiative, decisive clarity, and high personal accountability."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "نفاد الصبر عند التردد أو البطء، والميل إلى فرض الرأي عند الشعور بضيق الوقت." : "Impatience with hesitation or perceived inefficiency; tendency to become blunt under pressure."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "عبّر عن التقدير الصريح لجهود الشريك، وامنحه مساحة لتنظيم مهامه بحرية دون إملاءات." : "Acknowledge achievements verbally and respect personal autonomy in decision making."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageHartman");
+                        if (stage) renderHartmanDonut(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 6: DISC Behavioral Rhythm
+                {
+                    category: catFramework,
+                    title: isAr ? "6. نموذج ديسك: سرعتك اليومية وبوصلة اهتمامك" : "6. DISC Behavioral Rhythm: Pace & Focus",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.disc;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageDisc" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "القدرة على وضع خطط دقيقة ومتابعة النتائج بكفاءة عالية وبناء بيئة مستقرة." : "Structured clarity, swift execution, and setting reliable, predictable routines."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "الشعور بالإحباط عندما يطلب منك الشريك وقتاً إضافياً للتفكير، أو العكس الشعور بالاستعجال القسري." : "Friction arises when tempo mismatches make one feel rushed and the other feel stonewalled."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "اتفقا مسبقاً على مواعيد اتخاذ القرارات المصيرية: 'سنتحدث الليلة ونقرر غداً صباحاً بهدوء'." : "Agree on a tempo bridge: discuss issues now, but allow a night of sleep before finalizing decisions."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageDisc");
+                        if (stage) renderDiscQuadrantMap(stage, traitsA?.disc, traitsB?.disc, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 7: MBTI Cognitive Architecture
+                {
+                    category: catFramework,
+                    title: isAr ? "7. الأنماط المعرفية: كيف يلتقط عقلك صور العالم؟" : "7. MBTI Cognitive Architecture: How You View Reality",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.mbti;
+                        const mbtiA = traitsA?.mbti?.type || "ENTJ";
+                        const mbtiB = traitsB?.mbti?.type || "ISFJ";
+
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
+                                            <div style="display: flex; gap: 20px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                                                <div style="text-align: center;">
+                                                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">${nameA}</div>
+                                                    <span class="person-type-badge type-a" style="font-size: 1.5rem; padding: 10px 24px; border-radius: 16px;">${mbtiA}</span>
+                                                </div>
+                                                ${!isSingle ? `
+                                                    <span style="font-size: 1.3rem; font-weight: 800; color: var(--text-tertiary);">✕</span>
+                                                    <div style="text-align: center;">
+                                                        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">${nameB}</div>
+                                                        <span class="person-type-badge type-b" style="font-size: 1.5rem; padding: 10px 24px; border-radius: 16px;">${mbtiB}</span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                            <div style="width: 100%; max-width: 380px; background: var(--bg-tertiary); padding: 16px; border-radius: 14px; font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);">
+                                                <div>🧠 <strong>${isAr ? "مصدر الطاقة:" : "Energy:"}</strong> ${isAr ? "العزلة المشحونة بالتأمل مقابل الحوار النشط" : "Reflective space vs. dynamic engagement"}</div>
+                                                <div style="margin-top: 6px;">⚖️ <strong>${isAr ? "معالجة القرارات:" : "Decisions:"}</strong> ${isAr ? "التفكير المنطقي الصارم مقابل التعاطف الإنساني" : "Objective analysis balanced by heartfelt empathy"}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "توازن عبقري بين العقل والقلب: قدرة مشتركة على التفكير الاستراتيجي مع حماية المشاعر الإنسانية." : "A master pairing of strategic intellect and empathetic wisdom, solving life puzzles holistically."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "القفز المباشر لحل المشكلات بروداً دون الاستماع للمشاعر أولاً، مما يشعر الطرف العاطفي بالإهمال." : "Fixing the problem with pure logic before validating emotional distress leads to feelings of dismissal."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "قاعدة 'المشاعر أولاً ثم المنطق ثانياً': اسأل شريكك: 'هل تريدني أن أسمعك فقط أم أبحث معك عن حل؟'." : "The 3-word relationship question: 'Do you want comfort or solutions right now?'"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+
+                // SLIDE 8: The Birkman Iceberg
+                {
+                    category: catFramework,
+                    title: isAr ? "8. منهجية بيركمان: جبل الجليد العاطفي" : "8. Birkman Method: The Emotional Iceberg",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.birkman;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageBirkman" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "مظهر اجتماعي هادئ وموثوق يوفر الطمأنينة للمحيطين في الأوقات العادية." : "A composed, steady outward style that projects grounded stability to those around you."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "عند نفاذ الوقود النفسي الخفي (الاحتياج غير الملبي)، تنشط ردة فعل التوتر التلقائية (الانعزال أو الحدة)." : "When unexpressed underwater needs are starved, stress reflexes trigger automatic withdrawal or defensive edge."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "لا تنتظر حتى يسألك الشريك: بادر بالتقدير، والوضوح، ومنحه المساحة الكافية لشحن طاقته." : "Proactively feed your partner's underlying need (reassurance or space) before stress symptoms emerge."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageBirkman");
+                        if (stage) renderBirkmanIceberg(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 9: Adult Attachment Security (ECR)
+                {
+                    category: catFramework,
+                    title: isAr ? "9. نظرية التعلق العاطفي: مرساك الآمن وملاذك" : "9. Adult Attachment (ECR): Your Emotional Safe Harbor",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.attachment;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageAttachment" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "القدرة على تكوين روابط وثيقة ودافئة مع الاحتفاظ بالاستقلالية والكرامة الشخصية." : "Deep capacity for genuine love and bonding without losing healthy individual autonomy."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "تفسير الصمت كنوع من الهجران أو تفسير الرغبة في التقارب كنوع من الحصار الخانق." : "Misinterpreting quiet distance as abandonment or emotional warmth as suffocating control."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "بروتوكول التطمين: 'أنا أحبك وموجود معك، وسأجلس وحدي نصف ساعة لأرتاح ثم أعود إليك بكامل طاقتي'." : "The anchor phrase: 'I love you and I am committed to us. I just need 30 minutes of quiet, then I am all yours.'"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageAttachment");
+                        if (stage) renderAttachmentCoordinateMap(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 10: FIRO-B Interpersonal Exchange
+                {
+                    category: catFramework,
+                    title: isAr ? "10. مقياس فايرو-بي: من يقود الحافلة وكم عناقاً تحتاج؟" : "10. FIRO-B Reciprocity: Leadership & Warmth",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.firo;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageFiro" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "تكامل واضح في مجالات القيادة والتنسيق الاجتماعي يمنع التنافس على دفة التوجيه." : "Smooth reciprocity where leadership in different life domains is naturally shared rather than contested."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "اختلاف التوقعات في جرعات التعبير العاطفي (من يبادر بالمودة وكم مرة في اليوم)." : "Asymmetry between wanting explicit affection vs. offering practical support as proof of love."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "توزيع المجالات: حددا من يقود الملف المالي، ومن يقود التخطيط الاجتماعي، مع الاحترام الكامل للاختصاص." : "Explicit domain delegation: define who captains logistics, finances, and travel with mutual trust."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageFiro");
+                        if (stage) renderFiroExchange(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 11: Gottman Relationship House & Safety
+                {
+                    category: catFramework,
+                    title: isAr ? "11. منزل غوتمان: درع الأمان العاطفي ومضاد السموم" : "11. Gottman Relationship House: Emotional Safety Shield",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.gottman;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageGottman" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "درع أمان نفسي متين يحمي الحوار من السموم الأربعة (الانتقاد، الاستهزاء، الدفاعية، الانعزال)." : "High emotional safety index that acts as a fortress against contempt and chronic defensiveness."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "استخدام كلمات التعميم الجارحة: 'أنت دائماً تفعل كذا' أو 'أنت لا تهتم أبداً'." : "Using toxic absolutes like 'You always...' or 'You never...', which trigger instant defensive counters."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "معادلة البدء اللطيف: 'أنا أشعر بـ (المشاعر) بشأن (الموقف المحدد)، وأحتاج منك إلى (طلب إيجابي محدد)'." : "The gentle startup formula: 'I feel [emotion] about [specific event], and I need [positive action].'"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageGottman");
+                        if (stage) renderGottmanSafetyGauge(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 12: Conflict Handling (TKI & Conflict Cycle)
+                {
+                    category: catFramework,
+                    title: isAr ? "12. إدارة الخلافات: عندما يتطاير الشرر وقواطع الدائرة" : "12. TKI Conflict Modes: When Sparks Fly & Circuit Breakers",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.conflict;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card" style="padding: 16px;">
+                                        <div id="presStageConflict" style="width: 100%; display: flex; justify-content: center;"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "القدرة على الوصول إلى حلول تكاملية رابحة (Win-Win) تحفظ كرامة الطرفين وتثري العلاقة." : "Natural capacity for collaborative resolution, turning friction into mutual creative growth."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "استمرار النقاش أثناء الغضب الشديد، مما يؤدي إلى الفيضان العاطفي وانغلاق العقل التحليلي." : "Continuing heated debates while flooded physiological states shut down the rational prefrontal cortex."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "قاطع الدائرة المتفق عليه: كلمة سر مثل 'قهوة' أو إشارة يد تعني التوقف الفوري دون أي استكمال لمدة 20 دقيقة." : "The agreed circuit breaker: a safe word or gesture that halts debate instantly for 20 physiological minutes."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageConflict");
+                        if (stage) {
+                            if (!isSingle && rep) {
+                                renderDyadicConflictLoop(stage, rep, pA, pB, isAr);
+                            } else {
+                                stage.innerHTML = `
+                                    <div style="padding: 24px; text-align: center; color: var(--text-secondary);">
+                                        <div style="font-size: 2.2rem; margin-bottom: 10px;">⚡</div>
+                                        <h4 style="color: var(--text-primary); margin-bottom: 6px;">${isAr ? "نمطك التلقائي في التعامل مع الخلافات" : "Your Dominant Conflict Style"}</h4>
+                                        <div class="person-type-badge type-a" style="font-size: 1.1rem; padding: 6px 18px; margin: 10px 0;">${traitsA?.conflict?.primary || (isAr ? "التعاون والتكامل" : "Collaborating")}</div>
+                                        <p style="font-size: 0.9rem; line-height: 1.6; max-width: 380px; margin: 0 auto;">${isAr ? "تميل إلى البحث عن جذور المشكلة بدقة والوصول إلى تسوية عادلة تحترم رغبات الجميع." : "You naturally seek the root cause of disagreement, balancing firmness with empathetic understanding."}</p>
+                                    </div>
+                                `;
+                            }
+                        }
+                    }
+                },
+
+                // SLIDE 13: Hawkins & Hicks Consciousness Spectrum
+                {
+                    category: catFramework,
+                    title: isAr ? "13. سلم الوعي والإرشاد: مصعدك النفسي الداخلي" : "13. Consciousness Spectrum: Your Inner Emotional Elevator",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.consciousness;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageConsciousness" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "الاستقرار في حقول الوعي البنّاءة (فوق عتبة الشجاعة 200) مما يبث السكينة والتفاؤل في المحيط." : "Anchoring above the 200 Courage threshold, radiating constructive power, joy, and emotional optimism."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "الانزلاق المؤقت تحت الضغط إلى حقول القوة القسرية (الغضب أو تأنيب الضمير أو اللوم)." : "Under severe exhaustion, slipping below the line into blame, guilt, or coercive pressure."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "عندما ترى شريكك محبطاً، لا تنزل معه إلى القبو؛ كن بمثابة حبل النجاة الذي يرفعه بالقبول والابتسامة." : "When your partner drops in energy, meet them with steady acceptance rather than reactive frustration."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageConsciousness");
+                        if (stage) renderConsciousnessSpectrum(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 14: Maslow Needs & Human Development (Kegan)
+                {
+                    category: catFramework,
+                    title: isAr ? "14. هرم ماسلو ونمو كيغان: طوابق هرمك الإنساني" : "14. Maslow Needs & Kegan Mind: Floors of Your Life Pyramid",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.maslow;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card">
+                                        <div id="presStageMaslow" class="chart-center-wrapper"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "عقلية ناضجة من المرحلة الرابعة (العقل المستقل ذاتياً) تجمع بين تحقيق الذات وخدمة الصالح العام." : "Self-authoring maturity (Stage 4) balancing personal self-actualization with deep devotion to family."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "التركيز الزائد على قمة الهرم (الطموح والإنجاز) مع إهمال الاحتياجات الجسدية الأساسية كالراحة والنوم." : "Obsessing over high-level goals while neglecting basic physical foundations like sleep, nutrition, and rest."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "افهم الطابق الذي يقف عليه شريكك اليوم: إن كان متعباً جسدياً، لا تحدثه عن الخطط الكبرى، وفر له الراحة أولاً." : "Meet your partner at their active tier: if physical safety is low, provide nourishment before strategic talks."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageMaslow");
+                        if (stage) renderMaslowPyramidVisualizer(stage, traitsA, traitsB, isSingle, nameA, nameB, isAr);
+                    }
+                },
+
+                // SLIDE 15: The Big Five (OCEAN) Personality Ingredients
+                {
+                    category: catFramework,
+                    title: isAr ? "15. السمات الخمس الكبرى: المكونات الخمسة لشخصيتك" : "15. Big Five (OCEAN): The 5 Master Personality Ingredients",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.big_five;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card" style="padding: 20px;">
+                                        <div id="presStageBigFive" class="bars-container" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-superpower">
+                                            <div class="pres-insight-title">🌟 ${isAr ? "نقطة القوة الفطرية (Superpower)" : "Core Superpower"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "توازن متين بين الانضباط العالي، وحب التجربة، والاستقرار الانفعالي المتزن." : "Exceptional balance between conscientiousness, curiosity, and high emotional resilience."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-watchout">
+                                            <div class="pres-insight-title">⚠️ ${isAr ? "محفز التوتر والحذر (Trigger)" : "Watch-Out / Stress Trigger"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "سوء فهم الاختلاف في الطلاقة الاجتماعية أو الحساسية الانفعالية وتفسيرها كبرود أو مبالغة." : "Judging differences in extraversion or sensitivity as personal rejection or overreaction."}</p>
+                                        </div>
+                                        <div class="pres-insight-box box-relationship">
+                                            <div class="pres-insight-title">🤝 ${isAr ? "مفتاح التناغم في العلاقة" : "Relationship Key"}</div>
+                                            <p class="pres-insight-desc">${isAr ? "احتفلا بالاختلاف: كل سمة يتميز بها الشريك هي إضافة تثري أسرتكما وتغطي جوانب القوة الناقصة." : "Celebrate differences: every contrasting trait is a superpower that covers your blind spots."}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageBigFive");
+                        if (stage) renderBigFiveBarCharts(traitsA?.big_five, isSingle ? traitsA?.big_five : traitsB?.big_five, isSingle, nameA, nameB, stage);
+                    }
+                },
+
+                // SLIDE 16: Schwartz Values & Shared Horizon (Action Playbook)
+                {
+                    category: catFramework,
+                    title: isAr ? "16. قيم شوارتز والأفق المشترك: إلى أين تجدفان معاً؟" : "16. Schwartz Values & Shared Horizon: Where You Row Together",
+                    renderContent: () => {
+                        const info = this.FRAMEWORK_ELI5.schwartz;
+                        return `
+                            <div class="pres-slide-card">
+                                <div class="pres-eli5-banner">
+                                    <div class="pres-eli5-header">
+                                        <span class="pres-eli5-badge">🧸 ${isAr ? "الفكرة ببساطة شديدة" : "Explain Like I'm 5"}</span>
+                                        <span class="pres-eli5-measure">🎯 <strong>${isAr ? "ماذا يقيس؟" : "Measures:"}</strong> ${isAr ? info.measure_ar : info.measure_en}</span>
+                                    </div>
+                                    <p class="pres-eli5-text">${isAr ? info.metaphor_ar : info.metaphor_en}</p>
+                                </div>
+
+                                <div class="pres-content-grid">
+                                    <div class="pres-stage-card" style="padding: 16px;">
+                                        <div id="presStageRadar" class="chart-container" style="width: 100%; display: flex; justify-content: center;"></div>
+                                    </div>
+                                    <div class="pres-takeaways-card">
+                                        <div class="pres-insight-box box-relationship" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);">
+                                            <div class="pres-insight-title" style="color: #8b5cf6;">🏆 ${isAr ? "الوصفة الذهبية الثلاثية لعلاقة مزدهرة" : "The 3 Golden Daily Habits"}</div>
+                                            <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                                                <div><strong>1. 🌅 ${isAr ? "جلسة صفاء يومية 10 دقائق:" : "Daily 10-Min Sync:"}</strong> ${isAr ? "جلسة دون هواتف للسؤال: 'كيف كان يومك وما الذي أسعدك؟'." : "Unplugged 10 minutes checking in with genuine curiosity."}</div>
+                                                <div><strong>2. 🛡️ ${isAr ? "اتفاق العشرين دقيقة عند التوتر:" : "The 20-Min Pause Pact:"}</strong> ${isAr ? "إيقاف أي جدال فور ارتفاع نبرة الصوت لحماية كرامة الطرفين." : "Halt debate immediately when heartbeats rise to prevent regret."}</div>
+                                                <div><strong>3. 💌 ${isAr ? "طقس الامتنان الأسبوعي:" : "Weekly Gratitude Ritual:"}</strong> ${isAr ? "ذكر 3 تصرفات لطيفة قام بها الشريك خلال الأسبوع بكل تقدير." : "Explicitly thank your partner for 3 specific kindnesses each week."}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    },
+                    renderVisualizer: () => {
+                        const stage = document.getElementById("presStageRadar");
+                        if (stage) {
+                            if (rep && rep.category_scores) {
+                                renderSVGRadarChart(rep.category_scores, stage);
+                            } else {
+                                stage.innerHTML = `
+                                    <div style="padding: 30px; text-align: center; color: var(--text-secondary);">
+                                        <div style="font-size: 2.2rem; margin-bottom: 10px;">🧭</div>
+                                        <h4 style="color: var(--text-primary); margin-bottom: 6px;">${isAr ? "أولويات القيم الإنسانية الكبرى" : "Core Values Orientation"}</h4>
+                                        <p style="font-size: 0.9rem; line-height: 1.6; max-width: 380px; margin: 0 auto;">${isAr ? "تظهر بياناتك التزاماً راسخاً بالاستقرار الأسري، الاستقلالية المسؤولة، وحب التعلم والتطور المستمر." : "Your profile reveals deep dedication to family integrity, responsible independence, and continuous growth."}</p>
+                                    </div>
+                                `;
+                            }
+                        }
+                    }
+                }
+            ];
+        },
+
+        renderDots() {
+            if (!dom.presentationDotsContainer) return;
+            dom.presentationDotsContainer.innerHTML = "";
+            const isAr = state.localization.currentLang === "ar";
+            this.slides.forEach((slide, idx) => {
+                const dot = document.createElement("button");
+                dot.className = `pres-dot ${idx === this.currentIndex ? "active" : ""}`;
+                dot.title = `${isAr ? "الانتقال إلى الشريحة" : "Jump to slide"} ${idx + 1}: ${slide.title}`;
+                dot.setAttribute("aria-label", `Slide ${idx + 1}`);
+                dot.addEventListener("click", () => this.goToSlide(idx));
+                dom.presentationDotsContainer.appendChild(dot);
+            });
+        },
+
+        renderCurrentSlide() {
+            if (!this.slides || this.slides.length === 0) return;
+            if (this.currentIndex < 0) this.currentIndex = 0;
+            if (this.currentIndex >= this.slides.length) this.currentIndex = this.slides.length - 1;
+
+            const slide = this.slides[this.currentIndex];
+            const isAr = state.localization.currentLang === "ar";
+            const total = this.slides.length;
+
+            // Update header info
+            if (dom.presentationCategoryBadge) dom.presentationCategoryBadge.textContent = slide.category;
+            if (dom.presentationSlideTitle) dom.presentationSlideTitle.textContent = slide.title;
+            if (dom.presentationSlideCounter) {
+                dom.presentationSlideCounter.textContent = isAr 
+                    ? `شريحة ${this.currentIndex + 1} من ${total}` 
+                    : `Slide ${this.currentIndex + 1} of ${total}`;
+            }
+
+            // Update progress track
+            if (dom.presentationProgressFill) {
+                const pct = ((this.currentIndex + 1) / total) * 100;
+                dom.presentationProgressFill.style.width = `${pct}%`;
+            }
+
+            // Update prev/next button states
+            if (dom.btnPrevSlide) dom.btnPrevSlide.disabled = (this.currentIndex === 0);
+            if (dom.btnNextSlide) dom.btnNextSlide.disabled = (this.currentIndex === total - 1);
+
+            // Update dots
+            if (dom.presentationDotsContainer) {
+                const dots = dom.presentationDotsContainer.querySelectorAll(".pres-dot");
+                dots.forEach((d, idx) => {
+                    d.classList.toggle("active", idx === this.currentIndex);
+                });
+            }
+
+            // Render slide content
+            if (dom.presentationSlideViewport) {
+                dom.presentationSlideViewport.innerHTML = slide.renderContent();
+
+                // Call visualizer callback if defined
+                if (typeof slide.renderVisualizer === "function") {
+                    setTimeout(() => {
+                        try {
+                            slide.renderVisualizer();
+                        } catch (err) {
+                            console.error("Presentation visualizer error:", err);
+                        }
+                    }, 20);
+                }
+            }
+        },
+
+        nextSlide() {
+            if (this.currentIndex < this.slides.length - 1) {
+                this.currentIndex++;
+                this.renderCurrentSlide();
+            }
+        },
+
+        prevSlide() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+                this.renderCurrentSlide();
+            }
+        },
+
+        goToSlide(index) {
+            if (index >= 0 && index < this.slides.length) {
+                this.currentIndex = index;
+                this.renderCurrentSlide();
+            }
+        },
+
+        toggleFullscreen() {
+            const container = dom.presentationReportContainer;
+            if (!container) return;
+            this.isFullscreen = !this.isFullscreen;
+            container.classList.toggle("is-fullscreen", this.isFullscreen);
+
+            if (dom.btnPresentationFullscreen) {
+                dom.btnPresentationFullscreen.innerHTML = this.isFullscreen
+                    ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M14 10V4m0 6h6m-6 0l7-7M10 10V4m0 6H4m6 0L3 3"></path></svg>`
+                    : `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>`;
+            }
+        }
+    };
 
     // --- 11. MODAL HELPER FUNCTIONS ---
     function promptForName(callback) {

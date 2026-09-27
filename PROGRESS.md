@@ -1,8 +1,8 @@
 # MatchWise Lite - Project Progress & Changelog
 
-## Current Version: v3.1.0
-**Release Name:** Maslow 18 Major Segments & Creative Multi-Perspective Visualizer  
-**Date:** September 26, 2026  
+## Current Version: v3.2.0
+**Release Name:** Interactive Presentation Story Deck & ELI5 Framework Breakdown  
+**Date:** September 28, 2026  
 **Status:** ✅ Production Ready & Fully Verified
 
 ---
@@ -26,6 +26,7 @@
 | **M13: AI Educational Guidance** | Multi-stage AI educational tips (landing readiness, in-test reflection angles with dynamic re-clarification, and single/dyadic report reading guides), Gemini 3.8 Flash support, caching, and user preference toggle. | ✅ Complete | Browser Subagent & End-to-End Tested |
 | **M15: Production Hardening & Test Suite** | Stored XSS eradication, schema validation, demo button export, AI offline fallback, and zero-dependency Node test suite. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
 | **M16: Maslow Needs & Human Development** | Maslow 6-tier hierarchy (Somatic, Safety, Belonging, Esteem, Actualization, Transcendence), Kegan Orders of Mind (Stages 2-5), Bowen Differentiation, 10 new scenario questions (q86-q95), dual pyramid & continuum SVG visualizer, and dyadic asymmetry archetypes. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
+| **M17: Interactive Presentation Story Deck** | Interactive slide deck presentation mode with ELI5 kid-friendly framework metaphors, 3-tier slide architecture, screen adaptability, touch swipe/keyboard controls, dual view-mode toggle, preserving static print view untouched. | ✅ Complete | Node 10/10 Tests Passed & Browser Verified |
 
 
 ---
@@ -190,6 +191,60 @@
 
 ### Added
 - **Automated Smoke Test Suite (`test_suite.js`)**: Added zero-dependency Node.js test script verifying 10 critical test vectors across exports, XSS sanitization, schema validation, psychometrics, compatibility, and offline AI fallbacks. Verified 10/10 tests pass.
+
+## 📝 Changelog (v3.2.0) - Interactive Presentation Story Deck & ELI5 Framework Breakdown
+
+### Presentation Deck Engine (`script.js`, `PresentationDeckManager`)
+- **Digestible Slide Deck Paradigm**: Added a high-engagement presentation mode that transforms dense psychological reports into a step-by-step interactive slide deck, making complex behavioral frameworks intuitive and accessible to everyday users.
+- **Narrative Sequencing**:
+  1. **Slide 1 - Overall Match & Dyadic Index**: Radial compatibility score gauge, qualitative synergy category, dynamic complement/risk tags, and quick-glance radar synthesis.
+  2. **Slide 2 - Mutual Strengths & Chemistry Highlights**: Curated core harmonies, common ground pillars, and relational accelerants.
+  3. **Slide 3 - Friction Points & Growth Horizons**: Objective analysis of potential blind spots, communication tripwires, and stress de-escalation needs.
+  4. **Slide 4 - AI Strategic Synthesis & Bridge Scripts**: Executive AI consultation, mutual relational agreement principles, and actionable conversational bridge scripts for difficult moments.
+  5. **Slides 5–16 - Framework Deep-Dive Slides (12 Behavioral Frameworks)**:
+     - *Hartman Color Code* (Core Motives)
+     - *DISC Behavioral Rhythm*
+     - *The Birkman Method* (Iceberg Needs & Stress)
+     - *Adult Attachment Theory (ECR)*
+     - *FIRO-B Interpersonal Exchange*
+     - *Gottman Sound Relationship House*
+     - *Dyadic Conflict Escalation Cycle (TKI)*
+     - *Hawkins Map of Consciousness & Hicks Emotional Guidance*
+     - *Maslow Hierarchy of Needs (6 Tiers)*
+     - *Kegan Orders of Mind & Bowen Differentiation*
+     - *Big Five Factor Model (OCEAN)*
+     - *Schwartz Basic Human Values Radar*
+
+### ELI5 Kid-Friendly Metaphors & Real-Meaning Architecture (`FRAMEWORK_ELI5`)
+- **3-Tier Slide Anatomy**:
+  - **Tier 1 (Top Hero Card - ELI5 Metaphor)**: Explains the theoretical framework in language a 5-year-old child can grasp (e.g., *Hartman: "Every person has an engine fueled by a color"*; *Birkman: "Our minds are like icebergs floating in water"*; *Attachment: "Our heart has an invisible safety harbor"*), alongside an explicit *"What It Measures"* badge.
+  - **Tier 2 (Interactive Visualizer Mount)**: Cleanly mounts MatchWise's high-fidelity custom SVG visualizers (Hartman dual donut with person filtering, DISC 2x2 matrix, Birkman iceberg cross-section, Gottman safety gauge, Maslow pyramid, Big Five comparative bars, and SVG radar charts) inside dynamic container views.
+  - **Tier 3 (Clinical Breakdown & Real Meaning)**: Translates technical scores into 3 actionable relationship dimensions:
+    - ⚡ **Superpower (القوة الخارقة)**: What this trait unlocks in everyday life.
+    - 🚨 **Stress Trigger (محفز التوتر)**: What causes friction under emotional pressure.
+    - 🔑 **Relationship Key (مفتاح العلاقة)**: How the partner can best nurture and communicate with this trait.
+
+### UI / UX & Screen Adaptability (`index.html`, `style.css`)
+- **Dual View-Mode Switcher**: Added prominent `#btnViewModePresentation` and `#btnViewModeDossier` toggles in the report toolbar, allowing users to toggle instantaneously between the interactive slides and the comprehensive dossier.
+- **Adaptive Screen Sizing**:
+  - Fully responsive grid layout adapting from desktop widescreen (16:9 aspect ratio container, split visualizer/meaning columns) to tablet and mobile screens (<960px and <640px vertical column stacking).
+  - High-DPI support with CSS clamp typography and scrolling slide bodies.
+- **Controls & Navigation**:
+  - Previous / Next buttons with dynamic disabled states at deck boundaries.
+  - Interactive top progress scrubber bar showing real-time slide completion percentage.
+  - Fullscreen mode toggle (`#btnDeckFullscreen`) using the HTML5 Fullscreen API (`requestFullscreen` / `exitFullscreen`).
+  - Mobile touch swipe gesture detection (left/right swipe navigation).
+  - Desktop keyboard arrow navigation (`ArrowLeft` / `ArrowRight`) with intelligent input element exclusion.
+- **Print Fidelity & Isolation**:
+  - Enforced strict `@media print` and `body.print-preview-active` isolation rules (`#printableReportDocument { display: block !important; }` and `.presentation-report-container { display: none !important; }`).
+  - Preserves the existing printable dossier view 100% untouched for PDF generation and physical printing.
+
+### Localization & Quality Assurance (`utils.js`, `test_suite.js`)
+- **Bilingual Arabic/English RTL Support**: Complete translation dictionary in `utils.js` for all presentation UI badges, navigation buttons, view modes, and ELI5 labels.
+- **Automatic Scoping Fix**: Hoisted `dyadicReport` inside `generateAndRenderReport()` to ensure dyadic compatibility findings are passed reliably to both report renderers.
+- **Zero-Regression Verification**: Ran full automated test suite `test_suite.js` (10/10 tests passed) and conducted thorough browser validation across Tariq & Nour archetypes in both slide and print preview modes.
+
+---
 
 ## 📝 Changelog (v3.1.0) - Maslow 18 Major Segments & Creative Multi-Perspective Visualizer
 

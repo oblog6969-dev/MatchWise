@@ -347,6 +347,28 @@
                 <button id="btnDashboardFromReport" class="secondary-btn">
                     <span data-i18n="back">Back</span>
                 </button>
+
+                <!-- Report View Mode Switcher -->
+                <div class="report-view-mode-toggle" id="reportViewModeToggle" role="group" aria-label="Report View Mode">
+                    <button id="btnViewModePresentation" class="mode-toggle-btn active" data-i18n="view_mode_presentation">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span data-i18n="view_mode_presentation">Interactive Slides</span>
+                    </button>
+                    <button id="btnViewModeDossier" class="mode-toggle-btn" data-i18n="view_mode_dossier">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                        <span data-i18n="view_mode_dossier">Printable Dossier</span>
+                    </button>
+                </div>
+
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button id="btnTogglePrintPreview" class="btn-print-preview" aria-label="Toggle Print View">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -374,7 +396,57 @@
                 </div>
             </div>
 
-            <div class="compatibility-report-document" id="printableReportDocument">
+            <!-- INTERACTIVE PRESENTATION SLIDE DECK MODE -->
+            <div id="presentationReportContainer" class="presentation-report-container">
+                <!-- Slide Header Toolbar -->
+                <div class="presentation-header">
+                    <div class="presentation-header-left">
+                        <span id="presentationCategoryBadge" class="pres-cat-badge">✨ Match Results & AI Overview</span>
+                        <h3 id="presentationSlideTitle" class="pres-slide-title">1. Overall Compatibility & Match Synergy</h3>
+                    </div>
+                    <div class="presentation-header-right">
+                        <span id="presentationSlideCounter" class="pres-counter-badge">Slide 1 of 16</span>
+                        <button id="btnPresentationFullscreen" class="pres-icon-btn" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Track -->
+                <div class="presentation-progress-track">
+                    <div id="presentationProgressFill" class="presentation-progress-fill" style="width: 6.25%;"></div>
+                </div>
+
+                <!-- Slide Viewport (Animated Content) -->
+                <div id="presentationSlideViewport" class="presentation-slide-viewport" tabindex="0" role="region" aria-label="Presentation Slide">
+                    <!-- Dynamic Slide Content injected here by presentation engine -->
+                </div>
+
+                <!-- Presentation Navigation Footer -->
+                <div class="presentation-footer">
+                    <button id="btnPrevSlide" class="pres-nav-btn pres-btn-prev" aria-label="Previous Slide">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        <span data-i18n="slide_prev">Previous</span>
+                    </button>
+
+                    <div id="presentationDotsContainer" class="presentation-dots-track" role="tablist" aria-label="Slide Selection">
+                        <!-- Dynamic Dots injected here -->
+                    </div>
+
+                    <button id="btnNextSlide" class="pres-nav-btn pres-btn-next" aria-label="Next Slide">
+                        <span data-i18n="slide_next">Next</span>
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="compatibility-report-document" id="printableReportDocument" style="display: none;">
                 <!-- DOSSIER PAGE 1: EXECUTIVE SUMMARY & PROFILE PARAMETERS -->
                 <div class="print-dossier-page" id="dossierPage1">
                     <!-- Top Dossier Banner -->

@@ -1,6 +1,34 @@
-# MatchWise Lite v3.1.0
+# MatchWise Lite v3.2.0
 
-**MatchWise Lite v3.1.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, **Google Gemini 3.8 Flash**, and Autonomous AI.
+**MatchWise Lite v3.2.0** is a production-quality, offline relationship compatibility assessment tool and dyadic psychological consultation platform. It runs entirely inside the browser without requiring any mandatory backend, database, or login, with native English & Arabic localization, Google Website Translator (100+ languages), and optional AI consultation powered by **DeepSeek Pro**, **NVIDIA NIM**, **Google Gemini 3.8 Flash**, and Autonomous AI.
+
+---
+
+## 🌟 What's New in v3.2.0: Interactive Presentation Story Deck & ELI5 Framework Breakdown
+
+### 1. Interactive Presentation Story Deck
+Transforms the exhaustive clinical dossier into a digestible, slide-by-slide presentation experience. Ideal for couples, clients, and non-specialists to navigate results collaboratively without cognitive overwhelm:
+- **Narrative Story Flow**:
+  1. **Match Result & Compatibility Index**: Radial gauge, synergy archetype, and quick-glance radar synthesis.
+  2. **Highlights & Chemistry**: Core mutual strengths, shared values, and relationship superpowers.
+  3. **Friction Points & Growth Areas**: Trigger patterns, sensitivity tripwires, and de-escalation needs.
+  4. **AI Conclusion & Bridge Scripts**: Strategic relationship accords and word-for-word reconciliation scripts.
+  5. **12 Framework Deep Dives**: Hartman, DISC, Birkman, Attachment, FIRO-B, Gottman, Conflict, Consciousness, Maslow, Kegan, Big Five, and Schwartz Values.
+- **Dual View-Mode Switcher**: Instant switching between `🖥️ Slides View` (presentation deck) and `📄 Full Dossier` (static in-depth report) from the sticky report toolbar.
+
+### 2. ELI5 (Explain Like I'm 5) Kid-Friendly Metaphors
+Each behavioral framework features an intuitive child-friendly metaphor and clear *"What It Measures"* badge (e.g., explaining Hartman motives as colored fuel for emotional engines, or Birkman as an iceberg with unseen needs underwater), demystifying complex psychometrics.
+
+### 3. Real Meaning Relational Dimension Cards
+Every framework slide translates numerical results into three actionable relationship dimensions:
+- ⚡ **Superpower (القوة الخارقة)**: Everyday gifts and strengths unlocked by this trait.
+- 🚨 **Stress Trigger (محفز التوتر)**: Vulnerabilities and friction patterns under pressure.
+- 🔑 **Relationship Key (مفتاح العلاقة)**: How partners can best attune, support, and communicate.
+
+### 4. Screen Adaptability & Touch Controls
+- **Full Screen Adaptability**: Designed for desktop widescreen (16:9 split layout), tablets, and mobile smartphones (<960px & <640px vertical responsive stacking).
+- **Multi-Modal Controls**: Previous/Next navigation, interactive slide scrubber progress bar, fullscreen toggle, mobile touch swipe gestures, and keyboard arrow keys (`←` / `→`).
+- **100% Print View Isolation**: Printing and PDF export automatically and strictly target the full static dossier, keeping presentation controls completely decoupled from print media.
 
 ---
 
